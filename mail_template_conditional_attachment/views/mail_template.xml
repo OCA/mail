@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='report_template']/parent::group" position="after">
                 <group string="Conditional Attachments">
-                    <field name="conditional_attachment_ids">
+                    <field name="conditional_attachment_ids" context="{'default_mail_template_id': id}">
                         <tree>
                             <field name="mail_template_id" invisible="1"/>
                             <field name="model_name" invisible="1"/>
