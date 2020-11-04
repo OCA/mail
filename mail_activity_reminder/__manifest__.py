@@ -1,13 +1,14 @@
 # Copyright 2020 Brainbean Apps (https://brainbeanapps.com)
+# Copyright 2020 CorporateHub (https://corporatehub.eu)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     'name': 'Mail Activity Reminder',
-    'version': '12.0.1.0.0',
+    'version': '12.0.1.0.1',
     'category': 'Discuss',
     'website': 'https://github.com/OCA/social',
     'author':
-        'Brainbean Apps, '
+        'CorporateHub, '
         'Odoo Community Association (OCA)',
     'license': 'AGPL-3',
     'installable': True,
