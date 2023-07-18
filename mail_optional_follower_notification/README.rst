@@ -49,8 +49,11 @@ This field it's initialized to true to keep the standard behavior.
 
 |image2|
 
+|image3|
+
 .. |image1| image:: https://raw.githubusercontent.com/OCA/social/17.0/mail_optional_follower_notification/static/description/optional_follower_001.png
 .. |image2| image:: https://raw.githubusercontent.com/OCA/social/17.0/mail_optional_follower_notification/static/description/optional_follower_002.png
+.. |image3| image:: https://raw.githubusercontent.com/OCA/social/17.0/mail_optional_follower_notification/static/description/optional_follower_003.png
 
 Bug Tracker
 ===========
@@ -77,6 +80,7 @@ Contributors
 -  Laurent Mignon <laurent.mignon@acsone.eu>
 -  Andrea Stirpe <a.stirpe@onestein.nl>
 -  Robin Goots <robin.goots@dynapps.be>
+-  Quan Nguyen quan.nhm@komit-consulting.com
 
 Maintainers
 -----------
