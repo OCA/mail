@@ -6,8 +6,11 @@
     "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/social",
     "category": "Social Network",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.1.0",
     "license": "AGPL-3",
     "depends": ["mail"],
-    "data": ["wizard/mail_compose_message_view.xml"],
+    "data": [
+        "views/res_config_settings_view.xml",
+        "wizard/mail_compose_message_view.xml",
+    ],
 }

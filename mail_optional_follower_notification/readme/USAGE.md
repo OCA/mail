@@ -6,3 +6,5 @@ This field it's initialized to true to keep the standard behavior.
 ![](static/description/optional_follower_001.png)
 
 ![](static/description/optional_follower_002.png)
+
+![](static/description/optional_follower_003.png)
