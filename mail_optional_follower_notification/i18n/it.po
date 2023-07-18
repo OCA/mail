@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-17 01:02+0000\n"
-"PO-Revision-Date: 2024-10-22 09:06+0000\n"
+"PO-Revision-Date: 2025-02-13 11:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -28,9 +28,24 @@ msgid ""
 "can access the notification directly from the document (if they are allowed "
 "to)</span>"
 msgstr ""
-"<span name=\"no_followers_text\" invisible=\"notify_followers\" style=\"color"
-": red;\"> - Attenzione: chi segue non sarà avvisato ma potrà accedere alla "
-"notifica direttamente dal documento (se autorizzato)</span>"
+"<span name=\"no_followers_text\" invisible=\"notify_followers\" "
+"style=\"color: red;\"> - Attenzione: chi segue non sarà avvisato ma potrà "
+"accedere alla notifica direttamente dal documento (se autorizzato)</span>"
+
+#. module: mail_optional_follower_notification
+#: model:ir.model,name:mail_optional_follower_notification.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: mail_optional_follower_notification
+#: model:ir.model,name:mail_optional_follower_notification.model_res_config_settings
+msgid "Config Settings"
+msgstr "Impostazioni configurazione"
+
+#. module: mail_optional_follower_notification
+#: model_terms:ir.ui.view,arch_db:mail_optional_follower_notification.res_config_settings_view_form
+msgid "Default notify followers when the user sending email"
+msgstr "In modo predefinito avvisa chi segue quanto l'utente invia e-mail"
 
 #. module: mail_optional_follower_notification
 #: model:ir.model,name:mail_optional_follower_notification.model_mail_thread
@@ -44,6 +59,8 @@ msgstr "Procedura guidata creazione e-mail"
 
 #. module: mail_optional_follower_notification
 #: model:ir.model.fields,field_description:mail_optional_follower_notification.field_mail_compose_message__notify_followers
+#: model:ir.model.fields,field_description:mail_optional_follower_notification.field_res_company__notify_followers
+#: model:ir.model.fields,field_description:mail_optional_follower_notification.field_res_config_settings__notify_followers
 msgid "Notify Followers"
 msgstr "Avvisa chi segue"
 
