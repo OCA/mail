@@ -1,4 +1,3 @@
-/** @odoo-module **/
 import {useService} from "@web/core/utils/hooks";
 
 const {Component, useState} = owl;
@@ -8,7 +7,6 @@ export class FailedMessageReview extends Component {
     static template = "mail_tracking.FailedMessageReview";
 
     setup() {
-        this.threadService = useState(useService("mail.thread"));
         this.message = useState(this.props.message);
         this.orm = useService("orm");
     }
@@ -16,15 +14,6 @@ export class FailedMessageReview extends Component {
         await this.orm.call("mail.message", "set_need_action_done", [
             [this.message.id],
         ]);
-        // Debugger
-        const thread = this.env.services["mail.thread"].getThread(
-            this.message.model,
-            this.message.id
-        );
-        this.env.services["mail.thread"].fetchNewMessages(thread);
-        if (this.props.reloadParentView) {
-            this.props.reloadParentView();
-        }
     }
     retryFailedMessage() {
         this.env.services.action.doAction("mail.mail_resend_message_action", {
@@ -40,10 +29,7 @@ export class FailedMessageReview extends Component {
         });
     }
     get thread() {
-        return this.threadService.getThread(
-            this.message.res_model,
-            this.message.res_id
-        );
+        return this.props.message.thread;
     }
     get failed_recipients() {
         const error_states = ["error", "rejected", "spam", "bounced", "soft-bounced"];
