@@ -65,7 +65,6 @@ msgstr ""
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_messages_panel/failed_messages_panel.esm.js:0
-#, python-format
 msgid "%s failed messages found"
 msgstr ""
 
@@ -77,14 +76,12 @@ msgstr ""
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_thread.py:0
-#, python-format
 msgid "Anon. To"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Anonymous Recipient"
 msgstr ""
 
@@ -114,7 +111,6 @@ msgstr "Rebotat"
 #: code:addons/mail_tracking/models/mail_thread.py:0
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_message__email_cc
-#, python-format
 msgid "Cc"
 msgstr ""
 
@@ -132,6 +128,16 @@ msgstr "Clicat"
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__url
 msgid "Clicked URL"
 msgstr "URL Clicada"
+
+#. module: mail_tracking
+#: model:ir.model,name:mail_tracking.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: mail_tracking
+#: model:ir.model,name:mail_tracking.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
 
 #. module: mail_tracking
 #: model:ir.model,name:mail_tracking.model_res_partner
@@ -183,28 +189,24 @@ msgstr "Ajornat"
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__delivered
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-#, python-format
 msgid "Delivered"
 msgstr "Enviat"
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Delivered Status Center Checkmark"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Delivered Status Left Checkmark"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Delivered Status Right Checkmark"
 msgstr ""
 
@@ -265,7 +267,6 @@ msgstr "Puntuació del correu electrònic"
 #: code:addons/mail_tracking/models/mail_message.py:0
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__error
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_form
-#, python-format
 msgid "Error"
 msgstr "Error"
 
@@ -288,7 +289,6 @@ msgstr "Error del servidor SMTP"
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Error Status"
 msgstr ""
 
@@ -306,25 +306,15 @@ msgstr ""
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/core/discuss/thread_icon.xml:0
-#: code:addons/mail_tracking/static/src/services/messaging_service_patch.esm.js:0
+#: code:addons/mail_tracking/static/src/services/store_service_patch.esm.js:0
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-#, python-format
 msgid "Failed"
 msgstr "Fallit"
 
 #. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_account_account__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_analytic_account__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_bank_statement_line__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_journal__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_move__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_payment__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_reconcile_model__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_setup_bank_manual_config__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_tax__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_calendar_event__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_discuss_channel__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_iap_account__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_blacklist__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_blacklist__failed_message_ids
@@ -334,12 +324,7 @@ msgstr "Fallit"
 #: model:ir.model.fields,field_description:mail_tracking.field_mailing_contact__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mailing_mailing__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_phone_blacklist__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_pricelist__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_product__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_template__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_res_company__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_res_partner__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner_bank__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_res_users__failed_message_ids
 #, fuzzy
 msgid "Failed Messages"
@@ -349,7 +334,7 @@ msgstr "Missatge"
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
 #: code:addons/mail_tracking/static/src/core/message/message.xml:0
-#, fuzzy, python-format
+#, fuzzy
 msgid "Failed Recipients:"
 msgstr "Destinatari"
 
@@ -357,28 +342,24 @@ msgstr "Destinatari"
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_messages_panel/failed_messages_panel.esm.js:0
 #: code:addons/mail_tracking/static/src/core/chatter/chatter.xml:0
-#, python-format
 msgid "Failed messages"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_thread.py:0
-#, python-format
 msgid "Failed sent messages"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
-#, python-format
 msgid "Go"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
-#, python-format
 msgid "Go to message"
 msgstr ""
 
@@ -410,9 +391,16 @@ msgid "IP"
 msgstr "IP"
 
 #. module: mail_tracking
+#: model:ir.model.fields,help:mail_tracking.field_res_config_settings__mail_tracking_email_max_age_days
+#: model_terms:ir.ui.view,arch_db:mail_tracking.res_config_settings_view_form
+msgid ""
+"If set as positive integer enables the deletion of old mail tracking records "
+"to reduce the database size."
+msgstr ""
+
+#. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
-#, python-format
 msgid "Info"
 msgstr ""
 
@@ -503,6 +491,12 @@ msgid "MailTracking events"
 msgstr "MailTracking esdeveniments"
 
 #. module: mail_tracking
+#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__mail_tracking_email_max_age_days
+#: model_terms:ir.ui.view,arch_db:mail_tracking.res_config_settings_view_form
+msgid "Max age in days of mail tracking email records"
+msgstr ""
+
+#. module: mail_tracking
 #: model:ir.model,name:mail_tracking.model_mail_message
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__message_id
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__tracking_email_id
@@ -534,28 +528,24 @@ msgstr "Obre"
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_message.py:0
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__opened
-#, python-format
 msgid "Opened"
 msgstr "Obert"
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Opened Status Center Checkmark"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Opened Status Left Checkmark"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Opened Status Right Checkmark"
 msgstr ""
 
@@ -604,13 +594,6 @@ msgid "Recipient email address"
 msgstr "Adreça de correu electrònic del destinatari"
 
 #. module: mail_tracking
-#. odoo-python
-#: code:addons/mail_tracking/models/mail_tracking_email.py:0
-#, python-format
-msgid "Records:"
-msgstr ""
-
-#. module: mail_tracking
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__rejected
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__reject
 msgid "Rejected"
@@ -619,7 +602,6 @@ msgstr "Rebutjat"
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
-#, python-format
 msgid "Retry"
 msgstr ""
 
@@ -651,29 +633,32 @@ msgstr "Correu electrònic del remitent"
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__sent
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-#, python-format
 msgid "Sent"
 msgstr "Enviat"
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Sent Status"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
-#, python-format
 msgid "Set As Reviewed"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
-#, python-format
 msgid "Set as Reviewed"
+msgstr ""
+
+#. module: mail_tracking
+#: model:ir.model.fields,field_description:mail_tracking.field_res_company__mail_tracking_show_aliases
+#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__mail_tracking_show_aliases
+#: model_terms:ir.ui.view,arch_db:mail_tracking.res_config_settings_view_form
+msgid "Show Aliases in Mail Tracking"
 msgstr ""
 
 #. module: mail_tracking
@@ -701,7 +686,6 @@ msgstr "Estat"
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_message.py:0
-#, python-format
 msgid "Status: %s"
 msgstr ""
 
@@ -714,7 +698,6 @@ msgstr "Assumpte"
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
-#, python-format
 msgid "Subject:"
 msgstr ""
 
@@ -727,19 +710,19 @@ msgstr ""
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_message.py:0
-#, python-format
 msgid "The partner doesn't have a defined email"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_tracking_email.py:0
-#, python-format
 msgid ""
 "The requested operation cannot be completed due to security restrictions. "
 "Please contact your system administrator.\n"
 "\n"
-"(Document type: %(desc)s, Operation: %(operation)s)"
+"(Document type: %(type)s, Operation: %(operation)s)\n"
+"\n"
+"Records: %(records)s, User: %(user)s"
 msgstr ""
 
 #. module: mail_tracking
@@ -759,7 +742,6 @@ msgstr "Per:"
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/core/message/message.xml:0
-#, python-format
 msgid "To:"
 msgstr "Per:"
 
@@ -800,14 +782,12 @@ msgstr "Marca d'hora UTC"
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_message.py:0
-#, python-format
 msgid "Unknown"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Unknown Status"
 msgstr ""
 
@@ -864,22 +844,13 @@ msgstr "País de l'usuari"
 
 #. module: mail_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_tracking_email.py:0
-#, python-format
-msgid "User:"
-msgstr ""
-
-#. module: mail_tracking
-#. odoo-python
 #: code:addons/mail_tracking/models/mail_message.py:0
-#, python-format
 msgid "Waiting"
 msgstr ""
 
 #. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#, python-format
 msgid "Waiting Status"
 msgstr ""
 
