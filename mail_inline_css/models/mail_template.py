@@ -3,22 +3,16 @@
 
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from premailer import Premailer
+
 from odoo import models
-
-try:
-    from premailer import Premailer
-except (OSError, ImportError) as err:  # pragma: no cover
-    import logging
-
-    _logger = logging.getLogger(__name__)
-    _logger.debug(err)
 
 
 class MailTemplate(models.Model):
     _inherit = "mail.template"
 
-    def _render_template_postprocess(self, rendered):
-        rendered = super()._render_template_postprocess(rendered)
+    def _render_template_postprocess(self, model, rendered):
+        rendered = super()._render_template_postprocess(model, rendered)
         for res_id, html in rendered.items():
             rendered[res_id] = self._premailer_apply_transform(html)
         return rendered
