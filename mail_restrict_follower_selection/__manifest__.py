@@ -4,11 +4,11 @@
 
 {
     "name": "Restrict follower selection",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "author": "Therp BV,Creu Blanca,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Social Network",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "summary": "Define a domain from which followers can be selected",
     "depends": ["mail"],
     "data": ["data/ir_config_parameter.xml", "data/ir_actions.xml"],

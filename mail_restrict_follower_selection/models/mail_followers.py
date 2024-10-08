@@ -32,9 +32,11 @@ class MailFollowers(models.Model):
                 check_existing=check_existing,
                 existing_policy=existing_policy,
             )
-        domain = self.env[
-            "mail.wizard.invite"
-        ]._mail_restrict_follower_selection_get_domain(res_model=res_model)
+        domain = str(
+            self.env["mail.wizard.invite"]._mail_restrict_follower_selection_get_domain(
+                res_model=res_model
+            )
+        )
         partners = self.env["res.partner"].search(
             [("id", "in", partner_ids)]
             + safe_eval(
