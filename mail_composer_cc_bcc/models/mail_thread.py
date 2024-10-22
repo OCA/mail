@@ -34,6 +34,9 @@ class MailThread(models.AbstractModel):
             message, additional_values=additional_values
         )
         context = self.env.context
+        skip_adding_cc_bcc = context.get("skip_adding_cc_bcc", False)
+        if skip_adding_cc_bcc:
+            return res
 
         partners_cc = context.get("partner_cc_ids", None)
         if partners_cc:
@@ -55,7 +58,8 @@ class MailThread(models.AbstractModel):
         rdata = super()._notify_get_recipients(message, msg_vals, **kwargs)
         context = self.env.context
         is_from_composer = context.get("is_from_composer", False)
-        if not is_from_composer:
+        skip_adding_cc_bcc = context.get("skip_adding_cc_bcc", False)
+        if not is_from_composer or skip_adding_cc_bcc:
             return rdata
         for pdata in rdata:
             pdata["type"] = "customer"
@@ -100,7 +104,8 @@ class MailThread(models.AbstractModel):
             message, recipients_data, model_description, msg_vals=msg_vals
         )
         is_from_composer = self.env.context.get("is_from_composer", False)
-        if not is_from_composer:
+        skip_adding_cc_bcc = self.env.context.get("skip_adding_cc_bcc", False)
+        if not is_from_composer or skip_adding_cc_bcc:
             return res
         ids = []
         customer_data = None
@@ -116,3 +121,8 @@ class MailThread(models.AbstractModel):
         else:
             customer_data["recipients"] += ids
         return [customer_data]
+
+    def _notify_thread(self, message, msg_vals=False, **kwargs):
+        if message.message_type == "notification":
+            self = self.with_context(skip_adding_cc_bcc=True)
+        return super()._notify_thread(message, msg_vals, **kwargs)
