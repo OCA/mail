@@ -3,10 +3,10 @@
 {
     "name": "Email CC and BCC when sending invoice",
     "summary": "This module enables sending mail to CC and BCC partners for invoices.",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "development_status": "Alpha",
     "category": "Social",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Camptocamp SA, Odoo Community Association (OCA)",
     "maintainers": ["hailangvn2023"],
     "license": "AGPL-3",
@@ -19,6 +19,6 @@
         "mail_composer_cc_bcc",
     ],
     "data": [
-        "wizards/account_move_send.xml",
+        "wizards/account_move_send_wizard.xml",
     ],
 }
