@@ -17,29 +17,20 @@ msgstr ""
 "X-Generator: Weblate 4.17\n"
 
 #. module: mail_thread_create_nolog
-#: model:ir.model.fields,field_description:mail_thread_create_nolog.field_mail_message__display_name
-#: model:ir.model.fields,field_description:mail_thread_create_nolog.field_mail_thread__display_name
-msgid "Display Name"
-msgstr "Mostrar Nombre"
-
-#. module: mail_thread_create_nolog
 #: model:ir.model,name:mail_thread_create_nolog.model_mail_thread
 msgid "Email Thread"
 msgstr "Hilo de Correo Electrónico"
 
 #. module: mail_thread_create_nolog
-#: model:ir.model.fields,field_description:mail_thread_create_nolog.field_mail_message__id
-#: model:ir.model.fields,field_description:mail_thread_create_nolog.field_mail_thread__id
-msgid "ID"
-msgstr "ID"
-
-#. module: mail_thread_create_nolog
-#: model:ir.model.fields,field_description:mail_thread_create_nolog.field_mail_message____last_update
-#: model:ir.model.fields,field_description:mail_thread_create_nolog.field_mail_thread____last_update
-msgid "Last Modified on"
-msgstr "Última Modificación el"
-
-#. module: mail_thread_create_nolog
 #: model:ir.model,name:mail_thread_create_nolog.model_mail_message
 msgid "Message"
 msgstr "Mensaje"
+
+#~ msgid "Display Name"
+#~ msgstr "Mostrar Nombre"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última Modificación el"
