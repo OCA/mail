@@ -1,7 +1,8 @@
 # Copyright 2023 Camptocamp
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+import itertools
 
-from odoo import Command, api, fields, models
+from odoo import Command, api, fields, models, tools
 
 
 class MailComposeMessage(models.TransientModel):
@@ -44,7 +45,6 @@ class MailComposeMessage(models.TransientModel):
             res["partner_bcc_ids"] = [Command.set(partner_bcc.ids)]
         return res
 
-    # TODO: reduce repeated code
     @api.depends(
         "composition_mode", "model", "parent_id", "res_domain", "res_ids", "template_id"
     )
@@ -55,27 +55,12 @@ class MailComposeMessage(models.TransientModel):
                 and composer.composition_mode == "comment"
                 and not composer.composition_batch
             ):
-                res_ids = composer._evaluate_res_ids() or [0]
-                rendered_values = composer._generate_template_for_composer(
-                    res_ids,
-                    {"email_cc", "email_bcc"},
-                    find_or_create_partners=True,
-                )[res_ids[0]]
-
-                if rendered_values.get("partner_cc_ids"):
-                    partner_cc_ids = rendered_values.get("partner_cc_ids")
-                    if not isinstance(partner_cc_ids, list):
-                        partner_cc_ids = [partner_cc_ids]
-                    for partner_cc_id in partner_cc_ids:
-                        composer.partner_cc_ids = [(4, partner_cc_id)]
-
-                if rendered_values.get("partner_bcc_ids"):
-                    partner_bcc_ids = rendered_values.get("partner_bcc_ids")
-                    if not isinstance(partner_bcc_ids, list):
-                        partner_bcc_ids = [partner_bcc_ids]
-                    for partner_bcc_id in partner_bcc_ids:
-                        composer.partner_bcc_ids = [(4, partner_bcc_id)]
-
+                composer._set_partner_ids_from_mails(
+                    composer.template_id.email_cc, "partner_cc_ids"
+                )
+                composer._set_partner_ids_from_mails(
+                    composer.template_id.email_bcc, "partner_bcc_ids"
+                )
             elif composer.parent_id and composer.composition_mode == "comment":
                 composer.partner_cc_ids = composer.parent_id.partner_cc_ids
                 composer.partner_bcc_ids = composer.parent_id.partner_bcc_ids
@@ -111,6 +96,23 @@ class MailComposeMessage(models.TransientModel):
                 composer.partner_ids = composer.parent_id.partner_ids
             elif not composer.template_id:
                 composer.partner_ids = False
+
+    def _set_partner_ids_from_mails(self, email_field, partner_field):
+        if email_field:
+            mails = tools.email_split(email_field)
+            partner_ids = self.env["res.partner"]._find_or_create_from_emails(
+                mails,
+                additional_values={
+                    email: {
+                        "company_id": self.record_company_id.id,
+                    }
+                    for email in itertools.chain(mails, [False])
+                },
+            )
+            if not isinstance(partner_ids, list):
+                partner_ids = [partner_ids]
+            for partner_id in partner_ids:
+                setattr(self, partner_field, [(4, partner_id.id)])
 
     # ------------------------------------------------------------
     # RENDERING / VALUES GENERATION

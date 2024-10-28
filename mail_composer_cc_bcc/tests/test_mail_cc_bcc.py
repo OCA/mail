@@ -7,7 +7,6 @@ from odoo import tools
 from odoo.tests import Form, tagged
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.mail.models.mail_template import MailTemplate as MailTemplate_upstream
 from odoo.addons.mail.tests.common import MailCase
 from odoo.addons.mail.tests.test_mail_composer import TestMailComposerForm
 from odoo.addons.mail.wizard.mail_compose_message import (
@@ -15,7 +14,6 @@ from odoo.addons.mail.wizard.mail_compose_message import (
 )
 
 VALID_HASHES = {
-    "mail.template:_generate_template_recipients": ["73b0e20a018984841e454a57a86ee08d"],
     "mail.composer:_compute_partner_ids": ["813ef112e3948fe625b9a89428f2518d"],
 }
 
@@ -44,16 +42,6 @@ class TestMailCcBcc(TestMailComposerForm):
         form = Form(self.env["mail.compose.message"].with_context(**ctx))
         form.body = "<p>Hello</p>"
         return form
-
-    def test_MailTemplate_upstream_file_hash(self):
-        """Test that copied upstream function hasn't received fixes"""
-        func = inspect.getsource(
-            MailTemplate_upstream._generate_template_recipients
-        ).encode()
-        func_hash = hashlib.md5(func).hexdigest()
-        self.assertIn(
-            func_hash, VALID_HASHES.get("mail.template:_generate_template_recipients")
-        )
 
     def test_MailComposer_upstream_file_hash(self):
         """Test that copied upstream function hasn't received fixes"""
