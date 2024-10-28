@@ -17,15 +17,9 @@ msgstr ""
 "X-Generator: Weblate 4.17\n"
 
 #. module: mail_notification_with_history
-#: model_terms:ir.ui.view,arch_db:mail_notification_with_history.message_notification_email
+#: model_terms:ir.ui.view,arch_db:mail_notification_with_history.mail_notification_layout
 msgid "Discussion history in Odoo:"
 msgstr "Historial de discusiones en Odoo:"
-
-#. module: mail_notification_with_history
-#: model:ir.model.fields,field_description:mail_notification_with_history.field_mail_message__display_name
-#: model:ir.model.fields,field_description:mail_notification_with_history.field_mail_thread__display_name
-msgid "Display Name"
-msgstr "Mostrar Nombre"
 
 #. module: mail_notification_with_history
 #: model:ir.model,name:mail_notification_with_history.model_mail_thread
@@ -33,23 +27,20 @@ msgid "Email Thread"
 msgstr "Hilo de Correo Electrónico"
 
 #. module: mail_notification_with_history
-#: model:ir.model.fields,field_description:mail_notification_with_history.field_mail_message__id
-#: model:ir.model.fields,field_description:mail_notification_with_history.field_mail_thread__id
-msgid "ID"
-msgstr "ID"
-
-#. module: mail_notification_with_history
-#: model:ir.model.fields,field_description:mail_notification_with_history.field_mail_message____last_update
-#: model:ir.model.fields,field_description:mail_notification_with_history.field_mail_thread____last_update
-msgid "Last Modified on"
-msgstr "Última Modificación el"
-
-#. module: mail_notification_with_history
 #: model:ir.model,name:mail_notification_with_history.model_mail_message
 msgid "Message"
 msgstr "Mensaje"
 
 #. module: mail_notification_with_history
-#: model_terms:ir.ui.view,arch_db:mail_notification_with_history.message_notification_email
+#: model_terms:ir.ui.view,arch_db:mail_notification_with_history.mail_notification_layout
 msgid "commented on"
 msgstr "comentado en"
+
+#~ msgid "Display Name"
+#~ msgstr "Mostrar Nombre"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última Modificación el"
