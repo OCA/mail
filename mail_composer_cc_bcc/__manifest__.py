@@ -22,5 +22,6 @@
         "views/mail_message_views.xml",
         "views/mail_template_views.xml",
         "wizards/mail_compose_message_view.xml",
+        "wizards/mail_template_preview_view.xml",
     ],
 }
