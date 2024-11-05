@@ -64,6 +64,7 @@ class TestMailCcBcc(TestMailComposerForm):
         self.assertIn(func_hash, VALID_HASHES.get("mail.composer:_compute_partner_ids"))
 
     def test_email_cc_bcc(self):
+        self.test_record.email = "test@example.com"
         form = self.open_mail_composer_form()
         composer = form.save()
         # Use object to update Many2many fields (form can't do like this)
@@ -75,8 +76,14 @@ class TestMailCcBcc(TestMailComposerForm):
         with self.mock_mail_gateway():
             composer._action_send_mail()
 
+        self.assertEqual(len(self._mails), 5)
+
         # Verify recipients of mail.message
         message = self.test_record.message_ids[0]
+
+        # only keep 1 email to avoid clutting db
+        # but actually send 1 mail per recipients
+        self.assertEqual(len(message.mail_ids), 1)
         self.assertEqual(len(message.recipient_cc_ids), 3)
         self.assertEqual(len(message.recipient_bcc_ids), 1)
         # Verify notification

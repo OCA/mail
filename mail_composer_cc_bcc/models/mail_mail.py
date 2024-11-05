@@ -44,7 +44,7 @@ class MailMail(models.Model):
 
         # Collect recipients (RCPT TO) and update all emails
         # with the same To, Cc headers (to be shown by email client as users expect)
-        recipients = []
+        recipients = set()
         for m in res:
             rcpt_to = None
             if m["email_to"]:
@@ -64,7 +64,7 @@ class MailMail(models.Model):
                 rcpt_to = extract_rfc2822_addresses(m["email_cc"][0])[0]
 
             if rcpt_to:
-                recipients.append(rcpt_to)
+                recipients.add(rcpt_to)
 
             m.update(
                 {
@@ -74,5 +74,9 @@ class MailMail(models.Model):
                 }
             )
 
-        self.env.context = {**self.env.context, "recipients": recipients}
+        self.env.context = {**self.env.context, "recipients": list(recipients)}
+
+        if len(res) > len(recipients):
+            res.pop()
+
         return res
