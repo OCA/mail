@@ -93,6 +93,7 @@ class MailThread(models.AbstractModel):
                     "notif": data.get("notif") and data.get("notif") or notif,
                     "type": msg_type,
                     "is_follower": data.get("is_follower"),
+                    "uid": False,
                 }
                 rdata.append(pdata)
         return rdata

@@ -3,10 +3,10 @@
 {
     "name": "Email CC and BCC",
     "summary": "This module enables sending mail to CC and BCC partners in mail composer form.",  # noqa: E501
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "development_status": "Alpha",
     "category": "Social",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "maintainers": ["trisdoan"],
     "license": "AGPL-3",
