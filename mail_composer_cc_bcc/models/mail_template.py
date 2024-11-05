@@ -44,9 +44,9 @@ class MailTemplate(models.Model):
             }:
                 generated_field_values = self._render_field(field, res_ids)
                 for res_id in res_ids:
-                    render_results.setdefault(res_id, {})[
-                        field
-                    ] = generated_field_values[res_id]
+                    render_results.setdefault(res_id, {})[field] = (
+                        generated_field_values[res_id]
+                    )
 
         # create partners from emails if asked to
         if find_or_create_partners:
