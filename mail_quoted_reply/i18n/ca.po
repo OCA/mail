@@ -41,18 +41,15 @@ msgid "Message"
 msgstr "Missatge"
 
 #. module: mail_quoted_reply
-#. odoo-javascript
-#: code:addons/mail_quoted_reply/static/src/models/message_action_view.esm.js:0
-#, python-format
-msgid "Reply"
-msgstr "Respon"
-
-#. module: mail_quoted_reply
 #. odoo-python
 #: code:addons/mail_quoted_reply/models/mail_message.py:0
 #, python-format
 msgid "Subject"
 msgstr ""
+
+#, python-format
+#~ msgid "Reply"
+#~ msgstr "Respon"
 
 #~ msgid ""
 #~ "\n"

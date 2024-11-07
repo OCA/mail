@@ -4,3 +4,4 @@
 - Laurence Labusch \<<lala@labiso.de>\>
 - Dani Forga
 - Tris Doan \<<tridm@trobz.com>\>
+- Akim Juillerat \<<akim.juillerat@camptocamp.com>>
