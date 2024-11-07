@@ -2,11 +2,15 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import _, models
-from odoo.tools import format_datetime
+from odoo.tools import format_datetime, html_sanitize
 
 
 class MailMessage(models.Model):
     _inherit = "mail.message"
+
+    def _get_sanitized_body(self):
+        self.ensure_one()
+        return html_sanitize(self.body)
 
     def _prep_quoted_reply_body(self):
         return """
@@ -30,7 +34,7 @@ class MailMessage(models.Model):
             email_from=self.email_from,
             date=format_datetime(self.env, self.date),
             subject=self.subject,
-            body=self.body,
+            body=self._get_sanitized_body(),
             signature=self.env.user.signature,
             str_date=_("Date"),
             str_subject=_("Subject"),
