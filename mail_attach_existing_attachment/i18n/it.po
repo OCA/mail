@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-17 01:02+0000\n"
-"PO-Revision-Date: 2024-07-08 08:59+0000\n"
+"PO-Revision-Date: 2024-11-12 20:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -23,7 +23,7 @@ msgstr ""
 #. module: mail_attach_existing_attachment
 #: model:ir.model.fields,field_description:mail_attach_existing_attachment.field_mail_compose_message__can_attach_attachment
 msgid "Can Attach Attachment"
-msgstr "Inserimento Allegati Ammesso"
+msgstr "Può inserire allegati"
 
 #. module: mail_attach_existing_attachment
 #: model:ir.model.fields,field_description:mail_attach_existing_attachment.field_mail_compose_message__display_object_attachment_ids
