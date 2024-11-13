@@ -48,13 +48,21 @@ repos:
       # update the NOT INSTALLABLE ADDONS section above
       - id: oca-update-pre-commit-excluded-addons
       - id: oca-fix-manifest-website
+<<<<<<< HEAD
         args: ["https://github.com/OCA/mail"]
+=======
+        args: ["https://github.com/OCA/social"]
+>>>>>>> social/18.0-mig-mail_optional_follower_notification
       - id: oca-gen-addon-readme
         args:
           - --addons-dir=.
           - --branch=18.0
           - --org-name=OCA
+<<<<<<< HEAD
           - --repo-name=mail
+=======
+          - --repo-name=social
+>>>>>>> social/18.0-mig-mail_optional_follower_notification
           - --if-source-changed
           - --keep-source-digest
           - --convert-fragments-to-markdown

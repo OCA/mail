@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 [![Runboat](https://img.shields.io/badge/runboat-Try%20me-875A7B.png)](https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=18.0)
 [![Pre-commit Status](https://github.com/OCA/mail/actions/workflows/pre-commit.yml/badge.svg?branch=18.0)](https://github.com/OCA/mail/actions/workflows/pre-commit.yml?query=branch%3A18.0)
 [![Build Status](https://github.com/OCA/mail/actions/workflows/test.yml/badge.svg?branch=18.0)](https://github.com/OCA/mail/actions/workflows/test.yml?query=branch%3A18.0)
@@ -10,6 +11,19 @@
 # mail
 
 mail
+=======
+[![Runboat](https://img.shields.io/badge/runboat-Try%20me-875A7B.png)](https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=18.0)
+[![Pre-commit Status](https://github.com/OCA/social/actions/workflows/pre-commit.yml/badge.svg?branch=18.0)](https://github.com/OCA/social/actions/workflows/pre-commit.yml?query=branch%3A18.0)
+[![Build Status](https://github.com/OCA/social/actions/workflows/test.yml/badge.svg?branch=18.0)](https://github.com/OCA/social/actions/workflows/test.yml?query=branch%3A18.0)
+[![codecov](https://codecov.io/gh/OCA/social/branch/18.0/graph/badge.svg)](https://codecov.io/gh/OCA/social)
+[![Translation Status](https://translation.odoo-community.org/widgets/social-18-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/social-18-0/?utm_source=widget)
+
+<!-- /!\ do not modify above this line -->
+
+# social
+
+social
+>>>>>>> social/18.0-mig-mail_optional_follower_notification
 
 <!-- /!\ do not modify below this line -->
 
