@@ -74,8 +74,10 @@ msgstr "Nessun modello trovato."
 #. module: mail_layout_preview
 #: model_terms:ir.ui.view,arch_db:mail_layout_preview.email_templates_list
 msgid ""
-"Paste into the address bar and change the record ID (the last value in the URL).\n"
-"              <br/>If you don't know the ID of the record, just browse to the record via odoo interface and check its ID in the address bar `#id=XXX`."
+"Paste into the address bar and change the record ID (the last value in the "
+"URL).\n"
+"              <br/>If you don't know the ID of the record, just browse to "
+"the record via odoo interface and check its ID in the address bar `#id=XXX`."
 msgstr ""
 "Incollare nella barra indirizzo e modificare l'ID record (l'ultimo valore "
 "nell'URL).\n"

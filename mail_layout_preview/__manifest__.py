@@ -5,10 +5,10 @@
     "name": "Mail Preview",
     "summary": """
         Preview email templates in the browser""",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail"],
     "data": ["templates/email_preview.xml", "wizard/email_template_preview.xml"],
     "development_status": "Beta",
