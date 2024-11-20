@@ -7,7 +7,7 @@
     "version": "18.0.1.0.0",
     "development_status": "Beta",
     "category": "Social Network",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "SDi, David Juaneda, Sodexis, ACSONE SA/NV,"
     " Odoo Community Association (OCA)",
     "license": "AGPL-3",
