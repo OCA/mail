@@ -22,6 +22,7 @@ class MailActivity(models.Model):
         compute="_compute_related_model_instance",
         string="Document",
     )
+    user_avatar_128 = fields.Binary(related="user_id.avatar_128", readonly=True)
 
     @api.depends("res_id", "res_model")
     def _compute_related_model_instance(self):
@@ -71,13 +72,3 @@ class MailActivity(models.Model):
             for allowed_doc_id in allowed_doc_ids
             for message_id in doc_dict[allowed_doc_id]
         }
-
-    @api.model
-    def _find_allowed_doc_ids(self, model_ids):
-        ir_model_access_model = self.env["ir.model.access"]
-        allowed_ids = set()
-        for doc_model, doc_dict in model_ids.items():
-            if not ir_model_access_model.check(doc_model, "read", False):
-                continue
-            allowed_ids |= self._find_allowed_model_wise(doc_model, doc_dict)
-        return allowed_ids

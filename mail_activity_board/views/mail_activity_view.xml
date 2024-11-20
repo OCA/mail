@@ -9,9 +9,8 @@
         Add a link to the related model instance to ease navigation
     -->
     <record id="mail_activity_view_form_popup" model="ir.ui.view">
-        <field
-            name="name"
-        >mail.activity.view.form.popup (in mail_activity_board)</field>
+        <field name="name">mail.activity.view.form.popup (in mail_activity_board)
+        </field>
         <field name="model">mail.activity</field>
         <field name="inherit_id" ref="mail.mail_activity_view_form_popup" />
         <field name="arch" type="xml">
@@ -28,9 +27,8 @@
         Add a link to the related model instance to ease navigation
     -->
     <record id="mail_activity_view_calendar" model="ir.ui.view">
-        <field
-            name="name"
-        >mail.activity.view.form.calendar (in mail_activity_board)</field>
+        <field name="name">mail.activity.view.form.calendar (in mail_activity_board)
+        </field>
         <field name="model">mail.activity</field>
         <field name="inherit_id" ref="mail.mail_activity_view_calendar" />
         <field name="arch" type="xml">
@@ -221,13 +219,20 @@
                                         </t>
                                     </div>
                                     <div class="oe_kanban_bottom_right">
-                                        <img
-                                            t-att-src="kanban_image('res.users', 'avatar_128', record.user_id.raw_value)"
-                                            t-att-title="record.user_id.value"
+                                        <!--                                        <img-->
+                                        <!--                                            t-att-src="kanban_image('res.users', 'avatar_128', record.user_id.raw_value)"-->
+                                        <!--                                            t-att-title="record.user_id.value"-->
+                                        <!--                                            t-att-alt="record.user_id.value"-->
+                                        <!--                                            width="24"-->
+                                        <!--                                            height="24"-->
+                                        <!--                                            class="oe_kanban_avatar"-->
+                                        <!--                                        />-->
+                                        <field
+                                            name="user_avatar_128"
+                                            widget="image"
+                                            options="{'img_class': 'oe_kanban_avatar'}"
                                             t-att-alt="record.user_id.value"
-                                            width="24"
-                                            height="24"
-                                            class="oe_kanban_avatar"
+                                            t-att-title="record.user_id.value"
                                         />
                                     </div>
                                 </div>
