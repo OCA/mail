@@ -20,9 +20,9 @@
         </field>
     </record>
 
-    <!-- TREE VIEW -->
+    <!-- LIST VIEW -->
     <record id="mail_activity_view_tree" model="ir.ui.view">
-        <field name="name">mail.activity.boards.view.tree</field>
+        <field name="name">mail.activity.boards.view.list</field>
         <field name="model">mail.activity</field>
         <field name="inherit_id" ref="mail_activity_board.mail_activity_view_tree" />
         <field name="arch" type="xml">
