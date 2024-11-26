@@ -1,12 +1,15 @@
-/** @odoo-module **/
-import {Chatter} from "@mail/core/web/chatter";
+import {Chatter} from "@mail/chatter/web_portal/chatter";
 import {patch} from "@web/core/utils/patch";
+import {useService} from "@web/core/utils/hooks";
 
 patch(Chatter.prototype, {
     // --------------------------------------------------------------------------
     // Handlers
     // --------------------------------------------------------------------------
-
+    setup() {
+        super.setup(...arguments);
+        this.action = useService("action");
+    },
     /**
      * @private
      * @param {MouseEvent} ev

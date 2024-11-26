@@ -109,13 +109,13 @@
         </field>
     </record>
 
-    <!-- TREE VIEW -->
+    <!-- LIST VIEW -->
     <record id="mail_activity_view_tree" model="ir.ui.view">
-        <field name="name">mail.activity.boards.view.tree</field>
+        <field name="name">mail.activity.boards.view.list</field>
         <field name="model">mail.activity</field>
         <field name="inherit_id" ref="mail.mail_activity_view_tree" />
         <field name="arch" type="xml">
-            <xpath expr="//tree" position="attributes">
+            <xpath expr="//list" position="attributes">
                 <attribute name="default_order" />
                 <attribute
                     name="decoration-danger"
@@ -162,7 +162,7 @@
                 <field name="activity_type_id" />
                 <field name="activity_category" />
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div t-attf-class="oe_kanban_content oe_kanban_global_click">
                             <div class="oe_kanban_content">
                                 <div>
@@ -221,13 +221,9 @@
                                         </t>
                                     </div>
                                     <div class="oe_kanban_bottom_right">
-                                        <img
-                                            t-att-src="kanban_image('res.users', 'avatar_128', record.user_id.raw_value)"
-                                            t-att-title="record.user_id.value"
-                                            t-att-alt="record.user_id.value"
-                                            width="24"
-                                            height="24"
-                                            class="oe_kanban_avatar"
+                                        <field
+                                            name="user_id"
+                                            widget="many2one_avatar_user"
                                         />
                                     </div>
                                 </div>
@@ -252,7 +248,7 @@
                 <field name="res_name" string="Origin" />
             </xpath>
 
-            <xpath expr='//filter[@name="activities_overdue"]' position='before'>
+            <xpath expr='//filter[@name="filter_date_deadline_past"]' position='before'>
                 <filter
                     string="Act. next month"
                     name="activities_month"
@@ -296,7 +292,7 @@
             name="view_ids"
             eval="[(5, 0, 0),
                           (0, 0, {'view_mode': 'kanban', 'view_id': ref('mail_activity_view_kanban')}),
-                          (0, 0, {'view_mode': 'tree', 'view_id': ref('mail_activity_view_tree')}),
+                          (0, 0, {'view_mode': 'list', 'view_id': ref('mail_activity_view_tree')}),
                           (0, 0, {'view_mode': 'form', 'view_id': ref('mail_activity_view_form_board')}),
                           (0, 0, {'view_mode': 'calendar'}),
                           (0, 0, {'view_mode': 'pivot'}),

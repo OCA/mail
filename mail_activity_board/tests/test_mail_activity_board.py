@@ -191,9 +191,8 @@ class TestMailActivityBoardMethods(TransactionCase):
         kwargs["domain"] = action.get("domain")
 
         result = self.env[action.get("res_model")].get_views(action.get("views"))
-        # fields = result.get("views").get("kanban").get("fields")
         fields = result.get("models").get(action.get("res_model"))
-        kwargs["fields"] = list(fields.keys())
+        kwargs["fields"] = list(fields["fields"].keys())
 
         result = self.env["mail.activity"].read_group(**kwargs)
 
