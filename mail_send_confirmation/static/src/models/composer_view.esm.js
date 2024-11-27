@@ -1,5 +1,3 @@
-/* @odoo-module */
-
 import {Composer} from "@mail/core/common/composer";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
 import {_t} from "@web/core/l10n/translation";
