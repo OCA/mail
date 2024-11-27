@@ -36,8 +36,8 @@ class TestMailActivityDoneMethods(TransactionCase):
         self.assertTrue(self.act1.exists())
         self.assertEqual(self.act1.state, "done")
 
-    def test_systray_get_activities(self):
-        act_count = self.employee.with_user(self.employee).systray_get_activities()
+    def test_get_activity_groups(self):
+        act_count = self.employee.with_user(self.employee)._get_activity_groups()
         self.assertEqual(
             len(act_count), 1, "Number of activities should be equal to one"
         )
@@ -47,12 +47,19 @@ class TestMailActivityDoneMethods(TransactionCase):
         params = {
             "domain": [],
             "group_by": "id",
-            "progress_bar": {"field": "activity_state"},
+            "progress_bar": {
+                "field": "activity_state",
+                "colors": {
+                    "overdue": "danger",
+                    "today": "warning",
+                    "planned": "success",
+                },
+            },
         }
-        result = res_partner._read_progress_bar(**params)
-        self.assertEqual(result[0]["__count"], 1)
+        result = res_partner.read_progress_bar(**params)
+        self.assertEqual(len(result), 1)
 
         self.act1._action_done()
         self.assertEqual(self.act1.state, "done")
-        result = res_partner._read_progress_bar(**params)
+        result = res_partner.read_progress_bar(**params)
         self.assertEqual(len(result), 0)

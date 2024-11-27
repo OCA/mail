@@ -7,7 +7,7 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     @api.model
-    def systray_get_activities(self):
+    def _get_activity_groups(self):
         # Here we totally override the method. Not very nice, but
         # we should perhaps ask Odoo to add a hook here.
         query = """SELECT m.id, count(*), act.res_model as model,
@@ -50,7 +50,7 @@ class ResUsers(models.Model):
                     "planned_count": 0,
                     "type": "activity",
                 }
-            user_activities[activity["model"]]["%s_count" % activity["states"]] += (
+            user_activities[activity["model"]][f"{activity['states']}_count"] += (
                 activity["count"]
             )
             if activity["states"] in ("today", "overdue"):
