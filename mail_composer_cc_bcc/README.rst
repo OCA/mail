@@ -130,13 +130,13 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-.. |maintainer-hailangvn2023| image:: https://github.com/hailangvn2023.png?size=40px
-    :target: https://github.com/hailangvn2023
-    :alt: hailangvn2023
+.. |maintainer-trisdoan| image:: https://github.com/trisdoan.png?size=40px
+    :target: https://github.com/trisdoan
+    :alt: trisdoan
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-hailangvn2023| 
+|maintainer-trisdoan| 
 
 This module is part of the `OCA/social <https://github.com/OCA/social/tree/16.0/mail_composer_cc_bcc>`_ project on GitHub.
 
