@@ -58,7 +58,12 @@
                         nolabel="1"
                     >
                         <field name="res_name" invisible="1" />
-                        <h1><field name="related_model_instance" /></h1>
+                        <h1>
+                            <field
+                                name="related_model_instance"
+                                options="{'no_open': True}"
+                            />
+                        </h1>
                     </button>
                     <field name="activity_category" invisible="1" />
                     <field name="res_model" invisible="1" />
