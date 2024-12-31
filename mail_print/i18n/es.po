@@ -51,7 +51,7 @@ msgid "Message"
 msgstr "Mensaje"
 
 #. module: mail_print
-#. openerp-web
+#. odoo-javascript
 #: code:addons/mail_print/static/src/components/print_message/print_message.xml:0
 #, python-format
 msgid "Print Message"

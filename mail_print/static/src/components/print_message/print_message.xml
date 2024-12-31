@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates xml:space="preserve">
-    <t t-name="mail_print.PrintMessage" owl="1">
-        <span
-            class="o_MessageActionList_action o_MessageActionList_actionPrint p-2 fa fa-lg fa-print"
+    <t t-name="mail_print.PrintMessage">
+        <button
+            class="btn px-1 py-0 rounded-0 mail_print_message"
             title="Print Message"
-            role="button"
-            tabindex="0"
             aria-label="Print Message"
             t-on-click="onClickPrintMessage"
-        />
+        >
+            <i class="fa fa-lg fa-print" />
+        </button>
     </t>
 </templates>

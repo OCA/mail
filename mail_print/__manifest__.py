@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": "Mail Print Message",
-    "version": "15.0.1.1.0",
+    "version": "17.0.1.0.0",
     "summary": "Print messages from the chatter of any document. ",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/social",
@@ -14,10 +14,8 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "mail_print/static/src/components/**/*.esm.js",
-        ],
-        "web.assets_qweb": [
-            "mail_print/static/src/components/*/*.xml",
+            "mail_print/static/src/**/*.esm.js",
+            "mail_print/static/src/**/*.xml",
         ],
         "web.assets_tests": [
             "mail_print/static/tests/tours/**/*",
