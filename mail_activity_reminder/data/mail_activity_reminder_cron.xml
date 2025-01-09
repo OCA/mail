@@ -12,7 +12,5 @@
         <field name="interval_number">1</field>
         <field name="interval_type">hours</field>
         <field name="nextcall">2020-01-01 00:01:00</field>
-        <field name="numbercall">-1</field>
-        <field name="doall" eval="True" />
     </record>
 </odoo>
