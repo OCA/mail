@@ -4,7 +4,7 @@
 
 {
     "name": "Mail Activity Reminder",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Discuss",
     "website": "https://github.com/OCA/social",
     "author": "CorporateHub, Odoo Community Association (OCA)",
