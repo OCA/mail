@@ -4,7 +4,6 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <record
         id="mail_activity_reminder_mail_activity_type_view_form_inherit"
         model="ir.ui.view"
@@ -20,5 +19,4 @@
             </field>
         </field>
     </record>
-
 </odoo>
