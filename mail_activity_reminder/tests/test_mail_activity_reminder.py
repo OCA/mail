@@ -25,7 +25,7 @@ class TestMailActivityReminder(common.TransactionCase):
         cls.Company = cls.env["res.company"]
         cls.MailActivityType = cls.env["mail.activity.type"]
         cls.MailActivity = cls.env["mail.activity"]
-        cls.company_id = cls.Company._company_default_get()
+        cls.company_id = cls.env.company
         cls.now = datetime(2020, 4, 19, 15, 00)
         cls.today = cls.now.date()
         cls.model_res_partner = cls.env["ir.model"].search(
