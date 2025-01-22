@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": "Mail Forward Message",
-    "version": "15.0.1.0.1",
+    "version": "17.0.1.0.0",
     "summary": "Forward messages from the chatter of any document to other users.",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/social",
@@ -12,10 +12,8 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "mail_forward/static/src/components/**/*.esm.js",
-        ],
-        "web.assets_qweb": [
-            "mail_forward/static/src/components/*/*.xml",
+            "mail_forward/static/src/**/*.esm.js",
+            "mail_forward/static/src/**/*.xml",
         ],
         "web.assets_tests": [
             "mail_forward/static/tests/tours/**/*",

@@ -17,7 +17,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath
-                expr="//button[@name='action_save_as_template']"
+                expr="//button[@name='open_template_creation_wizard']"
                 position="attributes"
             >
                 <attribute name="invisible">1</attribute>

@@ -2,35 +2,31 @@
 /*  Copyright 2024 Tecnativa - Carlos Lopez
     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 */
-import {registerMessagingComponent} from "@mail/utils/messaging_component";
 const {Component} = owl;
+import {useService} from "@web/core/utils/hooks";
 
 export class ForwardMessage extends Component {
+    setup() {
+        super.setup();
+        this.threadService = useService("mail.thread");
+    }
     async onClickForwardMessage() {
         const composer = this.props.message.originThread.composer;
-        const action = await this.env.services.rpc({
-            model: "mail.message",
-            method: "action_wizard_forward",
-            args: [[this.props.message.id]],
-        });
-        this.env.bus.trigger("do-action", {
-            action: action,
-            options: {
-                additional_context: {
-                    active_id: this.props.message.id,
-                    active_ids: [this.props.message.id],
-                    active_model: "mail.message",
-                },
-                on_close: () => {
-                    if (composer.exists()) {
-                        composer._reset();
-                        if (composer.activeThread) {
-                            composer.activeThread.loadNewMessages();
-                            composer.activeThread.refreshFollowers();
-                            composer.activeThread.fetchAndUpdateSuggestedRecipients();
-                        }
-                    }
-                },
+        const action = await this.env.services.orm.call(
+            "mail.message",
+            "action_wizard_forward",
+            [[this.props.message.id]]
+        );
+        this.env.services.action.doAction(action, {
+            additionalContext: {
+                active_id: this.props.message.id,
+                active_ids: [this.props.message.id],
+                active_model: "mail.message",
+            },
+            onClose: () => {
+                if (composer.thread) {
+                    this.threadService.fetchNewMessages(composer.thread);
+                }
             },
         });
     }
@@ -40,5 +36,3 @@ ForwardMessage.template = "mail_forward.ForwardMessage";
 ForwardMessage.props = {
     message: Object,
 };
-
-registerMessagingComponent(ForwardMessage);
