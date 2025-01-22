@@ -17,7 +17,7 @@ class MailMessage(models.Model):
         action["views"] = [(view.id, view.type)]
         action["context"] = {
             "default_model": self.model,
-            "default_res_id": self.res_id,
+            "default_res_ids": [self.res_id],
             "default_composition_mode": "comment",
             "default_body": self._build_message_body_for_forward(),
             "default_attachment_ids": self.attachment_ids.ids,

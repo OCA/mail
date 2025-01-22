@@ -6,8 +6,8 @@ from odoo import models
 class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
-    def _notify_compute_recipients(self, message, msg_vals):
-        recipients_data = super()._notify_compute_recipients(message, msg_vals)
+    def _notify_get_recipients(self, message, msg_vals, **kwargs):
+        recipients_data = super()._notify_get_recipients(message, msg_vals, **kwargs)
         # only notify to explicit partners, remove others(followers).
         if self.env.context.get("message_forwarded_id"):
             current_partners_ids = message.partner_ids.ids

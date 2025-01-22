@@ -15,7 +15,7 @@ class MailComposeMessage(models.TransientModel):
             # remove 'Re: ' prefixes and add 'Fwd:' prefix to the subject
             subject = result.get("subject")
             if subject and subject.startswith(re_prefix):
-                subject = "%s %s" % (fwd_prefix, subject[4:])
+                subject = f"{fwd_prefix} {subject[4:]}"
             result["subject"] = subject
         return result
 

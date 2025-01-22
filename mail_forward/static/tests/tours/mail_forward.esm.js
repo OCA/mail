@@ -1,6 +1,7 @@
 /** @odoo-module */
 
-import tour from "web_tour.tour";
+import {registry} from "@web/core/registry";
+
 const contact_steps = [
     {
         trigger: ".o_navbar_apps_menu button",
@@ -11,7 +12,7 @@ const contact_steps = [
     {
         content: "Search Contact",
         trigger: ".o_searchview_input",
-        run: "text Test",
+        run: "text Test Forward",
     },
     {
         trigger: ".o_menu_item",
@@ -25,39 +26,22 @@ const contact_steps = [
     },
     {
         content: "Open contact",
-        trigger: ".o_list_table td[name='display_name']:contains('Test')",
+        trigger: ".o_list_table td[name='complete_name']:contains('Test Forward')",
     },
 ];
-tour.register(
-    "mail_forward.mail_forward_tour",
-    {
-        test: true,
-        url: "/web",
-    },
-    [
+registry.category("web_tour.tours").add("mail_forward.mail_forward_tour", {
+    test: true,
+    url: "/web",
+    steps: () => [
         ...contact_steps,
         {
-            content: "Open Chat",
-            trigger: ".o_ChatterTopbar_buttonSendMessage",
-            run: "click",
-        },
-        {
-            content: "Write a message",
-            trigger: ".o_ComposerTextInput_textarea",
-            run: "text Hello World",
-        },
-        {
-            content: "Post a message",
-            trigger: ".o_Composer_buttonSend",
-        },
-        {
             content: "Hover a message",
-            trigger: "div.o_Message.o-discussion",
+            trigger: "div.o-mail-Message[aria-label='Message'] button.dropdown-toggle",
             run: "click",
         },
         {
             content: "Forward a message",
-            trigger: ".o_MessageActionList_actionForward",
+            trigger: ".mail_forward_message",
             run: "click",
         },
         {
@@ -80,42 +64,24 @@ tour.register(
         {
             content: "Check Mail Forward",
             trigger:
-                ".o_Message_prettyBody:contains(---------- Forwarded message ---------)",
+                "div.o-mail-Message[aria-label='Message']:contains(---------- Forwarded message ---------)",
         },
-    ]
-);
+    ],
+});
 
-tour.register(
-    "mail_forward.mail_note_not_forward_tour",
-    {
-        test: true,
-        url: "/web",
-    },
-    [
+registry.category("web_tour.tours").add("mail_forward.mail_note_not_forward_tour", {
+    test: true,
+    url: "/web",
+    steps: () => [
         ...contact_steps,
         {
-            content: "Open Chat",
-            trigger: ".o_ChatterTopbar_buttonLogNote",
-            run: "click",
-        },
-        {
-            content: "Write a note",
-            trigger: ".o_ComposerTextInput_textarea",
-            run: "text This is a note",
-        },
-        {
-            content: "Post a note",
-            trigger: ".o_Composer_buttonSend",
-        },
-        {
             content: "Hover a note",
-            trigger: "div.o_Message.o-not-discussion",
+            trigger: "div.o-mail-Message[aria-label='Note']",
             run: "click",
         },
         {
             content: "Verify that the Forward button does not exist.",
-            trigger:
-                "div.o_Message.o-not-discussion:not(.o_MessageActionList_actionForward)",
+            trigger: "div.o-mail-Message[aria-label='Note']:not(.mail_forward_message)",
         },
-    ]
-);
+    ],
+});

@@ -12,6 +12,7 @@ class TestMailForward(TestMailComposer, HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.test_record.write({"name": "Test Forward", "email": "test@example.com"})
         cls.partner_follower1 = cls.env["res.partner"].create(
             {"name": "Follower1", "email": "follower1@example.com"}
         )
@@ -29,7 +30,7 @@ class TestMailForward(TestMailComposer, HttpCase):
         """
         ctx = {
             "default_model": self.test_record._name,
-            "default_res_id": self.test_record.id,
+            "default_res_ids": [self.test_record.id],
         }
         composer_form = Form(self.env["mail.compose.message"].with_context(**ctx))
         composer_form.body = "<p>Hello</p>"
@@ -69,9 +70,15 @@ class TestMailForward(TestMailComposer, HttpCase):
         self.assertIn("---------- Forwarded message ---------", forward_message.body)
 
     def test_02_mail_forward_tour(self):
+        self.test_record.message_post(
+            body="Hello World", message_type="comment", subtype_xmlid="mail.mt_comment"
+        )
         self.start_tour("/web", "mail_forward.mail_forward_tour", login="admin")
 
     def test_03_mail_note_not_forward_tour(self):
+        self.test_record.message_post(
+            body="This is a note", message_type="comment", subtype_xmlid="mail.mt_note"
+        )
         self.start_tour(
             "/web", "mail_forward.mail_note_not_forward_tour", login="admin"
         )
