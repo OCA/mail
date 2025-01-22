@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.Message.actions" t-inherit-mode="extension">
+        <!--
+        In the DropdownItem, render the callComponent if it is defined,
+        similar to how it is rendered for quick actions.
+        Currently, Odoo only renders the callComponent for quick actions (2 or 3 actions).
+        However, the remaining actions, rendered as DropdownItem, do not invoke the callComponent.
+        See the related code here:
+        https://github.com/odoo/odoo/blob/a32626be4cfbaeb21ed64a0abaad298e8e223ea3/addons/mail/static/src/core/common/message.xml#L146-L160
+
+        TODO: This code should be removed once the issue is fixed in the Odoo core.
+        https://github.com/odoo/odoo/pull/194643
+        -->
+        <xpath expr="//DropdownItem//i" position="before">
+            <t
+                t-if="action.callComponent"
+                t-component="action.callComponent"
+                t-props="action.props"
+            />
+            <t t-else="">
+                <!-- used to move the elements into the t-else -->
+                <span class="mail_action_item d-none" />
+            </t>
+        </xpath>
+        <xpath expr="//span[hasclass('mail_action_item')]" position="before">
+            <xpath expr="//DropdownItem/i" position="move" />
+            <xpath expr="//DropdownItem/t[@t-esc='action.title']" position="move" />
+        </xpath>
+    </t>
+</templates>
