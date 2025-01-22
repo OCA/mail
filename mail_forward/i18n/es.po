@@ -18,12 +18,14 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
 msgid "---------- Forwarded message ---------"
 msgstr "---------- Mensaje reenviado ---------"
 
 #. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
 msgid "Date"
@@ -40,7 +42,16 @@ msgid "Email composition wizard"
 msgstr "Asistente de composición de correos electrónicos"
 
 #. module: mail_forward
-#. openerp-web
+#. odoo-javascript
+#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
+#: code:addons/mail_forward/static/src/core/common/message_actions.esm.js:0
+#, python-format
+msgid "Forward"
+msgstr ""
+
+#. module: mail_forward
+#. odoo-javascript
+#. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
 #, python-format
@@ -48,12 +59,35 @@ msgid "Forward Message"
 msgstr "Reenviar mensaje"
 
 #. module: mail_forward
+#. odoo-javascript
+#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
+#, python-format
+msgid "Forward Message Center"
+msgstr ""
+
+#. module: mail_forward
+#. odoo-javascript
+#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
+#, python-format
+msgid "Forward Message Left"
+msgstr ""
+
+#. module: mail_forward
+#. odoo-javascript
+#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
+#, python-format
+msgid "Forward Message Right"
+msgstr ""
+
+#. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
 msgid "From"
 msgstr "De"
 
 #. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/wizards/mail_compose_message.py:0
 #, python-format
 msgid "Fwd:"
@@ -65,18 +99,21 @@ msgid "Message"
 msgstr "Mensaje"
 
 #. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/wizards/mail_compose_message.py:0
 #, python-format
 msgid "Re:"
 msgstr ""
 
 #. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
 msgid "Subject"
 msgstr "Asunto"
 
 #. module: mail_forward
+#. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
 msgid "To"
