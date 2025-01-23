@@ -1,5 +1,3 @@
-/* @odoo-module */
-
 import {Message} from "@mail/core/common/message";
 import {patch} from "@web/core/utils/patch";
 
@@ -15,6 +13,8 @@ patch(Message, {
 
 patch(Message.prototype, {
     get canReply() {
-        return Boolean(this.message.res_id && isMessageTypeValid(this.message.type));
+        return Boolean(
+            this.message.res_id && isMessageTypeValid(this.message.message_type)
+        );
     },
 });
