@@ -1,11 +1,8 @@
-/* @odoo-module */
-
 import {messageActionsRegistry} from "@mail/core/common/message_actions";
 
 messageActionsRegistry.add("reply", {
-    icon: "fa-reply",
+    icon: "fa fa-reply",
     title: "Reply",
-    onClick: (component) =>
-        component.messageService.messageReply(component.props.message),
+    onClick: (component) => component.message.messageReply(component.props.message),
     condition: (component) => component.canReply,
 });
