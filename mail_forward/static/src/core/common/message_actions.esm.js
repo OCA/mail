@@ -12,6 +12,6 @@ messageActionsRegistry.add("forward", {
     props: (component) => ({message: component.props.message}),
     condition: (component) =>
         component.props.message.is_discussion && !component.props.message.is_note,
-    sequence: 15,
+    sequence: 75,
     title: _t("Forward"),
 });
