@@ -19,8 +19,6 @@ class MailMessage(models.Model):
             "default_model": self.model,
             "default_res_ids": [self.res_id],
             "default_composition_mode": "comment",
-            "default_body": self._build_message_body_for_forward(),
-            "default_attachment_ids": self.attachment_ids.ids,
             "default_is_log": False,
             "default_notify": True,
             "force_email": True,

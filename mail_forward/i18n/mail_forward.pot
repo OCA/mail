@@ -21,6 +21,16 @@ msgid "---------- Forwarded message ---------"
 msgstr ""
 
 #. module: mail_forward
+#: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__another_thread
+msgid "Another thread"
+msgstr ""
+
+#. module: mail_forward
+#: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__current_thread
+msgid "Current thread"
+msgstr ""
+
+#. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
@@ -35,6 +45,21 @@ msgstr ""
 #. module: mail_forward
 #: model:ir.model,name:mail_forward.model_mail_compose_message
 msgid "Email composition wizard"
+msgstr ""
+
+#. module: mail_forward
+#: model:ir.model.fields,field_description:mail_forward.field_ir_model__enable_forward_to
+msgid "Enable Forward To"
+msgstr ""
+
+#. module: mail_forward
+#: model:ir.model.fields,help:mail_forward.field_ir_model__enable_forward_to
+msgid "Enable forwarding messages to records of this model."
+msgstr ""
+
+#. module: mail_forward
+#: model_terms:ir.ui.view,arch_db:mail_forward.mail_compose_message_forward_form
+msgid "Followers to notify"
 msgstr ""
 
 #. module: mail_forward
@@ -77,6 +102,11 @@ msgid "Forward Message Right"
 msgstr ""
 
 #. module: mail_forward
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_type
+msgid "Forward Type"
+msgstr ""
+
+#. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
@@ -96,6 +126,11 @@ msgid "Message"
 msgstr ""
 
 #. module: mail_forward
+#: model:ir.model,name:mail_forward.model_ir_model
+msgid "Models"
+msgstr ""
+
+#. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/wizards/mail_compose_message.py:0
 #, python-format
@@ -107,6 +142,11 @@ msgstr ""
 #: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
 msgid "Subject"
+msgstr ""
+
+#. module: mail_forward
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_thread
+msgid "Thread to forward"
 msgstr ""
 
 #. module: mail_forward
