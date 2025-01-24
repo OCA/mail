@@ -22,6 +22,7 @@ class TestMailForward(TestMailComposer, HttpCase):
         cls.partner_forward = cls.env["res.partner"].create(
             {"name": "Forward", "email": "forward@example.com"}
         )
+        cls.env["ir.model"]._get("res.partner").enable_forward_to = True
 
     def test_01_mail_forward(self):
         """
@@ -39,7 +40,7 @@ class TestMailForward(TestMailComposer, HttpCase):
         composer = composer_form.save()
         with self.mock_mail_gateway():
             composer._action_send_mail()
-        # Verify recipients of mail.message
+        # Verify the followers of mail.message
         message = self.test_record.message_ids[0]
         self.assertEqual(len(message.partner_ids), 2)
         self.assertIn(self.partner_follower1, message.partner_ids)
@@ -62,11 +63,66 @@ class TestMailForward(TestMailComposer, HttpCase):
         with RecordCapturer(self.env["mail.message"], message_domain) as capture:
             with self.mock_mail_gateway():
                 composer._action_send_mail()
-        # Verify recipients of mail.message
+        # Verify the followers of mail.message
         forward_message = capture.records
         self.assertEqual(len(forward_message.partner_ids), 1)
         self.assertNotIn(self.partner_follower1, forward_message.partner_ids)
         self.assertIn(self.partner_forward, forward_message.partner_ids)
+        self.assertIn("---------- Forwarded message ---------", forward_message.body)
+
+    def test_mail_forward_another_thread(self):
+        """
+        Check that the email is forwarded to another thread.
+        and the email is sent to the followers of the another thread.
+        """
+        ctx = {
+            "default_model": self.test_record._name,
+            "default_res_ids": [self.test_record.id],
+        }
+        composer_form = Form(self.env["mail.compose.message"].with_context(**ctx))
+        composer_form.body = "<p>Hello</p>"
+        composer_form.subject = "Test Forward"
+        composer_form.partner_ids.add(self.partner_follower1)
+        composer = composer_form.save()
+        with self.mock_mail_gateway():
+            composer._action_send_mail()
+        # Verify the followers of mail.message
+        message = self.test_record.message_ids[0]
+        self.assertEqual(len(message.partner_ids), 1)
+        self.assertIn(self.partner_follower1, message.partner_ids)
+        self.assertNotIn(self.partner_follower2, message.partner_ids)
+        self.assertNotIn(self.partner_forward, message.partner_ids)
+        self.assertNotIn("---------- Forwarded message ---------", message.body)
+        # Forward the email to another record(self.partner_forward)
+        action_forward = message.action_wizard_forward()
+        Message = self.env["mail.compose.message"].with_context(
+            **action_forward["context"]
+        )
+        composer_form = Form(Message, view=action_forward["views"][0][0])
+        composer_form.partner_ids.add(self.partner_follower2)
+        composer_form.forward_type = "another_thread"
+        composer_form.forward_thread = (
+            f"{self.partner_forward._name},{self.partner_forward.id}"
+        )
+        composer = composer_form.save()
+        message_domain = [
+            ("model", "=", self.partner_forward._name),
+            ("res_id", "=", self.partner_forward.id),
+        ]
+        with RecordCapturer(self.env["mail.message"], message_domain) as capture:
+            with self.mock_mail_gateway():
+                composer._action_send_mail()
+        # Verify the followers of mail.message
+        forward_message = capture.records
+        self.assertEqual(forward_message.subject, "Fwd: Test Forward")
+        self.assertEqual(len(forward_message.partner_ids), 1)
+        self.assertNotIn(self.partner_follower1, forward_message.partner_ids)
+        # the partner partner_follower2 is added to the message
+        # but is not added as a follower automatically.
+        self.assertIn(self.partner_follower2, forward_message.partner_ids)
+        self.assertNotIn(
+            self.partner_follower2, self.partner_forward.message_partner_ids
+        )
         self.assertIn("---------- Forwarded message ---------", forward_message.body)
 
     def test_02_mail_forward_tour(self):
