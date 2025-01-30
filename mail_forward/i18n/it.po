@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-01-25 15:06+0000\n"
+"PO-Revision-Date: 2025-01-30 13:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -26,12 +26,12 @@ msgstr "---------- Messaggio inoltrato ---------"
 #. module: mail_forward
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__another_thread
 msgid "Another thread"
-msgstr ""
+msgstr "Un'altra discussione"
 
 #. module: mail_forward
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__current_thread
 msgid "Current thread"
-msgstr ""
+msgstr "Discussione attuale"
 
 #. module: mail_forward
 #. odoo-python
@@ -53,17 +53,17 @@ msgstr "Procedura guidata creazione e-mail"
 #. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_ir_model__enable_forward_to
 msgid "Enable Forward To"
-msgstr ""
+msgstr "Abilita inoltro a"
 
 #. module: mail_forward
 #: model:ir.model.fields,help:mail_forward.field_ir_model__enable_forward_to
 msgid "Enable forwarding messages to records of this model."
-msgstr ""
+msgstr "Abilita messaggi inoltro ai record di questo modello."
 
 #. module: mail_forward
 #: model_terms:ir.ui.view,arch_db:mail_forward.mail_compose_message_forward_form
 msgid "Followers to notify"
-msgstr ""
+msgstr "Sottoscritti da avvisare"
 
 #. module: mail_forward
 #. odoo-javascript
@@ -106,7 +106,7 @@ msgstr "Inoltra messaggio successivo"
 #. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_type
 msgid "Forward Type"
-msgstr ""
+msgstr "Tipo inoltro"
 
 #. module: mail_forward
 #. odoo-python
@@ -130,7 +130,7 @@ msgstr "Messaggio"
 #. module: mail_forward
 #: model:ir.model,name:mail_forward.model_ir_model
 msgid "Models"
-msgstr ""
+msgstr "Modelli"
 
 #. module: mail_forward
 #. odoo-python
@@ -149,7 +149,7 @@ msgstr "Oggetto"
 #. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_thread
 msgid "Thread to forward"
-msgstr ""
+msgstr "Discussione da inoltrare"
 
 #. module: mail_forward
 #. odoo-python
