@@ -5,7 +5,7 @@
     "summary": "Assign new to its creator",
     "version": "16.0.1.0.0",
     "category": "Social",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Ilyas, Ooops, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "installable": True,
