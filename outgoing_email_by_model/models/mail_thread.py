@@ -13,7 +13,7 @@ class MailThread(models.AbstractModel):
         res = super()._notify_by_email_get_final_mail_values(
             recipient_ids, base_mail_values, additional_values=additional_values
         )
-        model = self.env["ir.model"].sudo().search([("model", "=", self._name)])
+        model = self.env["ir.model"].sudo()._get(self._name)
         custom_mailserver = model.outgoing_mailserver_id
         if custom_mailserver:
             res.update({"mail_server_id": custom_mailserver.id})

@@ -6,6 +6,7 @@ from odoo import fields, models
 
 class ModelWithMail(models.Model):
     _name = "model.with.mail"
+    _description = "Model with Mail Functionality"
     _inherit = ["mail.thread"]
 
     partner_id = fields.Many2one("res.partner")
