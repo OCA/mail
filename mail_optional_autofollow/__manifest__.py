@@ -6,7 +6,7 @@
         Choose if you want to automatically add new recipients as followers
         on mail.compose.message""",
     "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "category": "Social Network",
     "version": "16.0.1.0.0",
     "license": "AGPL-3",

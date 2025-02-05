@@ -1,0 +1,4160 @@
+From 9f847d9802842dd8eba0105186cd4ff565400ecc Mon Sep 17 00:00:00 2001
+From: "Adrien Peiffer (ACSONE)" <adrien.peiffer@acsone.eu>
+Date: Fri, 18 Mar 2016 18:03:32 +0100
+Subject: [ADD] Add mail_optional_autofollow module
+
+---
+ mail_optional_autofollow/README.rst           |  60 ++++++++++++++++++
+ mail_optional_autofollow/__init__.py          |   4 ++
+ mail_optional_autofollow/__openerp__.py       |  22 +++++++
+ .../static/description/autofollow.png         | Bin 0 -> 15854 bytes
+ .../static/description/icon.png               | Bin 0 -> 9455 bytes
+ mail_optional_autofollow/tests/__init__.py    |   5 ++
+ .../tests/test_mail_optional_autofollow.py    |  45 +++++++++++++
+ mail_optional_autofollow/wizard/__init__.py   |   4 ++
+ .../wizard/mail_compose_message.py            |  28 ++++++++
+ .../wizard/mail_compose_message_view.xml      |  15 +++++
+ 10 files changed, 183 insertions(+)
+ create mode 100644 mail_optional_autofollow/README.rst
+ create mode 100644 mail_optional_autofollow/__init__.py
+ create mode 100644 mail_optional_autofollow/__openerp__.py
+ create mode 100644 mail_optional_autofollow/static/description/autofollow.png
+ create mode 100644 mail_optional_autofollow/static/description/icon.png
+ create mode 100644 mail_optional_autofollow/tests/__init__.py
+ create mode 100644 mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+ create mode 100644 mail_optional_autofollow/wizard/__init__.py
+ create mode 100644 mail_optional_autofollow/wizard/mail_compose_message.py
+ create mode 100644 mail_optional_autofollow/wizard/mail_compose_message_view.xml
+
+diff --git a/mail_optional_autofollow/README.rst b/mail_optional_autofollow/README.rst
+new file mode 100644
+index 000000000..3223d7480
+--- /dev/null
++++ b/mail_optional_autofollow/README.rst
+@@ -0,0 +1,60 @@
++.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
++    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
++    :alt: License: AGPL-3
++
++========================
++Mail optional autofollow
++========================
++
++This module adds the possibility to choose if you want to automatically
++add new recipients as followers on mail.compose.message.
++
++Usage
++=====
++
++To use this module, you need to use the autofollow recipients checkbox on mail.compose.message:
++
++Technically, this field it's initialized to true if there is an
++'mail_post_autofollow' key in the current context
++
++.. figure:: static/description/autofollow.png
++   :alt: autofollow recipients checkbox
++
++.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
++   :alt: Try me on Runbot
++   :target: https://runbot.odoo-community.org/runbot/205/8.0
++
++For further information, please visit:
++
++ * https://www.odoo.com/forum/help-1
++
++
++Bug Tracker
++===========
++
++Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
++In case of trouble, please check there if your issue has already been reported.
++If you spotted it first, help us smashing it by providing a detailed and welcomed feedback
++`here <https://github.com/OCA/social/issues/new?body=module:%20mail_optional_autofollow%0Aversion:%208.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
++
++Credits
++=======
++
++Contributors
++------------
++
++* Adrien Peiffer <adrien.peiffer@acsone.eu>
++* Stéphane Bidoul <stephane.bidoul@acsone.eu>
++
++Maintainer
++----------
++
++.. image:: https://odoo-community.org/logo.png
++   :alt: Odoo Community Association
++   :target: https://odoo-community.org
++
++This module is maintained by the OCA.
++
++OCA, or the Odoo Community Association, is a nonprofit organization whose mission is to support the collaborative development of Odoo features and promote its widespread use.
++
++To contribute to this module, please visit https://odoo-community.org.
+\ No newline at end of file
+diff --git a/mail_optional_autofollow/__init__.py b/mail_optional_autofollow/__init__.py
+new file mode 100644
+index 000000000..095712720
+--- /dev/null
++++ b/mail_optional_autofollow/__init__.py
+@@ -0,0 +1,4 @@
++# -*- coding: utf-8 -*-
++# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++from . import wizard
+diff --git a/mail_optional_autofollow/__openerp__.py b/mail_optional_autofollow/__openerp__.py
+new file mode 100644
+index 000000000..a34fc6afe
+--- /dev/null
++++ b/mail_optional_autofollow/__openerp__.py
+@@ -0,0 +1,22 @@
++# -*- coding: utf-8 -*-
++# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++{
++    'name': "Mail optional autofollow",
++
++    'summary': """
++        Choose if you want to automatically add new recipients as followers
++        on mail.compose.message""",
++    'author': 'ACSONE SA/NV,'
++              'Odoo Community Association (OCA)',
++    'website': "http://acsone.eu",
++    'category': 'Social Network',
++    'version': '8.0.1.0.0',
++    'license': 'AGPL-3',
++    'depends': [
++        'mail',
++    ],
++    'data': [
++        'wizard/mail_compose_message_view.xml',
++    ],
++}
+diff --git a/mail_optional_autofollow/static/description/autofollow.png b/mail_optional_autofollow/static/description/autofollow.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..ef1aa0f8e238fb3d876751d6d0b1b0fd98f36007
+GIT binary patch
+literal 15854
+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
+WW8>BeS&e%aH;N0(2xTE&z5icX8WuVL
+
+literal 0
+HcmV?d00001
+
+diff --git a/mail_optional_autofollow/static/description/icon.png b/mail_optional_autofollow/static/description/icon.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..3a0328b516c4980e8e44cdb63fd945757ddd132d
+GIT binary patch
+literal 9455
+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
+Xviia!U7SGha1wx#SCgwmn*{w2TRX*I
+
+literal 0
+HcmV?d00001
+
+diff --git a/mail_optional_autofollow/tests/__init__.py b/mail_optional_autofollow/tests/__init__.py
+new file mode 100644
+index 000000000..3667d24bd
+--- /dev/null
++++ b/mail_optional_autofollow/tests/__init__.py
+@@ -0,0 +1,5 @@
++# -*- coding: utf-8 -*-
++# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++
++from . import test_mail_optional_autofollow
+diff --git a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+new file mode 100644
+index 000000000..953c1a31a
+--- /dev/null
++++ b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+@@ -0,0 +1,45 @@
++# -*- coding: utf-8 -*-
++# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++
++from openerp.tests import common
++
++
++class TestAttachExistingAttachment(common.TransactionCase):
++
++    def setUp(self):
++        super(TestAttachExistingAttachment, self).setUp()
++        self.partner_obj = self.env['res.partner']
++        self.partner_01 = self.env.ref('base.res_partner_11')
++        self.partner_02 = self.env.ref('base.res_partner_address_20')
++
++    def test_send_email_attachment(self):
++        ctx = self.env.context.copy()
++        ctx.update({
++            'default_model': 'res.partner',
++            'default_res_id': self.partner_01.id,
++            'default_composition_mode': 'comment',
++        })
++        mail_compose = self.env['mail.compose.message']
++        values = mail_compose.with_context(ctx)\
++            .onchange_template_id(False, 'comment', 'res.partner',
++                                  self.partner_01.id)['value']
++        values['partner_ids'] = [(4, self.partner_02.id)]
++        compose_id = mail_compose.with_context(ctx).create(values)
++        compose_id.autofollow_recipients = False
++        compose_id.with_context(ctx).send_mail()
++        res = self.env["mail.followers"].search(
++            [('res_model', '=', 'res.partner'),
++             ('res_id', '=', self.partner_01.id),
++             ('partner_id', '=', self.partner_02.id)])
++        # I check if the recipient isn't a follower
++        self.assertEqual(len(res.ids), 0)
++        compose_id = mail_compose.with_context(ctx).create(values)
++        compose_id.autofollow_recipients = True
++        compose_id.with_context(ctx).send_mail()
++        res = self.env["mail.followers"].search(
++            [('res_model', '=', 'res.partner'),
++             ('res_id', '=', self.partner_01.id),
++             ('partner_id', '=', self.partner_02.id)])
++        # I check if the recipient is a follower
++        self.assertEqual(len(res.ids), 1)
+diff --git a/mail_optional_autofollow/wizard/__init__.py b/mail_optional_autofollow/wizard/__init__.py
+new file mode 100644
+index 000000000..c82500c9b
+--- /dev/null
++++ b/mail_optional_autofollow/wizard/__init__.py
+@@ -0,0 +1,4 @@
++# -*- coding: utf-8 -*-
++# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++from . import mail_compose_message
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+new file mode 100644
+index 000000000..a36b6b03f
+--- /dev/null
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -0,0 +1,28 @@
++# -*- coding: utf-8 -*-
++# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++
++from openerp import models, fields, api
++
++
++class MailComposeMessage(models.TransientModel):
++    _inherit = 'mail.compose.message'
++
++    @api.model
++    def default_get(self, fields_list):
++        res = super(MailComposeMessage, self).default_get(fields_list)
++        if self.env.context.get('mail_post_autofollow'):
++            res['autofollow_recipients'] = True
++        return res
++
++    autofollow_recipients = fields.Boolean()
++
++    @api.multi
++    def send_mail(self):
++        for wizard in self:
++            if wizard.autofollow_recipients:
++                wizard = wizard.with_context(mail_post_autofollow=True)
++            else:
++                wizard = wizard.with_context(mail_post_autofollow=False)
++            super(MailComposeMessage, wizard).send_mail()
++        return {'type': 'ir.actions.act_window_close'}
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message_view.xml b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+new file mode 100644
+index 000000000..0bb7eacbb
+--- /dev/null
++++ b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="utf-8"?>
++<openerp>
++    <data noupdate="0">
++        <record model="ir.ui.view" id="email_compose_message_wizard_inherit_form">
++            <field name="name">mail.compose.message.form (mail_optional_autofollow)</field>
++            <field name="model">mail.compose.message</field>
++            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
++            <field name="arch" type="xml">
++                <xpath expr="//div[field[@name='partner_ids']]" position="after">
++                    <field name="autofollow_recipients" />
++                </xpath>
++            </field>
++        </record>
++    </data>
++</openerp>
+\ No newline at end of file
+--
+2.34.1
+
+
+From 72734e6e41cb7176b15d1f6e5e2b2e2abd64adef Mon Sep 17 00:00:00 2001
+From: "Adrien Peiffer (ACSONE)" <adrien.peiffer@acsone.eu>
+Date: Mon, 4 Apr 2016 20:58:03 +0200
+Subject: [CHG][mail_optional_autofollow] some improvements
+
+---
+ mail_optional_autofollow/README.rst             |  2 +-
+ .../wizard/mail_compose_message.py              | 17 +++++++++--------
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/mail_optional_autofollow/README.rst b/mail_optional_autofollow/README.rst
+index 3223d7480..cc74075db 100644
+--- a/mail_optional_autofollow/README.rst
++++ b/mail_optional_autofollow/README.rst
+@@ -14,7 +14,7 @@ Usage
+
+ To use this module, you need to use the autofollow recipients checkbox on mail.compose.message:
+
+-Technically, this field it's initialized to true if there is an
++Technically, this field is initialized to true if there is an
+ 'mail_post_autofollow' key in the current context
+
+ .. figure:: static/description/autofollow.png
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index a36b6b03f..912a3d913 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -11,18 +11,19 @@ class MailComposeMessage(models.TransientModel):
+     @api.model
+     def default_get(self, fields_list):
+         res = super(MailComposeMessage, self).default_get(fields_list)
+-        if self.env.context.get('mail_post_autofollow'):
+-            res['autofollow_recipients'] = True
++        res.setdefault(
++            'autofollow_recipients',
++            self.env.context.get('mail_post_autofollow', False))
+         return res
+
+-    autofollow_recipients = fields.Boolean()
++    autofollow_recipients = fields.Boolean(
++        string='Make recipients followers',
++        help="""if checked, the additional recipients will be added as\
++        followers on the related object""")
+
+     @api.multi
+     def send_mail(self):
+         for wizard in self:
+-            if wizard.autofollow_recipients:
+-                wizard = wizard.with_context(mail_post_autofollow=True)
+-            else:
+-                wizard = wizard.with_context(mail_post_autofollow=False)
+-            super(MailComposeMessage, wizard).send_mail()
++            super(MailComposeMessage, wizard.with_context(
++                mail_post_autofollow=wizard.autofollow_recipients)).send_mail()
+         return {'type': 'ir.actions.act_window_close'}
+--
+2.34.1
+
+
+From 10b991f072d3b852d1f438052bae5acf0cd2789b Mon Sep 17 00:00:00 2001
+From: "Adrien Peiffer (ACSONE)" <adrien.peiffer@acsone.eu>
+Date: Tue, 5 Apr 2016 08:30:29 +0200
+Subject: [IMP][mail_optional_autofollow] Improve readme file
+
+---
+ mail_optional_autofollow/README.rst     | 7 +------
+ mail_optional_autofollow/__openerp__.py | 1 -
+ 2 files changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/mail_optional_autofollow/README.rst b/mail_optional_autofollow/README.rst
+index cc74075db..08dd7a723 100644
+--- a/mail_optional_autofollow/README.rst
++++ b/mail_optional_autofollow/README.rst
+@@ -14,7 +14,7 @@ Usage
+
+ To use this module, you need to use the autofollow recipients checkbox on mail.compose.message:
+
+-Technically, this field is initialized to true if there is an
++Technically, this field is initialized to true if there is a
+ 'mail_post_autofollow' key in the current context
+
+ .. figure:: static/description/autofollow.png
+@@ -24,11 +24,6 @@ Technically, this field is initialized to true if there is an
+    :alt: Try me on Runbot
+    :target: https://runbot.odoo-community.org/runbot/205/8.0
+
+-For further information, please visit:
+-
+- * https://www.odoo.com/forum/help-1
+-
+-
+ Bug Tracker
+ ===========
+
+diff --git a/mail_optional_autofollow/__openerp__.py b/mail_optional_autofollow/__openerp__.py
+index a34fc6afe..531dab27a 100644
+--- a/mail_optional_autofollow/__openerp__.py
++++ b/mail_optional_autofollow/__openerp__.py
+@@ -3,7 +3,6 @@
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ {
+     'name': "Mail optional autofollow",
+-
+     'summary': """
+         Choose if you want to automatically add new recipients as followers
+         on mail.compose.message""",
+--
+2.34.1
+
+
+From dd415b3d2b7b348ffc9e581e7cf34daf5894c032 Mon Sep 17 00:00:00 2001
+From: "Laurent Mignon (ACSONE)" <laurent.mignon@acsone.eu>
+Date: Wed, 25 May 2016 13:47:32 +0200
+Subject: [MIG] Upgrade version from 8 -> 9
+
+---
+ mail_optional_autofollow/README.rst                           | 4 ++--
+ mail_optional_autofollow/__openerp__.py                       | 2 +-
+ .../tests/test_mail_optional_autofollow.py                    | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/mail_optional_autofollow/README.rst b/mail_optional_autofollow/README.rst
+index 08dd7a723..7d2cb9460 100644
+--- a/mail_optional_autofollow/README.rst
++++ b/mail_optional_autofollow/README.rst
+@@ -22,7 +22,7 @@ Technically, this field is initialized to true if there is a
+
+ .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+    :alt: Try me on Runbot
+-   :target: https://runbot.odoo-community.org/runbot/205/8.0
++   :target: https://runbot.odoo-community.org/runbot/205/9.0
+
+ Bug Tracker
+ ===========
+@@ -52,4 +52,4 @@ This module is maintained by the OCA.
+
+ OCA, or the Odoo Community Association, is a nonprofit organization whose mission is to support the collaborative development of Odoo features and promote its widespread use.
+
+-To contribute to this module, please visit https://odoo-community.org.
+\ No newline at end of file
++To contribute to this module, please visit https://odoo-community.org.
+diff --git a/mail_optional_autofollow/__openerp__.py b/mail_optional_autofollow/__openerp__.py
+index 531dab27a..abd3f76b6 100644
+--- a/mail_optional_autofollow/__openerp__.py
++++ b/mail_optional_autofollow/__openerp__.py
+@@ -10,7 +10,7 @@
+               'Odoo Community Association (OCA)',
+     'website': "http://acsone.eu",
+     'category': 'Social Network',
+-    'version': '8.0.1.0.0',
++    'version': '9.0.1.0.0',
+     'license': 'AGPL-3',
+     'depends': [
+         'mail',
+diff --git a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+index 953c1a31a..b583af2a7 100644
+--- a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
++++ b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+@@ -10,8 +10,8 @@ class TestAttachExistingAttachment(common.TransactionCase):
+     def setUp(self):
+         super(TestAttachExistingAttachment, self).setUp()
+         self.partner_obj = self.env['res.partner']
+-        self.partner_01 = self.env.ref('base.res_partner_11')
+-        self.partner_02 = self.env.ref('base.res_partner_address_20')
++        self.partner_01 = self.env.ref('base.res_partner_10')
++        self.partner_02 = self.env.ref('base.res_partner_address_17')
+
+     def test_send_email_attachment(self):
+         ctx = self.env.context.copy()
+--
+2.34.1
+
+
+From 767859b051e1a6646eaf298bc4052dbfd8725fe9 Mon Sep 17 00:00:00 2001
+From: "Laurent Mignon (ACSONE)" <laurent.mignon@acsone.eu>
+Date: Mon, 6 Jun 2016 14:39:49 +0200
+Subject: [ADD] fr translations
+
+---
+ mail_optional_autofollow/i18n/fr.po | 47 +++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 mail_optional_autofollow/i18n/fr.po
+
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+new file mode 100644
+index 000000000..70fe0208e
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -0,0 +1,47 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++#	* mail_optional_autofollow
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: Odoo Server 9.0e\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-06-06 12:25+0000\n"
++"PO-Revision-Date: 2016-06-06 12:25+0000\n"
++"Last-Translator: <>\n"
++"Language-Team: \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Plural-Forms: \n"
++
++#. module: mail_optional_autofollow
++#: model:ir.ui.view,arch_db:mail_optional_autofollow.email_compose_message_wizard_inherit_form
++msgid "<?xml version=\"1.0\"?>\n"
++"<xpath expr=\"//div[field[@name='partner_ids']]\" position=\"after\">\n"
++"                    <field name=\"autofollow_recipients\"/>\n"
++"                </xpath>\n"
++"            "
++msgstr "<?xml version=\"1.0\"?>\n"
++"<xpath expr=\"//div[field[@name='partner_ids']]\" position=\"after\">\n"
++"                    <field name=\"autofollow_recipients\"/>\n"
++"                </xpath>\n"
++"            "
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Assistant de composition de courriel"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: field:mail.compose.message,autofollow_recipients:0
++msgid "Make recipients followers"
++msgstr "Abonner les destinataires"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: help:mail.compose.message,autofollow_recipients:0
++msgid "if checked, the additional recipients will be added as        followers on the related object"
++msgstr "Si coché, les destinataires supplémentaires seront ajoutés comme abonné au file de discussion sur l'objet lié"
++
+--
+2.34.1
+
+
+From f974f328c47f95cc5461f1ba5a681fabd0b31317 Mon Sep 17 00:00:00 2001
+From: Thomas Binsfeld <thomas.binsfeld@acsone.eu>
+Date: Fri, 19 Aug 2016 09:47:08 +0200
+Subject: [FIX] Argument auto_commit in send_mail
+
+---
+ mail_optional_autofollow/wizard/mail_compose_message.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index 912a3d913..d7e6c3991 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -22,8 +22,9 @@ class MailComposeMessage(models.TransientModel):
+         followers on the related object""")
+
+     @api.multi
+-    def send_mail(self):
++    def send_mail(self, auto_commit=False):
+         for wizard in self:
+             super(MailComposeMessage, wizard.with_context(
+-                mail_post_autofollow=wizard.autofollow_recipients)).send_mail()
+-        return {'type': 'ir.actions.act_window_close'}
++                mail_post_autofollow=wizard.autofollow_recipients)).send_mail(
++                    auto_commit=auto_commit)
++        return True
+--
+2.34.1
+
+
+From 344eb96d51c4eeae7dcb520aa8827213c557e0e2 Mon Sep 17 00:00:00 2001
+From: "Pedro M. Baeza" <pedro.baeza@gmail.com>
+Date: Thu, 6 Oct 2016 16:08:38 +0200
+Subject: [MIG] Make modules uninstallable
+
+---
+ mail_optional_autofollow/__openerp__.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/mail_optional_autofollow/__openerp__.py b/mail_optional_autofollow/__openerp__.py
+index abd3f76b6..e2f7769a9 100644
+--- a/mail_optional_autofollow/__openerp__.py
++++ b/mail_optional_autofollow/__openerp__.py
+@@ -18,4 +18,5 @@
+     'data': [
+         'wizard/mail_compose_message_view.xml',
+     ],
++    'installable': False,
+ }
+--
+2.34.1
+
+
+From eaa38e590ce5357793dd60c8cc67a269b00e867c Mon Sep 17 00:00:00 2001
+From: "Pedro M. Baeza" <pedro.baeza@gmail.com>
+Date: Thu, 6 Oct 2016 16:08:42 +0200
+Subject: [MIG] Rename manifest files
+
+---
+ mail_optional_autofollow/{__openerp__.py => __manifest__.py} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename mail_optional_autofollow/{__openerp__.py => __manifest__.py} (100%)
+
+diff --git a/mail_optional_autofollow/__openerp__.py b/mail_optional_autofollow/__manifest__.py
+similarity index 100%
+rename from mail_optional_autofollow/__openerp__.py
+rename to mail_optional_autofollow/__manifest__.py
+--
+2.34.1
+
+
+From 723898a9010c3e29e3c45ce604e63f181b1c1499 Mon Sep 17 00:00:00 2001
+From: Damien Bouvy <dbo@odoo.com>
+Date: Fri, 14 Oct 2016 19:32:46 +0200
+Subject: [MIG] mail_optionnal_autofollow: Migrated to 10.0
+
+---
+ mail_optional_autofollow/README.rst           |  2 +-
+ mail_optional_autofollow/__manifest__.py      |  4 +--
+ .../wizard/mail_compose_message.py            |  2 +-
+ .../wizard/mail_compose_message_view.xml      | 26 +++++++++----------
+ 4 files changed, 16 insertions(+), 18 deletions(-)
+
+diff --git a/mail_optional_autofollow/README.rst b/mail_optional_autofollow/README.rst
+index 7d2cb9460..ceb453120 100644
+--- a/mail_optional_autofollow/README.rst
++++ b/mail_optional_autofollow/README.rst
+@@ -22,7 +22,7 @@ Technically, this field is initialized to true if there is a
+
+ .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+    :alt: Try me on Runbot
+-   :target: https://runbot.odoo-community.org/runbot/205/9.0
++   :target: https://runbot.odoo-community.org/runbot/205/10.0
+
+ Bug Tracker
+ ===========
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index e2f7769a9..79626aa64 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -10,7 +10,7 @@
+               'Odoo Community Association (OCA)',
+     'website': "http://acsone.eu",
+     'category': 'Social Network',
+-    'version': '9.0.1.0.0',
++    'version': '10.0.1.0.0',
+     'license': 'AGPL-3',
+     'depends': [
+         'mail',
+@@ -18,5 +18,5 @@
+     'data': [
+         'wizard/mail_compose_message_view.xml',
+     ],
+-    'installable': False,
++    'installable': True,
+ }
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index d7e6c3991..442c1725e 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -2,7 +2,7 @@
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+-from openerp import models, fields, api
++from odoo import models, fields, api
+
+
+ class MailComposeMessage(models.TransientModel):
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message_view.xml b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+index 0bb7eacbb..e21a29558 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message_view.xml
++++ b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+@@ -1,15 +1,13 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<openerp>
+-    <data noupdate="0">
+-        <record model="ir.ui.view" id="email_compose_message_wizard_inherit_form">
+-            <field name="name">mail.compose.message.form (mail_optional_autofollow)</field>
+-            <field name="model">mail.compose.message</field>
+-            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+-            <field name="arch" type="xml">
+-                <xpath expr="//div[field[@name='partner_ids']]" position="after">
+-                    <field name="autofollow_recipients" />
+-                </xpath>
+-            </field>
+-        </record>
+-    </data>
+-</openerp>
+\ No newline at end of file
++<odoo>
++    <record model="ir.ui.view" id="email_compose_message_wizard_inherit_form">
++        <field name="name">mail.compose.message.form (mail_optional_autofollow)</field>
++        <field name="model">mail.compose.message</field>
++        <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
++        <field name="arch" type="xml">
++            <xpath expr="//div[field[@name='partner_ids']]" position="after">
++                <field name="autofollow_recipients" />
++            </xpath>
++        </field>
++    </record>
++</odoo>
+\ No newline at end of file
+--
+2.34.1
+
+
+From aa7afc72f2bfea3da01d5e183e8637a90049af74 Mon Sep 17 00:00:00 2001
+From: OCA Transbot <transbot@odoo-community.org>
+Date: Sun, 17 Apr 2016 09:01:17 -0400
+Subject: OCA Transbot updated translations from Transifex
+
+---
+ mail_optional_autofollow/i18n/ca.po    | 35 ++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/de.po    | 35 ++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/es.po    | 35 ++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/es_CO.po | 35 ++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/fr.po    | 38 +++++++++-----------------
+ mail_optional_autofollow/i18n/hr.po    | 36 ++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/it.po    | 38 ++++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/pt_BR.po | 35 ++++++++++++++++++++++++
+ mail_optional_autofollow/i18n/sl.po    | 36 ++++++++++++++++++++++++
+ 9 files changed, 298 insertions(+), 25 deletions(-)
+ create mode 100644 mail_optional_autofollow/i18n/ca.po
+ create mode 100644 mail_optional_autofollow/i18n/de.po
+ create mode 100644 mail_optional_autofollow/i18n/es.po
+ create mode 100644 mail_optional_autofollow/i18n/es_CO.po
+ create mode 100644 mail_optional_autofollow/i18n/hr.po
+ create mode 100644 mail_optional_autofollow/i18n/it.po
+ create mode 100644 mail_optional_autofollow/i18n/pt_BR.po
+ create mode 100644 mail_optional_autofollow/i18n/sl.po
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+new file mode 100644
+index 000000000..d5748082c
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -0,0 +1,35 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++msgid ""
++msgstr ""
++"Project-Id-Version: social (8.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-04-14 07:09+0000\n"
++"PO-Revision-Date: 2016-04-05 07:05+0000\n"
++"Last-Translator: <>\n"
++"Language-Team: Catalan (http://www.transifex.com/oca/OCA-social-8-0/language/ca/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: ca\n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Assistent per composició de correus electrònics"
++
++#. module: mail_optional_autofollow
++#: field:mail.compose.message,autofollow_recipients:0
++msgid "Make recipients followers"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: help:mail.compose.message,autofollow_recipients:0
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr ""
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+new file mode 100644
+index 000000000..c2cc1036f
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -0,0 +1,35 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++msgid ""
++msgstr ""
++"Project-Id-Version: social (8.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-04-14 07:09+0000\n"
++"PO-Revision-Date: 2016-04-05 07:05+0000\n"
++"Last-Translator: <>\n"
++"Language-Team: German (http://www.transifex.com/oca/OCA-social-8-0/language/de/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: de\n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Assistent zum Email verfassen"
++
++#. module: mail_optional_autofollow
++#: field:mail.compose.message,autofollow_recipients:0
++msgid "Make recipients followers"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: help:mail.compose.message,autofollow_recipients:0
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr ""
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+new file mode 100644
+index 000000000..dc04d6ad1
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -0,0 +1,35 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++msgid ""
++msgstr ""
++"Project-Id-Version: social (8.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-04-14 07:09+0000\n"
++"PO-Revision-Date: 2016-04-05 07:05+0000\n"
++"Last-Translator: <>\n"
++"Language-Team: Spanish (http://www.transifex.com/oca/OCA-social-8-0/language/es/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: es\n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Asistente composición Correo Electrónico"
++
++#. module: mail_optional_autofollow
++#: field:mail.compose.message,autofollow_recipients:0
++msgid "Make recipients followers"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: help:mail.compose.message,autofollow_recipients:0
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr ""
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+new file mode 100644
+index 000000000..0659cee11
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -0,0 +1,35 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++msgid ""
++msgstr ""
++"Project-Id-Version: social (8.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-04-14 07:09+0000\n"
++"PO-Revision-Date: 2016-04-05 07:05+0000\n"
++"Last-Translator: <>\n"
++"Language-Team: Spanish (Colombia) (http://www.transifex.com/oca/OCA-social-8-0/language/es_CO/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: es_CO\n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Asistente de redacción de E-mail"
++
++#. module: mail_optional_autofollow
++#: field:mail.compose.message,autofollow_recipients:0
++msgid "Make recipients followers"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: help:mail.compose.message,autofollow_recipients:0
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr ""
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index 70fe0208e..b30a8a4a1 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -1,32 +1,21 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+-#	* mail_optional_autofollow
+-#
++# * mail_optional_autofollow
++#
++# Translators:
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: Odoo Server 9.0e\n"
++"Project-Id-Version: social (9.0)\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2016-06-06 12:25+0000\n"
+-"PO-Revision-Date: 2016-06-06 12:25+0000\n"
+-"Last-Translator: <>\n"
+-"Language-Team: \n"
++"POT-Creation-Date: 2016-06-12 02:44+0000\n"
++"PO-Revision-Date: 2016-06-11 22:15+0000\n"
++"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
++"Language-Team: French (http://www.transifex.com/oca/OCA-social-9-0/language/fr/)\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: \n"
+-
+-#. module: mail_optional_autofollow
+-#: model:ir.ui.view,arch_db:mail_optional_autofollow.email_compose_message_wizard_inherit_form
+-msgid "<?xml version=\"1.0\"?>\n"
+-"<xpath expr=\"//div[field[@name='partner_ids']]\" position=\"after\">\n"
+-"                    <field name=\"autofollow_recipients\"/>\n"
+-"                </xpath>\n"
+-"            "
+-msgstr "<?xml version=\"1.0\"?>\n"
+-"<xpath expr=\"//div[field[@name='partner_ids']]\" position=\"after\">\n"
+-"                    <field name=\"autofollow_recipients\"/>\n"
+-"                </xpath>\n"
+-"            "
++"Language: fr\n"
++"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -35,13 +24,12 @@ msgstr "Assistant de composition de courriel"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+-#: field:mail.compose.message,autofollow_recipients:0
+ msgid "Make recipients followers"
+ msgstr "Abonner les destinataires"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+-#: help:mail.compose.message,autofollow_recipients:0
+-msgid "if checked, the additional recipients will be added as        followers on the related object"
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
+ msgstr "Si coché, les destinataires supplémentaires seront ajoutés comme abonné au file de discussion sur l'objet lié"
+-
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+new file mode 100644
+index 000000000..2c0087628
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -0,0 +1,36 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++# Bole <bole@dajmi5.com>, 2016
++msgid ""
++msgstr ""
++"Project-Id-Version: social (9.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-06-13 02:44+0000\n"
++"PO-Revision-Date: 2016-06-14 11:31+0000\n"
++"Last-Translator: Bole <bole@dajmi5.com>\n"
++"Language-Team: Croatian (http://www.transifex.com/oca/OCA-social-9-0/language/hr/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: hr\n"
++"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Čarobnjak za sastavljanje maila"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid "Make recipients followers"
++msgstr "Učini primatelje i pratiteljima"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr "Ukoliko je označeno, dodatni primatelji će biti dodani i kao pratitelji na povezanom objektu"
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+new file mode 100644
+index 000000000..6523691d6
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -0,0 +1,38 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++# Marius Marolla <mariusmarolla@gmail.com>, 2017
++msgid ""
++msgstr ""
++"Project-Id-Version: Odoo Server 10.0\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2017-05-17 01:02+0000\n"
++"PO-Revision-Date: 2017-05-17 01:02+0000\n"
++"Last-Translator: Marius Marolla <mariusmarolla@gmail.com>, 2017\n"
++"Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: it\n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Wizard Creazione Email"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid "Make recipients followers"
++msgstr "Destinatari in Follower"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr ""
++"Se l'opzione è spuntata, i destinatari verranno aggiunti ai follower di "
++"questo documento."
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+new file mode 100644
+index 000000000..d72d30b7c
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -0,0 +1,35 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++msgid ""
++msgstr ""
++"Project-Id-Version: social (8.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-04-14 07:09+0000\n"
++"PO-Revision-Date: 2016-04-05 07:05+0000\n"
++"Last-Translator: <>\n"
++"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-social-8-0/language/pt_BR/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: pt_BR\n"
++"Plural-Forms: nplurals=2; plural=(n > 1);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Assistente de Composição de Email"
++
++#. module: mail_optional_autofollow
++#: field:mail.compose.message,autofollow_recipients:0
++msgid "Make recipients followers"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: help:mail.compose.message,autofollow_recipients:0
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr ""
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+new file mode 100644
+index 000000000..9b86623c5
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -0,0 +1,36 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# * mail_optional_autofollow
++#
++# Translators:
++# Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
++msgid ""
++msgstr ""
++"Project-Id-Version: social (9.0)\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2016-06-12 02:44+0000\n"
++"PO-Revision-Date: 2016-06-11 22:15+0000\n"
++"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
++"Language-Team: Slovenian (http://www.transifex.com/oca/OCA-social-9-0/language/sl/)\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Language: sl\n"
++"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr "Čarovnik za sestavljanje e-pošte"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid "Make recipients followers"
++msgstr "Prejemniki bodo sledilci"
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
++msgstr "če označeno, se objektu dodajo dodatni prejemniki kot sledilci"
+--
+2.34.1
+
+
+From 9397be536b7d1a9c2e562969917889b7caeb506e Mon Sep 17 00:00:00 2001
+From: Damien Carlier <damien.carlier@gmail.com>
+Date: Wed, 15 Nov 2017 14:34:53 +0100
+Subject: [MIG] mail_optional_autofollow: Migration to 11.0
+
+---
+ mail_optional_autofollow/__manifest__.py                        | 2 +-
+ mail_optional_autofollow/tests/test_mail_optional_autofollow.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index 79626aa64..6d155946a 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -10,7 +10,7 @@
+               'Odoo Community Association (OCA)',
+     'website': "http://acsone.eu",
+     'category': 'Social Network',
+-    'version': '10.0.1.0.0',
++    'version': '11.0.1.0.0',
+     'license': 'AGPL-3',
+     'depends': [
+         'mail',
+diff --git a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+index b583af2a7..7814d7486 100644
+--- a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
++++ b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+@@ -2,7 +2,7 @@
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+-from openerp.tests import common
++from odoo.tests import common
+
+
+ class TestAttachExistingAttachment(common.TransactionCase):
+--
+2.34.1
+
+
+From d164af0cfa703598ac3f84f717dc1e49861c7344 Mon Sep 17 00:00:00 2001
+From: Damien Carlier <damien.carlier@gmail.com>
+Date: Thu, 7 Dec 2017 10:57:39 +0100
+Subject: Update README.rst
+
+---
+ mail_optional_autofollow/README.rst | 50 +++++++++++++++++++++++------
+ 1 file changed, 40 insertions(+), 10 deletions(-)
+
+diff --git a/mail_optional_autofollow/README.rst b/mail_optional_autofollow/README.rst
+index ceb453120..6dcafdfda 100644
+--- a/mail_optional_autofollow/README.rst
++++ b/mail_optional_autofollow/README.rst
+@@ -1,6 +1,6 @@
+-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
+-    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
+-    :alt: License: AGPL-3
++.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
++   :target: https://www.gnu.org/licenses/agpl
++   :alt: License: AGPL-3
+
+ ========================
+ Mail optional autofollow
+@@ -9,10 +9,19 @@ Mail optional autofollow
+ This module adds the possibility to choose if you want to automatically
+ add new recipients as followers on mail.compose.message.
+
++Installation
++============
++
++
++Configuration
++=============
++
++
+ Usage
+ =====
+
+-To use this module, you need to use the autofollow recipients checkbox on mail.compose.message:
++To use this module, you need to use the autofollow recipients checkbox on
++mail.compose.message:
+
+ Technically, this field is initialized to true if there is a
+ 'mail_post_autofollow' key in the current context
+@@ -22,25 +31,44 @@ Technically, this field is initialized to true if there is a
+
+ .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+    :alt: Try me on Runbot
+-   :target: https://runbot.odoo-community.org/runbot/205/10.0
++   :target: https://runbot.odoo-community.org/runbot/205/11.0
++
++Known issues / Roadmap
++======================
++
+
+ Bug Tracker
+ ===========
+
+-Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
+-In case of trouble, please check there if your issue has already been reported.
+-If you spotted it first, help us smashing it by providing a detailed and welcomed feedback
+-`here <https://github.com/OCA/social/issues/new?body=module:%20mail_optional_autofollow%0Aversion:%208.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
++Bugs are tracked on `GitHub Issues
++<https://github.com/OCA/social/issues>`_.In case of trouble, please check there
++if your issue has already been reported. If you spotted it first, help us
++smashing it by providing a detailed and welcomed feedback
++`here <https://github.com/OCA/social/issues/new?body=module:%20mail_optional_autofollow%0Aversion:%2011.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+
+ Credits
+ =======
+
++Images
++------
++
++* Odoo Community Association: `Icon <https://odoo-community.org/logo.png>`_.
++
+ Contributors
+ ------------
+
+ * Adrien Peiffer <adrien.peiffer@acsone.eu>
+ * Stéphane Bidoul <stephane.bidoul@acsone.eu>
+
++Do not contact contributors directly about support or help with technical issues.
++
++Funders
++-------
++
++The development of this module has been financially supported by:
++
++* Acsone
++
+ Maintainer
+ ----------
+
+@@ -50,6 +78,8 @@ Maintainer
+
+ This module is maintained by the OCA.
+
+-OCA, or the Odoo Community Association, is a nonprofit organization whose mission is to support the collaborative development of Odoo features and promote its widespread use.
++OCA, or the Odoo Community Association, is a nonprofit organization whose
++mission is to support the collaborative development of Odoo features and
++promote its widespread use.
+
+ To contribute to this module, please visit https://odoo-community.org.
+--
+2.34.1
+
+
+From 7edb5aceedaacf4f70fe42ff5387d35cc6165f40 Mon Sep 17 00:00:00 2001
+From: "Denis Robinet (ACSONE)" <denis.robinet@acsone.eu>
+Date: Mon, 4 Dec 2017 17:21:55 +0100
+Subject: [IMP] Hide the checkbox for the mass mailing in
+ mail_optional_autofollow
+
+---
+ mail_optional_autofollow/wizard/mail_compose_message_view.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message_view.xml b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+index e21a29558..e388b4931 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message_view.xml
++++ b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+@@ -6,7 +6,7 @@
+         <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+         <field name="arch" type="xml">
+             <xpath expr="//div[field[@name='partner_ids']]" position="after">
+-                <field name="autofollow_recipients" />
++                <field name="autofollow_recipients" attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}"/>
+             </xpath>
+         </field>
+     </record>
+--
+2.34.1
+
+
+From eadd56245d9ea43c27bd789ee24dd68118414362 Mon Sep 17 00:00:00 2001
+From: Damien Carlier <damien.carlier@gmail.com>
+Date: Tue, 12 Jun 2018 09:56:33 +0200
+Subject: [IMP] Remove utf-8 lines
+
+---
+ mail_optional_autofollow/__init__.py                            | 1 -
+ mail_optional_autofollow/__manifest__.py                        | 1 -
+ mail_optional_autofollow/tests/__init__.py                      | 1 -
+ mail_optional_autofollow/tests/test_mail_optional_autofollow.py | 1 -
+ mail_optional_autofollow/wizard/__init__.py                     | 1 -
+ mail_optional_autofollow/wizard/mail_compose_message.py         | 1 -
+ 6 files changed, 6 deletions(-)
+
+diff --git a/mail_optional_autofollow/__init__.py b/mail_optional_autofollow/__init__.py
+index 095712720..9e1c952a8 100644
+--- a/mail_optional_autofollow/__init__.py
++++ b/mail_optional_autofollow/__init__.py
+@@ -1,4 +1,3 @@
+-# -*- coding: utf-8 -*-
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from . import wizard
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index 6d155946a..1bfea141c 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -1,4 +1,3 @@
+-# -*- coding: utf-8 -*-
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ {
+diff --git a/mail_optional_autofollow/tests/__init__.py b/mail_optional_autofollow/tests/__init__.py
+index 3667d24bd..f0cef833f 100644
+--- a/mail_optional_autofollow/tests/__init__.py
++++ b/mail_optional_autofollow/tests/__init__.py
+@@ -1,4 +1,3 @@
+-# -*- coding: utf-8 -*-
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+diff --git a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+index 7814d7486..f2c253c01 100644
+--- a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
++++ b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+@@ -1,4 +1,3 @@
+-# -*- coding: utf-8 -*-
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+diff --git a/mail_optional_autofollow/wizard/__init__.py b/mail_optional_autofollow/wizard/__init__.py
+index c82500c9b..660d786ae 100644
+--- a/mail_optional_autofollow/wizard/__init__.py
++++ b/mail_optional_autofollow/wizard/__init__.py
+@@ -1,4 +1,3 @@
+-# -*- coding: utf-8 -*-
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from . import mail_compose_message
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index 442c1725e..5ef894579 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -1,4 +1,3 @@
+-# -*- coding: utf-8 -*-
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+--
+2.34.1
+
+
+From 23570d9f0f55cdc72f74167ea8a131b450d64b0c Mon Sep 17 00:00:00 2001
+From: Damien Carlier <damien.carlier@gmail.com>
+Date: Tue, 12 Jun 2018 09:58:14 +0200
+Subject: [IMP] Remove headers on init.py files
+
+---
+ mail_optional_autofollow/__init__.py        | 2 --
+ mail_optional_autofollow/tests/__init__.py  | 3 ---
+ mail_optional_autofollow/wizard/__init__.py | 2 --
+ 3 files changed, 7 deletions(-)
+
+diff --git a/mail_optional_autofollow/__init__.py b/mail_optional_autofollow/__init__.py
+index 9e1c952a8..40272379f 100644
+--- a/mail_optional_autofollow/__init__.py
++++ b/mail_optional_autofollow/__init__.py
+@@ -1,3 +1 @@
+-# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from . import wizard
+diff --git a/mail_optional_autofollow/tests/__init__.py b/mail_optional_autofollow/tests/__init__.py
+index f0cef833f..dd099352b 100644
+--- a/mail_optional_autofollow/tests/__init__.py
++++ b/mail_optional_autofollow/tests/__init__.py
+@@ -1,4 +1 @@
+-# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+-
+ from . import test_mail_optional_autofollow
+diff --git a/mail_optional_autofollow/wizard/__init__.py b/mail_optional_autofollow/wizard/__init__.py
+index 660d786ae..b528d997d 100644
+--- a/mail_optional_autofollow/wizard/__init__.py
++++ b/mail_optional_autofollow/wizard/__init__.py
+@@ -1,3 +1 @@
+-# Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from . import mail_compose_message
+--
+2.34.1
+
+
+From f32aa84a3452aadf4ecdd75f9b704ed7fae1425e Mon Sep 17 00:00:00 2001
+From: oca-travis <oca+oca-travis@odoo-community.org>
+Date: Thu, 29 Nov 2018 08:31:23 +0000
+Subject: [UPD] Update mail_optional_autofollow.pot
+
+---
+ mail_optional_autofollow/i18n/ca.po           | 11 +++----
+ mail_optional_autofollow/i18n/de.po           | 11 +++----
+ mail_optional_autofollow/i18n/es.po           | 11 +++----
+ mail_optional_autofollow/i18n/es_CO.po        | 11 +++----
+ mail_optional_autofollow/i18n/fr.po           | 11 ++++---
+ mail_optional_autofollow/i18n/hr.po           | 14 +++++----
+ mail_optional_autofollow/i18n/it.po           |  4 +--
+ .../i18n/mail_optional_autofollow.pot         | 30 +++++++++++++++++++
+ mail_optional_autofollow/i18n/pt_BR.po        | 11 +++----
+ mail_optional_autofollow/i18n/sl.po           | 10 ++++---
+ 10 files changed, 84 insertions(+), 40 deletions(-)
+ create mode 100644 mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+index d5748082c..24ca56ec0 100644
+--- a/mail_optional_autofollow/i18n/ca.po
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ msgid ""
+ msgstr ""
+@@ -10,11 +10,12 @@ msgstr ""
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+ "PO-Revision-Date: 2016-04-05 07:05+0000\n"
+ "Last-Translator: <>\n"
+-"Language-Team: Catalan (http://www.transifex.com/oca/OCA-social-8-0/language/ca/)\n"
++"Language-Team: Catalan (http://www.transifex.com/oca/OCA-social-8-0/language/"
++"ca/)\n"
++"Language: ca\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: ca\n"
+ "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+ #. module: mail_optional_autofollow
+@@ -23,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Assistent per composició de correus electrònics"
+
+ #. module: mail_optional_autofollow
+-#: field:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: help:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index c2cc1036f..7485660d0 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ msgid ""
+ msgstr ""
+@@ -10,11 +10,12 @@ msgstr ""
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+ "PO-Revision-Date: 2016-04-05 07:05+0000\n"
+ "Last-Translator: <>\n"
+-"Language-Team: German (http://www.transifex.com/oca/OCA-social-8-0/language/de/)\n"
++"Language-Team: German (http://www.transifex.com/oca/OCA-social-8-0/language/"
++"de/)\n"
++"Language: de\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: de\n"
+ "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+ #. module: mail_optional_autofollow
+@@ -23,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Assistent zum Email verfassen"
+
+ #. module: mail_optional_autofollow
+-#: field:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: help:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index dc04d6ad1..383e04f06 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ msgid ""
+ msgstr ""
+@@ -10,11 +10,12 @@ msgstr ""
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+ "PO-Revision-Date: 2016-04-05 07:05+0000\n"
+ "Last-Translator: <>\n"
+-"Language-Team: Spanish (http://www.transifex.com/oca/OCA-social-8-0/language/es/)\n"
++"Language-Team: Spanish (http://www.transifex.com/oca/OCA-social-8-0/language/"
++"es/)\n"
++"Language: es\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: es\n"
+ "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+ #. module: mail_optional_autofollow
+@@ -23,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Asistente composición Correo Electrónico"
+
+ #. module: mail_optional_autofollow
+-#: field:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: help:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+index 0659cee11..ad0cee832 100644
+--- a/mail_optional_autofollow/i18n/es_CO.po
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ msgid ""
+ msgstr ""
+@@ -10,11 +10,12 @@ msgstr ""
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+ "PO-Revision-Date: 2016-04-05 07:05+0000\n"
+ "Last-Translator: <>\n"
+-"Language-Team: Spanish (Colombia) (http://www.transifex.com/oca/OCA-social-8-0/language/es_CO/)\n"
++"Language-Team: Spanish (Colombia) (http://www.transifex.com/oca/OCA-"
++"social-8-0/language/es_CO/)\n"
++"Language: es_CO\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: es_CO\n"
+ "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+ #. module: mail_optional_autofollow
+@@ -23,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Asistente de redacción de E-mail"
+
+ #. module: mail_optional_autofollow
+-#: field:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: help:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index b30a8a4a1..64ad08562 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ msgid ""
+ msgstr ""
+@@ -10,11 +10,12 @@ msgstr ""
+ "POT-Creation-Date: 2016-06-12 02:44+0000\n"
+ "PO-Revision-Date: 2016-06-11 22:15+0000\n"
+ "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+-"Language-Team: French (http://www.transifex.com/oca/OCA-social-9-0/language/fr/)\n"
++"Language-Team: French (http://www.transifex.com/oca/OCA-social-9-0/language/"
++"fr/)\n"
++"Language: fr\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: fr\n"
+ "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+ #. module: mail_optional_autofollow
+@@ -32,4 +33,6 @@ msgstr "Abonner les destinataires"
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+-msgstr "Si coché, les destinataires supplémentaires seront ajoutés comme abonné au file de discussion sur l'objet lié"
++msgstr ""
++"Si coché, les destinataires supplémentaires seront ajoutés comme abonné au "
++"file de discussion sur l'objet lié"
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+index 2c0087628..18ed63a3d 100644
+--- a/mail_optional_autofollow/i18n/hr.po
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ # Bole <bole@dajmi5.com>, 2016
+ msgid ""
+@@ -11,12 +11,14 @@ msgstr ""
+ "POT-Creation-Date: 2016-06-13 02:44+0000\n"
+ "PO-Revision-Date: 2016-06-14 11:31+0000\n"
+ "Last-Translator: Bole <bole@dajmi5.com>\n"
+-"Language-Team: Croatian (http://www.transifex.com/oca/OCA-social-9-0/language/hr/)\n"
++"Language-Team: Croatian (http://www.transifex.com/oca/OCA-social-9-0/"
++"language/hr/)\n"
++"Language: hr\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: hr\n"
+-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
++"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
++"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -33,4 +35,6 @@ msgstr "Učini primatelje i pratiteljima"
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+-msgstr "Ukoliko je označeno, dodatni primatelji će biti dodani i kao pratitelji na povezanom objektu"
++msgstr ""
++"Ukoliko je označeno, dodatni primatelji će biti dodani i kao pratitelji na "
++"povezanom objektu"
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index 6523691d6..ec6f3bc2b 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ # Marius Marolla <mariusmarolla@gmail.com>, 2017
+ msgid ""
+@@ -12,10 +12,10 @@ msgstr ""
+ "PO-Revision-Date: 2017-05-17 01:02+0000\n"
+ "Last-Translator: Marius Marolla <mariusmarolla@gmail.com>, 2017\n"
+ "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
++"Language: it\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: it\n"
+ "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+ #. module: mail_optional_autofollow
+diff --git a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+new file mode 100644
+index 000000000..4bd676b32
+--- /dev/null
++++ b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+@@ -0,0 +1,30 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++#	* mail_optional_autofollow
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: Odoo Server 11.0\n"
++"Report-Msgid-Bugs-To: \n"
++"Last-Translator: <>\n"
++"Language-Team: \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Plural-Forms: \n"
++
++#. module: mail_optional_autofollow
++#: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
++msgid "Email composition wizard"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid "Make recipients followers"
++msgstr ""
++
++#. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++msgid "if checked, the additional recipients will be added as        followers on the related object"
++msgstr ""
++
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index d72d30b7c..eb6bbcd21 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ msgid ""
+ msgstr ""
+@@ -10,11 +10,12 @@ msgstr ""
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+ "PO-Revision-Date: 2016-04-05 07:05+0000\n"
+ "Last-Translator: <>\n"
+-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-social-8-0/language/pt_BR/)\n"
++"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-"
++"social-8-0/language/pt_BR/)\n"
++"Language: pt_BR\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: pt_BR\n"
+ "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+ #. module: mail_optional_autofollow
+@@ -23,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Assistente de Composição de Email"
+
+ #. module: mail_optional_autofollow
+-#: field:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: help:mail.compose.message,autofollow_recipients:0
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+index 9b86623c5..ccfab1a6c 100644
+--- a/mail_optional_autofollow/i18n/sl.po
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -1,7 +1,7 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+ # * mail_optional_autofollow
+-#
++#
+ # Translators:
+ # Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
+ msgid ""
+@@ -11,12 +11,14 @@ msgstr ""
+ "POT-Creation-Date: 2016-06-12 02:44+0000\n"
+ "PO-Revision-Date: 2016-06-11 22:15+0000\n"
+ "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+-"Language-Team: Slovenian (http://www.transifex.com/oca/OCA-social-9-0/language/sl/)\n"
++"Language-Team: Slovenian (http://www.transifex.com/oca/OCA-social-9-0/"
++"language/sl/)\n"
++"Language: sl\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Language: sl\n"
+-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
++"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
++"%100==4 ? 2 : 3);\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+--
+2.34.1
+
+
+From 8961f1fba2bce1ffc30b132348832fd3ecc18334 Mon Sep 17 00:00:00 2001
+From: Maria Sparenberg <maria.sparenberg@gmx.net>
+Date: Fri, 14 Dec 2018 14:30:57 +0000
+Subject: Translated using Weblate (German)
+
+Currently translated at 100.0% (3 of 3 strings)
+
+Translation: social-11.0/social-11.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-11-0/social-11-0-mail_optional_autofollow/de/
+---
+ mail_optional_autofollow/i18n/de.po | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index 7485660d0..91684d2c7 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -8,15 +8,16 @@ msgstr ""
+ "Project-Id-Version: social (8.0)\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+-"PO-Revision-Date: 2016-04-05 07:05+0000\n"
+-"Last-Translator: <>\n"
++"PO-Revision-Date: 2018-12-15 14:58+0000\n"
++"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
+ "Language-Team: German (http://www.transifex.com/oca/OCA-social-8-0/language/"
+ "de/)\n"
+ "Language: de\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++"Plural-Forms: nplurals=2; plural=n != 1;\n"
++"X-Generator: Weblate 3.3\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -26,7 +27,7 @@ msgstr "Assistent zum Email verfassen"
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+ msgid "Make recipients followers"
+-msgstr ""
++msgstr "Empfänger als Abonnenten hinzufügen"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+@@ -34,3 +35,5 @@ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+ msgstr ""
++"Wenn der Haken gesetzt ist, werden die zusätzlichen Empfänger zu Abonnenten "
++"dieses Objektes"
+--
+2.34.1
+
+
+From 2f63d7ba9eaae74ba7018c513b830c04e8713a03 Mon Sep 17 00:00:00 2001
+From: "laurent.corron" <laurent.corron@acsone.eu>
+Date: Wed, 6 Nov 2019 11:37:46 +0100
+Subject: [REF] mail_optional_autofollow: Black python code
+
+---
+ mail_optional_autofollow/__manifest__.py      | 25 ++++------
+ .../tests/test_mail_optional_autofollow.py    | 47 +++++++++++--------
+ .../wizard/mail_compose_message.py            | 20 ++++----
+ .../wizard/mail_compose_message_view.xml      |  2 +-
+ 4 files changed, 49 insertions(+), 45 deletions(-)
+
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index 1bfea141c..503e5ee8c 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -1,21 +1,16 @@
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ {
+-    'name': "Mail optional autofollow",
+-    'summary': """
++    "name": "Mail optional autofollow",
++    "summary": """
+         Choose if you want to automatically add new recipients as followers
+         on mail.compose.message""",
+-    'author': 'ACSONE SA/NV,'
+-              'Odoo Community Association (OCA)',
+-    'website': "http://acsone.eu",
+-    'category': 'Social Network',
+-    'version': '11.0.1.0.0',
+-    'license': 'AGPL-3',
+-    'depends': [
+-        'mail',
+-    ],
+-    'data': [
+-        'wizard/mail_compose_message_view.xml',
+-    ],
+-    'installable': True,
++    "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
++    "website": "http://acsone.eu",
++    "category": "Social Network",
++    "version": "11.0.1.0.0",
++    "license": "AGPL-3",
++    "depends": ["mail",],
++    "data": ["wizard/mail_compose_message_view.xml",],
++    "installable": True,
+ }
+diff --git a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+index f2c253c01..887a48c64 100644
+--- a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
++++ b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+@@ -5,40 +5,47 @@ from odoo.tests import common
+
+
+ class TestAttachExistingAttachment(common.TransactionCase):
+-
+     def setUp(self):
+         super(TestAttachExistingAttachment, self).setUp()
+-        self.partner_obj = self.env['res.partner']
+-        self.partner_01 = self.env.ref('base.res_partner_10')
+-        self.partner_02 = self.env.ref('base.res_partner_address_17')
++        self.partner_obj = self.env["res.partner"]
++        self.partner_01 = self.env.ref("base.res_partner_10")
++        self.partner_02 = self.env.ref("base.res_partner_address_17")
+
+     def test_send_email_attachment(self):
+         ctx = self.env.context.copy()
+-        ctx.update({
+-            'default_model': 'res.partner',
+-            'default_res_id': self.partner_01.id,
+-            'default_composition_mode': 'comment',
+-        })
+-        mail_compose = self.env['mail.compose.message']
+-        values = mail_compose.with_context(ctx)\
+-            .onchange_template_id(False, 'comment', 'res.partner',
+-                                  self.partner_01.id)['value']
+-        values['partner_ids'] = [(4, self.partner_02.id)]
++        ctx.update(
++            {
++                "default_model": "res.partner",
++                "default_res_id": self.partner_01.id,
++                "default_composition_mode": "comment",
++            }
++        )
++        mail_compose = self.env["mail.compose.message"]
++        values = mail_compose.with_context(ctx).onchange_template_id(
++            False, "comment", "res.partner", self.partner_01.id
++        )["value"]
++        values["partner_ids"] = [(4, self.partner_02.id)]
+         compose_id = mail_compose.with_context(ctx).create(values)
+         compose_id.autofollow_recipients = False
+         compose_id.with_context(ctx).send_mail()
+         res = self.env["mail.followers"].search(
+-            [('res_model', '=', 'res.partner'),
+-             ('res_id', '=', self.partner_01.id),
+-             ('partner_id', '=', self.partner_02.id)])
++            [
++                ("res_model", "=", "res.partner"),
++                ("res_id", "=", self.partner_01.id),
++                ("partner_id", "=", self.partner_02.id),
++            ]
++        )
+         # I check if the recipient isn't a follower
+         self.assertEqual(len(res.ids), 0)
+         compose_id = mail_compose.with_context(ctx).create(values)
+         compose_id.autofollow_recipients = True
+         compose_id.with_context(ctx).send_mail()
+         res = self.env["mail.followers"].search(
+-            [('res_model', '=', 'res.partner'),
+-             ('res_id', '=', self.partner_01.id),
+-             ('partner_id', '=', self.partner_02.id)])
++            [
++                ("res_model", "=", "res.partner"),
++                ("res_id", "=", self.partner_01.id),
++                ("partner_id", "=", self.partner_02.id),
++            ]
++        )
+         # I check if the recipient is a follower
+         self.assertEqual(len(res.ids), 1)
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index 5ef894579..853b671e8 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -1,29 +1,31 @@
+ # Copyright 2016 ACSONE SA/NV (<http://acsone.eu>)
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+-from odoo import models, fields, api
++from odoo import api, fields, models
+
+
+ class MailComposeMessage(models.TransientModel):
+-    _inherit = 'mail.compose.message'
++    _inherit = "mail.compose.message"
+
+     @api.model
+     def default_get(self, fields_list):
+         res = super(MailComposeMessage, self).default_get(fields_list)
+         res.setdefault(
+-            'autofollow_recipients',
+-            self.env.context.get('mail_post_autofollow', False))
++            "autofollow_recipients", self.env.context.get("mail_post_autofollow", False)
++        )
+         return res
+
+     autofollow_recipients = fields.Boolean(
+-        string='Make recipients followers',
++        string="Make recipients followers",
+         help="""if checked, the additional recipients will be added as\
+-        followers on the related object""")
++        followers on the related object""",
++    )
+
+     @api.multi
+     def send_mail(self, auto_commit=False):
+         for wizard in self:
+-            super(MailComposeMessage, wizard.with_context(
+-                mail_post_autofollow=wizard.autofollow_recipients)).send_mail(
+-                    auto_commit=auto_commit)
++            super(
++                MailComposeMessage,
++                wizard.with_context(mail_post_autofollow=wizard.autofollow_recipients),
++            ).send_mail(auto_commit=auto_commit)
+         return True
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message_view.xml b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+index e388b4931..a5ff80d25 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message_view.xml
++++ b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+@@ -10,4 +10,4 @@
+             </xpath>
+         </field>
+     </record>
+-</odoo>
+\ No newline at end of file
++</odoo>
+--
+2.34.1
+
+
+From 60635ce273ee699dfe8b52f137797c9daefd60b0 Mon Sep 17 00:00:00 2001
+From: "laurent.corron" <laurent.corron@acsone.eu>
+Date: Wed, 6 Nov 2019 11:37:46 +0100
+Subject: [MIG] mail_optional_autofollow: Migration to 13.0
+
+---
+ mail_optional_autofollow/__manifest__.py                | 6 +++---
+ mail_optional_autofollow/wizard/mail_compose_message.py | 1 -
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index 503e5ee8c..7536d3473 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -8,9 +8,9 @@
+     "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
+     "website": "http://acsone.eu",
+     "category": "Social Network",
+-    "version": "11.0.1.0.0",
++    "version": "13.0.1.0.0",
+     "license": "AGPL-3",
+-    "depends": ["mail",],
+-    "data": ["wizard/mail_compose_message_view.xml",],
++    "depends": ["mail"],
++    "data": ["wizard/mail_compose_message_view.xml"],
+     "installable": True,
+ }
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index 853b671e8..8b3dd082b 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -21,7 +21,6 @@ class MailComposeMessage(models.TransientModel):
+         followers on the related object""",
+     )
+
+-    @api.multi
+     def send_mail(self, auto_commit=False):
+         for wizard in self:
+             super(
+--
+2.34.1
+
+
+From b5e003c7334ee95b6056437726667274e786cfa5 Mon Sep 17 00:00:00 2001
+From: oca-travis <oca+oca-travis@odoo-community.org>
+Date: Wed, 4 Dec 2019 07:41:46 +0000
+Subject: [UPD] Update mail_optional_autofollow.pot
+
+---
+ .../i18n/mail_optional_autofollow.pot             | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+index 4bd676b32..e3524a607 100644
+--- a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
++++ b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+@@ -1,12 +1,12 @@
+ # Translation of Odoo Server.
+ # This file contains the translation of the following modules:
+-#	* mail_optional_autofollow
++# 	* mail_optional_autofollow
+ #
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: Odoo Server 11.0\n"
++"Project-Id-Version: Odoo Server 13.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"Last-Translator: <>\n"
++"Last-Translator: \n"
+ "Language-Team: \n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+@@ -19,12 +19,13 @@ msgid "Email composition wizard"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
+-msgid "if checked, the additional recipients will be added as        followers on the related object"
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
++msgid ""
++"if checked, the additional recipients will be added as        followers on "
++"the related object"
+ msgstr ""
+-
+--
+2.34.1
+
+
+From 4f826a486f9a7ace14d540f0d5ab6814161b34c1 Mon Sep 17 00:00:00 2001
+From: OCA Transbot <transbot@odoo-community.org>
+Date: Wed, 15 Jan 2020 09:25:34 +0000
+Subject: Update translation files
+
+Updated by "Update PO files to match POT (msgmerge)" hook in Weblate.
+
+Translation: social-13.0/social-13.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-13-0/social-13-0-mail_optional_autofollow/
+---
+ mail_optional_autofollow/i18n/ca.po    | 4 ++--
+ mail_optional_autofollow/i18n/de.po    | 4 ++--
+ mail_optional_autofollow/i18n/es.po    | 4 ++--
+ mail_optional_autofollow/i18n/es_CO.po | 4 ++--
+ mail_optional_autofollow/i18n/fr.po    | 4 ++--
+ mail_optional_autofollow/i18n/hr.po    | 4 ++--
+ mail_optional_autofollow/i18n/it.po    | 4 ++--
+ mail_optional_autofollow/i18n/pt_BR.po | 4 ++--
+ mail_optional_autofollow/i18n/sl.po    | 4 ++--
+ 9 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+index 24ca56ec0..41a58a077 100644
+--- a/mail_optional_autofollow/i18n/ca.po
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -24,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Assistent per composició de correus electrònics"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index 91684d2c7..45d199bb9 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -25,12 +25,12 @@ msgid "Email composition wizard"
+ msgstr "Assistent zum Email verfassen"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Empfänger als Abonnenten hinzufügen"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index 383e04f06..d1a0fa03f 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -24,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Asistente composición Correo Electrónico"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+index ad0cee832..fe117459b 100644
+--- a/mail_optional_autofollow/i18n/es_CO.po
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -24,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Asistente de redacción de E-mail"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index 64ad08562..54a32ced1 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -24,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Assistant de composition de courriel"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Abonner les destinataires"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+index 18ed63a3d..c89c67579 100644
+--- a/mail_optional_autofollow/i18n/hr.po
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -26,12 +26,12 @@ msgid "Email composition wizard"
+ msgstr "Čarobnjak za sastavljanje maila"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Učini primatelje i pratiteljima"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index ec6f3bc2b..5d7b35f85 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -24,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Wizard Creazione Email"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Destinatari in Follower"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index eb6bbcd21..cafe3edc1 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -24,12 +24,12 @@ msgid "Email composition wizard"
+ msgstr "Assistente de Composição de Email"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+index ccfab1a6c..7d6aaf886 100644
+--- a/mail_optional_autofollow/i18n/sl.po
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -26,12 +26,12 @@ msgid "Email composition wizard"
+ msgstr "Čarovnik za sestavljanje e-pošte"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Prejemniki bodo sledilci"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message_autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+--
+2.34.1
+
+
+From 6d6c7ba043f166a785190125d27609363ac29450 Mon Sep 17 00:00:00 2001
+From: Jairo Llopis <jairo.llopis@tecnativa.com>
+Date: Tue, 26 Jan 2021 14:06:17 +0000
+Subject: [IMP] pre-commit run -a
+
+---
+ .../wizard/mail_compose_message_view.xml                 | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message_view.xml b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+index a5ff80d25..8899f9a27 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message_view.xml
++++ b/mail_optional_autofollow/wizard/mail_compose_message_view.xml
+@@ -1,12 +1,15 @@
+-<?xml version="1.0" encoding="utf-8"?>
++<?xml version="1.0" encoding="utf-8" ?>
+ <odoo>
+     <record model="ir.ui.view" id="email_compose_message_wizard_inherit_form">
+         <field name="name">mail.compose.message.form (mail_optional_autofollow)</field>
+         <field name="model">mail.compose.message</field>
+-        <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
++        <field name="inherit_id" ref="mail.email_compose_message_wizard_form" />
+         <field name="arch" type="xml">
+             <xpath expr="//div[field[@name='partner_ids']]" position="after">
+-                <field name="autofollow_recipients" attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}"/>
++                <field
++                    name="autofollow_recipients"
++                    attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}"
++                />
+             </xpath>
+         </field>
+     </record>
+--
+2.34.1
+
+
+From 9078411c33be8212fff4fff29e607fca0febbe8d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alexandre=20D=2E=20D=C3=ADaz?=
+ <alexandre.diaz@tecnativa.com>
+Date: Tue, 26 Jan 2021 17:37:52 +0100
+Subject: [IMP] Apply pre-commit changes: Resolve conflicts
+
+---
+ mail_optional_autofollow/__manifest__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index 7536d3473..8b168aaaa 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -6,7 +6,7 @@
+         Choose if you want to automatically add new recipients as followers
+         on mail.compose.message""",
+     "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
+-    "website": "http://acsone.eu",
++    "website": "https://github.com/OCA/social",
+     "category": "Social Network",
+     "version": "13.0.1.0.0",
+     "license": "AGPL-3",
+--
+2.34.1
+
+
+From 0a68c1d1f104d583a5b557ab472a239d78c33aa7 Mon Sep 17 00:00:00 2001
+From: oca-travis <oca+oca-travis@odoo-community.org>
+Date: Thu, 11 Nov 2021 11:52:35 +0000
+Subject: [UPD] Update mail_optional_autofollow.pot
+
+---
+ mail_optional_autofollow/i18n/mail_optional_autofollow.pot | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+index e3524a607..d609828d8 100644
+--- a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
++++ b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+@@ -19,11 +19,13 @@ msgid "Email composition wizard"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From eb52dc9a3b357681e7ab873f639a88695697c764 Mon Sep 17 00:00:00 2001
+From: OCA Transbot <transbot@odoo-community.org>
+Date: Thu, 11 Nov 2021 12:05:33 +0000
+Subject: Update translation files
+
+Updated by "Update PO files to match POT (msgmerge)" hook in Weblate.
+
+Translation: social-13.0/social-13.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-13-0/social-13-0-mail_optional_autofollow/
+---
+ mail_optional_autofollow/i18n/ca.po    | 2 ++
+ mail_optional_autofollow/i18n/de.po    | 2 ++
+ mail_optional_autofollow/i18n/es.po    | 2 ++
+ mail_optional_autofollow/i18n/es_CO.po | 2 ++
+ mail_optional_autofollow/i18n/fr.po    | 2 ++
+ mail_optional_autofollow/i18n/hr.po    | 2 ++
+ mail_optional_autofollow/i18n/it.po    | 2 ++
+ mail_optional_autofollow/i18n/pt_BR.po | 2 ++
+ mail_optional_autofollow/i18n/sl.po    | 2 ++
+ 9 files changed, 18 insertions(+)
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+index 41a58a077..269c59290 100644
+--- a/mail_optional_autofollow/i18n/ca.po
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Assistent per composició de correus electrònics"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index 45d199bb9..c01849465 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -25,11 +25,13 @@ msgid "Email composition wizard"
+ msgstr "Assistent zum Email verfassen"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Empfänger als Abonnenten hinzufügen"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index d1a0fa03f..b5880cec1 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Asistente composición Correo Electrónico"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+index fe117459b..4eafbc14a 100644
+--- a/mail_optional_autofollow/i18n/es_CO.po
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Asistente de redacción de E-mail"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index 54a32ced1..28161a6fc 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Assistant de composition de courriel"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Abonner les destinataires"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+index c89c67579..b70cfb3c6 100644
+--- a/mail_optional_autofollow/i18n/hr.po
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -26,11 +26,13 @@ msgid "Email composition wizard"
+ msgstr "Čarobnjak za sastavljanje maila"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Učini primatelje i pratiteljima"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index 5d7b35f85..a8e0759a0 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Wizard Creazione Email"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Destinatari in Follower"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index cafe3edc1..a1008cc32 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Assistente de Composição de Email"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+index 7d6aaf886..05436720e 100644
+--- a/mail_optional_autofollow/i18n/sl.po
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -26,11 +26,13 @@ msgid "Email composition wizard"
+ msgstr "Čarovnik za sestavljanje e-pošte"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Prejemniki bodo sledilci"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From 2a930968ae9efd3a4858c87fbf369428ead3427e Mon Sep 17 00:00:00 2001
+From: Karl Southern <karl@theangryangel.co.uk>
+Date: Fri, 1 Apr 2022 13:09:06 +0100
+Subject: [MIG] mail_optional_autofollow: Migration to 15.0
+
+---
+ mail_optional_autofollow/__manifest__.py               |  2 +-
+ .../tests/test_mail_optional_autofollow.py             | 10 +++++-----
+ .../wizard/mail_compose_message.py                     |  4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index 8b168aaaa..af3457ddc 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -8,7 +8,7 @@
+     "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
+     "website": "https://github.com/OCA/social",
+     "category": "Social Network",
+-    "version": "13.0.1.0.0",
++    "version": "15.0.1.0.0",
+     "license": "AGPL-3",
+     "depends": ["mail"],
+     "data": ["wizard/mail_compose_message_view.xml"],
+diff --git a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+index 887a48c64..805fe643a 100644
+--- a/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
++++ b/mail_optional_autofollow/tests/test_mail_optional_autofollow.py
+@@ -21,13 +21,13 @@ class TestAttachExistingAttachment(common.TransactionCase):
+             }
+         )
+         mail_compose = self.env["mail.compose.message"]
+-        values = mail_compose.with_context(ctx).onchange_template_id(
++        values = mail_compose.with_context(**ctx)._onchange_template_id(
+             False, "comment", "res.partner", self.partner_01.id
+         )["value"]
+         values["partner_ids"] = [(4, self.partner_02.id)]
+-        compose_id = mail_compose.with_context(ctx).create(values)
++        compose_id = mail_compose.with_context(**ctx).create(values)
+         compose_id.autofollow_recipients = False
+-        compose_id.with_context(ctx).send_mail()
++        compose_id.with_context(**ctx).action_send_mail()
+         res = self.env["mail.followers"].search(
+             [
+                 ("res_model", "=", "res.partner"),
+@@ -37,9 +37,9 @@ class TestAttachExistingAttachment(common.TransactionCase):
+         )
+         # I check if the recipient isn't a follower
+         self.assertEqual(len(res.ids), 0)
+-        compose_id = mail_compose.with_context(ctx).create(values)
++        compose_id = mail_compose.with_context(**ctx).create(values)
+         compose_id.autofollow_recipients = True
+-        compose_id.with_context(ctx).send_mail()
++        compose_id.with_context(**ctx).action_send_mail()
+         res = self.env["mail.followers"].search(
+             [
+                 ("res_model", "=", "res.partner"),
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index 8b3dd082b..665364cc0 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -21,10 +21,10 @@ class MailComposeMessage(models.TransientModel):
+         followers on the related object""",
+     )
+
+-    def send_mail(self, auto_commit=False):
++    def _action_send_mail(self, auto_commit=False):
+         for wizard in self:
+             super(
+                 MailComposeMessage,
+                 wizard.with_context(mail_post_autofollow=wizard.autofollow_recipients),
+-            ).send_mail(auto_commit=auto_commit)
++            )._action_send_mail(auto_commit=auto_commit)
+         return True
+--
+2.34.1
+
+
+From 001c95616b10c3210295e835b95e05cd1315afd4 Mon Sep 17 00:00:00 2001
+From: Benoit Aimont <benoit.aimont@acsone.eu>
+Date: Tue, 23 Aug 2022 14:51:48 +0200
+Subject: [MIG] mail_optional_autofollow: Migration to 16.0
+
+---
+ mail_optional_autofollow/__manifest__.py               |  2 +-
+ .../wizard/mail_compose_message.py                     | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/mail_optional_autofollow/__manifest__.py b/mail_optional_autofollow/__manifest__.py
+index af3457ddc..7d0917adb 100644
+--- a/mail_optional_autofollow/__manifest__.py
++++ b/mail_optional_autofollow/__manifest__.py
+@@ -8,7 +8,7 @@
+     "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
+     "website": "https://github.com/OCA/social",
+     "category": "Social Network",
+-    "version": "15.0.1.0.0",
++    "version": "16.0.1.0.0",
+     "license": "AGPL-3",
+     "depends": ["mail"],
+     "data": ["wizard/mail_compose_message_view.xml"],
+diff --git a/mail_optional_autofollow/wizard/mail_compose_message.py b/mail_optional_autofollow/wizard/mail_compose_message.py
+index 665364cc0..b8f7d1b7c 100644
+--- a/mail_optional_autofollow/wizard/mail_compose_message.py
++++ b/mail_optional_autofollow/wizard/mail_compose_message.py
+@@ -22,9 +22,15 @@ class MailComposeMessage(models.TransientModel):
+     )
+
+     def _action_send_mail(self, auto_commit=False):
++        result_mails_su, result_messages = (
++            self.env["mail.mail"].sudo(),
++            self.env["mail.message"],
++        )
+         for wizard in self:
+-            super(
++            result_mails_su_wizard, result_messages_wizard = super(
+                 MailComposeMessage,
+                 wizard.with_context(mail_post_autofollow=wizard.autofollow_recipients),
+             )._action_send_mail(auto_commit=auto_commit)
+-        return True
++            result_mails_su += result_mails_su_wizard
++            result_messages += result_messages_wizard
++        return result_mails_su, result_messages
+--
+2.34.1
+
+
+From a23bd5282d563da6000ff739a6cec9e31ea638b0 Mon Sep 17 00:00:00 2001
+From: oca-ci <oca-ci@odoo-community.org>
+Date: Fri, 30 Dec 2022 15:24:13 +0000
+Subject: [UPD] Update mail_optional_autofollow.pot
+
+---
+ mail_optional_autofollow/i18n/mail_optional_autofollow.pot | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+index d609828d8..34fc4d566 100644
+--- a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
++++ b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+@@ -4,7 +4,7 @@
+ #
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: Odoo Server 13.0\n"
++"Project-Id-Version: Odoo Server 16.0\n"
+ "Report-Msgid-Bugs-To: \n"
+ "Last-Translator: \n"
+ "Language-Team: \n"
+@@ -19,13 +19,11 @@ msgid "Email composition wizard"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From 262823368f05972975aa4b83f1e23a89b7801c94 Mon Sep 17 00:00:00 2001
+From: Weblate <noreply@weblate.org>
+Date: Fri, 30 Dec 2022 15:56:50 +0000
+Subject: Update translation files
+
+Updated by "Update PO files to match POT (msgmerge)" hook in Weblate.
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/
+---
+ mail_optional_autofollow/i18n/ca.po    | 2 --
+ mail_optional_autofollow/i18n/de.po    | 2 --
+ mail_optional_autofollow/i18n/es.po    | 2 --
+ mail_optional_autofollow/i18n/es_CO.po | 2 --
+ mail_optional_autofollow/i18n/fr.po    | 2 --
+ mail_optional_autofollow/i18n/hr.po    | 2 --
+ mail_optional_autofollow/i18n/it.po    | 2 --
+ mail_optional_autofollow/i18n/pt_BR.po | 2 --
+ mail_optional_autofollow/i18n/sl.po    | 2 --
+ 9 files changed, 18 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+index 269c59290..41a58a077 100644
+--- a/mail_optional_autofollow/i18n/ca.po
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -24,13 +24,11 @@ msgid "Email composition wizard"
+ msgstr "Assistent per composició de correus electrònics"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index c01849465..45d199bb9 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -25,13 +25,11 @@ msgid "Email composition wizard"
+ msgstr "Assistent zum Email verfassen"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Empfänger als Abonnenten hinzufügen"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index b5880cec1..d1a0fa03f 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -24,13 +24,11 @@ msgid "Email composition wizard"
+ msgstr "Asistente composición Correo Electrónico"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+index 4eafbc14a..fe117459b 100644
+--- a/mail_optional_autofollow/i18n/es_CO.po
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -24,13 +24,11 @@ msgid "Email composition wizard"
+ msgstr "Asistente de redacción de E-mail"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index 28161a6fc..54a32ced1 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -24,13 +24,11 @@ msgid "Email composition wizard"
+ msgstr "Assistant de composition de courriel"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Abonner les destinataires"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+index b70cfb3c6..c89c67579 100644
+--- a/mail_optional_autofollow/i18n/hr.po
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -26,13 +26,11 @@ msgid "Email composition wizard"
+ msgstr "Čarobnjak za sastavljanje maila"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Učini primatelje i pratiteljima"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index a8e0759a0..5d7b35f85 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -24,13 +24,11 @@ msgid "Email composition wizard"
+ msgstr "Wizard Creazione Email"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Destinatari in Follower"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index a1008cc32..cafe3edc1 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -24,13 +24,11 @@ msgid "Email composition wizard"
+ msgstr "Assistente de Composição de Email"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+index 05436720e..7d6aaf886 100644
+--- a/mail_optional_autofollow/i18n/sl.po
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -26,13 +26,11 @@ msgid "Email composition wizard"
+ msgstr "Čarovnik za sestavljanje e-pošte"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Prejemniki bodo sledilci"
+
+ #. module: mail_optional_autofollow
+-#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From b779f290f9854f68efdf945cff156cb1bbf6faf0 Mon Sep 17 00:00:00 2001
+From: oca-ci <oca-ci@odoo-community.org>
+Date: Wed, 18 Oct 2023 09:52:27 +0000
+Subject: [UPD] Update mail_optional_autofollow.pot
+
+---
+ mail_optional_autofollow/i18n/mail_optional_autofollow.pot | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+index 34fc4d566..3d4e10808 100644
+--- a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
++++ b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+@@ -19,11 +19,13 @@ msgid "Email composition wizard"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From 517e6f4e300b3b8c57c0f21cdb5ed5a6edad6705 Mon Sep 17 00:00:00 2001
+From: Weblate <noreply@weblate.org>
+Date: Wed, 18 Oct 2023 10:03:06 +0000
+Subject: Update translation files
+
+Updated by "Update PO files to match POT (msgmerge)" hook in Weblate.
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/
+---
+ mail_optional_autofollow/i18n/ca.po    | 2 ++
+ mail_optional_autofollow/i18n/de.po    | 2 ++
+ mail_optional_autofollow/i18n/es.po    | 2 ++
+ mail_optional_autofollow/i18n/es_CO.po | 2 ++
+ mail_optional_autofollow/i18n/fr.po    | 2 ++
+ mail_optional_autofollow/i18n/hr.po    | 2 ++
+ mail_optional_autofollow/i18n/it.po    | 2 ++
+ mail_optional_autofollow/i18n/pt_BR.po | 2 ++
+ mail_optional_autofollow/i18n/sl.po    | 2 ++
+ 9 files changed, 18 insertions(+)
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+index 41a58a077..269c59290 100644
+--- a/mail_optional_autofollow/i18n/ca.po
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Assistent per composició de correus electrònics"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index 45d199bb9..c01849465 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -25,11 +25,13 @@ msgid "Email composition wizard"
+ msgstr "Assistent zum Email verfassen"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Empfänger als Abonnenten hinzufügen"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index d1a0fa03f..b5880cec1 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Asistente composición Correo Electrónico"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+index fe117459b..4eafbc14a 100644
+--- a/mail_optional_autofollow/i18n/es_CO.po
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Asistente de redacción de E-mail"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index 54a32ced1..28161a6fc 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Assistant de composition de courriel"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Abonner les destinataires"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+index c89c67579..b70cfb3c6 100644
+--- a/mail_optional_autofollow/i18n/hr.po
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -26,11 +26,13 @@ msgid "Email composition wizard"
+ msgstr "Čarobnjak za sastavljanje maila"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Učini primatelje i pratiteljima"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index 5d7b35f85..a8e0759a0 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Wizard Creazione Email"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Destinatari in Follower"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index cafe3edc1..a1008cc32 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -24,11 +24,13 @@ msgid "Email composition wizard"
+ msgstr "Assistente de Composição de Email"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+index 7d6aaf886..05436720e 100644
+--- a/mail_optional_autofollow/i18n/sl.po
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -26,11 +26,13 @@ msgid "Email composition wizard"
+ msgstr "Čarovnik za sestavljanje e-pošte"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Prejemniki bodo sledilci"
+
+ #. module: mail_optional_autofollow
++#: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From 5d2b83475308afcb19fa3fdb27fb45c8b543f492 Mon Sep 17 00:00:00 2001
+From: Ivorra78 <informatica@totmaterial.es>
+Date: Tue, 9 Jan 2024 17:53:24 +0000
+Subject: Translated using Weblate (Spanish)
+
+Currently translated at 100.0% (3 of 3 strings)
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/es/
+---
+ mail_optional_autofollow/i18n/es.po | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index b5880cec1..d28926d93 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -8,15 +8,16 @@ msgstr ""
+ "Project-Id-Version: social (8.0)\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+-"PO-Revision-Date: 2016-04-05 07:05+0000\n"
+-"Last-Translator: <>\n"
++"PO-Revision-Date: 2024-01-09 20:34+0000\n"
++"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
+ "Language-Team: Spanish (http://www.transifex.com/oca/OCA-social-8-0/language/"
+ "es/)\n"
+ "Language: es\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++"Plural-Forms: nplurals=2; plural=n != 1;\n"
++"X-Generator: Weblate 4.17\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -27,7 +28,7 @@ msgstr "Asistente composición Correo Electrónico"
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+-msgstr ""
++msgstr "Hacer seguidores a destinatarios"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+@@ -36,3 +37,5 @@ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+ msgstr ""
++"si está marcada, los destinatarios adicionales se añadirán "
++"como                      seguidores en el objeto relacionado"
+--
+2.34.1
+
+
+From 2ddb3ec9012296358fd2f42df532b587b545c221 Mon Sep 17 00:00:00 2001
+From: mymage <stefano.consolaro@mymage.it>
+Date: Thu, 11 Jan 2024 07:50:16 +0000
+Subject: Translated using Weblate (Italian)
+
+Currently translated at 100.0% (3 of 3 strings)
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/it/
+---
+ mail_optional_autofollow/i18n/it.po | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index a8e0759a0..438c982b2 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -9,19 +9,20 @@ msgstr ""
+ "Project-Id-Version: Odoo Server 10.0\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2017-05-17 01:02+0000\n"
+-"PO-Revision-Date: 2017-05-17 01:02+0000\n"
+-"Last-Translator: Marius Marolla <mariusmarolla@gmail.com>, 2017\n"
++"PO-Revision-Date: 2024-01-11 08:06+0000\n"
++"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+ "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
+ "Language: it\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++"Plural-Forms: nplurals=2; plural=n != 1;\n"
++"X-Generator: Weblate 4.17\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+ msgid "Email composition wizard"
+-msgstr "Wizard Creazione Email"
++msgstr "Procedura guidata creazione e-mail"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+@@ -36,5 +37,5 @@ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+ msgstr ""
+-"Se l'opzione è spuntata, i destinatari verranno aggiunti ai follower di "
+-"questo documento."
++"Se selezionata, i destinatari aggiuntivi verranno aggiunti a        chi "
++"segue questo documento."
+--
+2.34.1
+
+
+From b9d11201bfeafc2a8dbf1b678b3fc18c3267f07e Mon Sep 17 00:00:00 2001
+From: mymage <stefano.consolaro@mymage.it>
+Date: Mon, 5 Feb 2024 07:08:15 +0000
+Subject: Translated using Weblate (Italian)
+
+Currently translated at 100.0% (3 of 3 strings)
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/it/
+---
+ mail_optional_autofollow/i18n/it.po | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index 438c982b2..f93e077ab 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -9,7 +9,7 @@ msgstr ""
+ "Project-Id-Version: Odoo Server 10.0\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2017-05-17 01:02+0000\n"
+-"PO-Revision-Date: 2024-01-11 08:06+0000\n"
++"PO-Revision-Date: 2024-02-05 09:41+0000\n"
+ "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+ "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
+ "Language: it\n"
+@@ -38,4 +38,4 @@ msgid ""
+ "the related object"
+ msgstr ""
+ "Se selezionata, i destinatari aggiuntivi verranno aggiunti a        chi "
+-"segue questo documento."
++"segue questo documento"
+--
+2.34.1
+
+
+From c7cbb4e79a49723f93069f3a61d92ae5c06182a0 Mon Sep 17 00:00:00 2001
+From: Rodrigo Macedo
+ <sottomaiormacedotec@users.noreply.translation.odoo-community.org>
+Date: Wed, 22 May 2024 11:49:43 +0000
+Subject: Translated using Weblate (Portuguese (Brazil))
+
+Currently translated at 100.0% (3 of 3 strings)
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/pt_BR/
+---
+ mail_optional_autofollow/i18n/pt_BR.po | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index a1008cc32..079335fd0 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -8,15 +8,17 @@ msgstr ""
+ "Project-Id-Version: social (8.0)\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2016-04-14 07:09+0000\n"
+-"PO-Revision-Date: 2016-04-05 07:05+0000\n"
+-"Last-Translator: <>\n"
+-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-"
+-"social-8-0/language/pt_BR/)\n"
++"PO-Revision-Date: 2024-05-22 14:35+0000\n"
++"Last-Translator: Rodrigo Macedo <sottomaiormacedotec@users.noreply."
++"translation.odoo-community.org>\n"
++"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/"
++"OCA-social-8-0/language/pt_BR/)\n"
+ "Language: pt_BR\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
++"Plural-Forms: nplurals=2; plural=n > 1;\n"
++"X-Generator: Weblate 4.17\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -27,7 +29,7 @@ msgstr "Assistente de Composição de Email"
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+-msgstr ""
++msgstr "Torne os destinatários seguidores"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+@@ -36,3 +38,5 @@ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+ "the related object"
+ msgstr ""
++"se marcada, os destinatários adicionais serão adicionados como        "
++"seguidores no objeto relacionado"
+--
+2.34.1
+
+
+From b9bfecc6fce7710986d59329c640bacd83c15c53 Mon Sep 17 00:00:00 2001
+From: mymage <stefano.consolaro@mymage.it>
+Date: Thu, 13 Jun 2024 13:24:12 +0000
+Subject: Translated using Weblate (Italian)
+
+Currently translated at 100.0% (3 of 3 strings)
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/it/
+---
+ mail_optional_autofollow/i18n/it.po | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index f93e077ab..7f567add7 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -9,7 +9,7 @@ msgstr ""
+ "Project-Id-Version: Odoo Server 10.0\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2017-05-17 01:02+0000\n"
+-"PO-Revision-Date: 2024-02-05 09:41+0000\n"
++"PO-Revision-Date: 2024-06-13 13:36+0000\n"
+ "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+ "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
+ "Language: it\n"
+@@ -28,7 +28,7 @@ msgstr "Procedura guidata creazione e-mail"
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+-msgstr "Destinatari in Follower"
++msgstr "Converti destinatari in chi segue"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
+--
+2.34.1
+
+
+From 3001707332e604ee10acb4faa2e65828a507f31c Mon Sep 17 00:00:00 2001
+From: oca-ci <oca-ci@odoo-community.org>
+Date: Fri, 8 Nov 2024 12:50:10 +0000
+Subject: [UPD] Update mail_optional_autofollow.pot
+
+---
+ mail_optional_autofollow/i18n/mail_optional_autofollow.pot | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+index 3d4e10808..c1ce1e20a 100644
+--- a/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
++++ b/mail_optional_autofollow/i18n/mail_optional_autofollow.pot
+@@ -20,12 +20,14 @@ msgstr ""
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
+
+
+From 5f80b7215054c54000dedcc0ea6d65c141f9e194 Mon Sep 17 00:00:00 2001
+From: Weblate <noreply@weblate.org>
+Date: Fri, 8 Nov 2024 12:54:55 +0000
+Subject: Update translation files
+
+Updated by "Update PO files to match POT (msgmerge)" hook in Weblate.
+
+Translation: social-16.0/social-16.0-mail_optional_autofollow
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_optional_autofollow/
+---
+ mail_optional_autofollow/i18n/ca.po    | 2 ++
+ mail_optional_autofollow/i18n/de.po    | 2 ++
+ mail_optional_autofollow/i18n/es.po    | 2 ++
+ mail_optional_autofollow/i18n/es_CO.po | 2 ++
+ mail_optional_autofollow/i18n/fr.po    | 2 ++
+ mail_optional_autofollow/i18n/hr.po    | 6 ++++--
+ mail_optional_autofollow/i18n/it.po    | 2 ++
+ mail_optional_autofollow/i18n/pt_BR.po | 6 ++++--
+ mail_optional_autofollow/i18n/sl.po    | 6 ++++--
+ 9 files changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/mail_optional_autofollow/i18n/ca.po b/mail_optional_autofollow/i18n/ca.po
+index 269c59290..aeff23ead 100644
+--- a/mail_optional_autofollow/i18n/ca.po
++++ b/mail_optional_autofollow/i18n/ca.po
+@@ -25,12 +25,14 @@ msgstr "Assistent per composició de correus electrònics"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/de.po b/mail_optional_autofollow/i18n/de.po
+index c01849465..1e57838b8 100644
+--- a/mail_optional_autofollow/i18n/de.po
++++ b/mail_optional_autofollow/i18n/de.po
+@@ -26,12 +26,14 @@ msgstr "Assistent zum Email verfassen"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Empfänger als Abonnenten hinzufügen"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es.po b/mail_optional_autofollow/i18n/es.po
+index d28926d93..edde3cff0 100644
+--- a/mail_optional_autofollow/i18n/es.po
++++ b/mail_optional_autofollow/i18n/es.po
+@@ -26,12 +26,14 @@ msgstr "Asistente composición Correo Electrónico"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Hacer seguidores a destinatarios"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/es_CO.po b/mail_optional_autofollow/i18n/es_CO.po
+index 4eafbc14a..2042a255e 100644
+--- a/mail_optional_autofollow/i18n/es_CO.po
++++ b/mail_optional_autofollow/i18n/es_CO.po
+@@ -25,12 +25,14 @@ msgstr "Asistente de redacción de E-mail"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr ""
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/fr.po b/mail_optional_autofollow/i18n/fr.po
+index 28161a6fc..e472fe814 100644
+--- a/mail_optional_autofollow/i18n/fr.po
++++ b/mail_optional_autofollow/i18n/fr.po
+@@ -25,12 +25,14 @@ msgstr "Assistant de composition de courriel"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Abonner les destinataires"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/hr.po b/mail_optional_autofollow/i18n/hr.po
+index b70cfb3c6..0ddcb2862 100644
+--- a/mail_optional_autofollow/i18n/hr.po
++++ b/mail_optional_autofollow/i18n/hr.po
+@@ -17,8 +17,8 @@ msgstr ""
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
++"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
++"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -27,12 +27,14 @@ msgstr "Čarobnjak za sastavljanje maila"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Učini primatelje i pratiteljima"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/it.po b/mail_optional_autofollow/i18n/it.po
+index 7f567add7..74477399f 100644
+--- a/mail_optional_autofollow/i18n/it.po
++++ b/mail_optional_autofollow/i18n/it.po
+@@ -26,12 +26,14 @@ msgstr "Procedura guidata creazione e-mail"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Converti destinatari in chi segue"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/pt_BR.po b/mail_optional_autofollow/i18n/pt_BR.po
+index 079335fd0..fa3142306 100644
+--- a/mail_optional_autofollow/i18n/pt_BR.po
++++ b/mail_optional_autofollow/i18n/pt_BR.po
+@@ -11,8 +11,8 @@ msgstr ""
+ "PO-Revision-Date: 2024-05-22 14:35+0000\n"
+ "Last-Translator: Rodrigo Macedo <sottomaiormacedotec@users.noreply."
+ "translation.odoo-community.org>\n"
+-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/"
+-"OCA-social-8-0/language/pt_BR/)\n"
++"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-"
++"social-8-0/language/pt_BR/)\n"
+ "Language: pt_BR\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+@@ -27,12 +27,14 @@ msgstr "Assistente de Composição de Email"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Torne os destinatários seguidores"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+diff --git a/mail_optional_autofollow/i18n/sl.po b/mail_optional_autofollow/i18n/sl.po
+index 05436720e..057dce2ba 100644
+--- a/mail_optional_autofollow/i18n/sl.po
++++ b/mail_optional_autofollow/i18n/sl.po
+@@ -17,8 +17,8 @@ msgstr ""
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: \n"
+-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+-"%100==4 ? 2 : 3);\n"
++"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
++"n%100==4 ? 2 : 3);\n"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model,name:mail_optional_autofollow.model_mail_compose_message
+@@ -27,12 +27,14 @@ msgstr "Čarovnik za sestavljanje e-pošte"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,field_description:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid "Make recipients followers"
+ msgstr "Prejemniki bodo sledilci"
+
+ #. module: mail_optional_autofollow
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_account_invoice_send__autofollow_recipients
++#: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_gateway_message__autofollow_recipients
+ #: model:ir.model.fields,help:mail_optional_autofollow.field_mail_compose_message__autofollow_recipients
+ msgid ""
+ "if checked, the additional recipients will be added as        followers on "
+--
+2.34.1
