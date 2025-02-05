@@ -5,7 +5,7 @@
     "name": "Outgoing Email by Model",
     "version": "16.0.1.0.0",
     "category": "Social",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "maintainers": ["mmequignon"],
     "license": "AGPL-3",
