@@ -139,13 +139,3 @@ msgid ""
 "Whether to replace completely, partially, append at beginning or append at "
 "end to other templates that apply to a given context"
 msgstr ""
-
-#~ msgid ""
-#~ "Whether to replace, append at beggining or append at end to other "
-#~ "templates that apply to a given context"
-#~ msgstr ""
-#~ "Si reemplazar, añadir al principio o añadir al final a otras plantillas "
-#~ "que se aplican a un contexto determinado"
-
-#~ msgid "Last Modified on"
-#~ msgstr "Última Modificación el"

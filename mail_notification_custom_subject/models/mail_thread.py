@@ -53,10 +53,15 @@ class MailThread(models.AbstractModel):
                 .sudo(False)
             )
             if not subject:
-                subject = "Re: %s" % self.env["mail.message"].with_context(
-                    default_model=self._name,
-                    default_res_id=self.id,
-                )._get_record_name({})
+                record_name = (
+                    self.env["mail.message"]
+                    .with_context(
+                        default_model=self._name,
+                        default_res_id=self.id,
+                    )
+                    ._get_record_name({})
+                )
+                subject = f"Re: {record_name}"
             for template in custom_subjects:
                 try:
                     rendered_subject_template = self.env[
