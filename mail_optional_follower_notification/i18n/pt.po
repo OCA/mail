@@ -30,6 +30,21 @@ msgid ""
 msgstr ""
 
 #. module: mail_optional_follower_notification
+#: model:ir.model,name:mail_optional_follower_notification.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: mail_optional_follower_notification
+#: model:ir.model,name:mail_optional_follower_notification.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: mail_optional_follower_notification
+#: model_terms:ir.ui.view,arch_db:mail_optional_follower_notification.res_config_settings_view_form
+msgid "Default notify followers when the user sending email"
+msgstr ""
+
+#. module: mail_optional_follower_notification
 #: model:ir.model,name:mail_optional_follower_notification.model_mail_thread
 msgid "Email Thread"
 msgstr ""
@@ -41,6 +56,8 @@ msgstr "Assistente de composição de email"
 
 #. module: mail_optional_follower_notification
 #: model:ir.model.fields,field_description:mail_optional_follower_notification.field_mail_compose_message__notify_followers
+#: model:ir.model.fields,field_description:mail_optional_follower_notification.field_res_company__notify_followers
+#: model:ir.model.fields,field_description:mail_optional_follower_notification.field_res_config_settings__notify_followers
 #, fuzzy
 msgid "Notify Followers"
 msgstr "Notificar seguidores"
