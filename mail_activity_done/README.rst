@@ -79,6 +79,7 @@ Contributors
 -  Manuel Regidor <manuel.regidor@sygel.es> (https://www.sygel.es)
 -  Bernat Puig <bernat.puig@forgeflow.com>
    (`www.forgeflow.com <http://www.forgeflow.com>`__)
+-  Stefan Rijnhart <stefan@opener.amsterdam>
 
 Maintainers
 -----------
