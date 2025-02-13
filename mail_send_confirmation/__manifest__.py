@@ -6,7 +6,7 @@
     "author": "Quartile Limited, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Mail",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail"],
     "assets": {
         "web.assets_backend": [
