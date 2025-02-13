@@ -16,14 +16,14 @@ Mail Show Follower
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github
-    :target: https://github.com/OCA/social/tree/17.0/mail_show_follower
-    :alt: OCA/social
+.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
+    :target: https://github.com/OCA/mail/tree/18.0/mail_show_follower
+    :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/social-17-0/social-17-0-mail_show_follower
+    :target: https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_show_follower
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=17.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -45,19 +45,19 @@ Configuration
 
 To configure this module, you need to:
 
-1. Go General settings/Discuss/Show Followers on mails/Show Internal
-   Users CC and set if want to show or not internal users in cc details.
+1. Go General settings/Mail/Show Followers on mails/Show Internal Users
+   CC and set if want to show or not internal users in cc details.
 2. Go Settings/Users & Company select any user in 'Preferences' check or
    not the 'Show in CC' field if this user need to appear in the cc
    note.
-3. Go General settings/Discuss/Show Followers on mails/Text 'Sent to'
-   and set the initial part of the message.
-4. Go General settings/Discuss/Show Followers on mails/Partner format
-   and choose desired fields to show on CC recipients.
-5. Go General settings/Discuss/Show Followers on mails/Text 'Replies'
-   and choose desired warn message
-6. Go General settings/Discuss/Show Followers in 'Models to exclude'
-   enter the models you want to exclude from the CC note.
+3. Go General settings/Mail/Show Followers on mails/Text 'Sent to' and
+   set the initial part of the message.
+4. Go General settings/Mail/Show Followers on mails/Partner format and
+   choose desired fields to show on CC recipients.
+5. Go General settings/Mail/Show Followers on mails/Text 'Replies' and
+   choose desired warn message
+6. Go General settings/Mail/Show Followers in 'Models to exclude' enter
+   the models you want to exclude from the CC note.
 
 Usage
 =====
@@ -69,10 +69,10 @@ To use this module, you need to:
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_show_follower%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_show_follower%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -88,10 +88,10 @@ Authors
 Contributors
 ------------
 
-- Valentin Vinagre <valentin.vinagre@sygel.es>
-- Lorenzo Battistini
-- Eduardo de Miguel <edu@moduon.team>
-- Vincent Van Rossem <vincent.vanrossem@camptocamp.com>
+-  Valentin Vinagre <valentin.vinagre@sygel.es>
+-  Lorenzo Battistini
+-  Eduardo de Miguel <edu@moduon.team>
+-  Vincent Van Rossem <vincent.vanrossem@camptocamp.com>
 
 Maintainers
 -----------
@@ -114,6 +114,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-yajo| 
 
-This module is part of the `OCA/social <https://github.com/OCA/social/tree/17.0/mail_show_follower>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/18.0/mail_show_follower>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

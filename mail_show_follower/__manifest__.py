@@ -5,9 +5,9 @@
 {
     "name": "Mail Show Follower",
     "summary": "Show CC document followers in mails.",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Mail",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Sygel, Moduon, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
