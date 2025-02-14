@@ -6,7 +6,7 @@
     "summary": """Add the previous chatter discussion into new email notifications.""",
     "version": "18.0.1.0.0",
     "category": "Social Network",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "installable": True,
