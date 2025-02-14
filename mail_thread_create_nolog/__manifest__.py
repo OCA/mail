@@ -5,7 +5,7 @@
     "summary": "Display a fake (non-stored) create log in the chatter.",
     "version": "18.0.1.0.0",
     "category": "Mail",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "maintainers": ["sebalix"],
     "development_status": "Alpha",
