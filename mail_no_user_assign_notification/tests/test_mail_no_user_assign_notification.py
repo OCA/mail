@@ -14,7 +14,8 @@ class TestMailNoUserAssignNotification(common.TransactionCase):
             "mail_no_user_assign_notification.no_user_assign_notification_models"
         )
         cls.icp.value = "res.partner"
-        # patch registry to simulate a ready environment so that _message_auto_subscribe_notify
+        # patch registry to simulate a ready environment
+        # so that _message_auto_subscribe_notify
         # will be executed with the associated notification
         cls.env.registry.ready = True
 
