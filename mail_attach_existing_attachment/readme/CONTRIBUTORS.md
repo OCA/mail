@@ -1,0 +1,9 @@
+- Adrien Peiffer \<<adrien.peiffer@acsone.eu>\>
+- Benoit Aimont \<<benoit.aimont@acsone.eu>\>
+- [Tecnativa](https://www.tecnativa.com):
+  - Sergio Teruel
+  - Ernesto Tejeda
+- [360ERP](https://www.360erp.com):
+  - Andrea Stirpe
+- [Apik](https://www.aapik.cloud):
+  - Frederic Grall
