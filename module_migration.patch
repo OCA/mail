@@ -1,0 +1,1684 @@
+From d39fc4d29d9fd47320f23fa4423c7f56ab99f9dd Mon Sep 17 00:00:00 2001
+From: Ilyas <irazor147@gmail.com>
+Date: Wed, 22 Mar 2023 15:43:03 +0100
+Subject: [14.0][ADD] mail_activity_reply_creator
+
+---
+ mail_activity_reply_creator/README.rst        |  0
+ mail_activity_reply_creator/__init__.py       |  1 +
+ mail_activity_reply_creator/__manifest__.py   | 11 ++++++
+ .../models/__init__.py                        |  1 +
+ .../models/mail_activity.py                   | 39 +++++++++++++++++++
+ .../readme/CONTRIBUTORS.rst                   |  3 ++
+ .../readme/DESCRIPTION.rst                    | 18 +++++++++
+ 7 files changed, 73 insertions(+)
+ create mode 100644 mail_activity_reply_creator/README.rst
+ create mode 100644 mail_activity_reply_creator/__init__.py
+ create mode 100644 mail_activity_reply_creator/__manifest__.py
+ create mode 100644 mail_activity_reply_creator/models/__init__.py
+ create mode 100644 mail_activity_reply_creator/models/mail_activity.py
+ create mode 100644 mail_activity_reply_creator/readme/CONTRIBUTORS.rst
+ create mode 100644 mail_activity_reply_creator/readme/DESCRIPTION.rst
+
+diff --git a/mail_activity_reply_creator/README.rst b/mail_activity_reply_creator/README.rst
+new file mode 100644
+index 000000000..e69de29bb
+diff --git a/mail_activity_reply_creator/__init__.py b/mail_activity_reply_creator/__init__.py
+new file mode 100644
+index 000000000..0650744f6
+--- /dev/null
++++ b/mail_activity_reply_creator/__init__.py
+@@ -0,0 +1 @@
++from . import models
+diff --git a/mail_activity_reply_creator/__manifest__.py b/mail_activity_reply_creator/__manifest__.py
+new file mode 100644
+index 000000000..808abdf33
+--- /dev/null
++++ b/mail_activity_reply_creator/__manifest__.py
+@@ -0,0 +1,11 @@
++{
++    "name": "Mail Activity Reply Creator",
++    "summary": "Assign new to its creator",
++    "version": "14.0.1.0.0",
++    "category": "Social",
++    "website": "https://github.com/OCA/social",
++    "author": "Ilyas, Ooops, Odoo Community Association (OCA)",
++    "license": "AGPL-3",
++    "installable": True,
++    "depends": ["mail"],
++}
+diff --git a/mail_activity_reply_creator/models/__init__.py b/mail_activity_reply_creator/models/__init__.py
+new file mode 100644
+index 000000000..1ff388029
+--- /dev/null
++++ b/mail_activity_reply_creator/models/__init__.py
+@@ -0,0 +1 @@
++from . import mail_activity
+diff --git a/mail_activity_reply_creator/models/mail_activity.py b/mail_activity_reply_creator/models/mail_activity.py
+new file mode 100644
+index 000000000..3226f1e16
+--- /dev/null
++++ b/mail_activity_reply_creator/models/mail_activity.py
+@@ -0,0 +1,39 @@
++from odoo import api, models
++
++
++class MailActivity(models.Model):
++    _inherit = "mail.activity"
++
++    @api.onchange("activity_type_id")
++    def _onchange_activity_type_id(self):
++        original_user_id = self.user_id
++        super(MailActivity, self)._onchange_activity_type_id()
++        if (
++            original_user_id != self.env.user
++            and not self.activity_type_id.default_user_id
++        ):
++            # keep already set user
++            self.user_id = original_user_id
++
++    def action_feedback_schedule_next(self, feedback=False):
++        create_uid = self.create_uid.id
++        action = super().action_feedback_schedule_next()
++        action["context"]["source_activity_create_uid"] = create_uid
++        return action
++
++    @api.model
++    def default_get(self, fields):
++        res = super().default_get(fields)
++        if self._context.get("source_activity_create_uid") and not self._context.get(
++            "no_recursion"
++        ):
++            default_activity_type_id = self.with_context(
++                no_recursion=True
++            )._default_activity_type_id()
++            if (
++                not default_activity_type_id
++                or not default_activity_type_id.default_user_id
++            ):
++                # assign to prev. activity creator
++                res["user_id"] = self._context["source_activity_create_uid"]
++        return res
+diff --git a/mail_activity_reply_creator/readme/CONTRIBUTORS.rst b/mail_activity_reply_creator/readme/CONTRIBUTORS.rst
+new file mode 100644
+index 000000000..6f583d7f2
+--- /dev/null
++++ b/mail_activity_reply_creator/readme/CONTRIBUTORS.rst
+@@ -0,0 +1,3 @@
++* Ooops404 <https://ooops404.com>
++
++  * Ilyas <irazor147@gmail.com>
+diff --git a/mail_activity_reply_creator/readme/DESCRIPTION.rst b/mail_activity_reply_creator/readme/DESCRIPTION.rst
+new file mode 100644
+index 000000000..a40245df5
+--- /dev/null
++++ b/mail_activity_reply_creator/readme/DESCRIPTION.rst
+@@ -0,0 +1,18 @@
++This module aims to facilitate back-and-forth activity assignment between users by
++automatically selecting activity creator as the assignee of the followup activity when
++using button "Done & schedule next". Use case:
++
++Mitchell Admin assigns activity "to do" to Marc Demo >
++Marc Demo clicks "done and schedule next" on the activity >
++in new activity form, "assigned to" is set to Mitchell Admin (unless a different default
++user is set for the selected activity type).
++
++Furthermore, the module corrects a behavior that can induce user to assigning a new
++activity to themselves instead of the previously selected user. Use case:
++
++Mitchell Admin creates a new activity, selects "Marc Demo" as "assigned to", but then
++changes activity type.
++
++In standard behavior "assigned to" is reset to "Mitchell Admin";
++with this module, the user selection is maintained when changing activity type (unless
++a different default user is set for the selected activity type).
+--
+2.34.1
+
+
+From 0859ae2ad6e52a41c89b3243aa3bfb4e573e9a11 Mon Sep 17 00:00:00 2001
+From: Ilyas <irazor147@gmail.com>
+Date: Thu, 30 Mar 2023 14:47:18 +0200
+Subject: [14.0][IMP] mail_activity_reply_creator: added tests
+
+---
+ .../models/mail_activity.py                   | 10 ++--
+ mail_activity_reply_creator/tests/__init__.py |  3 ++
+ .../tests/test_mail_activity_reply_creator.py | 51 +++++++++++++++++++
+ 3 files changed, 60 insertions(+), 4 deletions(-)
+ create mode 100644 mail_activity_reply_creator/tests/__init__.py
+ create mode 100644 mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+
+diff --git a/mail_activity_reply_creator/models/mail_activity.py b/mail_activity_reply_creator/models/mail_activity.py
+index 3226f1e16..d2b5279c6 100644
+--- a/mail_activity_reply_creator/models/mail_activity.py
++++ b/mail_activity_reply_creator/models/mail_activity.py
+@@ -1,3 +1,5 @@
++# Copyright 2018 ForgeFlow S.L.
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from odoo import api, models
+
+
+@@ -7,7 +9,7 @@ class MailActivity(models.Model):
+     @api.onchange("activity_type_id")
+     def _onchange_activity_type_id(self):
+         original_user_id = self.user_id
+-        super(MailActivity, self)._onchange_activity_type_id()
++        super()._onchange_activity_type_id()
+         if (
+             original_user_id != self.env.user
+             and not self.activity_type_id.default_user_id
+@@ -17,14 +19,14 @@ class MailActivity(models.Model):
+
+     def action_feedback_schedule_next(self, feedback=False):
+         create_uid = self.create_uid.id
+-        action = super().action_feedback_schedule_next()
++        action = super().action_feedback_schedule_next(feedback)
+         action["context"]["source_activity_create_uid"] = create_uid
+         return action
+
+     @api.model
+     def default_get(self, fields):
+         res = super().default_get(fields)
+-        if self._context.get("source_activity_create_uid") and not self._context.get(
++        if self._context.get("source_activity_create_uid") and not self.env.context.get(
+             "no_recursion"
+         ):
+             default_activity_type_id = self.with_context(
+@@ -35,5 +37,5 @@ class MailActivity(models.Model):
+                 or not default_activity_type_id.default_user_id
+             ):
+                 # assign to prev. activity creator
+-                res["user_id"] = self._context["source_activity_create_uid"]
++                res["user_id"] = self.env.context["source_activity_create_uid"]
+         return res
+diff --git a/mail_activity_reply_creator/tests/__init__.py b/mail_activity_reply_creator/tests/__init__.py
+new file mode 100644
+index 000000000..8819ed895
+--- /dev/null
++++ b/mail_activity_reply_creator/tests/__init__.py
+@@ -0,0 +1,3 @@
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++
++from . import test_mail_activity_reply_creator
+diff --git a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+new file mode 100644
+index 000000000..e654c1493
+--- /dev/null
++++ b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+@@ -0,0 +1,51 @@
++# Copyright 2018 ForgeFlow S.L.
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
++from odoo.tests.common import SavepointCase
++
++
++class TestMailActivityReplyCreator(SavepointCase):
++    @classmethod
++    def setUpClass(cls):
++        super().setUpClass()
++        # disable tracking test suite wise
++        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
++        cls.user_model = cls.env["res.users"].with_context(no_reset_password=True)
++        cls.user_admin = cls.env.ref("base.user_root")
++        cls.user_2 = cls.env["res.users"].search([])[-1]
++        cls.partner_ir_model = cls.env["ir.model"]._get("res.partner")
++        cls.partner_01 = cls.env.ref("base.res_partner_1")
++        activity_type_model = cls.env["mail.activity.type"]
++        cls.activity_type_1 = activity_type_model.create(
++            {
++                "name": "Act Type Without Default Responsible",
++                "res_model_id": cls.partner_ir_model.id,
++                "default_user_id": False,
++            }
++        )
++        cls.act1 = (
++            cls.env["mail.activity"]
++            .with_user(cls.user_2)
++            .create(
++                {
++                    "activity_type_id": cls.activity_type_1.id,
++                    "note": "Partner activity 1.",
++                    "res_id": cls.partner_01.id,
++                    "res_model_id": cls.partner_ir_model.id,
++                    "user_id": cls.user_2.id,
++                }
++            )
++        )
++
++    def test_activity_default_user(self):
++        self.act1._onchange_activity_type_id()
++        # by default user is set to current user.
++        # module keeps original activity user, if activity type has no default_user_id.
++        self.assertEqual(self.act1.user_id, self.user_2)
++
++    def test_schedule_new_activity_user(self):
++        prev_act_uid = self.act1.create_uid
++        action = self.act1.action_feedback_schedule_next()
++        new_act = self.env["mail.activity"].with_context(action["context"]).create({})
++        # by default current user will be responsible.
++        # module set responsible as prev. activity creator.
++        self.assertEqual(new_act.user_id, prev_act_uid)
+--
+2.34.1
+
+
+From fc10e9ff13913ff75a1a192dc5681fe7238615a8 Mon Sep 17 00:00:00 2001
+From: Ilyas <irazor147@gmail.com>
+Date: Wed, 5 Apr 2023 10:59:04 +0200
+Subject: [IMP] mail_activity_reply_creator: added copyright
+
+---
+ mail_activity_reply_creator/README.rst        |  93 ++++
+ mail_activity_reply_creator/__manifest__.py   |   2 +
+ .../i18n/mail_activity_reply_creator.pot      |  34 ++
+ .../models/mail_activity.py                   |   2 +-
+ .../static/description/icon.png               | Bin 0 -> 9455 bytes
+ .../static/description/index.html             | 436 ++++++++++++++++++
+ .../tests/test_mail_activity_reply_creator.py |   2 +-
+ 7 files changed, 567 insertions(+), 2 deletions(-)
+ create mode 100644 mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot
+ create mode 100644 mail_activity_reply_creator/static/description/icon.png
+ create mode 100644 mail_activity_reply_creator/static/description/index.html
+
+diff --git a/mail_activity_reply_creator/README.rst b/mail_activity_reply_creator/README.rst
+index e69de29bb..c625f9648 100644
+--- a/mail_activity_reply_creator/README.rst
++++ b/mail_activity_reply_creator/README.rst
+@@ -0,0 +1,93 @@
++===========================
++Mail Activity Reply Creator
++===========================
++
++.. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++   !! This file is generated by oca-gen-addon-readme !!
++   !! changes will be overwritten.                   !!
++   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++
++.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
++    :target: https://odoo-community.org/page/development-status
++    :alt: Beta
++.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
++    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
++    :alt: License: AGPL-3
++.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github
++    :target: https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator
++    :alt: OCA/social
++.. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
++    :target: https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator
++    :alt: Translate me on Weblate
++.. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
++    :target: https://runbot.odoo-community.org/runbot/205/14.0
++    :alt: Try me on Runbot
++
++|badge1| |badge2| |badge3| |badge4| |badge5|
++
++This module aims to facilitate back-and-forth activity assignment between users by
++automatically selecting activity creator as the assignee of the followup activity when
++using button "Done & schedule next". Use case:
++
++Mitchell Admin assigns activity "to do" to Marc Demo >
++Marc Demo clicks "done and schedule next" on the activity >
++in new activity form, "assigned to" is set to Mitchell Admin (unless a different default
++user is set for the selected activity type).
++
++Furthermore, the module corrects a behavior that can induce user to assigning a new
++activity to themselves instead of the previously selected user. Use case:
++
++Mitchell Admin creates a new activity, selects "Marc Demo" as "assigned to", but then
++changes activity type.
++
++In standard behavior "assigned to" is reset to "Mitchell Admin";
++with this module, the user selection is maintained when changing activity type (unless
++a different default user is set for the selected activity type).
++
++**Table of contents**
++
++.. contents::
++   :local:
++
++Bug Tracker
++===========
++
++Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
++In case of trouble, please check there if your issue has already been reported.
++If you spotted it first, help us smashing it by providing a detailed and welcomed
++`feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
++
++Do not contact contributors directly about support or help with technical issues.
++
++Credits
++=======
++
++Authors
++~~~~~~~
++
++* Ilyas
++* Ooops
++
++Contributors
++~~~~~~~~~~~~
++
++* Ooops404 <https://ooops404.com>
++
++  * Ilyas <irazor147@gmail.com>
++
++Maintainers
++~~~~~~~~~~~
++
++This module is maintained by the OCA.
++
++.. image:: https://odoo-community.org/logo.png
++   :alt: Odoo Community Association
++   :target: https://odoo-community.org
++
++OCA, or the Odoo Community Association, is a nonprofit organization whose
++mission is to support the collaborative development of Odoo features and
++promote its widespread use.
++
++This module is part of the `OCA/social <https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator>`_ project on GitHub.
++
++You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
+diff --git a/mail_activity_reply_creator/__manifest__.py b/mail_activity_reply_creator/__manifest__.py
+index 808abdf33..2a453fdc8 100644
+--- a/mail_activity_reply_creator/__manifest__.py
++++ b/mail_activity_reply_creator/__manifest__.py
+@@ -1,3 +1,5 @@
++# Copyright 2023 Ooops404
++# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ {
+     "name": "Mail Activity Reply Creator",
+     "summary": "Assign new to its creator",
+diff --git a/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot b/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot
+new file mode 100644
+index 000000000..5ce37022a
+--- /dev/null
++++ b/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot
+@@ -0,0 +1,34 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# 	* mail_activity_reply_creator
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: Odoo Server 14.0\n"
++"Report-Msgid-Bugs-To: \n"
++"Last-Translator: \n"
++"Language-Team: \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Plural-Forms: \n"
++
++#. module: mail_activity_reply_creator
++#: model:ir.model,name:mail_activity_reply_creator.model_mail_activity
++msgid "Activity"
++msgstr ""
++
++#. module: mail_activity_reply_creator
++#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__display_name
++msgid "Display Name"
++msgstr ""
++
++#. module: mail_activity_reply_creator
++#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__id
++msgid "ID"
++msgstr ""
++
++#. module: mail_activity_reply_creator
++#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity____last_update
++msgid "Last Modified on"
++msgstr ""
+diff --git a/mail_activity_reply_creator/models/mail_activity.py b/mail_activity_reply_creator/models/mail_activity.py
+index d2b5279c6..c1d900d94 100644
+--- a/mail_activity_reply_creator/models/mail_activity.py
++++ b/mail_activity_reply_creator/models/mail_activity.py
+@@ -1,4 +1,4 @@
+-# Copyright 2018 ForgeFlow S.L.
++# Copyright 2023 Ooops404
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from odoo import api, models
+
+diff --git a/mail_activity_reply_creator/static/description/icon.png b/mail_activity_reply_creator/static/description/icon.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..3a0328b516c4980e8e44cdb63fd945757ddd132d
+GIT binary patch
+literal 9455
+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
+Xviia!U7SGha1wx#SCgwmn*{w2TRX*I
+
+literal 0
+HcmV?d00001
+
+diff --git a/mail_activity_reply_creator/static/description/index.html b/mail_activity_reply_creator/static/description/index.html
+new file mode 100644
+index 000000000..9047d1b69
+--- /dev/null
++++ b/mail_activity_reply_creator/static/description/index.html
+@@ -0,0 +1,436 @@
++<?xml version="1.0" encoding="utf-8" ?>
++<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
++<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
++<head>
++<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
++<meta name="generator" content="Docutils 0.15.1: http://docutils.sourceforge.net/" />
++<title>Mail Activity Reply Creator</title>
++<style type="text/css">
++
++/*
++:Author: David Goodger (goodger@python.org)
++:Id: $Id: html4css1.css 7952 2016-07-26 18:15:59Z milde $
++:Copyright: This stylesheet has been placed in the public domain.
++
++Default cascading style sheet for the HTML output of Docutils.
++
++See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
++customize this style sheet.
++*/
++
++/* used to remove borders from tables and images */
++.borderless, table.borderless td, table.borderless th {
++  border: 0 }
++
++table.borderless td, table.borderless th {
++  /* Override padding for "table.docutils td" with "! important".
++     The right padding separates the table cells. */
++  padding: 0 0.5em 0 0 ! important }
++
++.first {
++  /* Override more specific margin styles with "! important". */
++  margin-top: 0 ! important }
++
++.last, .with-subtitle {
++  margin-bottom: 0 ! important }
++
++.hidden {
++  display: none }
++
++.subscript {
++  vertical-align: sub;
++  font-size: smaller }
++
++.superscript {
++  vertical-align: super;
++  font-size: smaller }
++
++a.toc-backref {
++  text-decoration: none ;
++  color: black }
++
++blockquote.epigraph {
++  margin: 2em 5em ; }
++
++dl.docutils dd {
++  margin-bottom: 0.5em }
++
++object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
++  overflow: hidden;
++}
++
++/* Uncomment (and remove this text!) to get bold-faced definition list terms
++dl.docutils dt {
++  font-weight: bold }
++*/
++
++div.abstract {
++  margin: 2em 5em }
++
++div.abstract p.topic-title {
++  font-weight: bold ;
++  text-align: center }
++
++div.admonition, div.attention, div.caution, div.danger, div.error,
++div.hint, div.important, div.note, div.tip, div.warning {
++  margin: 2em ;
++  border: medium outset ;
++  padding: 1em }
++
++div.admonition p.admonition-title, div.hint p.admonition-title,
++div.important p.admonition-title, div.note p.admonition-title,
++div.tip p.admonition-title {
++  font-weight: bold ;
++  font-family: sans-serif }
++
++div.attention p.admonition-title, div.caution p.admonition-title,
++div.danger p.admonition-title, div.error p.admonition-title,
++div.warning p.admonition-title, .code .error {
++  color: red ;
++  font-weight: bold ;
++  font-family: sans-serif }
++
++/* Uncomment (and remove this text!) to get reduced vertical space in
++   compound paragraphs.
++div.compound .compound-first, div.compound .compound-middle {
++  margin-bottom: 0.5em }
++
++div.compound .compound-last, div.compound .compound-middle {
++  margin-top: 0.5em }
++*/
++
++div.dedication {
++  margin: 2em 5em ;
++  text-align: center ;
++  font-style: italic }
++
++div.dedication p.topic-title {
++  font-weight: bold ;
++  font-style: normal }
++
++div.figure {
++  margin-left: 2em ;
++  margin-right: 2em }
++
++div.footer, div.header {
++  clear: both;
++  font-size: smaller }
++
++div.line-block {
++  display: block ;
++  margin-top: 1em ;
++  margin-bottom: 1em }
++
++div.line-block div.line-block {
++  margin-top: 0 ;
++  margin-bottom: 0 ;
++  margin-left: 1.5em }
++
++div.sidebar {
++  margin: 0 0 0.5em 1em ;
++  border: medium outset ;
++  padding: 1em ;
++  background-color: #ffffee ;
++  width: 40% ;
++  float: right ;
++  clear: right }
++
++div.sidebar p.rubric {
++  font-family: sans-serif ;
++  font-size: medium }
++
++div.system-messages {
++  margin: 5em }
++
++div.system-messages h1 {
++  color: red }
++
++div.system-message {
++  border: medium outset ;
++  padding: 1em }
++
++div.system-message p.system-message-title {
++  color: red ;
++  font-weight: bold }
++
++div.topic {
++  margin: 2em }
++
++h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
++h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
++  margin-top: 0.4em }
++
++h1.title {
++  text-align: center }
++
++h2.subtitle {
++  text-align: center }
++
++hr.docutils {
++  width: 75% }
++
++img.align-left, .figure.align-left, object.align-left, table.align-left {
++  clear: left ;
++  float: left ;
++  margin-right: 1em }
++
++img.align-right, .figure.align-right, object.align-right, table.align-right {
++  clear: right ;
++  float: right ;
++  margin-left: 1em }
++
++img.align-center, .figure.align-center, object.align-center {
++  display: block;
++  margin-left: auto;
++  margin-right: auto;
++}
++
++table.align-center {
++  margin-left: auto;
++  margin-right: auto;
++}
++
++.align-left {
++  text-align: left }
++
++.align-center {
++  clear: both ;
++  text-align: center }
++
++.align-right {
++  text-align: right }
++
++/* reset inner alignment in figures */
++div.align-right {
++  text-align: inherit }
++
++/* div.align-center * { */
++/*   text-align: left } */
++
++.align-top    {
++  vertical-align: top }
++
++.align-middle {
++  vertical-align: middle }
++
++.align-bottom {
++  vertical-align: bottom }
++
++ol.simple, ul.simple {
++  margin-bottom: 1em }
++
++ol.arabic {
++  list-style: decimal }
++
++ol.loweralpha {
++  list-style: lower-alpha }
++
++ol.upperalpha {
++  list-style: upper-alpha }
++
++ol.lowerroman {
++  list-style: lower-roman }
++
++ol.upperroman {
++  list-style: upper-roman }
++
++p.attribution {
++  text-align: right ;
++  margin-left: 50% }
++
++p.caption {
++  font-style: italic }
++
++p.credits {
++  font-style: italic ;
++  font-size: smaller }
++
++p.label {
++  white-space: nowrap }
++
++p.rubric {
++  font-weight: bold ;
++  font-size: larger ;
++  color: maroon ;
++  text-align: center }
++
++p.sidebar-title {
++  font-family: sans-serif ;
++  font-weight: bold ;
++  font-size: larger }
++
++p.sidebar-subtitle {
++  font-family: sans-serif ;
++  font-weight: bold }
++
++p.topic-title {
++  font-weight: bold }
++
++pre.address {
++  margin-bottom: 0 ;
++  margin-top: 0 ;
++  font: inherit }
++
++pre.literal-block, pre.doctest-block, pre.math, pre.code {
++  margin-left: 2em ;
++  margin-right: 2em }
++
++pre.code .ln { color: grey; } /* line numbers */
++pre.code, code { background-color: #eeeeee }
++pre.code .comment, code .comment { color: #5C6576 }
++pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
++pre.code .literal.string, code .literal.string { color: #0C5404 }
++pre.code .name.builtin, code .name.builtin { color: #352B84 }
++pre.code .deleted, code .deleted { background-color: #DEB0A1}
++pre.code .inserted, code .inserted { background-color: #A3D289}
++
++span.classifier {
++  font-family: sans-serif ;
++  font-style: oblique }
++
++span.classifier-delimiter {
++  font-family: sans-serif ;
++  font-weight: bold }
++
++span.interpreted {
++  font-family: sans-serif }
++
++span.option {
++  white-space: nowrap }
++
++span.pre {
++  white-space: pre }
++
++span.problematic {
++  color: red }
++
++span.section-subtitle {
++  /* font-size relative to parent (h1..h6 element) */
++  font-size: 80% }
++
++table.citation {
++  border-left: solid 1px gray;
++  margin-left: 1px }
++
++table.docinfo {
++  margin: 2em 4em }
++
++table.docutils {
++  margin-top: 0.5em ;
++  margin-bottom: 0.5em }
++
++table.footnote {
++  border-left: solid 1px black;
++  margin-left: 1px }
++
++table.docutils td, table.docutils th,
++table.docinfo td, table.docinfo th {
++  padding-left: 0.5em ;
++  padding-right: 0.5em ;
++  vertical-align: top }
++
++table.docutils th.field-name, table.docinfo th.docinfo-name {
++  font-weight: bold ;
++  text-align: left ;
++  white-space: nowrap ;
++  padding-left: 0 }
++
++/* "booktabs" style (no vertical lines) */
++table.docutils.booktabs {
++  border: 0px;
++  border-top: 2px solid;
++  border-bottom: 2px solid;
++  border-collapse: collapse;
++}
++table.docutils.booktabs * {
++  border: 0px;
++}
++table.docutils.booktabs th {
++  border-bottom: thin solid;
++  text-align: left;
++}
++
++h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
++h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
++  font-size: 100% }
++
++ul.auto-toc {
++  list-style-type: none }
++
++</style>
++</head>
++<body>
++<div class="document" id="mail-activity-reply-creator">
++<h1 class="title">Mail Activity Reply Creator</h1>
++
++<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++!! This file is generated by oca-gen-addon-readme !!
++!! changes will be overwritten.                   !!
++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
++<p><a class="reference external" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external" href="https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator"><img alt="OCA/social" src="https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github" /></a> <a class="reference external" href="https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external" href="https://runbot.odoo-community.org/runbot/205/14.0"><img alt="Try me on Runbot" src="https://img.shields.io/badge/runbot-Try%20me-875A7B.png" /></a></p>
++<p>This module aims to facilitate back-and-forth activity assignment between users by
++automatically selecting activity creator as the assignee of the followup activity when
++using button “Done &amp; schedule next”. Use case:</p>
++<p>Mitchell Admin assigns activity “to do” to Marc Demo &gt;
++Marc Demo clicks “done and schedule next” on the activity &gt;
++in new activity form, “assigned to” is set to Mitchell Admin (unless a different default
++user is set for the selected activity type).</p>
++<p>Furthermore, the module corrects a behavior that can induce user to assigning a new
++activity to themselves instead of the previously selected user. Use case:</p>
++<p>Mitchell Admin creates a new activity, selects “Marc Demo” as “assigned to”, but then
++changes activity type.</p>
++<p>In standard behavior “assigned to” is reset to “Mitchell Admin”;
++with this module, the user selection is maintained when changing activity type (unless
++a different default user is set for the selected activity type).</p>
++<p><strong>Table of contents</strong></p>
++<div class="contents local topic" id="contents">
++<ul class="simple">
++<li><a class="reference internal" href="#bug-tracker" id="id1">Bug Tracker</a></li>
++<li><a class="reference internal" href="#credits" id="id2">Credits</a><ul>
++<li><a class="reference internal" href="#authors" id="id3">Authors</a></li>
++<li><a class="reference internal" href="#contributors" id="id4">Contributors</a></li>
++<li><a class="reference internal" href="#maintainers" id="id5">Maintainers</a></li>
++</ul>
++</li>
++</ul>
++</div>
++<div class="section" id="bug-tracker">
++<h1><a class="toc-backref" href="#id1">Bug Tracker</a></h1>
++<p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/social/issues">GitHub Issues</a>.
++In case of trouble, please check there if your issue has already been reported.
++If you spotted it first, help us smashing it by providing a detailed and welcomed
++<a class="reference external" href="https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
++<p>Do not contact contributors directly about support or help with technical issues.</p>
++</div>
++<div class="section" id="credits">
++<h1><a class="toc-backref" href="#id2">Credits</a></h1>
++<div class="section" id="authors">
++<h2><a class="toc-backref" href="#id3">Authors</a></h2>
++<ul class="simple">
++<li>Ilyas</li>
++<li>Ooops</li>
++</ul>
++</div>
++<div class="section" id="contributors">
++<h2><a class="toc-backref" href="#id4">Contributors</a></h2>
++<ul class="simple">
++<li>Ooops404 &lt;<a class="reference external" href="https://ooops404.com">https://ooops404.com</a>&gt;<ul>
++<li>Ilyas &lt;<a class="reference external" href="mailto:irazor147&#64;gmail.com">irazor147&#64;gmail.com</a>&gt;</li>
++</ul>
++</li>
++</ul>
++</div>
++<div class="section" id="maintainers">
++<h2><a class="toc-backref" href="#id5">Maintainers</a></h2>
++<p>This module is maintained by the OCA.</p>
++<a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
++<p>OCA, or the Odoo Community Association, is a nonprofit organization whose
++mission is to support the collaborative development of Odoo features and
++promote its widespread use.</p>
++<p>This module is part of the <a class="reference external" href="https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator">OCA/social</a> project on GitHub.</p>
++<p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
++</div>
++</div>
++</div>
++</body>
++</html>
+diff --git a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+index e654c1493..275580069 100644
+--- a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
++++ b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+@@ -1,4 +1,4 @@
+-# Copyright 2018 ForgeFlow S.L.
++# Copyright 2023 Ooops404
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ from odoo.tests.common import SavepointCase
+
+--
+2.34.1
+
+
+From 08dfe7a83164011642dd7b2d92d3231f6779e1a8 Mon Sep 17 00:00:00 2001
+From: Francesco Foresti <francesco.foresti@ooops404.com>
+Date: Wed, 5 Apr 2023 14:03:05 +0000
+Subject: Added translation using Weblate (Italian)
+
+---
+ mail_activity_reply_creator/i18n/it.po | 37 ++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 mail_activity_reply_creator/i18n/it.po
+
+diff --git a/mail_activity_reply_creator/i18n/it.po b/mail_activity_reply_creator/i18n/it.po
+new file mode 100644
+index 000000000..21e5f0ba4
+--- /dev/null
++++ b/mail_activity_reply_creator/i18n/it.po
+@@ -0,0 +1,37 @@
++# Translation of Odoo Server.
++# This file contains the translation of the following modules:
++# 	* mail_activity_reply_creator
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: Odoo Server 14.0\n"
++"Report-Msgid-Bugs-To: \n"
++"PO-Revision-Date: 2023-04-05 16:31+0000\n"
++"Last-Translator: Francesco Foresti <francesco.foresti@ooops404.com>\n"
++"Language-Team: none\n"
++"Language: it\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: \n"
++"Plural-Forms: nplurals=2; plural=n != 1;\n"
++"X-Generator: Weblate 4.14.1\n"
++
++#. module: mail_activity_reply_creator
++#: model:ir.model,name:mail_activity_reply_creator.model_mail_activity
++msgid "Activity"
++msgstr "Attività"
++
++#. module: mail_activity_reply_creator
++#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__display_name
++msgid "Display Name"
++msgstr "Nome visualizzato"
++
++#. module: mail_activity_reply_creator
++#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__id
++msgid "ID"
++msgstr "ID"
++
++#. module: mail_activity_reply_creator
++#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity____last_update
++msgid "Last Modified on"
++msgstr "Ultima modifica il"
+--
+2.34.1
+
+
+From 3642098f215ec6b3f9381019689f647026664561 Mon Sep 17 00:00:00 2001
+From: Ilyas <irazor147@gmail.com>
+Date: Mon, 17 Apr 2023 16:07:21 +0200
+Subject: [FIX] mail_activity_reply_creator: check if action is not False
+
+---
+ mail_activity_reply_creator/README.rst        | 15 ++++----
+ mail_activity_reply_creator/__manifest__.py   |  2 +-
+ .../models/mail_activity.py                   |  3 +-
+ .../static/description/index.html             | 34 ++++++++++---------
+ .../tests/test_mail_activity_reply_creator.py | 22 ++++++++++++
+ 5 files changed, 52 insertions(+), 24 deletions(-)
+
+diff --git a/mail_activity_reply_creator/README.rst b/mail_activity_reply_creator/README.rst
+index c625f9648..841dd9118 100644
+--- a/mail_activity_reply_creator/README.rst
++++ b/mail_activity_reply_creator/README.rst
+@@ -2,10 +2,13 @@
+ Mail Activity Reply Creator
+ ===========================
+
+-.. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++..
++   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !! This file is generated by oca-gen-addon-readme !!
+    !! changes will be overwritten.                   !!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++   !! source digest: sha256:78f3a5c417c8a61413fe1dc5166433c24a103edf66aafb69a55f567c17577243
++   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+     :target: https://odoo-community.org/page/development-status
+@@ -19,11 +22,11 @@ Mail Activity Reply Creator
+ .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
+     :target: https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator
+     :alt: Translate me on Weblate
+-.. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
+-    :target: https://runbot.odoo-community.org/runbot/205/14.0
+-    :alt: Try me on Runbot
++.. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
++    :target: https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=14.0
++    :alt: Try me on Runboat
+
+-|badge1| |badge2| |badge3| |badge4| |badge5|
++|badge1| |badge2| |badge3| |badge4| |badge5|
+
+ This module aims to facilitate back-and-forth activity assignment between users by
+ automatically selecting activity creator as the assignee of the followup activity when
+@@ -54,7 +57,7 @@ Bug Tracker
+
+ Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
+ In case of trouble, please check there if your issue has already been reported.
+-If you spotted it first, help us smashing it by providing a detailed and welcomed
++If you spotted it first, help us to smash it by providing a detailed and welcomed
+ `feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+
+ Do not contact contributors directly about support or help with technical issues.
+diff --git a/mail_activity_reply_creator/__manifest__.py b/mail_activity_reply_creator/__manifest__.py
+index 2a453fdc8..4f6c971b2 100644
+--- a/mail_activity_reply_creator/__manifest__.py
++++ b/mail_activity_reply_creator/__manifest__.py
+@@ -3,7 +3,7 @@
+ {
+     "name": "Mail Activity Reply Creator",
+     "summary": "Assign new to its creator",
+-    "version": "14.0.1.0.0",
++    "version": "14.0.1.0.1",
+     "category": "Social",
+     "website": "https://github.com/OCA/social",
+     "author": "Ilyas, Ooops, Odoo Community Association (OCA)",
+diff --git a/mail_activity_reply_creator/models/mail_activity.py b/mail_activity_reply_creator/models/mail_activity.py
+index c1d900d94..1d073f766 100644
+--- a/mail_activity_reply_creator/models/mail_activity.py
++++ b/mail_activity_reply_creator/models/mail_activity.py
+@@ -20,7 +20,8 @@ class MailActivity(models.Model):
+     def action_feedback_schedule_next(self, feedback=False):
+         create_uid = self.create_uid.id
+         action = super().action_feedback_schedule_next(feedback)
+-        action["context"]["source_activity_create_uid"] = create_uid
++        if action:
++            action["context"]["source_activity_create_uid"] = create_uid
+         return action
+
+     @api.model
+diff --git a/mail_activity_reply_creator/static/description/index.html b/mail_activity_reply_creator/static/description/index.html
+index 9047d1b69..f95990380 100644
+--- a/mail_activity_reply_creator/static/description/index.html
++++ b/mail_activity_reply_creator/static/description/index.html
+@@ -1,20 +1,20 @@
+-<?xml version="1.0" encoding="utf-8" ?>
++<?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+-<meta name="generator" content="Docutils 0.15.1: http://docutils.sourceforge.net/" />
++<meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
+ <title>Mail Activity Reply Creator</title>
+ <style type="text/css">
+
+ /*
+ :Author: David Goodger (goodger@python.org)
+-:Id: $Id: html4css1.css 7952 2016-07-26 18:15:59Z milde $
++:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
+ :Copyright: This stylesheet has been placed in the public domain.
+
+ Default cascading style sheet for the HTML output of Docutils.
+
+-See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
++See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+ customize this style sheet.
+ */
+
+@@ -366,8 +366,10 @@ ul.auto-toc {
+ <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ !! This file is generated by oca-gen-addon-readme !!
+ !! changes will be overwritten.                   !!
++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++!! source digest: sha256:78f3a5c417c8a61413fe1dc5166433c24a103edf66aafb69a55f567c17577243
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+-<p><a class="reference external" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external" href="https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator"><img alt="OCA/social" src="https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github" /></a> <a class="reference external" href="https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external" href="https://runbot.odoo-community.org/runbot/205/14.0"><img alt="Try me on Runbot" src="https://img.shields.io/badge/runbot-Try%20me-875A7B.png" /></a></p>
++<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator"><img alt="OCA/social" src="https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/social&amp;target_branch=14.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+ <p>This module aims to facilitate back-and-forth activity assignment between users by
+ automatically selecting activity creator as the assignee of the followup activity when
+ using button “Done &amp; schedule next”. Use case:</p>
+@@ -385,34 +387,34 @@ a different default user is set for the selected activity type).</p>
+ <p><strong>Table of contents</strong></p>
+ <div class="contents local topic" id="contents">
+ <ul class="simple">
+-<li><a class="reference internal" href="#bug-tracker" id="id1">Bug Tracker</a></li>
+-<li><a class="reference internal" href="#credits" id="id2">Credits</a><ul>
+-<li><a class="reference internal" href="#authors" id="id3">Authors</a></li>
+-<li><a class="reference internal" href="#contributors" id="id4">Contributors</a></li>
+-<li><a class="reference internal" href="#maintainers" id="id5">Maintainers</a></li>
++<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
++<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a><ul>
++<li><a class="reference internal" href="#authors" id="toc-entry-3">Authors</a></li>
++<li><a class="reference internal" href="#contributors" id="toc-entry-4">Contributors</a></li>
++<li><a class="reference internal" href="#maintainers" id="toc-entry-5">Maintainers</a></li>
+ </ul>
+ </li>
+ </ul>
+ </div>
+ <div class="section" id="bug-tracker">
+-<h1><a class="toc-backref" href="#id1">Bug Tracker</a></h1>
++<h1><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h1>
+ <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/social/issues">GitHub Issues</a>.
+ In case of trouble, please check there if your issue has already been reported.
+-If you spotted it first, help us smashing it by providing a detailed and welcomed
++If you spotted it first, help us to smash it by providing a detailed and welcomed
+ <a class="reference external" href="https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+ <p>Do not contact contributors directly about support or help with technical issues.</p>
+ </div>
+ <div class="section" id="credits">
+-<h1><a class="toc-backref" href="#id2">Credits</a></h1>
++<h1><a class="toc-backref" href="#toc-entry-2">Credits</a></h1>
+ <div class="section" id="authors">
+-<h2><a class="toc-backref" href="#id3">Authors</a></h2>
++<h2><a class="toc-backref" href="#toc-entry-3">Authors</a></h2>
+ <ul class="simple">
+ <li>Ilyas</li>
+ <li>Ooops</li>
+ </ul>
+ </div>
+ <div class="section" id="contributors">
+-<h2><a class="toc-backref" href="#id4">Contributors</a></h2>
++<h2><a class="toc-backref" href="#toc-entry-4">Contributors</a></h2>
+ <ul class="simple">
+ <li>Ooops404 &lt;<a class="reference external" href="https://ooops404.com">https://ooops404.com</a>&gt;<ul>
+ <li>Ilyas &lt;<a class="reference external" href="mailto:irazor147&#64;gmail.com">irazor147&#64;gmail.com</a>&gt;</li>
+@@ -421,7 +423,7 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
+ </ul>
+ </div>
+ <div class="section" id="maintainers">
+-<h2><a class="toc-backref" href="#id5">Maintainers</a></h2>
++<h2><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h2>
+ <p>This module is maintained by the OCA.</p>
+ <a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
+ <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
+diff --git a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+index 275580069..f9d86aab3 100644
+--- a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
++++ b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+@@ -22,6 +22,14 @@ class TestMailActivityReplyCreator(SavepointCase):
+                 "default_user_id": False,
+             }
+         )
++        cls.activity_type_2 = activity_type_model.create(
++            {
++                "name": "Act Type 2",
++                "res_model_id": cls.partner_ir_model.id,
++                "default_user_id": False,
++                "default_next_type_id": cls.activity_type_1.id,
++            }
++        )
+         cls.act1 = (
+             cls.env["mail.activity"]
+             .with_user(cls.user_2)
+@@ -35,6 +43,19 @@ class TestMailActivityReplyCreator(SavepointCase):
+                 }
+             )
+         )
++        cls.act2 = (
++            cls.env["mail.activity"]
++            .with_user(cls.user_2)
++            .create(
++                {
++                    "activity_type_id": cls.activity_type_2.id,
++                    "note": "Partner activity 2.",
++                    "res_id": cls.partner_01.id,
++                    "res_model_id": cls.partner_ir_model.id,
++                    "user_id": cls.user_2.id,
++                }
++            )
++        )
+
+     def test_activity_default_user(self):
+         self.act1._onchange_activity_type_id()
+@@ -49,3 +70,4 @@ class TestMailActivityReplyCreator(SavepointCase):
+         # by default current user will be responsible.
+         # module set responsible as prev. activity creator.
+         self.assertEqual(new_act.user_id, prev_act_uid)
++        self.act2.action_feedback_schedule_next()
+--
+2.34.1
+
+
+From efa3b79e19f94567764649c77ebbab281fa55dc7 Mon Sep 17 00:00:00 2001
+From: Alessio Renda <renda855@gmail.com>
+Date: Wed, 20 Nov 2024 11:41:16 +0100
+Subject: [MIG] mail_activity_reply_creator: Migration to 16.0
+
+---
+ mail_activity_reply_creator/README.rst        | 12 +++++------
+ mail_activity_reply_creator/__manifest__.py   |  2 +-
+ .../models/mail_activity.py                   |  5 +++--
+ .../static/description/index.html             | 20 ++++++++++---------
+ .../tests/test_mail_activity_reply_creator.py | 11 +++++-----
+ 5 files changed, 26 insertions(+), 24 deletions(-)
+
+diff --git a/mail_activity_reply_creator/README.rst b/mail_activity_reply_creator/README.rst
+index 841dd9118..b1d368a51 100644
+--- a/mail_activity_reply_creator/README.rst
++++ b/mail_activity_reply_creator/README.rst
+@@ -7,7 +7,7 @@ Mail Activity Reply Creator
+    !! This file is generated by oca-gen-addon-readme !!
+    !! changes will be overwritten.                   !!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-   !! source digest: sha256:78f3a5c417c8a61413fe1dc5166433c24a103edf66aafb69a55f567c17577243
++   !! source digest: sha256:25547488c3bf13b185d6f375ac4c18391f030077dda3b30f13d83bb525d2e1ff
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+@@ -17,13 +17,13 @@ Mail Activity Reply Creator
+     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
+     :alt: License: AGPL-3
+ .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github
+-    :target: https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator
++    :target: https://github.com/OCA/social/tree/16.0/mail_activity_reply_creator
+     :alt: OCA/social
+ .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
+-    :target: https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator
++    :target: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_activity_reply_creator
+     :alt: Translate me on Weblate
+ .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
+-    :target: https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=14.0
++    :target: https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=16.0
+     :alt: Try me on Runboat
+
+ |badge1| |badge2| |badge3| |badge4| |badge5|
+@@ -58,7 +58,7 @@ Bug Tracker
+ Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
+ In case of trouble, please check there if your issue has already been reported.
+ If you spotted it first, help us to smash it by providing a detailed and welcomed
+-`feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
++`feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+
+ Do not contact contributors directly about support or help with technical issues.
+
+@@ -91,6 +91,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
+ mission is to support the collaborative development of Odoo features and
+ promote its widespread use.
+
+-This module is part of the `OCA/social <https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator>`_ project on GitHub.
++This module is part of the `OCA/social <https://github.com/OCA/social/tree/16.0/mail_activity_reply_creator>`_ project on GitHub.
+
+ You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
+diff --git a/mail_activity_reply_creator/__manifest__.py b/mail_activity_reply_creator/__manifest__.py
+index 4f6c971b2..f64378651 100644
+--- a/mail_activity_reply_creator/__manifest__.py
++++ b/mail_activity_reply_creator/__manifest__.py
+@@ -3,7 +3,7 @@
+ {
+     "name": "Mail Activity Reply Creator",
+     "summary": "Assign new to its creator",
+-    "version": "14.0.1.0.1",
++    "version": "16.0.1.0.0",
+     "category": "Social",
+     "website": "https://github.com/OCA/social",
+     "author": "Ilyas, Ooops, Odoo Community Association (OCA)",
+diff --git a/mail_activity_reply_creator/models/mail_activity.py b/mail_activity_reply_creator/models/mail_activity.py
+index 1d073f766..2bb724063 100644
+--- a/mail_activity_reply_creator/models/mail_activity.py
++++ b/mail_activity_reply_creator/models/mail_activity.py
+@@ -9,13 +9,14 @@ class MailActivity(models.Model):
+     @api.onchange("activity_type_id")
+     def _onchange_activity_type_id(self):
+         original_user_id = self.user_id
+-        super()._onchange_activity_type_id()
++        res = super()._onchange_activity_type_id()
+         if (
+             original_user_id != self.env.user
+             and not self.activity_type_id.default_user_id
+         ):
+             # keep already set user
+             self.user_id = original_user_id
++        return res
+
+     def action_feedback_schedule_next(self, feedback=False):
+         create_uid = self.create_uid.id
+@@ -32,7 +33,7 @@ class MailActivity(models.Model):
+         ):
+             default_activity_type_id = self.with_context(
+                 no_recursion=True
+-            )._default_activity_type_id()
++            )._default_activity_type()
+             if (
+                 not default_activity_type_id
+                 or not default_activity_type_id.default_user_id
+diff --git a/mail_activity_reply_creator/static/description/index.html b/mail_activity_reply_creator/static/description/index.html
+index f95990380..8f05ff77e 100644
+--- a/mail_activity_reply_creator/static/description/index.html
++++ b/mail_activity_reply_creator/static/description/index.html
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+@@ -9,10 +8,11 @@
+
+ /*
+ :Author: David Goodger (goodger@python.org)
+-:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
++:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+ :Copyright: This stylesheet has been placed in the public domain.
+
+ Default cascading style sheet for the HTML output of Docutils.
++Despite the name, some widely supported CSS2 features are used.
+
+ See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+ customize this style sheet.
+@@ -275,7 +275,7 @@ pre.literal-block, pre.doctest-block, pre.math, pre.code {
+   margin-left: 2em ;
+   margin-right: 2em }
+
+-pre.code .ln { color: grey; } /* line numbers */
++pre.code .ln { color: gray; } /* line numbers */
+ pre.code, code { background-color: #eeeeee }
+ pre.code .comment, code .comment { color: #5C6576 }
+ pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+@@ -301,7 +301,7 @@ span.option {
+ span.pre {
+   white-space: pre }
+
+-span.problematic {
++span.problematic, pre.problematic {
+   color: red }
+
+ span.section-subtitle {
+@@ -367,9 +367,9 @@ ul.auto-toc {
+ !! This file is generated by oca-gen-addon-readme !!
+ !! changes will be overwritten.                   !!
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-!! source digest: sha256:78f3a5c417c8a61413fe1dc5166433c24a103edf66aafb69a55f567c17577243
++!! source digest: sha256:25547488c3bf13b185d6f375ac4c18391f030077dda3b30f13d83bb525d2e1ff
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator"><img alt="OCA/social" src="https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/social-14-0/social-14-0-mail_activity_reply_creator"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/social&amp;target_branch=14.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
++<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/social/tree/16.0/mail_activity_reply_creator"><img alt="OCA/social" src="https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_activity_reply_creator"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/social&amp;target_branch=16.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+ <p>This module aims to facilitate back-and-forth activity assignment between users by
+ automatically selecting activity creator as the assignee of the followup activity when
+ using button “Done &amp; schedule next”. Use case:</p>
+@@ -401,7 +401,7 @@ a different default user is set for the selected activity type).</p>
+ <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/social/issues">GitHub Issues</a>.
+ In case of trouble, please check there if your issue has already been reported.
+ If you spotted it first, help us to smash it by providing a detailed and welcomed
+-<a class="reference external" href="https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
++<a class="reference external" href="https://github.com/OCA/social/issues/new?body=module:%20mail_activity_reply_creator%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+ <p>Do not contact contributors directly about support or help with technical issues.</p>
+ </div>
+ <div class="section" id="credits">
+@@ -425,11 +425,13 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
+ <div class="section" id="maintainers">
+ <h2><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h2>
+ <p>This module is maintained by the OCA.</p>
+-<a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
++<a class="reference external image-reference" href="https://odoo-community.org">
++<img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />
++</a>
+ <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
+ mission is to support the collaborative development of Odoo features and
+ promote its widespread use.</p>
+-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/social/tree/14.0/mail_activity_reply_creator">OCA/social</a> project on GitHub.</p>
++<p>This module is part of the <a class="reference external" href="https://github.com/OCA/social/tree/16.0/mail_activity_reply_creator">OCA/social</a> project on GitHub.</p>
+ <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
+ </div>
+ </div>
+diff --git a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+index f9d86aab3..4e7e3c520 100644
+--- a/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
++++ b/mail_activity_reply_creator/tests/test_mail_activity_reply_creator.py
+@@ -1,9 +1,9 @@
+ # Copyright 2023 Ooops404
+ # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+-from odoo.tests.common import SavepointCase
++from odoo.tests.common import TransactionCase
+
+
+-class TestMailActivityReplyCreator(SavepointCase):
++class TestMailActivityReplyCreator(TransactionCase):
+     @classmethod
+     def setUpClass(cls):
+         super().setUpClass()
+@@ -18,16 +18,15 @@ class TestMailActivityReplyCreator(SavepointCase):
+         cls.activity_type_1 = activity_type_model.create(
+             {
+                 "name": "Act Type Without Default Responsible",
+-                "res_model_id": cls.partner_ir_model.id,
++                "res_model": cls.partner_ir_model.model,
+                 "default_user_id": False,
+             }
+         )
+         cls.activity_type_2 = activity_type_model.create(
+             {
+                 "name": "Act Type 2",
+-                "res_model_id": cls.partner_ir_model.id,
++                "res_model": cls.partner_ir_model.model,
+                 "default_user_id": False,
+-                "default_next_type_id": cls.activity_type_1.id,
+             }
+         )
+         cls.act1 = (
+@@ -66,7 +65,7 @@ class TestMailActivityReplyCreator(SavepointCase):
+     def test_schedule_new_activity_user(self):
+         prev_act_uid = self.act1.create_uid
+         action = self.act1.action_feedback_schedule_next()
+-        new_act = self.env["mail.activity"].with_context(action["context"]).create({})
++        new_act = self.env["mail.activity"].with_context(**action["context"]).create({})
+         # by default current user will be responsible.
+         # module set responsible as prev. activity creator.
+         self.assertEqual(new_act.user_id, prev_act_uid)
+--
+2.34.1
+
+
+From 91f2c05b65967a9c08600be1c8923e2e46948d21 Mon Sep 17 00:00:00 2001
+From: oca-ci <oca-ci@odoo-community.org>
+Date: Wed, 20 Nov 2024 11:09:52 +0000
+Subject: [UPD] Update mail_activity_reply_creator.pot
+
+---
+ .../i18n/mail_activity_reply_creator.pot        | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
+
+diff --git a/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot b/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot
+index 5ce37022a..f70d0e4ff 100644
+--- a/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot
++++ b/mail_activity_reply_creator/i18n/mail_activity_reply_creator.pot
+@@ -4,7 +4,7 @@
+ #
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: Odoo Server 14.0\n"
++"Project-Id-Version: Odoo Server 16.0\n"
+ "Report-Msgid-Bugs-To: \n"
+ "Last-Translator: \n"
+ "Language-Team: \n"
+@@ -17,18 +17,3 @@ msgstr ""
+ #: model:ir.model,name:mail_activity_reply_creator.model_mail_activity
+ msgid "Activity"
+ msgstr ""
+-
+-#. module: mail_activity_reply_creator
+-#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__display_name
+-msgid "Display Name"
+-msgstr ""
+-
+-#. module: mail_activity_reply_creator
+-#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__id
+-msgid "ID"
+-msgstr ""
+-
+-#. module: mail_activity_reply_creator
+-#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity____last_update
+-msgid "Last Modified on"
+-msgstr ""
+--
+2.34.1
+
+
+From 0dde4b19932457da5843fe854c1a5597769df25a Mon Sep 17 00:00:00 2001
+From: Weblate <noreply@weblate.org>
+Date: Wed, 20 Nov 2024 11:51:51 +0000
+Subject: Update translation files
+
+Updated by "Update PO files to match POT (msgmerge)" hook in Weblate.
+
+Translation: social-16.0/social-16.0-mail_activity_reply_creator
+Translate-URL: https://translation.odoo-community.org/projects/social-16-0/social-16-0-mail_activity_reply_creator/
+---
+ mail_activity_reply_creator/i18n/it.po | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/mail_activity_reply_creator/i18n/it.po b/mail_activity_reply_creator/i18n/it.po
+index 21e5f0ba4..48d8ede17 100644
+--- a/mail_activity_reply_creator/i18n/it.po
++++ b/mail_activity_reply_creator/i18n/it.po
+@@ -21,17 +21,11 @@ msgstr ""
+ msgid "Activity"
+ msgstr "Attività"
+
+-#. module: mail_activity_reply_creator
+-#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__display_name
+-msgid "Display Name"
+-msgstr "Nome visualizzato"
++#~ msgid "Display Name"
++#~ msgstr "Nome visualizzato"
+
+-#. module: mail_activity_reply_creator
+-#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity__id
+-msgid "ID"
+-msgstr "ID"
++#~ msgid "ID"
++#~ msgstr "ID"
+
+-#. module: mail_activity_reply_creator
+-#: model:ir.model.fields,field_description:mail_activity_reply_creator.field_mail_activity____last_update
+-msgid "Last Modified on"
+-msgstr "Ultima modifica il"
++#~ msgid "Last Modified on"
++#~ msgstr "Ultima modifica il"
+--
+2.34.1
