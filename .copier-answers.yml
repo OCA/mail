@@ -18,10 +18,17 @@ odoo_version: 18.0
 org_name: Odoo Community Association (OCA)
 org_slug: OCA
 rebel_module_groups: []
+<<<<<<< HEAD
 repo_description: mail
 repo_name: mail
 repo_slug: mail
 repo_website: https://github.com/OCA/mail
+=======
+repo_description: social
+repo_name: social
+repo_slug: social
+repo_website: https://github.com/OCA/social
+>>>>>>> social/18.0-mig-mail_optional_follower_notification
 use_pyproject_toml: true
 use_ruff: true
 
