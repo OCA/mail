@@ -19,7 +19,9 @@ exclude: |
   # Ignore test files in addons
   /tests/samples/.*|
   # You don't usually want a bot to modify your legal texts
-  (LICENSE.*|COPYING.*)
+  (LICENSE.*|COPYING.*)|
+  # Exclude monkeypatches
+  mail_activity_team/patch.py
 default_language_version:
   python: python3
   node: "22.9.0"
