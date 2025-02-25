@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-<!--
+    <!--
     VIEWS
 -->
 
@@ -52,19 +52,17 @@
         </field>
     </record>
 
-
     <!-- TREE VIEW -->
     <record id="mail_activity_team_view_tree" model="ir.ui.view">
         <field name="name">mail.activity.team.view.tree</field>
         <field name="model">mail.activity.team</field>
         <field name="arch" type="xml">
-           <tree>
-               <field name="name" />
-               <field name="res_model_ids" widget="many2many_tags" />
-           </tree>
+            <list>
+                <field name="name" />
+                <field name="res_model_ids" widget="many2many_tags" />
+            </list>
         </field>
     </record>
-
 
     <!-- SEARCH VIEW -->
     <record id="mail_activity_team_view_search" model="ir.ui.view">
@@ -72,36 +70,33 @@
         <field name="model">mail.activity.team</field>
         <field name="arch" type="xml">
             <search>
-               <field name="name" />
-               <field name="res_model_ids" />
-               <field name="member_ids" />
+                <field name="name" />
+                <field name="res_model_ids" />
+                <field name="member_ids" />
             </search>
         </field>
     </record>
 
-
-<!--
+    <!--
     ACTION
 -->
     <record model="ir.actions.act_window" id="mail_activity_team_action">
         <field name="name">Activity Teams</field>
         <field name="res_model">mail.activity.team</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
         <field name="search_view_id" ref="mail_activity_team_view_search" />
     </record>
 
-
-<!--
+    <!--
 Menus
 -->
     <menuitem
         id="menu_mail_activity_team"
         name="Activity Teams"
-        parent="mail.mail_menu_technical"
-        sequence="10"
+        parent="mail.menu_mail_activities_section"
+        sequence="90"
         action="mail_activity_team_action"
     />
-
 </odoo>
