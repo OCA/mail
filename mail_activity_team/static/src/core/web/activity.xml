@@ -6,19 +6,50 @@
         t-inherit="mail.Activity"
         t-inherit-mode="extension"
     >
+        <!-- Prevent error rendering the avatar in case of missing user -->
         <xpath
-            expr="//div/div[hasclass('o-mail-Activity-sidebar')]/img"
+            expr="//div/div[hasclass('o-mail-Activity-sidebar')]/a/img"
             position="attributes"
         >
-            <attribute name="t-if">activity.user_id</attribute>
+            <attribute name="t-if">props.activity.user_id</attribute>
         </xpath>
+        <!-- Prevent error rendering the assigned user in case of missing user -->
         <xpath
             expr="//div/div/div[hasclass('o-mail-Activity-info')]/span[hasclass('o-mail-Activity-user')]"
             position="attributes"
         >
-            <attribute name="t-if">activity.user_id</attribute>
+            <attribute name="t-if">props.activity.user_id</attribute>
         </xpath>
-
+        <!-- Show team in the condensed view -->
+        <xpath
+            expr="//div/div/div[hasclass('o-mail-Activity-info')]/span[hasclass('o-mail-Activity-user')]"
+            position="after"
+        >
+            <span
+                class="o-mail-Activity-user px-1"
+                t-if="props.activity.team_id"
+            >(Team <t t-esc="props.activity.team_id[1]" />)
+            </span>
+        </xpath>
+        <!-- Prevent error rendering the assigned user in case of missing user in the expanded view -->
+        <xpath
+            expr="//t[@t-esc='props.activity.persona.name']/parent::td/parent::tr"
+            position="attributes"
+        >
+            <attribute name="t-if">props.activity.user_id</attribute>
+        </xpath>
+        <!-- Show team in the expanded view -->
+        <xpath
+            expr="//t[@t-esc='props.activity.persona.name']/parent::td/parent::tr"
+            position="after"
+        >
+            <tr t-if="props.activity.team_id">
+                <td class="text-end fw-bolder">Team</td>
+                <td>
+                    <t t-esc="props.activity.team_id[1]" />
+                </td>
+            </tr>
+        </xpath>
     </t>
 
 </templates>

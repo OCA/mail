@@ -1,10 +1,12 @@
 # Copyright 2018-22 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
+import os
 from datetime import date
 
 from odoo.exceptions import ValidationError
-from odoo.tests.common import Form, TransactionCase
+from odoo.modules.migration import load_script
+from odoo.tests import Form
+from odoo.tests.common import TransactionCase
 
 
 class TestMailActivityTeam(TransactionCase):
@@ -103,6 +105,7 @@ class TestMailActivityTeam(TransactionCase):
         cls.act2 = (
             cls.env["mail.activity"]
             .with_user(cls.employee)
+            .sudo()
             .create(
                 {
                     "activity_type_id": cls.activity2.id,
@@ -265,7 +268,7 @@ class TestMailActivityTeam(TransactionCase):
             self.env["res.users"]
             .with_user(self.employee.id)
             .with_context(**{"team_activities": True})
-            .systray_get_activities()
+            ._get_activity_groups()
         )
         self.assertEqual(res[0]["total_count"], 0)
         self.assertEqual(res[0]["today_count"], 1)
@@ -279,11 +282,11 @@ class TestMailActivityTeam(TransactionCase):
             self.env["res.users"]
             .with_user(self.employee.id)
             .with_context(**{"team_activities": True})
-            .systray_get_activities()
+            ._get_activity_groups()
         )
         self.assertEqual(res[0]["total_count"], 1)
         self.assertEqual(res[0]["today_count"], 2)
-        res = self.env["res.users"].with_user(self.employee.id).systray_get_activities()
+        res = self.env["res.users"].with_user(self.employee.id)._get_activity_groups()
         self.assertEqual(res[0]["total_count"], 2)
 
     def test_activity_schedule_next(self):
@@ -359,3 +362,77 @@ class TestMailActivityTeam(TransactionCase):
         )
         self.assertEqual(partner, self.partner_client)
         self.assertEqual(partner.my_activity_date_deadline, today)
+
+    def _web_search_read_to_ids(self, domain, context=None):
+        """Return web_search_read results as a set of ids"""
+        if context is None:
+            context = {}
+        res = (
+            self.env["res.partner"]
+            .with_context(**context)
+            .web_search_read(
+                domain,
+                {"id": {}},
+            )
+        )
+        return set(record["id"] for record in res["records"])
+
+    def test_web_search_read(self):
+        """Test the domain mangling of web_search_read"""
+        # Create a non-team activity for our second employee, for a second partner
+        self.team1.member_ids |= self.employee2
+        partner2 = self.partner_client.copy()
+        self.employee2.groups_id += self.env.ref("base.group_partner_manager")
+
+        # Craft the activity without a team
+        act3 = (
+            self.env["mail.activity"]
+            .with_user(self.employee2)
+            .create(
+                {
+                    "activity_type_id": self.activity1.id,
+                    "note": "Partner activity 3.",
+                    "res_id": partner2.id,
+                    "res_model_id": self.partner_ir_model.id,
+                    "team_user_id": self.employee2.id,
+                    "user_id": self.employee2.id,
+                    "team_id": False,
+                }
+            )
+        )
+        self.assertFalse(act3.team_id)
+
+        # A regular search retrieves this activity
+        self.assertEqual(
+            self._web_search_read_to_ids(
+                [("activity_user_id", "=", self.employee2.id)]
+            ),
+            set(partner2.ids),
+        )
+
+        # Searching with magic context key retrieves team activities.
+        self.assertEqual(
+            self._web_search_read_to_ids(
+                [("activity_user_id", "=", self.employee2.id)],
+                {"team_activities": True},
+            ),
+            set(self.partner_client.ids),
+        )
+
+    def test_migration(self):
+        """Check that the 18.0.1.0.0 migration script runs without error"""
+        rule = self.env.ref("mail_activity_team.mail_activity_rule_my_team")
+        rule.perm_create = True
+
+        # Run the migration script
+        pyfile = os.path.join(
+            "mail_activity_team",
+            "migrations",
+            "18.0.1.0.0",
+            "post-migration.py",
+        )
+        name, ext = os.path.splitext(os.path.basename(pyfile))
+        mod = load_script(pyfile, name)
+        mod.migrate(self.env.cr, "18.0.1.0.0")
+
+        self.assertFalse(rule.perm_create)
