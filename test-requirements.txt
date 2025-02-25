@@ -1,1 +1,2 @@
 odoo_test_helper
+git+https://github.com/DynAppsNV/mail@18.0-mig-mail_activity_board#subdirectory=mail_activity_board
