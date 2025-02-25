@@ -14,3 +14,4 @@
   - Italo Lopes <italo.lopes@camptocamp.com>
 - [CorporateHub](https://corporatehub.eu/)
   - Alexey Pelykh <alexey.pelykh@corphub.eu>
+- Stefan Rijnhart (<stefan@opener.amsterdam>)

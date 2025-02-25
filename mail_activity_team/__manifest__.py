@@ -5,14 +5,14 @@
 {
     "name": "Mail Activity Team",
     "summary": "Add Teams to Activities",
-    "version": "17.0.2.0.1",
+    "version": "18.0.1.0.0",
     "development_status": "Alpha",
     "category": "Social Network",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "ForgeFlow, Sodexis, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "installable": True,
-    "depends": ["mail_activity_board"],
+    "depends": ["mail_activity_board", "web"],
     "data": [
         "security/ir.model.access.csv",
         "security/mail_activity_team_security.xml",
@@ -30,4 +30,5 @@
             "mail_activity_team/static/src/models/*",
         ],
     },
+    "post_load": "post_load_hook",
 }

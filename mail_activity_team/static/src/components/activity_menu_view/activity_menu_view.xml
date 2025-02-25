@@ -6,7 +6,10 @@
         t-inherit-mode="extension"
     >
         <xpath expr="//div[1]" position="before">
-            <div class="o_mail_systray_dropdown_top">
+            <div
+                t-ref="mail_activity_team_dropdown"
+                class="o_mail_systray_dropdown_top"
+            >
                 <ul class="nav nav-pills">
                     <li class="nav-item cursor-pointer">
                         <a
