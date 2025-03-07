@@ -263,6 +263,17 @@ class TestMailActivityTeam(TransactionCase):
         # As we are in a 'team activity' context, the user should not be set
         self.assertEqual(activity.user_id, self.env["res.users"])
 
+    def test_schedule_activity_no_default_team(self):
+        """If there are no teams, activities can still be scheduled for users"""
+        self.env["mail.activity.team"].search([]).unlink()
+        partner_record = self.employee.partner_id.with_user(self.employee.id)
+        activity = partner_record.activity_schedule(
+            activity_type_id=self.activity2.id,
+            user_id=self.employee2.id,
+        )
+        self.assertFalse(activity.team_id)
+        self.assertEqual(activity.user_id, self.employee2)
+
     def test_activity_count(self):
         res = (
             self.env["res.users"]
