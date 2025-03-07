@@ -1,5 +1,8 @@
-You need to do nothing. The module is configured appropriately out of
-the box.
+You usually don't need to do anything. The module is configured appropriately out of the box.
+Just make sure the following scheduled actions are active:
+
+- Mail: Email Queue Manager (mail.ir_cron_mail_scheduler_action)
+- Notification: Send scheduled message notifications (mail.ir_cron_send_scheduled_message)
 
 The mail queue processing is made by a cron job. This is normal Odoo
 behavior, not specific to this module. However, since you will start
