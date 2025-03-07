@@ -42,7 +42,7 @@ class MailActivity(models.Model):
         for vals in vals_list:
             # we need to be sure that we are in a context where the team_id is set,
             # and we don't want to use user_id
-            if "team_id" in vals:
+            if vals.get("team_id"):
                 # using team, we have user_id = team_user_id,
                 # so if we don't have a user_team_id we don't want user_id too
                 if "user_id" in vals and not vals.get("team_user_id", False):
