@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "category": "Marketing",
     "depends": ["mail"],
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "data": [
         "security/ir.model.access.csv",
         "views/mail_autosubscribe.xml",
