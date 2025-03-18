@@ -14,7 +14,7 @@
                     name="mail_autosubscribe_ids"
                     string="In copy of"
                     widget="many2many_checkboxes"
-                    attrs="{'invisible': [('email', '=', False)]}"
+                    invisible="not email"
                 />
             </xpath>
             <xpath
@@ -25,7 +25,7 @@
                     name="mail_autosubscribe_ids"
                     string="In copy of"
                     widget="many2many_checkboxes"
-                    attrs="{'invisible': [('email', '=', False)]}"
+                    invisible="not email"
                 />
             </xpath>
         </field>
