@@ -81,7 +81,9 @@ class MailMail(models.Model):
             # recipients from any Notification Type (i.e. email, inbox, etc.)
             recipients = mail.notification_ids.res_partner_id
             record = self.env[mail.model].browse(mail.res_id)
-            company = getattr(record, "company_id", self.env.company)
+            company = getattr(record, "company_id", False)
+            if not company:
+                company = self.env.company
             show_internal_users = company and company.show_internal_users_cc
             show_in_cc_recipients = recipients._filter_shown_in_cc(show_internal_users)
             if len(show_in_cc_recipients) <= 1:
