@@ -69,11 +69,6 @@ msgid "In copy of"
 msgstr "In copia di"
 
 #. module: mail_autosubscribe
-#: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe____last_update
-msgid "Last Modified on"
-msgstr "Ultima modifica il"
-
-#. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe__write_uid
 msgid "Last Updated by"
 msgstr "Ultimo aggiornamento di"
@@ -118,3 +113,6 @@ msgstr "Esiste già una regola per questo modello"
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_template__use_autosubscribe_followers
 msgid "Use Autosubscribe Followers"
 msgstr "Utilizza autoiscrizione chi segue"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Ultima modifica il"
