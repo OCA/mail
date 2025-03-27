@@ -4,7 +4,7 @@
     "name": "Mail optional follower notification - Account",
     "summary": "Choose to notify followers for account app",
     "author": "NSI-SA," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "category": "Social Network",
     "version": "17.0.1.0.0",
     "license": "AGPL-3",
