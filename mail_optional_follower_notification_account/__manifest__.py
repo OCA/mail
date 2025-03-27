@@ -6,7 +6,7 @@
     "author": "NSI-SA," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
     "category": "Social Network",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "depends": ["mail_optional_follower_notification", "account"],
     "data": ["wizard/account_move_send_views.xml"],
