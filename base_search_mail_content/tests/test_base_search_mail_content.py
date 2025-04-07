@@ -23,3 +23,14 @@ class TestBaseSearchMailContent(TransactionCase):
             res["models"][self.channel_obj._name],
             "message_content field was not detected",
         )
+
+    def test_base_search_mail_content_3(self):
+        Partner = self.env["res.partner"]
+        partner = Partner.create({"name": "Test Partner"})
+        partner.message_post(
+            body="Hello World",
+        )
+        partner_find = Partner.search([("message_content", "ilike", "world hell")])
+        self.assertFalse(partner_find)
+        partner_find = Partner.search([("message_content", "%", "world hell")])
+        self.assertEqual(partner, partner_find)
