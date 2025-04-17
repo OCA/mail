@@ -353,6 +353,9 @@ msgstr "odoo.exemple.com"
 msgid "pubkey-abcde0123456789abcde0123456789ab"
 msgstr "pubkey-abcde0123456789abcde0123456789ab"
 
+#. module: mail_tracking_mailgun
+#. odoo-python
+#: code:addons/mail_tracking_mailgun/models/res_partner.py:0
 #, python-format
-#~ msgid "unknown"
-#~ msgstr "inconnu"
+msgid "unknown"
+msgstr "inconnu"

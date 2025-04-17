@@ -7,6 +7,7 @@
 from urllib.parse import urljoin
 
 import requests
+from markupsafe import Markup
 
 from odoo import SUPERUSER_ID, _, models
 from odoo.exceptions import UserError
@@ -27,16 +28,15 @@ class ResPartner(models.Model):
             if not partner.email:
                 continue
             event = event or self.env["mail.tracking.event"]
-            event_str = (
-                f'<a href="#" data-oe-model="mail.tracking.event"'
-                f'data-oe-id="{event.id or 0}">{event.id or _("unknown")}</a>'
-            )
-            body = _(
-                "Email has been bounced: %(email)s\nReason: "
-                "%(reason)s\nEvent: %(event_str)s",
-                email=partner.email,
-                reason=reason,
-                event_str=event_str,
+            event_str = event._get_html_link(title=event.id) if event else _("unknown")
+            body = Markup(
+                _(
+                    "Email has been bounced: %(email)s\nReason: "
+                    "%(reason)s\nEvent: %(event_str)s",
+                    email=partner.email,
+                    reason=reason,
+                    event_str=event_str,
+                )
             )
             # This function can be called by the non user via the callback_method set in
             # /mail/tracking/mailgun/all/. A sudo() is not enough to succesfully send

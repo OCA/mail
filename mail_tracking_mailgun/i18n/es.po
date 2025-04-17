@@ -365,13 +365,16 @@ msgstr "odoo.example.com"
 msgid "pubkey-abcde0123456789abcde0123456789ab"
 msgstr "pubclave-abcde0123456789abcde0123456789ab"
 
+#. module: mail_tracking_mailgun
+#. odoo-python
+#: code:addons/mail_tracking_mailgun/models/res_partner.py:0
+#, python-format
+msgid "unknown"
+msgstr "desconocido"
+
 #, python-format
 #~ msgid "Wrong database for event!"
 #~ msgstr "¡Base de datos incorrecta para el evento!"
-
-#, python-format
-#~ msgid "unknown"
-#~ msgstr "desconocido"
 
 #~ msgid "Attempt to check partner emails always. This may cost money."
 #~ msgstr ""
