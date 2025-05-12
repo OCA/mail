@@ -196,7 +196,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
         with self.mock_smtplib_connection():
             message = self._send_mail(self.message)
         self.assertEqual(
-            message["From"], f"Mitchell Admin <{expected_mail_server.smtp_from}>"
+            message["From"], f'"Mitchell Admin" <{expected_mail_server.smtp_from}>'
         )
 
         used_mail_server = self.IrMailServer._get_mail_sever(domain)
@@ -372,3 +372,28 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
             mail_server.smtp_from = "."
 
         mail_server.smtp_from = "notifications@test.com"
+
+    def test_11_from_outgoing_server_another_special_char_comma(self):
+        self._init_mail_server_domain_whilelist_based()
+        domain = "example.com"
+        email_from = f'"Muster, Jörg" <admin@{domain}>'
+        expected_mail_server = self.mail_server_domainone
+
+        self.message.replace_header("From", email_from)
+        # A mail server is configured for the email
+        with self.mock_smtplib_connection():
+            message = self._send_mail(self.message)
+        self.assertEqual(
+            message["From"], f'"Muster, Jörg" <{expected_mail_server.smtp_from}>'
+        )
+
+        used_mail_server = self.IrMailServer._get_mail_sever(domain)
+        used_mail_server = self.IrMailServer.browse(used_mail_server)
+        self.assertEqual(
+            used_mail_server,
+            expected_mail_server,
+            (
+                f"It using {used_mail_server.name}"
+                f" but we expect to use {expected_mail_server.name}"
+            ),
+        )

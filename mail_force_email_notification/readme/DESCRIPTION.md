@@ -1,0 +1,3 @@
+This module extends the functionality of Odoo's mail notification system to allow forcing email notifications through context keys. By default, Odoo sends internal notifications to connected users and email notifications to external partners or disconnected users. 
+
+With this module, you can override this behavior by setting the `force_notification_by_email` context key, ensuring specific notifications are always sent by email regardless of the user's connection status or notification preferences. This is particularly useful when you need to maintain an email trail for certain communications or ensure critical notifications are delivered via email.

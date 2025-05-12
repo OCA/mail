@@ -21,14 +21,18 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [base_search_mail_content](base_search_mail_content/) | 18.0.1.0.0 |  | Base Search Mail Content
+[mail_activity_done](mail_activity_done/) | 18.0.1.0.0 |  | Mail Activity Done
 [mail_autosubscribe](mail_autosubscribe/) | 18.0.1.0.0 |  | Automatically subscribe partners to its company's business documents
+[mail_composer_cc_bcc](mail_composer_cc_bcc/) | 18.0.1.0.0 | [![trisdoan](https://github.com/trisdoan.png?size=30px)](https://github.com/trisdoan) | This module enables sending mail to CC and BCC partners in mail composer form.
 [mail_debrand](mail_debrand/) | 18.0.1.0.1 | [![pedrobaeza](https://github.com/pedrobaeza.png?size=30px)](https://github.com/pedrobaeza) [![joao-p-marques](https://github.com/joao-p-marques.png?size=30px)](https://github.com/joao-p-marques) | Remove Odoo branding in sent emails Removes anchor <a href odoo.com togheder with it's parent ( for powerd by) form all the templates removes any 'odoo' that are in tempalte texts > 20characters
+[mail_force_email_notification](mail_force_email_notification/) | 18.0.1.0.0 |  | Context key to define notifications to be sent by emaildefined by force_notification_by_email context key
 [mail_inline_css](mail_inline_css/) | 18.0.1.0.0 |  | Convert style tags in inline style in your mails
 [mail_layout_preview](mail_layout_preview/) | 18.0.1.0.0 |  | Preview email templates in the browser
 [mail_notification_clean_status_error](mail_notification_clean_status_error/) | 18.0.1.0.0 | [![sebalix](https://github.com/sebalix.png?size=30px)](https://github.com/sebalix) | Extend Odoo scheduled action to also delete notifications in error.
 [mail_notification_custom_subject](mail_notification_custom_subject/) | 18.0.1.0.0 | [![yajo](https://github.com/yajo.png?size=30px)](https://github.com/yajo) | Apply a custom subject to mail notifications
-[mail_outbound_static](mail_outbound_static/) | 18.0.1.0.0 |  | Allows you to configure the from header for a mail server.
+[mail_outbound_static](mail_outbound_static/) | 18.0.1.0.1 |  | Allows you to configure the from header for a mail server.
 [mail_partner_forwarding](mail_partner_forwarding/) | 18.0.1.0.0 |  | Forwarding notifications for partners
+[mail_quoted_reply](mail_quoted_reply/) | 18.0.1.0.0 |  | Make a reply using a message
 [mail_restrict_follower_selection](mail_restrict_follower_selection/) | 18.0.1.0.0 |  | Define a domain from which followers can be selected
 [mail_tracking](mail_tracking/) | 18.0.1.0.0 |  | Email tracking system for all mails sent
 [mail_tracking_mass_mailing](mail_tracking_mass_mailing/) | 18.0.1.0.0 |  | Improve mass mailing email tracking

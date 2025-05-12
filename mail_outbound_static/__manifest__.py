@@ -4,10 +4,10 @@
 {
     "name": "Mail Outbound Static",
     "summary": "Allows you to configure the from header for a mail server.",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Discuss",
     "website": "https://github.com/OCA/mail",
-    "author": "brain-tec AG, LasLabs, Adhoc SA, Odoo Community Association (OCA)",
+    "author": "braintec AG, LasLabs, Adhoc SA, Odoo Community Association (OCA)",
     "license": "LGPL-3",
     "application": False,
     "installable": True,

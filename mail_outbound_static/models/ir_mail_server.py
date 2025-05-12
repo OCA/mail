@@ -2,10 +2,11 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 import re
-from email.utils import formataddr, parseaddr
+from email.utils import parseaddr
 
 from odoo import _, api, fields, models, tools
 from odoo.exceptions import ValidationError
+from odoo.tools import formataddr
 
 
 class IrMailServer(models.Model):
@@ -84,7 +85,7 @@ class IrMailServer(models.Model):
         ):
             email_from = formataddr((name_from, mail_server.smtp_from))
             message.replace_header("From", email_from)
-            smtp_from = email_from
+            smtp_from = mail_server.smtp_from
             if not self._get_default_bounce_address():
                 # then, bounce handling is disabled and we want
                 # Return-Path = From
