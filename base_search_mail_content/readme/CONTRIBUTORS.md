@@ -5,4 +5,5 @@
 - [Tecnativa](https://www.tecnativa.com):
   - Vicent Cubells
   - Ernesto Tejeda
+  - David Bañón
 - Nguyen Minh Chien \<<chien@trobz.com>\>

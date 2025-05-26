@@ -111,6 +111,7 @@ Contributors
 
   - Vicent Cubells
   - Ernesto Tejeda
+  - David Bañón
 
 - Nguyen Minh Chien <chien@trobz.com>
 
