@@ -1,0 +1,2 @@
+- [Aulora](https://www.aulora.io):
+  - Saulius Žilys \<<saulius.zilys@aulora.io>\>
