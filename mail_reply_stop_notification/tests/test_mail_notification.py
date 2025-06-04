@@ -29,6 +29,9 @@ class TestMailNotification(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # Set the company configuration to stop email notifications on replies
+        cls.env.company.mail_reply_stop_notification = True
+
         cls.demo_user = cls.env.ref("base.user_demo")
         cls.admin_user = cls.env.ref("base.user_admin")
 

@@ -10,7 +10,12 @@ class MailThread(models.AbstractModel):
     def _notify_thread_by_email(
         self, message, recipients_data, msg_vals=False, **kwargs
     ):
-        """Remove recipients_data to prevent email generation."""
+        """
+        Remove recipients_data to prevent email generation when
+        `mail_reply_stop_notification` is enabled.
+        """
+        if self.env.company.mail_reply_stop_notification:
+            recipients_data = []
         return super()._notify_thread_by_email(
-            message, recipients_data=[], msg_vals=msg_vals, **kwargs
+            message, recipients_data=recipients_data, msg_vals=msg_vals, **kwargs
         )
