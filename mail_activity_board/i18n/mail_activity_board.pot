@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,7 +20,10 @@ msgstr ""
 
 #. module: mail_activity_board
 #: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_kanban
-msgid "<span><i title=\"date\" class=\"fa fa-clock-o\"/></span>"
+msgid ""
+"<span>\n"
+"                                                <i title=\"date\" class=\"fa fa-clock-o\"/>\n"
+"                                            </span>"
 msgstr ""
 
 #. module: mail_activity_board
@@ -119,7 +122,6 @@ msgstr ""
 #. module: mail_activity_board
 #. odoo-javascript
 #: code:addons/mail_activity_board/static/src/components/chatter/chatter.xml:0
-#, python-format
 msgid "View Activities"
 msgstr ""
 
