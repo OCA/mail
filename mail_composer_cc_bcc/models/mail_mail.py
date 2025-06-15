@@ -8,12 +8,15 @@ from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
 
 
 def format_emails(partners):
-    emails = [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
-    return ", ".join(emails)
+    return [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
 
 
 def format_emails_raw(partners):
-    emails = [p.email for p in partners if p.email]
+    return [p.email for p in partners if p.email]
+
+
+def format_emails_str(partners):
+    emails = format_emails(partners)
     return ", ".join(emails)
 
 
@@ -42,7 +45,7 @@ class MailMail(models.Model):
         partner_to = self.env["res.partner"].browse(partner_to_ids)
         email_to = format_emails(partner_to)
         email_to_raw = format_emails_raw(partner_to)
-        email_cc = format_emails(self.recipient_cc_ids)
+        email_cc = format_emails_str(self.recipient_cc_ids)
         email_bcc = [r.email for r in self.recipient_bcc_ids if r.email]
 
         # Collect recipients (RCPT TO) and update all emails
