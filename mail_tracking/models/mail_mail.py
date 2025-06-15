@@ -3,7 +3,6 @@
 
 import time
 from datetime import datetime
-from email.utils import COMMASPACE
 
 from odoo import fields, models
 
@@ -15,8 +14,7 @@ class MailMail(models.Model):
         """Prepare email.tracking.email record values"""
         ts = time.time()
         dt = datetime.utcfromtimestamp(ts)
-        email_to_list = email.get("email_to", [])
-        email_to = COMMASPACE.join(email_to_list)
+        email_to = email.get("email_to", "")
         return {
             "name": self.subject,
             "timestamp": f"{ts:.6f}",
