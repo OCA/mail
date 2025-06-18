@@ -4,7 +4,7 @@
     "name": "Mail Message Search",
     "version": "16.0.1.0.0",
     "author": "Quartile, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail"],
     "license": "AGPL-3",
     "maintainers": ["yostashiro", "aungkokolin1997"],
