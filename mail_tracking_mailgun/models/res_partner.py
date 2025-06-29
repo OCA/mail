@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 import requests
 from markupsafe import Markup
 
-from odoo import SUPERUSER_ID, _, models
+from odoo import SUPERUSER_ID, models
 from odoo.exceptions import UserError
 
 from ..wizards.res_config_settings import MAILGUN_TIMEOUT
@@ -28,9 +28,11 @@ class ResPartner(models.Model):
             if not partner.email:
                 continue
             event = event or self.env["mail.tracking.event"]
-            event_str = event._get_html_link(title=event.id) if event else _("unknown")
+            event_str = (
+                event._get_html_link(title=event.id) if event else self.env._("unknown")
+            )
             body = Markup(
-                _(
+                self.env._(
                     "Email has been bounced: %(email)s\nReason: "
                     "%(reason)s\nEvent: %(event_str)s",
                     email=partner.email,
@@ -59,7 +61,7 @@ class ResPartner(models.Model):
         )
         if not params.validation_key:
             raise UserError(
-                _(
+                self.env._(
                     "You need to configure mailgun.validation_key"
                     " in order to be able to check mails validity"
                 )
@@ -77,8 +79,8 @@ class ResPartner(models.Model):
                 and not self.env.context.get("mailgun_auto_check")
             ):
                 raise UserError(
-                    _(
-                        "Error %s trying to check mail" % res.status_code
+                    self.env._(
+                        f"Error {res.status_code} trying to check mail"
                         or "of connection"
                     )
                 )
@@ -86,7 +88,7 @@ class ResPartner(models.Model):
             if "mailbox_verification" not in content:
                 if not self.env.context.get("mailgun_auto_check"):
                     raise UserError(
-                        _(
+                        self.env._(
                             "Mailgun Error. Mailbox verification value wasn't"
                             " returned"
                         )
@@ -96,7 +98,7 @@ class ResPartner(models.Model):
             if not content["is_valid"]:
                 partner.email_bounced = True
                 body = (
-                    _(
+                    self.env._(
                         "%s is not a valid email address. Please check it"
                         " in order to avoid sending issues"
                     )
@@ -110,7 +112,7 @@ class ResPartner(models.Model):
             if content["mailbox_verification"] == "false":
                 partner.email_bounced = True
                 body = (
-                    _(
+                    self.env._(
                         "%s failed the mailbox verification. Please check it"
                         " in order to avoid sending issues"
                     )
@@ -124,7 +126,7 @@ class ResPartner(models.Model):
             if content["mailbox_verification"] == "unknown":
                 if not self.env.context.get("mailgun_auto_check"):
                     raise UserError(
-                        _(
+                        self.env._(
                             "%s couldn't be verified. Either the request couln't"
                             " be completed or the mailbox provider doesn't "
                             "support email verification"

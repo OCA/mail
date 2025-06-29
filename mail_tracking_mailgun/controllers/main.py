@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 
 from werkzeug.exceptions import NotAcceptable
 
-from odoo import _
 from odoo.exceptions import ValidationError
 from odoo.http import request, route
 
@@ -28,7 +27,7 @@ class MailTrackingController(main.MailTrackingController):
         # Request cannot be old
         processing_time = datetime.utcnow() - datetime.utcfromtimestamp(int(timestamp))
         if not timedelta() < processing_time < timedelta(minutes=10):
-            raise ValidationError(_("Request is too old"))
+            raise ValidationError(request.env._("Request is too old"))
         # Avoid replay attacks
         try:
             processed_tokens = (
@@ -39,7 +38,7 @@ class MailTrackingController(main.MailTrackingController):
                 request.env.registry._mail_tracking_mailgun_processed_tokens
             ) = set()
         if token in processed_tokens:
-            raise ValidationError(_("Request was already processed"))
+            raise ValidationError(request.env._("Request was already processed"))
         processed_tokens.add(token)
         params = request.env["mail.tracking.email"]._mailgun_values()
         # Assert signature
@@ -55,7 +54,7 @@ class MailTrackingController(main.MailTrackingController):
             digestmod=hashlib.sha256,
         ).hexdigest()
         if not hmac.compare_digest(str(signature), str(hmac_digest)):
-            raise ValidationError(_("Wrong signature"))
+            raise ValidationError(request.env._("Wrong signature"))
 
     @route(["/mail/tracking/mailgun/all"], auth="none", type="json", csrf=False)
     def mail_tracking_mailgun_webhook(self):

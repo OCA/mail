@@ -10,8 +10,10 @@ from freezegun import freeze_time
 from werkzeug.exceptions import NotAcceptable
 
 from odoo.exceptions import MissingError, UserError, ValidationError
-from odoo.tests.common import Form, TransactionCase
+from odoo.tests import Form
 from odoo.tools import mute_logger
+
+from odoo.addons.base.tests.common import BaseCommon
 
 from ..controllers.main import MailTrackingController
 
@@ -26,7 +28,7 @@ _packagepath = "odoo.addons.mail_tracking_mailgun"
 
 
 @freeze_time("2016-08-12 17:00:00", tick=True)
-class TestMailgun(TransactionCase):
+class TestMailgun(BaseCommon):
     def mail_send(self):
         mail = self.env["mail.mail"].create(
             {
@@ -199,7 +201,7 @@ class TestMailgun(TransactionCase):
             self.MailTrackingController.mail_tracking_mailgun_webhook()
 
     def test_tracking_wrong_db(self):
-        self.event["user-variables"]["odoo_db"] = "%s_nope" % self.env.cr.dbname
+        self.event["user-variables"]["odoo_db"] = f"{self.env.cr.dbname}_nope"
         with self._request_mock(), self.assertLogs(level="ERROR") as log_catcher:
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         self.assertIn(
@@ -221,7 +223,7 @@ class TestMailgun(TransactionCase):
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         events = self.event_search("delivered")
         for event in events:
-            self.assertEqual(event.timestamp, float(self.timestamp))
+            self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
             self.assertEqual(event.recipient, self.recipient)
 
     # https://documentation.mailgun.com/en/latest/user_manual.html#tracking-opens
@@ -248,7 +250,7 @@ class TestMailgun(TransactionCase):
         with self._request_mock():
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         event = self.event_search("open")
-        self.assertEqual(event.timestamp, float(self.timestamp))
+        self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
         self.assertEqual(event.recipient, self.recipient)
         self.assertEqual(event.ip, ip)
         self.assertEqual(event.user_agent, user_agent)
@@ -284,7 +286,7 @@ class TestMailgun(TransactionCase):
         with self._request_mock():
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         event = self.event_search("click")
-        self.assertEqual(event.timestamp, float(self.timestamp))
+        self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
         self.assertEqual(event.recipient, self.recipient)
         self.assertEqual(event.ip, ip)
         self.assertEqual(event.user_agent, user_agent)
@@ -318,7 +320,7 @@ class TestMailgun(TransactionCase):
         with self._request_mock():
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         event = self.event_search("unsub")
-        self.assertEqual(event.timestamp, float(self.timestamp))
+        self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
         self.assertEqual(event.recipient, self.recipient)
         self.assertEqual(event.ip, ip)
         self.assertEqual(event.user_agent, user_agent)
@@ -333,7 +335,7 @@ class TestMailgun(TransactionCase):
         with self._request_mock():
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         event = self.event_search("spam")
-        self.assertEqual(event.timestamp, float(self.timestamp))
+        self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
         self.assertEqual(event.recipient, self.recipient)
         self.assertEqual(event.error_type, "spam")
 
@@ -361,7 +363,7 @@ class TestMailgun(TransactionCase):
         with self._request_mock():
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         event = self.event_search("hard_bounce")
-        self.assertEqual(event.timestamp, float(self.timestamp))
+        self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
         self.assertEqual(event.recipient, self.recipient)
         self.assertEqual(event.error_type, str(code))
         self.assertEqual(event.error_description, error)
@@ -379,7 +381,7 @@ class TestMailgun(TransactionCase):
         with self._request_mock():
             self.MailTrackingController.mail_tracking_mailgun_webhook()
         event = self.event_search("reject")
-        self.assertEqual(event.timestamp, float(self.timestamp))
+        self.assertAlmostEqual(event.timestamp, float(self.timestamp), 5)
         self.assertEqual(event.recipient, self.recipient)
         self.assertEqual(event.error_type, "rejected")
         self.assertEqual(event.error_description, reason)

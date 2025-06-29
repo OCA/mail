@@ -10,7 +10,7 @@ from urllib.parse import urljoin
 
 import requests
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import email_split
 
@@ -76,12 +76,12 @@ class MailTrackingEmail(models.Model):
         icp = self.env["ir.config_parameter"].sudo()
         api_key = icp.get_param("mailgun.apikey")
         if not api_key:
-            raise ValidationError(_("There is no Mailgun API key!"))
+            raise ValidationError(self.env._("There is no Mailgun API key!"))
         api_url = icp.get_param("mailgun.api_url", "https://api.mailgun.net/v3")
         catchall_domain = self.env["mail.alias.domain"].sudo().search([], limit=1).name
         domain = icp.get_param("mailgun.domain", catchall_domain or "")
         if not domain:
-            raise ValidationError(_("A Mailgun domain value is needed!"))
+            raise ValidationError(self.env._("A Mailgun domain value is needed!"))
         validation_key = icp.get_param("mailgun.validation_key")
         web_base_url = icp.get_param("web.base.url")
         webhooks_domain = icp.get_param("mailgun.webhooks_domain", web_base_url)
@@ -155,8 +155,10 @@ class MailTrackingEmail(models.Model):
             metadata.update(
                 {
                     "error_type": "spam",
-                    "error_description": "Recipient '%s' mark this email as spam"
-                    % event.get("recipient", False),
+                    "error_description": (
+                        f"Recipient '{event.get('recipient', False)}' mark "
+                        "this email as spam"
+                    ),
                 }
             )
         return metadata
@@ -222,7 +224,7 @@ class MailTrackingEmail(models.Model):
         for tracking in self.filtered("message_id"):
             message_id = tracking.message_id.replace("<", "").replace(">", "")
             events = []
-            url = urljoin(api_url, "/v3/%s/events" % domain)
+            url = urljoin(api_url, f"/v3/{domain}/events")
             params = {
                 "begin": tracking.timestamp,
                 "ascending": "yes",
@@ -237,7 +239,7 @@ class MailTrackingEmail(models.Model):
                     timeout=timeout,
                 )
                 if not res or res.status_code != 200:
-                    raise UserError(_("Couldn't retrieve Mailgun information"))
+                    raise UserError(self.env._("Couldn't retrieve Mailgun information"))
                 iter_events = res.json().get("items", [])
                 if not iter_events:
                     # Loop no more
@@ -246,6 +248,6 @@ class MailTrackingEmail(models.Model):
                 # Loop over pagination
                 url = res.json().get("paging", {}).get("next")
             if not events:
-                raise UserError(_("Event information not longer stored"))
+                raise UserError(self.env._("Event information not longer stored"))
             for event in events:
                 self.sudo()._mailgun_event_process(event, {})
