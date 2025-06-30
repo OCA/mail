@@ -152,7 +152,7 @@ class MailTrackingEmail(models.Model):
         _check_access() for more details about those rules.
         """
         query = super()._search(domain, offset, limit, order)
-        if not self.env.user.has_group("base.group_system"):
+        if not self.env.is_superuser():
             records = self.browse(query)
             allowed_ids = self._get_allowed_ids(records.ids)
             return self.browse(allowed_ids)._as_query(order)
