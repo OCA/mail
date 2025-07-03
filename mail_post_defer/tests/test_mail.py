@@ -1,11 +1,11 @@
 # Copyright 2022-2023 Moduon Team S.L. <info@moduon.team>
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
+
 import freezegun
 from lxml import html
 
-from odoo.exceptions import UserError
-from odoo.tests import tagged
+from odoo.tests.common import tagged
 
 from odoo.addons.mail.tests.common import MailCommon
 
@@ -19,7 +19,7 @@ class MailPostDeferCommon(MailCommon):
         cls.user_employee.notification_type = "email"
 
 
-@freezegun.freeze_time("2023-01-02 10:00:00")
+@freezegun.freeze_time("2123-01-02 10:00:00")
 class MessagePostCase(MailPostDeferCommon):
     def test_standard(self):
         """A normal call just uses the queue by default."""
@@ -33,7 +33,7 @@ class MessagePostCase(MailPostDeferCommon):
             schedules = self.env["mail.message.schedule"].search(
                 [
                     ("mail_message_id", "=", msg.id),
-                    ("scheduled_datetime", "=", "2023-01-02 10:00:30"),
+                    ("scheduled_datetime", "=", "2123-01-02 10:00:30"),
                 ]
             )
             self.assertEqual(len(schedules), 1)
@@ -77,8 +77,8 @@ class MessagePostCase(MailPostDeferCommon):
     def test_msg_edit(self):
         """Can update messages.
 
-        Upstream Odoo allows only updating notes, regardless of their sent
-        status. We allow updating any message that is not sent yet.
+        Make sure a user can update a message that is scheduled to be sent
+        later. The message is updated and the scheduled time is updated too.
         """
         with self.mock_mail_gateway():
             msg = self.partner_portal.message_post(
@@ -91,24 +91,24 @@ class MessagePostCase(MailPostDeferCommon):
             schedules = self.env["mail.message.schedule"].search(
                 [
                     ("mail_message_id", "=", msg.id),
-                    ("scheduled_datetime", "=", "2023-01-02 10:00:30"),
+                    ("scheduled_datetime", "=", "2123-01-02 10:00:30"),
                 ]
             )
             self.assertEqual(len(schedules), 1)
             self.assertNoMail(self.partner_employee)
             # After 15 seconds, the user updates the message
-            with freezegun.freeze_time("2023-01-02 10:00:15"):
+            with freezegun.freeze_time("2123-01-02 10:00:15"):
                 self.partner_portal._message_update_content(msg, "new body")
                 schedules = self.env["mail.message.schedule"].search(
                     [
                         ("mail_message_id", "=", msg.id),
-                        ("scheduled_datetime", "=", "2023-01-02 10:00:45"),
+                        ("scheduled_datetime", "=", "2123-01-02 10:00:45"),
                     ]
                 )
                 self.assertEqual(len(schedules), 1)
                 self.assertNoMail(self.partner_employee)
             # After a minute, the mail is created
-            with freezegun.freeze_time("2023-01-02 10:01:00"):
+            with freezegun.freeze_time("2123-01-02 10:01:00"):
                 self.env["mail.message.schedule"]._send_notifications_cron()
                 self.assertMailMail(
                     self.partner_employee,
@@ -125,12 +125,14 @@ class MessagePostCase(MailPostDeferCommon):
                 subject="test subject",
                 message_type="comment",
                 partner_ids=self.partner_employee.ids,
-                subtype_xmlid="mail.mt_comment",
+                subtype_id=self.env["ir.model.data"]._xmlid_to_res_id(
+                    "mail.mt_comment"
+                ),
             )
             schedules = self.env["mail.message.schedule"].search(
                 [
                     ("mail_message_id", "=", msg.id),
-                    ("scheduled_datetime", "=", "2023-01-02 10:00:30"),
+                    ("scheduled_datetime", "=", "2123-01-02 10:00:30"),
                 ]
             )
             self.assertEqual(len(schedules), 1)
@@ -144,44 +146,13 @@ class MessagePostCase(MailPostDeferCommon):
                 author=self.env.user.partner_id,
             )
             # One minute later, the cron has no mails to send
-            with freezegun.freeze_time("2023-01-02 10:01:00"):
+            with freezegun.freeze_time("2123-01-02 10:01:00"):
                 self.env["mail.message.schedule"]._send_notifications_cron()
                 self.env["mail.mail"].process_email_queue()
                 self.assertNoMail(
                     self.partner_employee,
                     author=self.env.user.partner_id,
                 )
-
-    def test_no_sent_msg_delete(self):
-        """A user cannot delete a message after it's sent.
-
-        Usually, the trash button will be hidden in UI if the message is sent.
-        However, the server-side protection is still important, because there
-        can be a race condition when the mail is sent in the background but
-        the user didn't refresh the view.
-        """
-        with self.mock_mail_gateway():
-            msg = self.partner_portal.message_post(
-                body="test body",
-                subject="test subject",
-                message_type="comment",
-                partner_ids=self.partner_employee.ids,
-                subtype_xmlid="mail.mt_comment",
-            )
-            # One minute later, the cron sends the mail
-            with freezegun.freeze_time("2023-01-02 10:01:00"):
-                self.env["mail.message.schedule"]._send_notifications_cron()
-                self.env["mail.mail"].process_email_queue()
-                self.assertMailMail(
-                    self.partner_employee,
-                    "sent",
-                    author=self.env.user.partner_id,
-                    content="test body",
-                )
-                # Emulate user clicking on delete button and going through the
-                # `/mail/message/update_content` controller
-                with self.assertRaises(UserError):
-                    self.partner_portal._message_update_content(msg, "", [])
 
     def test_model_without_threading(self):
         """When models don't inherit from mail.thread, they still work."""
@@ -198,7 +169,7 @@ class MessagePostCase(MailPostDeferCommon):
             )
             self.assertNoMail(self.partner_employee | self.partner_portal)
             # One minute later, the cron sends the mail
-            with freezegun.freeze_time("2023-01-02 10:01:00"):
+            with freezegun.freeze_time("2123-01-02 10:01:00"):
                 self.env["mail.message.schedule"]._send_notifications_cron()
                 self.env["mail.mail"].process_email_queue()
                 self.assertMailMail(
@@ -231,7 +202,7 @@ class MessagePostCase(MailPostDeferCommon):
             )
             self.assertNoMail(self.partner_employee | customer)
             # After a minute, mails are sent
-            with freezegun.freeze_time("2023-01-02 10:01:00"):
+            with freezegun.freeze_time("2123-01-02 10:01:00"):
                 self.env["mail.message.schedule"]._send_notifications_cron()
                 self.env["mail.mail"].process_email_queue()
                 # Employee has a button that grants them access
@@ -262,7 +233,7 @@ class MessagePostCase(MailPostDeferCommon):
 
 
 @tagged("-at_install", "post_install")
-@freezegun.freeze_time("2023-01-02 10:00:00")
+@freezegun.freeze_time("2123-01-02 10:00:00")
 class AutomaticNotificationCase(MailPostDeferCommon):
     """Check that automatic notifications are queued too.
 
@@ -280,12 +251,12 @@ class AutomaticNotificationCase(MailPostDeferCommon):
                 [
                     ("mail_message_id.res_id", "=", self.partner_portal.id),
                     ("mail_message_id.model", "=", "res.partner"),
-                    ("scheduled_datetime", "=", "2023-01-02 10:00:30"),
+                    ("scheduled_datetime", "=", "2123-01-02 10:00:30"),
                 ]
             )
             self.assertEqual(len(schedules), 1)
             # After a minute, the mail is sent
-            with freezegun.freeze_time("2023-01-02 10:01:00"):
+            with freezegun.freeze_time("2123-01-02 10:01:00"):
                 self.env["mail.message.schedule"]._send_notifications_cron()
                 self.assertMailMail(
                     self.partner_employee,

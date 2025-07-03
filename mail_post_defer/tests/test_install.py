@@ -10,3 +10,6 @@ class InstallationCase(TransactionCase):
         cron = self.env.ref("mail.ir_cron_mail_scheduler_action")
         cadence = cron.interval_number, cron.interval_type
         self.assertEqual(cadence, (1, "minutes"))
+        cron2 = self.env.ref("mail.ir_cron_post_scheduled_message")
+        cadence2 = cron2.interval_number, cron2.interval_type
+        self.assertEqual(cadence2, (1, "minutes"))

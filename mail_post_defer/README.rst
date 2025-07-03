@@ -67,7 +67,10 @@ it is not recommended). To do so:
 2. Activate developer mode.
 3. Go to *Settings > Technical > Automation > Scheduled Actions*.
 4. Edit the action named "Mail: Email Queue Manager".
-5. Lower down the frequency in the field *Execute Every*. Recommended: 1
+5. Lower the frequency in the field *Execute Every*. Recommended: 1
+   minute.
+6. Edit the action named "Mail: Post scheduled messages".
+7. Lower the frequency in the field *Execute Every*. Recommended: 1
    minute.
 
 Usage
@@ -93,10 +96,9 @@ While the message has not been yet sent:
 Known issues / Roadmap
 ======================
 
--  Add minimal deferring time configuration if it ever becomes
-   necessary. See
-   https://github.com/OCA/social/pull/1001#issuecomment-1461581573 for
-   the rationale behind current hardcoded value of 30 seconds.
+- Add minimal deferring time configuration if it ever becomes necessary.
+  See https://github.com/OCA/social/pull/1001#issuecomment-1461581573
+  for the rationale behind current hardcoded value of 30 seconds.
 
 Bug Tracker
 ===========
@@ -119,7 +121,7 @@ Authors
 Contributors
 ------------
 
--  Jairo Llopis (https://www.moduon.team/)
+- Jairo Llopis (https://www.moduon.team/)
 
 Maintainers
 -----------
