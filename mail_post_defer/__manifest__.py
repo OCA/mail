@@ -6,7 +6,7 @@
     "version": "16.0.1.1.2",
     "development_status": "Alpha",
     "category": "Productivity/Discuss",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "author": "Moduon, Odoo Community Association (OCA)",
     "maintainers": ["Yajo"],
     "license": "LGPL-3",
