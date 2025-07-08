@@ -7,10 +7,10 @@
     "author": "Thore Baden, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
     "category": "Social Network",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "depends": ["account", "mail_attach_existing_attachment"],
-    "data": ["wizard/account_move_send_view.xml"],
+    "data": ["wizard/account_move_send_wizard_view.xml"],
     "installable": True,
     "auto_install": True,
 }
