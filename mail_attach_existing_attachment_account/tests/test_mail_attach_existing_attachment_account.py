@@ -25,7 +25,7 @@ class TestMailAttachExistingAttachmentAccount(BaseCommon):
 
     def test_account_invoice_send(self):
         compose = Form(
-            self.env["account.move.send"].with_context(
+            self.env["account.move.send.wizard"].with_context(
                 active_ids=self.invoice.ids,
                 default_model=self.invoice._name,
                 default_res_id=self.invoice.id,
@@ -33,3 +33,7 @@ class TestMailAttachExistingAttachmentAccount(BaseCommon):
             )
         )
         self.assertTrue(compose.can_attach_attachment)
+        wizard = compose.save()
+        self.assertFalse(wizard.display_object_attachment_ids)
+        wizard.move_id = False
+        self.assertFalse(wizard.display_object_attachment_ids)
