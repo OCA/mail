@@ -5,7 +5,7 @@
     "name": "Mail Attach Existing Attachment (Account)",
     "summary": "Module to use attach existing attachment for account module",
     "author": "Thore Baden, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "category": "Social Network",
     "version": "17.0.1.0.0",
     "license": "AGPL-3",
