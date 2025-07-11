@@ -3,7 +3,7 @@
 {
     "name": "Mail suggested recipient unchecked",
     "author": "Tecnativa, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/server-ux",
+    "website": "https://github.com/OCA/mail",
     "version": "18.0.1.0.0",
     "depends": ["mail"],
     "license": "AGPL-3",
