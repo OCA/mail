@@ -115,6 +115,8 @@ Contributors
      - Son Ho <sonhd@trobz.com>
      - Tri Doan <tridm@trobz.com>
 
+- Alberto Nieto alberto.nieto@braintec.com (https://braintec.com)
+
 Other credits
 -------------
 

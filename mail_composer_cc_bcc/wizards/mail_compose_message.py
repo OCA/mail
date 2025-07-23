@@ -55,11 +55,22 @@ class MailComposeMessage(models.TransientModel):
                 and composer.composition_mode == "comment"
                 and not composer.composition_batch
             ):
+                res_ids = composer._evaluate_res_ids() or [0]
+                rendered_values = composer._generate_template_for_composer(
+                    res_ids,
+                    {"email_cc"},
+                    find_or_create_partners=False,
+                )[res_ids[0]]
                 composer._set_partner_ids_from_mails(
-                    composer.template_id.email_cc, "partner_cc_ids"
+                    rendered_values.get("email_cc"), "partner_cc_ids"
                 )
+                rendered_values = composer._generate_template_for_composer(
+                    res_ids,
+                    {"email_bcc"},
+                    find_or_create_partners=False,
+                )[res_ids[0]]
                 composer._set_partner_ids_from_mails(
-                    composer.template_id.email_bcc, "partner_bcc_ids"
+                    rendered_values.get("email_bcc"), "partner_bcc_ids"
                 )
             elif composer.parent_id and composer.composition_mode == "comment":
                 composer.partner_cc_ids = composer.parent_id.partner_cc_ids

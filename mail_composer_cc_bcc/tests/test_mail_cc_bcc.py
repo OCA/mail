@@ -159,6 +159,54 @@ Test Template<br></p>""",
         expecting = self.partner_cc2 + self.partner_bcc
         self.assertEqual(composer.partner_bcc_ids, expecting)
 
+    def test_template_cc_bcc_with_placeholders(self):
+        """Test that template with placeholders for email_cc and email_bcc"""
+        # Add child record to test_record
+        self.test_record.child_ids |= (
+            self.partner_cc + self.partner_cc2 + self.partner_cc3
+        )
+
+        # Partner template values
+        tmpl_model = self.env["ir.model"].search([("model", "=", "res.partner")])
+        vals = {
+            "name": "Product Template: Re: [E-COM11] Cabinet with Doors",
+            "model_id": tmpl_model.id,
+            "subject": "Re: [E-COM11] Cabinet with Doors",
+            "body_html": """<p style="margin:0px 0 12px 0;box-sizing:border-box;">
+Test Template<br></p>""",
+            # Use placeholders
+            "email_cc": "{{ ','.join(object.mapped('child_ids.email')) }}",
+            "email_bcc": "{{ ','.join(object.mapped('child_ids.email')) }}",
+        }
+        partner_tmpl = self.env["mail.template"].create(vals)
+
+        # Open mail composer form and check for default values from company
+        form = self.open_mail_composer_form()
+        composer = form.save()
+
+        form = Form(composer)
+        form.template_id = partner_tmpl
+        composer = form.save()
+        expecting = self.partner_cc + self.partner_cc2 + self.partner_cc3
+
+        self.assertEqual(composer.partner_cc_ids, expecting)
+        self.assertEqual(composer.partner_bcc_ids, expecting)
+        # But not add Marc Demo from cc field to partner_ids field
+        self.assertEqual(len(composer.partner_ids), 1)
+        self.assertEqual(composer.partner_ids.display_name, "Test")
+
+        # Selecting the template again doesn't add as the partners already
+        # in the list
+        form = Form(composer)
+        form.template_id = self.env["mail.template"]
+        form.save()
+        self.assertFalse(form.template_id)  # no template
+
+        form.template_id = partner_tmpl
+        composer = form.save()
+        self.assertEqual(composer.partner_cc_ids, expecting)
+        self.assertEqual(composer.partner_bcc_ids, expecting)
+
     def set_company(self):
         company = self.env.company
         # Company default values
