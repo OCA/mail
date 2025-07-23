@@ -90,10 +90,10 @@ Queue Manager" cron job is executed.
 
 While the message has not been yet sent:
 
-1. Hover over the little envelope. You will see a paper airplane icon,
+1. Click the little envelope. You will see a paper airplane icon,
    indicating it is still outgoing.
-2. Hover over the message and click on the little trash icon to delete
-   it. Mails will not be sent.
+2. Hover over the message and click on *⠇ > 🗑️ Delete*. Mails will not
+   be sent.
 
 Known issues / Roadmap
 ======================

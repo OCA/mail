@@ -42,26 +42,22 @@ class MailThread(models.AbstractModel):
         that they exist but are not sent yet. In those cases, we are still on
         time to update it.
         """
-        try:
-            # If upstream allows editing, we are done
-            return super()._check_can_update_message_content(messages)
-        except UserError:
-            # Repeat upstream checks that are still valid for us
-            if messages.tracking_value_ids:
-                raise
-            if any(message.message_type != "comment" for message in messages):
-                raise
-            # Check that no notification or mail has been sent yet
-            if any(
-                ntf.notification_status == "sent" for ntf in messages.notification_ids
-            ):
-                raise UserError(
-                    _("Cannot modify message; notifications were already sent.")
-                ) from None
-            if any(mail.state in {"sent", "received"} for mail in messages.mail_ids):
-                raise UserError(
-                    _("Cannot modify message; notifications were already sent.")
-                ) from None
+        # Check that no notification or mail has been sent yet
+        if any(ntf.notification_status == "sent" for ntf in messages.notification_ids):
+            raise UserError(
+                _("Cannot modify message; notifications were already sent.")
+            ) from None
+        if any(mail.state in {"sent", "received"} for mail in messages.mail_ids):
+            raise UserError(
+                _("Cannot modify message; notifications were already sent.")
+            ) from None
+
+        # For unsent messages, we're more permissive than the original implementation
+        # Only check the basic restrictions that make sense
+        if any(message.message_type != "comment" for message in messages):
+            raise UserError(
+                _("Only messages type comment can have their content updated")
+            )
 
     def _message_update_content(self, *args, **kwargs):
         """Defer messages by extra 30 seconds after updates."""

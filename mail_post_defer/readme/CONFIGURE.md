@@ -16,5 +16,4 @@ it is not recommended). To do so:
 2.  Activate developer mode.
 3.  Go to *Settings \> Technical \> Automation \> Scheduled Actions*.
 4.  Edit the action named "Mail: Email Queue Manager".
-5.  Lower down the frequency in the field *Execute Every*. Recommended:
-    1 minute.
+5.  Lower down the frequency in the field *Execute Every*. Recommended: 1 minute.
