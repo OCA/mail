@@ -325,9 +325,10 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             ("model", "=", channel._name),
             ("res_id", "=", channel.id),
         ]
-        with RecordCapturer(self.env["mail.message"], message_domain) as capture, patch(
-            "requests.post"
-        ) as post_mock:
+        with (
+            RecordCapturer(self.env["mail.message"], message_domain) as capture,
+            patch("requests.post") as post_mock,
+        ):
             post_mock.return_value = MagicMock()
             composer.action_send_whatsapp()
         self.assertEqual(len(capture.records), 1)
@@ -347,9 +348,10 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             ("model", "=", channel._name),
             ("res_id", "=", channel.id),
         ]
-        with RecordCapturer(self.env["mail.message"], message_domain) as capture, patch(
-            "requests.post"
-        ) as post_mock:
+        with (
+            RecordCapturer(self.env["mail.message"], message_domain) as capture,
+            patch("requests.post") as post_mock,
+        ):
             post_mock.return_value = MagicMock()
             composer.action_send_whatsapp()
         self.assertEqual(len(capture.records), 1)

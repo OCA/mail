@@ -2,7 +2,6 @@
 <!-- Copyright 2022 CreuBlanca
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="whatsapp_composer_form_view">
         <field name="name">whatsapp.composer.form (in mail_gateway_whatsapp)</field>
         <field name="model">whatsapp.composer</field>
@@ -10,7 +9,7 @@
             <form string="Whatsapp Composer">
                 <group>
                     <field name="gateway_id" invisible="not find_gateway" />
-                     <field
+                    <field
                         name="template_id"
                         required="is_required_template"
                         options="{'no_create': True, 'no_open': True}"
@@ -48,6 +47,4 @@
         <field name="context">{}</field>
         <field name="target">new</field>
     </record>
-
-
 </odoo>
