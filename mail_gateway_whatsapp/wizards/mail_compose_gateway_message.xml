@@ -2,7 +2,6 @@
 <!-- Copyright 2024 Tecnativa - Carlos López
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="mail_compose_gateway_message_form_view">
         <field name="model">mail.compose.gateway.message</field>
         <field
