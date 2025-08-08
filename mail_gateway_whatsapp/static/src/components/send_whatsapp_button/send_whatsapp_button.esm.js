@@ -1,13 +1,11 @@
-/** @odoo-module **/
-
 import {useService} from "@web/core/utils/hooks";
 import {_t} from "@web/core/l10n/translation";
-const {Component, status} = owl;
+import {user} from "@web/core/user";
+import {Component, status} from "@odoo/owl";
 
 export class SendWhatsappButton extends Component {
     setup() {
         this.action = useService("action");
-        this.user = useService("user");
         this.title = _t("Send Whatsapp Message");
     }
     get phoneHref() {
@@ -23,7 +21,7 @@ export class SendWhatsappButton extends Component {
                 res_model: "whatsapp.composer",
                 views: [[false, "form"]],
                 context: {
-                    ...this.user.context,
+                    ...user.context,
                     default_res_model: this.props.record.resModel,
                     default_res_id: this.props.record.resId,
                     default_number_field_name: this.props.name,
