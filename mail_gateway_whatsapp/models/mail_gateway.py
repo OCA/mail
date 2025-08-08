@@ -17,7 +17,7 @@ class MailGateway(models.Model):
         selection_add=[("whatsapp", "WhatsApp")], ondelete={"whatsapp": "cascade"}
     )
     whatsapp_from_phone = fields.Char()
-    whatsapp_version = fields.Char(default="15.0")
+    whatsapp_version = fields.Char(default="23.0")
     whatsapp_account_id = fields.Char()
     whatsapp_template_ids = fields.One2many("mail.whatsapp.template", "gateway_id")
     whatsapp_template_count = fields.Integer(compute="_compute_whatsapp_template_count")

@@ -9,8 +9,6 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import ustr
 
-from odoo.addons.http_routing.models.ir_http import slugify
-
 from ..tools.const import supported_languages
 from .mail_gateway import BASE_URL
 
@@ -79,7 +77,7 @@ class MailWhatsAppTemplate(models.Model):
                 template.state == "draft" and not template.template_uid
             ):
                 template.template_name = re.sub(
-                    r"\W+", "_", slugify(template.name or "")
+                    r"\W+", "_", self.env["ir.http"]._slugify(template.name or "")
                 )
 
     def button_back2draft(self):
@@ -96,7 +94,7 @@ class MailWhatsAppTemplate(models.Model):
             payload = self._prepare_values_to_export()
             response = requests.post(
                 template_url,
-                headers={"Authorization": "Bearer %s" % gateway.token},
+                headers={"Authorization": f"Bearer {gateway.token}"},
                 json=payload,
                 timeout=10,
             )
@@ -154,7 +152,7 @@ class MailWhatsAppTemplate(models.Model):
         try:
             response = requests.get(
                 template_url,
-                headers={"Authorization": "Bearer %s" % gateway.token},
+                headers={"Authorization": f"Bearer {gateway.token}"},
                 timeout=10,
             )
             response.raise_for_status()
