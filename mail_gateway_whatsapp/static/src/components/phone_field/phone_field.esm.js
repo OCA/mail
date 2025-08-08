@@ -1,8 +1,7 @@
-/** @odoo-module **/
-
 import {PhoneField} from "@web/views/fields/phone/phone_field";
-import {SendWhatsappButton} from "@mail_gateway_whatsapp/components/send_whatsapp_button/send_whatsapp_button.esm";
+import {SendWhatsappButton} from "../send_whatsapp_button/send_whatsapp_button.esm";
 import {patch} from "@web/core/utils/patch";
+
 patch(PhoneField, {
     components: {
         ...PhoneField.components,

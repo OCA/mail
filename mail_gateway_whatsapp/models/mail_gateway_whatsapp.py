@@ -43,17 +43,12 @@ class MailGatewayWhatsappService(models.AbstractModel):
         signature = request.httprequest.headers.get("x-hub-signature-256")
         if not signature:
             return False
-        if (
-            "sha256=%s"
-            % hmac.new(
-                bot_data["webhook_secret"].encode(),
-                request.httprequest.data,
-                hashlib.sha256,
-            ).hexdigest()
-            != signature
-        ):
-            return False
-        return True
+        hex_dig = hmac.new(
+            bot_data["webhook_secret"].encode(),
+            request.httprequest.data,
+            hashlib.sha256,
+        ).hexdigest()
+        return f"sha256={hex_dig}" == signature
 
     def _get_channel_vals(self, gateway, token, update):
         result = super()._get_channel_vals(gateway, token, update)
@@ -106,7 +101,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                 image_request = requests.get(
                     image_url,
                     headers={
-                        "Authorization": "Bearer %s" % chat.gateway_id.token,
+                        "Authorization": f"Bearer {chat.gateway_id.token}",
                     },
                     timeout=10,
                     proxies=self._get_proxies(),
@@ -178,6 +173,13 @@ class MailGatewayWhatsappService(models.AbstractModel):
                     )
                     self._post_process_reply(related_message)
                     new_message.gateway_message_id = new_related_message
+                    gateway_thread_data = new_message.sudo().gateway_thread_data
+                    new_message._bus_send_store(
+                        new_message,
+                        {
+                            "gateway_thread_data": gateway_thread_data,
+                        },
+                    )
 
     def _send(
         self,

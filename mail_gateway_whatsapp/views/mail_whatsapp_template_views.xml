@@ -4,7 +4,7 @@
         <field name="name">view.mail.whatsapp.template.tree</field>
         <field name="model">mail.whatsapp.template</field>
         <field name="arch" type="xml">
-            <tree decoration-danger="not is_supported and template_uid">
+            <list decoration-danger="not is_supported and template_uid">
                 <field name="name" />
                 <field name="template_name" />
                 <field name="template_uid" optional="show" />
@@ -23,7 +23,7 @@
                     widget="badge"
                 />
                 <field name="is_supported" optional="show" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -130,7 +130,7 @@
         <field name="name">WhatsApp Templates</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">mail.whatsapp.template</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('gateway_id', '=', active_id)]</field>
         <field name="context">{'default_gateway_id': active_id}</field>
     </record>
