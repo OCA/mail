@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -125,7 +125,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/wizards/whatsapp_composer.py:0
-#, python-format
 msgid "Body is required"
 msgstr ""
 
@@ -322,11 +321,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
 msgid "Export Template"
-msgstr ""
-
-#. module: mail_gateway_whatsapp
-#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__failed_message_ids
-msgid "Failed Messages"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -643,18 +637,8 @@ msgid "Message"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
-#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_content
-msgid "Message Content"
-msgstr ""
-
-#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_has_error
 msgid "Message Delivery error"
-msgstr ""
-
-#. module: mail_gateway_whatsapp
-#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_content
-msgid "Message content, to be used only in searches"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -670,7 +654,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_gateway_whatsapp.py:0
-#, python-format
 msgid "Mimetype is not valid"
 msgstr ""
 
@@ -760,7 +743,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_thread.py:0
-#, python-format
 msgid "Phone cannot be sanitized"
 msgstr ""
 
@@ -850,7 +832,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mail_gateway_whatsapp/static/src/components/send_whatsapp_button/send_whatsapp_button.esm.js:0
 #: model:ir.actions.act_window,name:mail_gateway_whatsapp.whatsapp_composer_act_window
-#, python-format
 msgid "Send Whatsapp Message"
 msgstr ""
 
@@ -930,7 +911,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
-#, python-format
 msgid "Synchronization successfully."
 msgstr ""
 
@@ -989,7 +969,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_gateway_whatsapp.py:0
-#, python-format
 msgid "Unable to send the whatsapp message"
 msgstr ""
 
@@ -1021,18 +1000,7 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
-#, python-format
 msgid "WathsApp Templates"
-msgstr ""
-
-#. module: mail_gateway_whatsapp
-#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__website_message_ids
-msgid "Website Messages"
-msgstr ""
-
-#. module: mail_gateway_whatsapp
-#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__website_message_ids
-msgid "Website communication history"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -1043,7 +1011,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
-#, python-format
 msgid "WhatsApp Account is required to import templates."
 msgstr ""
 
@@ -1055,7 +1022,6 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #. odoo-javascript
 #: code:addons/mail_gateway_whatsapp/static/src/components/send_whatsapp_button/send_whatsapp_button.xml:0
-#, python-format
 msgid "Whatsapp"
 msgstr ""
 
