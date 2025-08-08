@@ -157,14 +157,12 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         data = json.dumps(message)
         headers_dict = {"Content-Type": "application/json"}
         if headers:
-            headers_dict["x-hub-signature-256"] = (
-                "sha256=%s"
-                % hmac.new(
-                    self.gateway.webhook_secret.encode(),
-                    data.encode(),
-                    hashlib.sha256,
-                ).hexdigest()
-            )
+            hex_dig = hmac.new(
+                self.gateway.webhook_secret.encode(),
+                data.encode(),
+                hashlib.sha256,
+            ).hexdigest()
+            headers_dict["x-hub-signature-256"] = f"sha256={hex_dig}"
         self.url_open(
             f"/gateway/{self.gateway.gateway_type}/{webhook}/update",
             data=data,
@@ -209,6 +207,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             get_mock.return_value = GetImageResponse()
             self.receive_message(self.message_02)
 
+    @mute_logger("odoo.addons.mail_gateway.controllers.gateway")
     def test_post_no_signature_no_message(self):
         self.gateway.webhook_key = self.webhook
         self.gateway.set_webhook()
@@ -218,21 +217,20 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             self.env["discuss.channel"].search([("gateway_id", "=", self.gateway.id)])
         )
 
+    @mute_logger("odoo.addons.mail_gateway.controllers.gateway")
     def test_post_wrong_signature_no_message(self):
         self.gateway.webhook_key = self.webhook
         self.gateway.set_webhook()
         self.integrate_webhook()
         data = json.dumps(self.message_01)
+        hex_dig = hmac.new(
+            self.gateway.webhook_secret.encode(),
+            data.encode(),
+            hashlib.sha256,
+        ).hexdigest()
         headers = {
             "Content-Type": "application/json",
-            "x-hub-signature-256": (
-                "sha256=1234%s"
-                % hmac.new(
-                    self.gateway.webhook_secret.encode(),
-                    data.encode(),
-                    hashlib.sha256,
-                ).hexdigest()
-            ),
+            "x-hub-signature-256": f"sha256=1234{hex_dig}",
         }
         self.url_open(
             f"/gateway/{self.gateway.gateway_type}/{self.webhook}/update",
