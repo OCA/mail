@@ -1,0 +1,24 @@
+<odoo>
+    <record id="view_signature_template_preview_form" model="ir.ui.view">
+        <field name="name">signature.template.preview.form</field>
+        <field name="model">signature.template.preview</field>
+        <field name="arch" type="xml">
+            <form string="Signature Preview">
+                <group>
+                    <field name="user_id" options="{'no_create': True}" />
+                    <field name="template_id" options="{'no_create': True}" />
+                </group>
+                <separator string="Signature Preview" />
+                <div
+                    class="mt-3 mb-3"
+                    style="border: 1px solid #dee2e6; padding: 20px; background-color: #f8f9fa;"
+                >
+                    <field name="preview_html" widget="html" readonly="1" nolabel="1" />
+                </div>
+                <footer>
+                    <button string="Close" class="btn-primary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

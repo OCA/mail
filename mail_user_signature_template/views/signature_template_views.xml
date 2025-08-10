@@ -1,0 +1,373 @@
+<odoo>
+    <!-- List View -->
+    <record id="view_signature_template_list" model="ir.ui.view">
+        <field name="name">signature.template.list</field>
+        <field name="model">signature.template</field>
+        <field name="arch" type="xml">
+            <list string="Signature Templates">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="user_count" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_signature_template_form" model="ir.ui.view">
+        <field name="name">signature.template.form</field>
+        <field name="model">signature.template</field>
+        <field name="arch" type="xml">
+            <form string="Signature Template">
+                <header>
+                    <button
+                        name="action_preview"
+                        type="object"
+                        string="Preview"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_check_sanitization"
+                        type="object"
+                        string="Check Template"
+                        class="btn-secondary"
+                        help="Check if template contains styles that will be removed by email sanitization"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_users"
+                            icon="fa-users"
+                        >
+                            <field string="Users" name="user_count" widget="statinfo" />
+                        </button>
+                    </div>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        invisible="active"
+                    />
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field
+                                name="name"
+                                placeholder="e.g. Professional Signature"
+                            />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                            <field name="active" invisible="1" />
+                            <field name="sequence" />
+                        </group>
+                        <group>
+                            <field name="description" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Template" name="template">
+                            <group>
+                                <group
+                                    string="Logo Settings"
+                                    invisible="not include_company_logo"
+                                >
+                                    <field name="include_company_logo" />
+                                    <field
+                                        name="logo_position"
+                                        invisible="not include_company_logo"
+                                    />
+                                    <field
+                                        name="logo_max_width"
+                                        invisible="not include_company_logo"
+                                    />
+                                </group>
+                                <group string="Color Settings">
+                                    <field name="use_company_colors" />
+                                    <field
+                                        name="primary_color"
+                                        widget="color"
+                                        invisible="use_company_colors"
+                                    />
+                                    <field
+                                        name="secondary_color"
+                                        widget="color"
+                                        invisible="use_company_colors"
+                                    />
+                                    <div
+                                        class="alert alert-info"
+                                        role="alert"
+                                        invisible="not use_company_colors"
+                                    >
+                                        <i
+                                        class="fa fa-info-circle"
+                                    /> This template will use the company's email template colors (Header and Button colors).
+                                        You can configure these in Settings → General Settings → Discuss section.
+                                    </div>
+                                </group>
+                            </group>
+                            <group string="UTM Tracking">
+                                <group>
+                                    <field name="use_utm_tracking" />
+                                    <field
+                                        name="utm_source_id"
+                                        invisible="not use_utm_tracking"
+                                        context="{'default_name': 'email-signature'}"
+                                    />
+                                    <field
+                                        name="utm_medium_id"
+                                        invisible="not use_utm_tracking"
+                                        context="{'default_name': 'email'}"
+                                    />
+                                    <field
+                                        name="utm_campaign_id"
+                                        invisible="not use_utm_tracking"
+                                    />
+                                </group>
+                                <div
+                                    class="alert alert-info"
+                                    role="alert"
+                                    invisible="not use_utm_tracking"
+                                >
+                                    <i
+                                    class="fa fa-info-circle"
+                                /> UTM tracking will be added to the website URL in signatures.
+                                    User ID will be included as utm_content for detailed tracking.
+                                </div>
+                            </group>
+                            <separator string="Template Content" />
+                            <field
+                                name="body_html"
+                                widget="code"
+                                options="{'mode': 'xml'}"
+                            />
+                        </page>
+                        <page string="Preview" name="preview">
+                            <div class="alert alert-info" role="alert">
+                                <i
+                                class="fa fa-info-circle"
+                            /> This preview shows how the signature will look with your user data.
+                            </div>
+                            <group string="Original Preview">
+                                <field
+                                    name="preview_html"
+                                    readonly="1"
+                                    widget="html"
+                                    nolabel="1"
+                                />
+                            </group>
+                            <separator string="After Email Sanitization" />
+                            <div
+                                class="alert alert-warning"
+                                role="alert"
+                                invisible="preview_html == preview_html_sanitized"
+                            >
+                                <i
+                                class="fa fa-exclamation-triangle"
+                            /> The signature will be modified during email sending. Compare the versions below.
+                            </div>
+                            <group string="Sanitized Preview">
+                                <field
+                                    name="preview_html_sanitized"
+                                    readonly="1"
+                                    widget="html"
+                                    nolabel="1"
+                                />
+                            </group>
+                        </page>
+                        <page string="Help" name="help">
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <h3>Available Placeholders</h3>
+                                    <p
+                                    >Use these placeholders in your template to insert user data:</p>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Placeholder</th>
+                                                <th>Description</th>
+                                                <th>Example</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <code>&lt;t t-out="name"/&gt;</code>
+                                                </td>
+                                                <td>User's display name</td>
+                                                <td>John Doe</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="email"/&gt;</code>
+                                                </td>
+                                                <td>User's email address</td>
+                                                <td>john.doe@example.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="phone"/&gt;</code>
+                                                </td>
+                                                <td>User's phone number</td>
+                                                <td>+1 555 123 4567</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="mobile"/&gt;</code>
+                                                </td>
+                                                <td>User's mobile number</td>
+                                                <td>+1 555 987 6543</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="function"/&gt;</code>
+                                                </td>
+                                                <td>User's job position</td>
+                                                <td>Sales Manager</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="company_name"/&gt;</code>
+                                                </td>
+                                                <td>Company name</td>
+                                                <td>Your Company</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="website"/&gt;</code>
+                                                </td>
+                                                <td>Company website</td>
+                                                <td>www.example.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="website_url"/&gt;</code>
+                                                </td>
+                                                <td>Website URL with UTM</td>
+                                                <td
+                                                >https://example.com?utm_source=...</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="company_email"/&gt;</code>
+                                                </td>
+                                                <td>Company email</td>
+                                                <td>info@example.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="company_phone"/&gt;</code>
+                                                </td>
+                                                <td>Company phone</td>
+                                                <td>+1 555 000 1111</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="company_logo"/&gt;</code>
+                                                </td>
+                                                <td>Company logo image</td>
+                                                <td>(Logo image)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <code
+                                                    >&lt;t t-out="user_image"/&gt;</code>
+                                                </td>
+                                                <td>User avatar image</td>
+                                                <td>(User avatar)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_signature_template_search" model="ir.ui.view">
+        <field name="name">signature.template.search</field>
+        <field name="model">signature.template</field>
+        <field name="arch" type="xml">
+            <search string="Search Signature Templates">
+                <field name="name" />
+                <field name="description" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <separator />
+                <filter
+                    string="Active"
+                    name="active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    string="Archived"
+                    name="inactive"
+                    domain="[('active', '=', False)]"
+                />
+                <separator />
+                <filter
+                    string="With Logo"
+                    name="with_logo"
+                    domain="[('include_company_logo', '=', True)]"
+                />
+                <separator />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Company"
+                        name="company"
+                        context="{'group_by':'company_id'}"
+                        groups="base.group_multi_company"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_signature_template" model="ir.actions.act_window">
+        <field name="name">Signature Templates</field>
+        <field name="res_model">signature.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_signature_template_search" />
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first signature template
+            </p>
+            <p>
+                Signature templates allow you to maintain consistent, professional email signatures across your organization.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_signature_template"
+        name="Signature Templates"
+        parent="base.menu_email"
+        action="action_signature_template"
+        sequence="30"
+    />
+</odoo>

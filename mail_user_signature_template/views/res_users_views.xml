@@ -1,0 +1,141 @@
+<odoo>
+    <!-- Inherit Users Form View -->
+    <record id="view_users_form_inherit_signature_template" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.signature.template</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Replace the signature field with our enhanced version -->
+            <xpath expr="//field[@name='signature']" position="replace">
+                <group string="Email Signature" name="signature_group">
+                    <field
+                        name="use_signature_template"
+                        invisible="not company_id.use_signature_templates"
+                    />
+                    <field
+                        name="signature_template_id"
+                        invisible="not use_signature_template or not company_id.use_signature_templates"
+                        context="{'default_company_id': company_id}"
+                        options="{'no_create': True}"
+                    />
+                    <button
+                        name="action_preview_signature"
+                        type="object"
+                        string="Preview Signature"
+                        class="btn-link"
+                        invisible="not use_signature_template or not signature_template_id"
+                    />
+                    <field
+                        name="signature"
+                        widget="html"
+                        invisible="use_signature_template and company_id.use_signature_templates"
+                        placeholder="Type your custom signature here..."
+                        readonly="use_signature_template"
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Users Preferences View -->
+    <record
+        id="view_users_form_simple_modif_inherit_signature_template"
+        model="ir.ui.view"
+    >
+        <field name="name">res.users.preferences.form.inherit.signature.template</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Replace the signature field in preferences -->
+            <xpath expr="//field[@name='signature']" position="replace">
+                <separator string="Email Signature" />
+                <field name="company_id" invisible="1" />
+                <group>
+                    <field
+                        name="use_signature_template"
+                        invisible="not company_id.use_signature_templates or company_id.force_signature_template"
+                    />
+                    <div
+                        class="text-muted small"
+                        invisible="not company_id.force_signature_template"
+                    >
+                        <i
+                        class="fa fa-info-circle"
+                    /> Your company requires using a signature template.
+                    </div>
+                    <field
+                        name="signature_template_id"
+                        invisible="not use_signature_template or not company_id.use_signature_templates"
+                        readonly="company_id.force_signature_template"
+                        context="{'default_company_id': company_id}"
+                        options="{'no_create': True}"
+                    />
+                </group>
+                <group
+                    string="Current Signature Preview"
+                    invisible="not use_signature_template or not signature_template_id"
+                    colspan="2"
+                >
+                    <field name="signature" readonly="1" widget="html" nolabel="1" />
+                </group>
+                <field
+                    name="signature"
+                    widget="html"
+                    readonly="use_signature_template or company_id.force_signature_template"
+                    invisible="use_signature_template and company_id.use_signature_templates"
+                    placeholder="Type your custom signature here..."
+                    nolabel="1"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- List View to show signature template usage -->
+    <record id="view_users_list_signature_template" model="ir.ui.view">
+        <field name="name">res.users.list.signature.template</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree" />
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="signature_template_id" optional="hide" />
+                <field
+                    name="use_signature_template"
+                    widget="boolean_toggle"
+                    optional="hide"
+                />
+            </field>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_users_search_signature_template" model="ir.ui.view">
+        <field name="name">res.users.search.signature.template</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_search" />
+        <field name="arch" type="xml">
+            <filter name="Inactive" position="after">
+                <separator />
+                <filter
+                    string="Using Signature Template"
+                    name="using_template"
+                    domain="[('use_signature_template', '=', True)]"
+                />
+                <filter
+                    string="Custom Signature"
+                    name="custom_signature"
+                    domain="[('use_signature_template', '=', False)]"
+                />
+            </filter>
+            <field name="share" position="after">
+                <separator />
+                <filter
+                    string="Group by Signature Template"
+                    name="group_signature_template"
+                    context="{'group_by': 'signature_template_id'}"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>

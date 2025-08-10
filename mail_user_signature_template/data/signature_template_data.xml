@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="signature_template_professional" model="signature.template">
+        <field name="name">Professional</field>
+        <field name="description">Clean and professional signature template</field>
+        <field name="sequence">10</field>
+        <field name="include_company_logo">True</field>
+        <field name="logo_position">left</field>
+        <field name="logo_max_width">120</field>
+        <field name="use_company_colors">True</field>
+        <field name="use_utm_tracking">True</field>
+        <field name="body_html" type="html">
+            <table
+                cellpadding="0"
+                cellspacing="0"
+                style="font-family: Arial, sans-serif; font-size: 14px; color: #333333; border-collapse: collapse"
+            >
+                <tr>
+                    <td style="padding-right: 20px; vertical-align: top">
+                        <t t-out="company_logo" />
+                    </td>
+                    <td style="vertical-align: top">
+                        <div style="margin-bottom: 8px">
+                            <strong style="font-size: 16px; color: #333333">
+                                <t t-out="name" />
+                            </strong>
+                            <br />
+                            <span style="color: #666666; font-size: 14px">
+                                <t t-out="function" />
+                            </span>
+                        </div>
+                        <div style="margin-bottom: 8px">
+                            <strong style="color: #333333">
+                                <t t-out="company_name" />
+                            </strong>
+                        </div>
+                        <div style="font-size: 13px; color: #666666; line-height: 1.4">
+                            <a
+                                t-att-href="'mailto:' + email"
+                                t-att-style="'color: ' + primary_color + '; text-decoration: none'"
+                            >
+                                <t t-out="email" />
+                            </a>
+                            <br />
+                            <t t-if="phone">
+                                <span>Phone: <t t-out="phone" /></span>
+                                <br />
+                            </t>
+                            <t t-if="mobile">
+                                <span>Mobile: <t t-out="mobile" /></span>
+                                <br />
+                            </t>
+                            <t t-if="website_url">
+                                <a
+                                    t-att-href="website_url"
+                                    t-att-style="'color: ' + primary_color + '; text-decoration: none'"
+                                >
+                                    <t t-out="website" />
+                                </a>
+                            </t>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="signature_template_minimal" model="signature.template">
+        <field name="name">Minimal</field>
+        <field name="description">Simple text-only signature</field>
+        <field name="sequence">20</field>
+        <field name="include_company_logo">False</field>
+        <field name="use_utm_tracking">True</field>
+        <field name="body_html" type="html">
+            <div
+                style="font-family: Arial, sans-serif; font-size: 14px; color: #333333"
+            >
+                <div>--</div>
+                <div style="margin-top: 8px">
+                    <strong>
+                        <t t-out="name" />
+                    </strong>
+                    <br />
+                    <t t-out="function" />
+                    <br />
+                    <t t-out="company_name" />
+                    <br />
+                    <a t-att-href="'mailto:' + email" style="color: #0066cc">
+                        <t t-out="email" />
+                    </a>
+                    <br />
+                    <t t-if="phone">
+                        <t t-out="phone" />
+                    </t>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <record id="signature_template_minimalist_personal" model="signature.template">
+        <field name="name">Minimalist Personal Brand</field>
+        <field
+            name="description"
+        >Clean signature with vertical divider and user photo</field>
+        <field name="sequence">15</field>
+        <field name="include_company_logo">False</field>
+        <field name="use_utm_tracking">True</field>
+        <field name="body_html" type="html">
+            <table
+                style="width: 500px; font-size: 9pt; font-family: Arial, sans-serif"
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+            >
+                <tbody>
+                    <tr>
+                        <t t-if="user_image_large">
+                            <td
+                                t-att-style="'width: 143px; vertical-align: top; padding-top: 5px; border-right-width: 1px; border-right-style: solid; border-right-color: ' + secondary_color"
+                                valign="top"
+                            >
+                                <t t-out="user_image_large" />
+                            </td>
+                            <td style="width: 26px" />
+                        </t>
+                        <td style="width: 331px">
+                            <span
+                                style="font-size: 10pt; font-family: Arial, sans-serif; color:#000000; font-weight: bold"
+                            >
+                                <t t-out="name" />
+                                <br />
+                            </span>
+                            <t t-if="function">
+                                <span
+                                    style="font-family: Arial, sans-serif; font-size: 9pt; line-height: 16px; color:#846d53"
+                                >
+                                    <t t-out="function" />
+                                    <br />
+                                </span>
+                            </t>
+
+                            <p
+                                style="padding-top: 18px; padding-bottom: 0px; margin: 0px; font-size: 9pt; line-height: 16px"
+                            >
+                                <t t-if="phone">
+                                    <span
+                                        style="font-size: 9pt; line-height: 16px; color:#846d53"
+                                    >
+                                        <strong>P:</strong>
+                                        <span style="color:#846d53">
+                                            <t t-out="phone" />
+                                        </span>
+                                        <t t-if="mobile"> | </t>
+                                    </span>
+                                </t>
+                                <t t-if="mobile">
+                                    <span
+                                        style="font-size: 9pt; line-height: 16px; color:#846d53"
+                                    >
+                                        <strong>M:</strong>
+                                        <span style="color:#846d53">
+                                            <t t-out="mobile" />
+                                        </span>
+                                    </span>
+                                </t>
+
+                                <t t-if="email or website">
+                                    <span style="line-height: 16px">
+                                        <br />
+                                    </span>
+                                </t>
+
+                                <t t-if="email">
+                                    <span
+                                        style="font-family: Arial, sans-serif; font-size: 9pt; line-height: 16px; color:#846d53"
+                                    >
+                                        <strong>E:</strong>
+                                        <a
+                                            t-att-href="'mailto:' + email"
+                                            style="font-size: 9pt; color:#846d53; text-decoration: none"
+                                        >
+                                            <span
+                                                style="text-decoration: none; font-size: 9pt; line-height: 16px; color:#846d53; font-family: Arial, sans-serif"
+                                            >
+                                                <t t-out="email" />
+                                            </span>
+                                        </a>
+                                        <t t-if="website"> | </t>
+                                    </span>
+                                </t>
+
+                                <t t-if="website_url">
+                                    <span
+                                        style="padding: 0px; margin-top: 10px; margin-bottom: 0px"
+                                    >
+                                        <a
+                                            t-att-href="website_url"
+                                            target="_blank"
+                                            rel="noopener"
+                                            style="font-family: Arial, sans-serif; font-size: 9pt; color: #846d53 !important; text-decoration:none !important"
+                                        >
+                                            <span
+                                                style="font-family: Arial, sans-serif; font-size: 9pt; color: #846d53 !important; text-decoration:none !important"
+                                            >
+                                                <t t-out="website" />
+                                            </span>
+                                        </a>
+                                    </span>
+                                </t>
+
+                                <br />
+                                <br />
+
+                                <span
+                                    style="font-family: Arial, sans-serif; font-size: 9pt; line-height: 16px; color:#846d53"
+                                >
+                                    <t t-out="company_name" />
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </field>
+    </record>
+
+    <record id="signature_template_modern" model="signature.template">
+        <field name="name">Modern with Avatar</field>
+        <field
+            name="description"
+        >Contemporary signature with user avatar and company logo</field>
+        <field name="sequence">25</field>
+        <field name="include_company_logo">True</field>
+        <field name="logo_position">left</field>
+        <field name="logo_max_width">100</field>
+        <field name="use_utm_tracking">True</field>
+        <field name="body_html" type="html">
+            <table style="font-family: Arial, sans-serif; font-size: 14px; color: #333">
+                <tr>
+                    <td style="padding-right: 15px; vertical-align: top">
+                        <t t-out="user_image" />
+                    </td>
+                    <td style="vertical-align: top">
+                        <div style="margin-bottom: 8px">
+                            <strong style="font-size: 16px">
+                                <t t-out="name" />
+                            </strong>
+                            <br />
+                            <t t-if="function">
+                                <span style="color: #666">
+                                    <t t-out="function" />
+                                </span>
+                            </t>
+                        </div>
+                        <div style="font-size: 13px; color: #666; margin-bottom: 8px">
+                            <t t-if="email">
+                                <a
+                                    t-att-href="'mailto:' + email"
+                                    t-att-style="'color: ' + primary_color + '; text-decoration: none'"
+                                >
+                                    <t t-out="email" />
+                                </a>
+                            </t>
+                            <t t-if="phone">
+                                <span style="margin: 0 5px">|</span>
+                                <t t-out="phone" />
+                            </t>
+                        </div>
+                        <div
+                            style="margin-top: 10px; padding-top: 10px; border-top-width: 1px; border-top-style: solid; border-top-color: #ddd"
+                        >
+                            <table>
+                                <tr>
+                                    <td style="padding-right: 15px">
+                                        <t t-out="company_logo" />
+                                    </td>
+                                    <td style="vertical-align: middle">
+                                        <div style="font-size: 12px; color: #999">
+                                            <t t-out="company_name" />
+                                            <br />
+                                            <t t-if="website_url">
+                                                <a
+                                                    t-att-href="website_url"
+                                                    style="color: #999; text-decoration: none"
+                                                >
+                                                    <t t-out="website" />
+                                                </a>
+                                            </t>
+                                            <t
+                                                t-if="social_twitter or social_facebook or social_linkedin or social_instagram"
+                                            >
+                                                <div style="margin-top: 8px">
+                                                    <t t-if="social_twitter">
+                                                        <a
+                                                            t-att-href="social_twitter"
+                                                            style="text-decoration: none; margin-right: 8px"
+                                                        >
+                                                            <span
+                                                                style="color: #1DA1F2"
+                                                            >X</span>
+                                                        </a>
+                                                    </t>
+                                                    <t t-if="social_facebook">
+                                                        <a
+                                                            t-att-href="social_facebook"
+                                                            style="text-decoration: none; margin-right: 8px"
+                                                        >
+                                                            <span
+                                                                style="color: #1877F2"
+                                                            >f</span>
+                                                        </a>
+                                                    </t>
+                                                    <t t-if="social_linkedin">
+                                                        <a
+                                                            t-att-href="social_linkedin"
+                                                            style="text-decoration: none; margin-right: 8px"
+                                                        >
+                                                            <span
+                                                                style="color: #0A66C2"
+                                                            >in</span>
+                                                        </a>
+                                                    </t>
+                                                    <t t-if="social_instagram">
+                                                        <a
+                                                            t-att-href="social_instagram"
+                                                            style="text-decoration: none"
+                                                        >
+                                                            <span
+                                                                style="color: #E4405F"
+                                                            >IG</span>
+                                                        </a>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="signature_template_corporate" model="signature.template">
+        <field name="name">Corporate</field>
+        <field
+            name="description"
+        >Formal corporate signature with full contact details</field>
+        <field name="sequence">30</field>
+        <field name="include_company_logo">True</field>
+        <field name="logo_position">top</field>
+        <field name="logo_max_width">200</field>
+        <field name="use_utm_tracking">True</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; color: #333333">
+                <div style="margin-bottom: 15px">
+                    <t t-out="company_logo" />
+                </div>
+                <div
+                    t-att-style="'border-left-width: 3px; border-left-style: solid; border-left-color: ' + primary_color + '; padding-left: 15px'"
+                >
+                    <h3 style="margin: 0 0 5px 0; font-size: 18px; color: #333333">
+                        <t t-out="name" />
+                    </h3>
+                    <p style="margin: 0 0 10px 0; color: #666666; font-size: 14px">
+                        <t t-out="function" />
+                    </p>
+                    <table style="font-size: 13px; color: #666666">
+                        <tr>
+                            <td
+                                style="color: #999999; padding-right: 10px"
+                            >Company:</td>
+                            <td style="color: #333333">
+                                <t t-out="company_name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: #999999; padding-right: 10px">Email:</td>
+                            <td>
+                                <a
+                                    t-att-href="'mailto:' + email"
+                                    t-att-style="'color: ' + primary_color + '; text-decoration: none'"
+                                >
+                                    <t t-out="email" />
+                                </a>
+                            </td>
+                        </tr>
+                        <t t-if="phone">
+                            <tr>
+                                <td
+                                    style="color: #999999; padding-right: 10px"
+                                >Phone:</td>
+                                <td style="color: #333333">
+                                    <t t-out="phone" />
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-if="mobile">
+                            <tr>
+                                <td
+                                    style="color: #999999; padding-right: 10px"
+                                >Mobile:</td>
+                                <td style="color: #333333">
+                                    <t t-out="mobile" />
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-if="website_url">
+                            <tr>
+                                <td
+                                    style="color: #999999; padding-right: 10px"
+                                >Website:</td>
+                                <td>
+                                    <a
+                                        t-att-href="website_url"
+                                        t-att-style="'color: ' + primary_color + '; text-decoration: none'"
+                                    >
+                                        <t t-out="website" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <record id="signature_template_playful" model="signature.template">
+        <field name="name">Playful &amp; Friendly</field>
+        <field
+            name="description"
+        >Fun signature with round avatar and colorful elements</field>
+        <field name="sequence">35</field>
+        <field name="include_company_logo">True</field>
+        <field name="logo_position">right</field>
+        <field name="logo_max_width">80</field>
+        <field name="use_utm_tracking">True</field>
+        <field name="primary_color">#FF6B6B</field>
+        <field name="secondary_color">#4ECDC4</field>
+        <field name="body_html" type="html">
+            <table
+                cellpadding="0"
+                cellspacing="0"
+                style="font-family: Arial, sans-serif"
+            >
+                <tr>
+                    <td style="padding-right: 15px; vertical-align: middle">
+                        <!-- Fun circular avatar with colorful border -->
+                        <div style="position: relative; display: inline-block">
+                            <div
+                                t-att-style="'background-color: ' + primary_color + '; padding: 3px; border-radius: 50%; display: inline-block'"
+                            >
+                                <t t-out="user_image_round" />
+                            </div>
+                        </div>
+                    </td>
+                    <td style="vertical-align: middle">
+                        <div style="margin-bottom: 10px">
+                            <span style="font-size: 20px; font-weight: bold">Hi, I'm <t
+                                t-out="name"
+                            />!</span>
+                            <br />
+                            <t t-if="function">
+                                <span
+                                    t-att-style="'font-size: 14px; color: ' + primary_color + '; font-style: italic'"
+                                >
+                                    <t t-out="function" /> extraordinaire </span>
+                            </t>
+                        </div>
+
+                        <div
+                            style="background-color: #f8f9fa; border-radius: 15px; padding: 10px; display: inline-block"
+                        >
+                            <table
+                                cellpadding="0"
+                                cellspacing="0"
+                                style="font-size: 13px"
+                            >
+                                <tr>
+                                    <td style="padding-right: 5px">Email:</td>
+                                    <td>
+                                        <a
+                                            t-att-href="'mailto:' + email"
+                                            t-att-style="'color: ' + primary_color + '; text-decoration: none; font-weight: bold'"
+                                        >
+                                            <t t-out="email" />
+                                        </a>
+                                    </td>
+                                </tr>
+                                <t t-if="phone">
+                                    <tr>
+                                        <td style="padding-right: 5px">Phone:</td>
+                                        <td style="color: #666">
+                                            <t t-out="phone" />
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="website_url">
+                                    <tr>
+                                        <td style="padding-right: 5px">Web:</td>
+                                        <td>
+                                            <a
+                                                t-att-href="website_url"
+                                                t-att-style="'color: ' + secondary_color + '; text-decoration: none'"
+                                            >
+                                                <t t-out="website" />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+
+                        <div style="margin-top: 10px">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="vertical-align: middle">
+                                        <span
+                                            style="font-size: 12px; color: #999"
+                                        >Powered by</span>
+                                    </td>
+                                    <td style="padding-left: 10px">
+                                        <t t-out="company_logo" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <t t-if="social_twitter or social_linkedin or social_instagram">
+                            <div style="margin-top: 10px">
+                                <span
+                                    style="font-size: 12px; color: #999"
+                                >Let's connect!</span>
+                                <div style="margin-top: 5px">
+                                    <t t-if="social_twitter">
+                                        <a
+                                            t-att-href="social_twitter"
+                                            style="text-decoration: none; margin-right: 10px; font-size: 20px"
+                                        >
+                                            <span>[X]</span>
+                                        </a>
+                                    </t>
+                                    <t t-if="social_linkedin">
+                                        <a
+                                            t-att-href="social_linkedin"
+                                            style="text-decoration: none; margin-right: 10px; font-size: 20px"
+                                        >
+                                            <span>[in]</span>
+                                        </a>
+                                    </t>
+                                    <t t-if="social_instagram">
+                                        <a
+                                            t-att-href="social_instagram"
+                                            style="text-decoration: none; margin-right: 10px; font-size: 20px"
+                                        >
+                                            <span>[IG]</span>
+                                        </a>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+</odoo>

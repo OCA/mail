@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_signature_sanitization_check_form" model="ir.ui.view">
+        <field name="name">signature.sanitization.check.form</field>
+        <field name="model">signature.sanitization.check</field>
+        <field name="arch" type="xml">
+            <form string="Sanitization Check Results">
+                <sheet>
+                    <group>
+                        <field name="template_name" />
+                        <field name="has_issues" invisible="1" />
+                    </group>
+                    <notebook>
+                        <page string="Summary" name="report">
+                            <div class="oe_form_sheet_width">
+                                <field
+                                    name="report_html"
+                                    widget="html"
+                                    readonly="1"
+                                    options="{'no_edit': True}"
+                                    nolabel="1"
+                                />
+                            </div>
+                        </page>
+                        <page
+                            string="Visual Comparison"
+                            name="comparison"
+                            invisible="not has_issues"
+                        >
+                            <div class="alert alert-info" role="alert">
+                                <i
+                                class="fa fa-info-circle"
+                            /> Lines with changes are highlighted. Removed content is shown in red, added content in green.
+                            </div>
+                            <field
+                                name="diff_html"
+                                widget="html"
+                                readonly="1"
+                                nolabel="1"
+                                style="overflow-x: auto;"
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-primary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

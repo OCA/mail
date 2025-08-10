@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- Default UTM Source for email signatures -->
+    <record id="utm_source_email_signature" model="utm.source">
+        <field name="name">email-signature</field>
+    </record>
+</odoo>

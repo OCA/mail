@@ -1,0 +1,6 @@
+-   Add support for template variables from hr.employee model
+-   Implement template inheritance for multi-level customization
+-   Add signature template scheduling (e.g., holiday signatures)
+-   Support for multiple signatures per user (contextual selection)
+-   Integration with email marketing campaigns
+-   Add support for social media links and icons

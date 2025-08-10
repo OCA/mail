@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="signature_template_creative_demo" model="signature.template">
+        <field name="name">Creative</field>
+        <field name="description">Modern creative signature with social links</field>
+        <field name="sequence">40</field>
+        <field name="include_company_logo">True</field>
+        <field name="logo_position">right</field>
+        <field name="logo_max_width">120</field>
+        <field name="body_html" type="html">
+            <table
+                cellpadding="0"
+                cellspacing="0"
+                style="font-family: 'Segoe UI', Arial, sans-serif;"
+            >
+                <tr>
+                    <td style="vertical-align: middle; padding-right: 20px;">
+                        <div
+                            t-att-style="'border-left: 4px solid ' + secondary_color + '; padding-left: 15px;'"
+                        >
+                            <h2
+                                t-att-style="'margin: 0 0 5px 0; font-size: 20px; color: ' + primary_color + ';'"
+                            >
+                                <t t-out="name" />
+                            </h2>
+                            <p
+                                style="margin: 0 0 10px 0; font-size: 15px; color: #666666; font-style: italic;"
+                            >
+                                <t t-out="function" />
+                            </p>
+                            <p style="margin: 0 0 15px 0; font-size: 14px;">
+                                <strong>
+                                    <t t-out="company_name" />
+                                </strong>
+                            </p>
+                            <p style="margin: 0; font-size: 13px; line-height: 1.6;">
+                                Email: <a
+                                t-att-href="'mailto:' + email"
+                                t-att-style="'color: ' + primary_color + '; text-decoration: none;'"
+                            >
+                                <t t-out="email" />
+                            </a><br />
+                                <t t-if="phone">Phone: <t t-out="phone" /><br /></t>
+                                <t t-if="mobile">Mobile: <t t-out="mobile" /><br /></t>
+                                <t t-if="website_url">Web: <a
+                                t-att-href="website_url"
+                                t-att-style="'color: ' + primary_color + '; text-decoration: none;'"
+                            >
+                                <t t-out="website" />
+                            </a></t>
+                            </p>
+                        </div>
+                    </td>
+                    <td style="vertical-align: middle;">
+                        <t t-out="company_logo" />
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <!-- Configure main company for demo -->
+    <record id="base.main_company" model="res.company">
+        <field name="use_signature_templates">True</field>
+        <field
+            name="default_signature_template_id"
+            ref="signature_template_creative_demo"
+        />
+        <field
+            name="signature_logo_url"
+        >https://placehold.co/240x80/0066cc/ffffff/png?text=Your+Logo</field>
+        <field name="signature_logo_width">120</field>
+    </record>
+
+    <record id="base.user_demo" model="res.users">
+        <field name="_use_signature_template">True</field>
+        <field name="_signature_template_id" ref="signature_template_creative_demo" />
+    </record>
+
+    <!-- Demo UTM Campaign -->
+    <record id="utm_campaign_email_signature" model="utm.campaign">
+        <field name="name">Email Signatures 2025</field>
+    </record>
+
+    <!-- Template with Custom Avatar Styling -->
+    <record id="demo_template_custom_avatar" model="signature.template">
+        <field name="name">Custom Avatar Style</field>
+        <field name="company_id" ref="base.main_company" />
+        <field name="body_html" type="html">
+            <table
+                cellpadding="0"
+                cellspacing="0"
+                style="font-family: Arial, sans-serif;"
+            >
+                <tr>
+                    <td style="padding-right: 20px;">
+                        <!-- Custom styled avatar with shadow and border -->
+                        <img
+                            t-att-src="user_image_url"
+                            t-att-alt="name"
+                            width="80"
+                            height="80"
+                            style="display:block;border-radius:50%;border:3px solid #0066cc;box-shadow:0 2px 4px rgba(0,0,0,0.1);"
+                        />
+                    </td>
+                    <td>
+                        <div style="font-size: 16px; font-weight: bold; color: #333;">
+                            <t t-esc="name" />
+                        </div>
+                        <div style="font-size: 14px; color: #666;">
+                            <t t-esc="function" />
+                        </div>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;">
+                            <a
+                                t-att-href="'mailto:' + email"
+                                style="color: #0066cc; text-decoration: none;"
+                            >
+                                <t t-esc="email" />
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </field>
+        <field name="primary_color">#0066cc</field>
+        <field name="secondary_color">#ff6600</field>
+    </record>
+
+    <!-- Template with Square Avatar (Original Ratio) -->
+    <record id="demo_template_square_avatar" model="signature.template">
+        <field name="name">Square Avatar</field>
+        <field name="company_id" ref="base.main_company" />
+        <field name="body_html" type="html">
+            <table
+                cellpadding="0"
+                cellspacing="0"
+                style="font-family: Arial, sans-serif;"
+            >
+                <tr>
+                    <td style="padding-right: 15px; vertical-align: top;">
+                        <!-- Standard square avatar without forced border-radius -->
+                        <t t-out="user_image" />
+                    </td>
+                    <td style="vertical-align: top;">
+                        <div
+                            style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 5px;"
+                        >
+                            <t t-esc="name" />
+                        </div>
+                        <div style="font-size: 14px; color: #666; margin-bottom: 3px;">
+                            <t t-esc="function" />
+                        </div>
+                        <div style="font-size: 14px; color: #999; margin-bottom: 10px;">
+                            <t t-esc="company_name" />
+                        </div>
+                        <div style="font-size: 13px; line-height: 1.4;">
+                            <a
+                                t-att-href="'mailto:' + email"
+                                style="color: #0066cc; text-decoration: none;"
+                            >
+                                <t t-esc="email" />
+                            </a>
+                            <br />
+                            <t t-if="phone">
+                                <t t-esc="phone" />
+                            </t>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </field>
+        <field name="primary_color">#0066cc</field>
+        <field name="secondary_color">#ff6600</field>
+    </record>
+</odoo>

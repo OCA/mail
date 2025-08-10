@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_signature_template_user,signature.template.user,model_signature_template,base.group_user,1,0,0,0
+access_signature_template_manager,signature.template.manager,model_signature_template,mail_user_signature_template.group_signature_template_manager,1,1,1,1
+access_signature_template_system,signature.template.system,model_signature_template,base.group_system,1,1,1,1
+access_signature_template_preview_user,signature.template.preview.user,model_signature_template_preview,base.group_user,1,1,1,0
+access_signature_sanitization_check_user,signature.sanitization.check.user,model_signature_sanitization_check,base.group_user,1,1,1,0

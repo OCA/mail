@@ -1,0 +1,77 @@
+<odoo>
+    <!-- Inherit Company Form View -->
+    <record id="view_company_form_inherit_signature_template" model="ir.ui.view">
+        <field name="name">res.company.form.inherit.signature.template</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Email Signatures" name="email_signatures">
+                    <group>
+                        <group string="Signature Templates">
+                            <field name="use_signature_templates" />
+                            <field
+                                name="default_signature_template_id"
+                                invisible="not use_signature_templates"
+                                options="{'no_create': True}"
+                            />
+                            <field
+                                name="force_signature_template"
+                                invisible="not use_signature_templates"
+                            />
+                        </group>
+                        <group
+                            string="Logo Settings"
+                            invisible="not use_signature_templates"
+                        >
+                            <field
+                                name="signature_logo_url"
+                                placeholder="Optional: https://cdn.company.com/logo-email.png"
+                            />
+                            <field name="signature_logo_width" />
+                        </group>
+                    </group>
+                    <div
+                        class="alert alert-info"
+                        role="alert"
+                        invisible="not use_signature_templates"
+                    >
+                        <i
+                        class="fa fa-info-circle"
+                    /> When signature templates are enabled, users can select from company-approved templates for their email signatures.
+                        <span invisible="not force_signature_template">
+                            <br /><strong
+                    >Note:</strong> Force signature template is enabled. Users cannot use custom signatures.
+                        </span>
+                    </div>
+                    <div
+                        class="alert alert-warning"
+                        role="alert"
+                        invisible="not use_signature_templates or not signature_logo_url"
+                    >
+                        <i
+                        class="fa fa-lightbulb-o"
+                        title="Logo Best Practices"
+                    /> <strong>Logo Best Practices:</strong><br />
+                        • Use a PNG image hosted on your domain (e.g., https://cdn.yourcompany.com/logo-email.png)<br
+                    />
+                        • Keep file size under 40KB<br />
+                        • Create image at 2x dimensions (e.g., 240px wide) but display at 120px for retina screens<br
+                    />
+                        • Use transparent background for dark mode compatibility
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add menu item to company settings -->
+    <record id="action_company_signature_settings" model="ir.actions.act_window">
+        <field name="name">Signature Settings</field>
+        <field name="res_model">res.company</field>
+        <field name="view_mode">form</field>
+        <field name="res_id" ref="base.main_company" />
+        <field name="target">current</field>
+        <field name="context">{'form_view_initial_mode': 'edit'}</field>
+    </record>
+</odoo>
