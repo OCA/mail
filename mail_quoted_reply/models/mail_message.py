@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import _, models
-from odoo.tools import format_datetime, html_sanitize
+from odoo.tools import format_datetime, html_escape, html_sanitize
 
 
 class MailMessage(models.Model):
@@ -31,9 +31,9 @@ class MailMessage(models.Model):
             </blockquote>
             </div>
         """.format(
-            email_from=self.email_from,
+            email_from=html_escape(self.email_from),
             date=format_datetime(self.env, self.date),
-            subject=self.subject,
+            subject=html_escape(self.subject),
             body=self._get_sanitized_body(),
             signature=self.env.user.signature,
             str_date=_("Date"),

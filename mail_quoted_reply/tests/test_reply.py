@@ -29,6 +29,12 @@ class TestMessageReply(TransactionCase):
             )
         )
         action = message.reply_message()
+
+        quote_body = action.get("context", {}).get("quote_body", "")
+        self.assertTrue(
+            "From: &#34;OdooBot&#34; &lt;odoobot@example.com&gt;" in quote_body
+        )
+
         wizard = (
             self.env[action["res_model"]].with_context(**action["context"]).create({})
         )
