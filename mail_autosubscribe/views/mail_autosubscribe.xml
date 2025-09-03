@@ -38,7 +38,7 @@
     <record id="action_mail_autosubscribe" model="ir.actions.act_window">
         <field name="name">Mail Auto Subscribe</field>
         <field name="res_model">mail.autosubscribe</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem
