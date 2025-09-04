@@ -8,7 +8,7 @@ import {useService} from "@web/core/utils/hooks";
 import {Component, toRaw, useState} from "@odoo/owl";
 
 export class FailedMessage extends Component {
-    static props = ["message", "reloadParentView"];
+    static props = ["message", "onUpdate?", "reloadParentView"];
     // eslint-disable-next-line no-empty-function
     static defaultProps = {onUpdate: () => {}};
     static template = "mail_tracking.FailedMessage";
