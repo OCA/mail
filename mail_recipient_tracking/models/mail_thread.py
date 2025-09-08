@@ -5,7 +5,7 @@ from email.utils import getaddresses
 
 from lxml import etree
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.tools.mail import email_split, email_split_and_format
 
 
@@ -68,8 +68,8 @@ class MailThread(models.AbstractModel):
         If the recipient has a res.partner, use it.
         """
         res = super()._message_get_suggested_recipients()
-        self._add_extra_recipients_suggestions(res, "email_cc", _("Cc"))
-        self._add_extra_recipients_suggestions(res, "email_to", _("Anon. To"))
+        self._add_extra_recipients_suggestions(res, "email_cc", self.env._("Cc"))
+        self._add_extra_recipients_suggestions(res, "email_to", self.env._("Anon. To"))
         return res
 
     def _add_extra_recipients_suggestions(self, suggestions, field_mail, reason):
@@ -117,7 +117,7 @@ class MailThread(models.AbstractModel):
             new_filter = etree.Element(
                 "filter",
                 {
-                    "string": _("Failed sent messages"),
+                    "string": self.env._("Failed sent messages"),
                     "name": "failed_message_ids",
                     "domain": str(
                         [
