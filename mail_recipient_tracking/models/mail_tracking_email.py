@@ -492,15 +492,6 @@ class MailTrackingEmail(models.Model):
                 _logger.debug("Concurrent event '%s' discarded", event_type)
         return event_ids
 
-    # TODO Remove useless method
-    @api.model
-    def event_process(self, request, post, metadata, event_type=None):
-        # Generic event process hook, inherit it and
-        # - return 'OK' if processed
-        # - return 'NONE' if this request is not for you
-        # - return 'ERROR' if any error
-        return "NONE"  # pragma: no cover
-
     def _get_old_mail_tracking_email_domain(self, max_age_days):
         target_write_date = fields.Datetime.subtract(
             fields.Datetime.now(), days=max_age_days
