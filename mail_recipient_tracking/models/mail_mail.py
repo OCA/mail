@@ -38,8 +38,8 @@ class MailMail(models.Model):
         X-Odoo-MailTracking-ID header there.
         """
         emails = super()._prepare_outgoing_list(mail_server, recipients_follower_status)
-        for email in emails:
-            vals = self._tracking_email_prepare(email)
-            tracking_email = self.env["mail.tracking.email"].sudo().create(vals)
-            tracking_email.tracking_img_add(email)
+        tracking_vals_list = [self._tracking_email_prepare(email) for email in emails]
+        trackings = self.env["mail.tracking.email"].sudo().create(tracking_vals_list)
+        for email, tracking in zip(emails, trackings, strict=True):
+            tracking.tracking_img_add(email)
         return emails
