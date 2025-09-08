@@ -276,6 +276,15 @@ msgid "Failed"
 msgstr ""
 
 #. module: mail_tracking
+#: model:ir.model.fields,field_description:mail_tracking.field_account_account__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_analytic_account__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_bank_statement_line__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_journal__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_move__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_payment__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_reconcile_model__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_setup_bank_manual_config__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_account_tax__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_calendar_event__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_discuss_channel__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_blacklist__failed_message_ids
@@ -287,7 +296,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_tracking.field_mailing_contact__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mailing_mailing__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_phone_blacklist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_product_category__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_product_pricelist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_product_product__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_product_template__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_res_company__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_res_partner__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_res_partner_bank__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_res_users__failed_message_ids
 msgid "Failed Messages"
 msgstr ""
@@ -328,11 +343,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
 msgid "Group By"
-msgstr ""
-
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_guest
-msgid "Guest"
 msgstr ""
 
 #. module: mail_tracking

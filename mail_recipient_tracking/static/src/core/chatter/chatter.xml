@@ -49,32 +49,5 @@
                 <t t-call="mail_tracking.FailedMessageList" />
             </t>
         </xpath>
-        <!-- Failed messages search panel -->
-        <xpath expr="//button[@t-on-click='onClickSearch']" position="before">
-            <button
-                class="btn btn-link text-danger"
-                aria-label="Failed messages"
-                title="Failed messages"
-                t-on-click="toggleSearchFailedOpen"
-                t-if="failed_messages?.length"
-            >
-                <span class="text-danger">
-                    <i class="fa fa-exclamation-triangle" role="img" />
-                    <sup
-                        class="o-mail-Followers-counter"
-                        t-out="failed_messages.length"
-                    />
-                </span>
-            </button>
-        </xpath>
-        <xpath expr="//div[@t-if='state.isSearchOpen']" position="after">
-            <div t-elif="state.isSearchFailedOpen" class="o-mail-Chatter-search">
-                <FailedMessagesPanel
-                    closeSearch.bind="closeSearchFailed"
-                    thread="state.thread"
-                    onClickJump.bind="closeSearchFailed"
-                />
-            </div>
-        </xpath>
     </t>
 </templates>

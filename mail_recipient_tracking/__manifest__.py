@@ -7,7 +7,7 @@
 {
     "name": "Email tracking",
     "summary": "Email tracking system for all mails sent",
-    "version": "18.0.1.0.2",
+    "version": "18.0.1.0.4",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
     "author": ("Tecnativa, Odoo Community Association (OCA)"),
@@ -29,13 +29,11 @@
         "web.assets_backend": [
             "mail_tracking/static/src/core/chatter/*",
             "mail_tracking/static/src/core/message/*",
-            "mail_tracking/static/src/core/search/*",
             "mail_tracking/static/src/core/discuss/*",
             "mail_tracking/static/src/services/*",
             "mail_tracking/static/src/components/message_tracking/*",
             "mail_tracking/static/src/components/failed_message/*",
             "mail_tracking/static/src/components/failed_message_review/*",
-            "mail_tracking/static/src/components/failed_messages_panel/*",
         ],
     },
     "demo": ["demo/demo.xml"],
