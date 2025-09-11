@@ -3,7 +3,7 @@
 import requests
 from werkzeug.urls import url_join
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 BASE_URL = "https://graph.facebook.com/"
@@ -31,7 +31,9 @@ class MailGateway(models.Model):
         self.ensure_one()
         WhatsappTemplate = self.env["mail.whatsapp.template"]
         if not self.whatsapp_account_id:
-            raise UserError(_("WhatsApp Account is required to import templates."))
+            raise UserError(
+                self.env._("WhatsApp Account is required to import templates.")
+            )
         meta_info = {}
         template_url = url_join(
             BASE_URL,
@@ -67,9 +69,9 @@ class MailGateway(models.Model):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": _("WathsApp Templates"),
+                "title": self.env._("WathsApp Templates"),
                 "type": "success",
-                "message": _("Synchronization successfully."),
+                "message": self.env._("Synchronization successfully."),
                 "next": {"type": "ir.actions.act_window_close"},
             },
         }
