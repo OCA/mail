@@ -11,7 +11,7 @@ from io import StringIO
 import requests
 import requests_toolbelt
 
-from odoo import _, models
+from odoo import models
 from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.tools import html2plaintext
@@ -226,7 +226,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
             attachment_mimetype_map = self._get_whatsapp_mimetype_kind()
             for attachment in record.mail_message_id.attachment_ids:
                 if attachment.mimetype not in attachment_mimetype_map:
-                    raise UserError(_("Mimetype is not valid"))
+                    raise UserError(self.env._("Mimetype is not valid"))
                 attachment_type = attachment_mimetype_map[attachment.mimetype]
                 m = requests_toolbelt.multipart.encoder.MultipartEncoder(
                     fields={
@@ -285,7 +285,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
             _logger.error(buff.getvalue())
             if raise_exception:
                 raise MailDeliveryException(
-                    _("Unable to send the whatsapp message")
+                    self.env._("Unable to send the whatsapp message")
                 ) from exc
             else:
                 _logger.warning(f"Issue sending message with id {record.id}: {exc}")
@@ -329,6 +329,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                         "template": {
                             "name": whatsapp_template.template_name,
                             "language": {"code": whatsapp_template.language},
+                            "components": whatsapp_template.prepare_value_to_send(),
                         },
                     }
                 )
