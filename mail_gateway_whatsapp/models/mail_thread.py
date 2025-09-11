@@ -1,7 +1,7 @@
 # Copyright 2022 CreuBlanca
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, models
+from odoo import models
 from odoo.exceptions import UserError
 
 
@@ -21,7 +21,7 @@ class MailThread(models.AbstractModel):
     def _whatsapp_get_channel(self, field_name, gateway):
         sanitized_number = self._phone_format(number=self[field_name])
         if not sanitized_number:
-            raise UserError(_("Phone cannot be sanitized"))
+            raise UserError(self.env._("Phone cannot be sanitized"))
         # Avoid the plus sign prefix to match the whatsapp token
         sanitized_number = sanitized_number.replace("+", "")
         partner = self._whatsapp_get_partner()
