@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="mail.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <setting id="email_servers_setting" position="after">
+                <setting
+                    id="unassigned_mail_settings"
+                    title="Collect not assignable incoming e-mails for manual assignment"
+                >
+                    <field name="use_unassigned_mails" />
+                    <div
+                        class="content-group mb-3"
+                        invisible="not use_unassigned_mails"
+                    >
+                        <div class="mt16" dir="ltr">
+                            <label
+                                for="delete_unassigned_after"
+                                class="o_light_label"
+                            />
+                            <field name="delete_unassigned_after" />
+                            <span>Days</span>
+                        </div>
+
+                        <div class="mt16" dir="ltr">
+                            <field name="assign_to_same_thread" />
+                            <label for="assign_to_same_thread" class="o_light_label" />
+                        </div>
+
+                        <div class="mt16" dir="ltr">
+                            <field name="unassigned_show_after" />
+                            <label for="unassigned_show_after" class="o_light_label" />
+                        </div>
+                    </div>
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>

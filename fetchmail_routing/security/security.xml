@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="module_category_mail_assignment" model="ir.module.category">
+        <field name="name">E-Mail</field>
+        <field name="parent_id" ref="base.module_category_administration" />
+    </record>
+
+    <record id="group_mail_assign" model="res.groups">
+        <field name="name">Assign E-Mails</field>
+        <field name="category_id" ref="module_category_mail_assignment" />
+    </record>
+
+    <record id="group_mail_manager" model="res.groups">
+        <field name="name">Manage E-Mails</field>
+        <field name="category_id" ref="module_category_mail_assignment" />
+        <field name="implied_ids" eval="[(4, ref('group_mail_assign'))]" />
+    </record>
+
+    <record id="base.group_system" model="res.groups">
+        <field
+            name="implied_ids"
+            eval="[(4, ref('fetchmail_routing.group_mail_manager'))]"
+        />
+    </record>
+</odoo>

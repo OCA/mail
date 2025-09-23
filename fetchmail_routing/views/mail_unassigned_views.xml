@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_mail_unassigned_form" model="ir.ui.view">
+        <field name="model">mail.unassigned</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        type="object"
+                        name="action_assign"
+                        string="Assign"
+                        class="oe_highlight"
+                        invisible="thread_id or model"
+                    />
+                    <button
+                        type="object"
+                        name="action_unlink"
+                        string="Delete"
+                        class="btn btn-secondary"
+                        confirm="Are you sure that you want to delete the e-mail?"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="subject" />
+                            <field name="create_date" />
+                            <field name="email_from" />
+                            <field name="email_to_ids" widget="many2many_tags" />
+                            <field name="email_cc_ids" widget="many2many_tags" />
+                            <field
+                                name="has_attachments"
+                                groups="!fetchmail_routing.group_mail_manager"
+                            />
+                        </group>
+                        <group>
+                            <field name="thread_id" readonly="1" />
+                            <field name="model" readonly="1" />
+                            <field name="color" widget="color_picker" />
+                        </group>
+                    </group>
+
+                    <notebook groups="fetchmail_routing.group_mail_manager">
+                        <page string="Body">
+                            <field name="body" nolabel="1" colspan="2" />
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mail_unassigned_list" model="ir.ui.view">
+        <field name="model">mail.unassigned</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="thread_id" editable="bottom" multi_edit="1">
+                <field name="message_id" column_invisible="1" />
+                <field name="has_attachments" column_invisible="1" />
+                <field name="color" widget="color_picker" optional="show" />
+                <field name="create_date" />
+                <button
+                    class="fa fa-paperclip"
+                    title="Has Attachments"
+                    invisible="not has_attachments"
+                />
+                <field name="email_from" />
+                <field name="email_to_ids" widget="many2many_tags" optional="show" />
+                <field name="email_cc_ids" widget="many2many_tags" optional="show" />
+                <field name="subject" />
+                <field name="thread_id" readonly="1" />
+                <button
+                    type="object"
+                    name="action_open"
+                    string="Open"
+                    class="oe_highlight"
+                    groups="fetchmail_routing.group_mail_manager"
+                />
+                <button
+                    type="object"
+                    name="action_assign"
+                    string="Assign"
+                    class="oe_highlight"
+                />
+                <button
+                    type="object"
+                    name="action_unlink"
+                    string="Delete"
+                    class="btn btn-secondary"
+                    confirm="Are you sure that you want to delete the e-mail?"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mail_unassigned" model="ir.actions.act_window">
+        <field name="name">Unassigned E-Mails</field>
+        <field name="res_model">mail.unassigned</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem
+        id="menu_mail_unassigned"
+        name="Unassigned E-Mails"
+        action="action_mail_unassigned"
+        parent="mail.menu_root_discuss"
+        sequence="200"
+    />
+</odoo>

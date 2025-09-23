@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_assign_mail" model="ir.actions.server">
+        <field name="name">Assign</field>
+        <field name="model_id" ref="fetchmail_routing.model_mail_unassigned" />
+        <field name="binding_model_id" ref="fetchmail_routing.model_mail_unassigned" />
+        <field name="binding_view_types">list,form</field>
+        <field
+            name="groups_id"
+            eval="[(4, ref('fetchmail_routing.group_mail_assign'))]"
+        />
+        <field name="state">code</field>
+        <field name="code">action = records.action_assign()</field>
+    </record>
+</odoo>

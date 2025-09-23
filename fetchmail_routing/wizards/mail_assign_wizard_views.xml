@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_mail_assign_wizard_form" model="ir.ui.view">
+        <field name="model">mail.assign.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="mail_ids" invisible="1" />
+                    <field name="show_same_thread" invisible="1" />
+
+                    <group>
+                        <field name="operation" string="Assign the E-Mail to" />
+
+                        <field
+                            name="thread_id"
+                            string="Target"
+                            options="{'no_open': True, 'no_create': True}"
+                            context="{'active_test': False}"
+                            invisible="operation != 'existing'"
+                        />
+                        <field
+                            name="model"
+                            string="Target"
+                            invisible="operation != 'new'"
+                        />
+
+                        <field
+                            name="thread_per_mail"
+                            string="New Thread per E-Mail"
+                            invisible="not show_same_thread"
+                        />
+                    </group>
+                </sheet>
+                <footer>
+                    <button
+                    type="object"
+                    name="action_assign"
+                    string="Assign"
+                    class="oe_highlight"
+                />
+                    or
+                    <button type="special" string="Close" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,308 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * fetchmail_routing
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-14 13:21+0000\n"
+"PO-Revision-Date: 2023-06-14 13:21+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__color
+msgid "Marker"
+msgstr "Markierung"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.res_config_settings_view_form
+msgid "<span>Days</span>"
+msgstr "<span>Tage</span>"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__active
+msgid "Active"
+msgstr "Aktiv"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__has_attachments
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_list
+msgid "Has Attachments"
+msgstr "Hat Anhänge"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__server_ids
+msgid "Allowed Servers"
+msgstr "Erlaubte Server"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__attachment_ids
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_form
+msgid "Attachments"
+msgstr "Anhänge"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_form
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_list
+#: model:ir.actions.server,name:fetchmail_routing.action_assign_mail
+msgid "Assign"
+msgstr "Zuweisen"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_form
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_list
+msgid "Delete"
+msgstr "Löschen"
+
+#. module: fetchmail_routing
+#. odoo-python
+#: code:addons/fetchmail_routing/models/mail_unassigned.py:0
+#: model:res.groups,name:fetchmail_routing.group_mail_assign
+#, python-format
+msgid "Assign E-Mails"
+msgstr "Weise E-Mails zu"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_company__assign_to_same_thread
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_config_settings__assign_to_same_thread
+msgid "Assign E-Mails to same Thread in the Wizard"
+msgstr "Weise E-Mails im Wizard dem gleichen Thread zu"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "Assign all e-mails to the following thread:"
+msgstr "Weise alle E-Mails zum folgendem Thread zu:"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__body
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_form
+msgid "Body"
+msgstr "Inhalt"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "Assign each e-mail to a new thread:"
+msgstr "Weise jede E-Mail einem neuen Thread zu:"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_company__delete_unassigned_after
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_config_settings__delete_unassigned_after
+msgid "Delete Unassigned E-Mails After"
+msgstr "Lösche nicht zugewiesene E-Mails nach"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "Close"
+msgstr "Schließen"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__code
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_fetchmail_routing_form
+msgid "Code"
+msgstr "Code"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.res_config_settings_view_form
+msgid "Collect not assignable incoming e-mails for manual assignment"
+msgstr "Sammel nicht zuweisbare eingehende E-Mails für eine manuelle Zuweisung"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__email_from
+msgid "From"
+msgstr "Von"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__email_to_ids
+#: model:ir.model.fields.selection,name:fetchmail_routing.selection__mail_unassigned_receiver__type__to
+msgid "To"
+msgstr "An"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__email_cc_ids
+#: model:ir.model.fields.selection,name:fetchmail_routing.selection__mail_unassigned_receiver__type__cc
+msgid "CC"
+msgstr "CC"
+
+#. module: fetchmail_routing
+#: model:ir.model,name:fetchmail_routing.model_mail_thread
+msgid "Email Thread"
+msgstr "Email Thread"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_fetchmail_routing_form
+msgid "Help"
+msgstr "Hilfe"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__help_text
+msgid "Help Text"
+msgstr "Hilfetext"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_fetchmail_routing_form
+msgid "Help with Python expressions"
+msgstr "Hilfe mit Python Ausdrücken"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__fetchmail_server_id
+msgid "Incoming Mail Server"
+msgstr "Eingehender Mailserver"
+
+#. module: fetchmail_routing
+#: model:ir.actions.act_window,name:fetchmail_routing.action_fetchmail_routing
+#: model:ir.ui.menu,name:fetchmail_routing.menu_fetchmail_routing
+msgid "Incoming Routing"
+msgstr "Eingehendes Routing"
+
+#. module: fetchmail_routing
+#: model:ir.model,name:fetchmail_routing.model_mail_assign_wizard
+msgid "E-Mail Assign Wizard"
+msgstr "E-Mailzuweisungsassistent"
+
+#. module: fetchmail_routing
+#: model:res.groups,name:fetchmail_routing.group_mail_manager
+msgid "Manage E-Mails"
+msgstr "Verwalte E-Mails"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__message
+msgid "Message"
+msgstr "Nachricht"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__message_id
+msgid "Message ID"
+msgstr "Nachrichten-ID"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__model_id
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_assign_wizard__model
+msgid "Model"
+msgstr "Model"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__name
+msgid "Name"
+msgstr "Name"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_list
+msgid "Open"
+msgstr "Öffnen"
+
+#. module: fetchmail_routing
+#. odoo-python
+#: code:addons/fetchmail_routing/wizards/mail_assign_wizard.py:0
+#, python-format
+msgid "Please select either an object or a thread"
+msgstr "Bitte entweder ein Objekt oder Thread auswählen"
+
+#. module: fetchmail_routing
+#: code:addons/fetchmail_routing/models/fetchmail_routing.py:0
+#: model:ir.model,name:fetchmail_routing.model_fetchmail_routing
+#, python-format
+msgid "Routing Extension of Incoming Servers"
+msgstr "Routing-Erweiterung für eingehende Server"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_fetchmail_routing__sequence
+msgid "Sequence"
+msgstr "Sequenz"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_company__unassigned_show_after
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_config_settings__unassigned_show_after
+msgid "Show the threads after assigning"
+msgstr "Zeige die Threads nach der Zuweisung"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__subject
+msgid "Subject"
+msgstr "Betreff"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_fetchmail_routing_form
+msgid "The following variables are defined:"
+msgstr "Die folgenden Variablen sind definiert:"
+
+#. module: fetchmail_routing
+#: model:ir.model.constraint,message:fetchmail_routing.constraint_fetchmail_routing_name_uniq
+msgid "The name must be unique!"
+msgstr "Der Name muss eindeutig sein!"
+
+#. module: fetchmail_routing
+#: code:addons/fetchmail_routing/models/fetchmail_routing.py:0
+#, python-format
+msgid "Too many records are matching"
+msgstr "Zu viele Datensätze wurden gefunden"
+
+#. module: fetchmail_routing
+#: model:ir.actions.act_window,name:fetchmail_routing.action_mail_unassigned
+#: model:ir.model,name:fetchmail_routing.model_mail_unassigned
+#: model:ir.ui.menu,name:fetchmail_routing.menu_mail_unassigned
+msgid "Unassigned E-Mails"
+msgstr "Nicht zuweisbare E-Mails"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_company__use_unassigned_mails
+#: model:ir.model.fields,field_description:fetchmail_routing.field_res_config_settings__use_unassigned_mails
+msgid "Allow manual assignment of e-mails"
+msgstr "Erlaube die manuelle Zuweisung von E-Mails"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,help:fetchmail_routing.field_mail_unassigned__color
+msgid "Used for manual highlighting"
+msgstr "Genutzt für manuelle Hervorhebungen"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "or"
+msgstr "oder"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_unassigned__create_date
+msgid "Created on"
+msgstr "Erstellt am"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields.selection,name:fetchmail_routing.selection__mail_assign_wizard__operation__existing
+msgid "Existing Thread"
+msgstr "Existierender Thread"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields.selection,name:fetchmail_routing.selection__mail_assign_wizard__operation__new
+msgid "New Thread"
+msgstr "Neuer Thread"
+
+#. module: fetchmail_routing
+#: model:ir.model.fields,field_description:fetchmail_routing.field_mail_assign_wizard__operation
+msgid "Operation"
+msgstr "Operation"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "Assign the E-Mail to"
+msgstr "Zuweisung der E-Mail zu"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "Target"
+msgstr "Ziel"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_assign_wizard_form
+msgid "New Thread per E-Mail"
+msgstr "Neuer Thread pro E-Mail"
+
+#. module: fetchmail_routing
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_form
+#: model_terms:ir.ui.view,arch_db:fetchmail_routing.view_mail_unassigned_list
+msgid "Are you sure that you want to delete the e-mail?"
+msgstr "Sind Sie sicher, dass Sie die E-Mail löschen wollen?"
