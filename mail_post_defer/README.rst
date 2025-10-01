@@ -21,13 +21,13 @@ Deferred Message Posting
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/18.0/mail_post_defer
+    :target: https://github.com/OCA/mail/tree/19.0/mail_post_defer
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_post_defer
+    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_post_defer
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -61,13 +61,14 @@ appropriately out of the box. Just make sure the following scheduled
 actions are active:
 
 - Mail: Email Queue Manager (mail.ir_cron_mail_scheduler_action)
-- Notification: Send scheduled message notifications
+- Notification: Notify scheduled messages
   (mail.ir_cron_send_scheduled_message)
 
-The mail queue processing is made by a cron job. This is normal Odoo
-behavior, not specific to this module. However, since you will start
-using that queue for every message posted by any user in any thread,
-this module configures that job to execute every minute by default.
+The mail queue processing and scheduled messages notifications are
+handled by cron jobs. This is normal Odoo behavior, not specific to this
+module. However, since you will start using that queue for every message
+posted by any user in any thread, both jobs are configured to execute
+every minute by default.
 
 You can still change that cadence after installing the module (although
 it is not recommended). To do so:
@@ -75,7 +76,11 @@ it is not recommended). To do so:
 1. Log in with an administrator user.
 2. Activate developer mode.
 3. Go to *Settings > Technical > Automation > Scheduled Actions*.
-4. Edit the action named "Mail: Email Queue Manager".
+4. Find the cron(s) you want to adjust:
+
+   - Mail: Email Queue Manager - handles outgoing emails.
+   - Notification: Notify scheduled messages - handles notifications.
+
 5. Lower down the frequency in the field *Execute Every*. Recommended: 1
    minute.
 
@@ -112,7 +117,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_post_defer%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_post_defer%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -123,11 +128,15 @@ Authors
 -------
 
 * Moduon
+* OERP Canada
 
 Contributors
 ------------
 
 - Jairo Llopis (https://www.moduon.team/)
+- `OERP Canada <https://www.oerp.ca>`__
+
+  - Yash Pathak
 
 Maintainers
 -----------
@@ -150,6 +159,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-Yajo| 
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/18.0/mail_post_defer>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_post_defer>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

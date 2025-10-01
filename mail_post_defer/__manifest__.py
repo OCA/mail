@@ -3,11 +3,11 @@
 {
     "name": "Deferred Message Posting",
     "summary": "Faster and cancellable outgoing messages",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "development_status": "Alpha",
     "category": "Productivity/Discuss",
     "website": "https://github.com/OCA/mail",
-    "author": "Moduon, Odoo Community Association (OCA)",
+    "author": "Moduon, OERP Canada, Odoo Community Association (OCA)",
     "maintainers": ["Yajo"],
     "license": "LGPL-3",
     "depends": [

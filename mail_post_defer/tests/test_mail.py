@@ -101,7 +101,7 @@ class MessagePostCase(MailPostDeferCommon):
             self.assertNoMail(self.partner_employee)
             # After 15 seconds, the user updates the message
             with freezegun.freeze_time("2023-01-02 10:00:15"):
-                self.partner_portal._message_update_content(msg, "new body")
+                self.partner_portal._message_update_content(msg, body="new body")
                 schedules = self.env["mail.message.schedule"].search(
                     [
                         ("mail_message_id", "=", msg.id),
@@ -139,7 +139,7 @@ class MessagePostCase(MailPostDeferCommon):
             self.assertEqual(len(schedules), 1)
             # Emulate user clicking on delete button and going through the
             # `/mail/message/update_content` controller
-            self.partner_portal._message_update_content(msg, "", [])
+            self.partner_portal._message_update_content(msg, body="", partner_ids=[])
             self.env.flush_all()
             self.assertFalse(schedules.exists())
             self.assertNoMail(
@@ -197,7 +197,9 @@ class MessagePostCase(MailPostDeferCommon):
                 # Emulate user clicking on delete button and going through the
                 # `/mail/message/update_content` controller
                 with self.assertRaises(UserError):
-                    self.partner_portal._message_update_content(msg, "", [])
+                    self.partner_portal._message_update_content(
+                        msg, body="", partner_ids=[]
+                    )
 
     def test_model_without_threading(self):
         """When models don't inherit from mail.thread, they still work."""
@@ -209,6 +211,7 @@ class MessagePostCase(MailPostDeferCommon):
                 model="res.country",
                 partner_ids=(self.partner_employee | self.partner_portal).ids,
                 res_id=self.ref("base.es"),
+                notify_author_mention=False,
             )
             self.assertNoMail(self.partner_employee | self.partner_portal)
             # One minute later, the cron sends the mail

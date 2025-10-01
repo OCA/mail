@@ -1,10 +1,9 @@
 # Copyright 2022-2024 Moduon Team S.L. <info@moduon.team>
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-from odoo import _, fields, models
-from odoo.exceptions import UserError
+from odoo import fields, models
 
 
 class MailThread(models.AbstractModel):
@@ -27,41 +26,45 @@ class MailThread(models.AbstractModel):
         if defer_seconds:
             kwargs.setdefault(
                 "scheduled_date",
-                datetime.utcnow() + timedelta(seconds=defer_seconds),
+                fields.Datetime.now() + timedelta(seconds=defer_seconds),
             )
         return super(MailThread, _self)._notify_thread(
             message, msg_vals=msg_vals, **kwargs
         )
 
-    def _check_can_update_message_content(self, messages):
-        """Allow updating unsent messages.
-
-        Upstream Odoo only allows updating notes. We want to be able to update
-        any message that is not sent yet. When a message is scheduled,
-        notifications and mails will still not exist. Another possibility is
-        that they exist but are not sent yet. In those cases, we are still on
-        time to update it.
-        """
-        # Check that no notification or mail has been sent yet
-        if any(ntf.notification_status == "sent" for ntf in messages.notification_ids):
-            raise UserError(
-                _("Cannot modify message; notifications were already sent.")
-            ) from None
-        if any(mail.state in {"sent", "received"} for mail in messages.mail_ids):
-            raise UserError(
-                _("Cannot modify message; notifications were already sent.")
-            ) from None
-
-        # For unsent messages, we're more permissive than the original implementation
-        # Only check the basic restrictions that make sense
-        if any(message.message_type != "comment" for message in messages):
-            raise UserError(
-                _("Only messages type comment can have their content updated")
+    def _message_update_content(self, message, /, *, body, **kwargs):
+        # If anything already went out, fall back to the standard behavior
+        if any(ntf.notification_status == "sent" for ntf in message.notification_ids):
+            return super()._message_update_content(message, body=body, **kwargs)
+        scheduled_date = fields.Datetime.now() + timedelta(seconds=30)
+        Schedule = self.env["mail.message.schedule"].sudo()
+        sched = Schedule.search([("mail_message_id", "=", message.id)], limit=1)
+        if sched:
+            sched.scheduled_datetime = scheduled_date
+        # In case emails are already created but not sent yet, cancel queued mails and
+        # delete the notification (so nothing goes out with old content)
+        else:
+            message.mail_ids.filtered(
+                lambda x: x.state in {"outgoing", "exception", "draft"}
+            ).write({"state": "cancel"})
+            message.notification_ids.filtered(
+                lambda x: x.notification_status
+                in {"ready", "exception", "canceled", "bounce"}
+            ).unlink()
+            Schedule.create(
+                {"mail_message_id": message.id, "scheduled_datetime": scheduled_date}
             )
-
-    def _message_update_content(self, *args, **kwargs):
-        """Defer messages by extra 30 seconds after updates."""
-        kwargs.setdefault(
-            "scheduled_date", fields.Datetime.now() + timedelta(seconds=30)
-        )
-        return super()._message_update_content(*args, **kwargs)
+        kw = dict(kwargs)
+        # Drop empty [] for partner_ids, or else Odoo will try to send to nobody
+        if not kw.get("partner_ids"):
+            kw.pop("partner_ids", None)
+        res = super()._message_update_content(message, body=body, **kw)
+        # Delete empty pending outgoing mails
+        if empty_messages := message.sudo()._filter_empty():
+            empty_messages.mail_ids.filtered(
+                lambda mail: mail.state == "outgoing"
+            ).unlink()
+            empty_messages.env["mail.message.schedule"].search(
+                [("mail_message_id", "in", empty_messages.ids)]
+            ).unlink()
+        return res

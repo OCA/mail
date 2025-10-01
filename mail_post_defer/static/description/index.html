@@ -374,7 +374,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:b8388b0cb11cde1fb22cb0f1e2d686f10b048d834cf2b8fa29b3582c98b85853
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Alpha" src="https://img.shields.io/badge/maturity-Alpha-red.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/18.0/mail_post_defer"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_post_defer"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Alpha" src="https://img.shields.io/badge/maturity-Alpha-red.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/19.0/mail_post_defer"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_post_defer"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>This module enhances mail threads by using the mail queue by default.</p>
 <p>Without this module, Odoo attempts to notify recipients of your message
 immediately. If your mail server is slow or you have many followers,
@@ -411,20 +411,25 @@ appropriately out of the box. Just make sure the following scheduled
 actions are active:</p>
 <ul class="simple">
 <li>Mail: Email Queue Manager (mail.ir_cron_mail_scheduler_action)</li>
-<li>Notification: Send scheduled message notifications
+<li>Notification: Notify scheduled messages
 (mail.ir_cron_send_scheduled_message)</li>
 </ul>
-<p>The mail queue processing is made by a cron job. This is normal Odoo
-behavior, not specific to this module. However, since you will start
-using that queue for every message posted by any user in any thread,
-this module configures that job to execute every minute by default.</p>
+<p>The mail queue processing and scheduled messages notifications are
+handled by cron jobs. This is normal Odoo behavior, not specific to this
+module. However, since you will start using that queue for every message
+posted by any user in any thread, both jobs are configured to execute
+every minute by default.</p>
 <p>You can still change that cadence after installing the module (although
 it is not recommended). To do so:</p>
 <ol class="arabic simple">
 <li>Log in with an administrator user.</li>
 <li>Activate developer mode.</li>
 <li>Go to <em>Settings &gt; Technical &gt; Automation &gt; Scheduled Actions</em>.</li>
-<li>Edit the action named “Mail: Email Queue Manager”.</li>
+<li>Find the cron(s) you want to adjust:<ul>
+<li>Mail: Email Queue Manager - handles outgoing emails.</li>
+<li>Notification: Notify scheduled messages - handles notifications.</li>
+</ul>
+</li>
 <li>Lower down the frequency in the field <em>Execute Every</em>. Recommended: 1
 minute.</li>
 </ol>
@@ -461,7 +466,7 @@ for the rationale behind current hardcoded value of 30 seconds.</li>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/mail/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/mail/issues/new?body=module:%20mail_post_defer%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/mail/issues/new?body=module:%20mail_post_defer%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -470,12 +475,17 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <h3><a class="toc-backref" href="#toc-entry-6">Authors</a></h3>
 <ul class="simple">
 <li>Moduon</li>
+<li>OERP Canada</li>
 </ul>
 </div>
 <div class="section" id="contributors">
 <h3><a class="toc-backref" href="#toc-entry-7">Contributors</a></h3>
 <ul class="simple">
 <li>Jairo Llopis (<a class="reference external" href="https://www.moduon.team/">https://www.moduon.team/</a>)</li>
+<li><a class="reference external" href="https://www.oerp.ca">OERP Canada</a><ul>
+<li>Yash Pathak</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
@@ -489,7 +499,7 @@ mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
 <p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainer</a>:</p>
 <p><a class="reference external image-reference" href="https://github.com/Yajo"><img alt="Yajo" src="https://github.com/Yajo.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/mail/tree/18.0/mail_post_defer">OCA/mail</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/mail/tree/19.0/mail_post_defer">OCA/mail</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>
