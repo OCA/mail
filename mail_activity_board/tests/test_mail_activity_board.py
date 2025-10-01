@@ -16,7 +16,7 @@ class TestMailActivityBoardMethods(TransactionCase):
                 "name": "Employee",
                 "login": "csu",
                 "email": "crmuser@yourcompany.com",
-                "groups_id": [
+                "group_ids": [
                     (
                         6,
                         0,
@@ -36,7 +36,7 @@ class TestMailActivityBoardMethods(TransactionCase):
                 "name": "Employee2",
                 "login": "alien",
                 "email": "alien@yourcompany.com",
-                "groups_id": [(6, 0, [mail_activity_group.id])],
+                "group_ids": [(6, 0, [mail_activity_group.id])],
             }
         )
 
@@ -73,7 +73,7 @@ class TestMailActivityBoardMethods(TransactionCase):
         )
 
         # I create an opportunity, as employee
-        self.partner_client = self.env.ref("base.res_partner_1")
+        self.partner_client = self.env["res.partner"].create({"name": "Partner test"})
 
         # assure there isn't any mail activity yet
         self.env["mail.activity"].sudo().search([]).unlink()
@@ -191,14 +191,13 @@ class TestMailActivityBoardMethods(TransactionCase):
 
         result = self.env[action.get("res_model")].get_views(action.get("views"))
         fields = result.get("models").get(action.get("res_model"))
-        kwargs["fields"] = list(fields["fields"].keys())
-
-        result = self.env["mail.activity"].read_group(**kwargs)
+        field_keys_list = list(fields["fields"].keys())
+        result = self.env["mail.activity"].formatted_read_group(**kwargs)
 
         acts = []
         for group in result:
             records = self.env["mail.activity"].search_read(
-                domain=group.get("__domain"), fields=kwargs["fields"]
+                domain=group.get("__domain"), fields=field_keys_list
             )
             acts += [record_id.get("id") for record_id in records]
 

@@ -57,7 +57,7 @@
         <field name="inherit_id" ref="mail.mail_activity_view_search" />
         <field name="mode">extension</field>
         <field name="arch" type="xml">
-            <xpath expr='//field[@name="res_model"]' position='before'>
+            <xpath expr='//field[@name="activity_type_id"]' position='after'>
                 <field name="user_id" />
                 <field name="res_name" string="Origin" />
             </xpath>
@@ -103,7 +103,7 @@
         <field name="act_window_id" ref="mail.mail_activity_action_my" />
     </record>
     <record
-        id="mail_activity_action_my_view_calendar"
+        id="mail.mail_activity_action_my_view_calendar"
         model="ir.actions.act_window.view"
     >
         <field name="sequence" eval="4" />
