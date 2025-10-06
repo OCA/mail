@@ -23,7 +23,6 @@ msgstr "Discussione e-mail"
 
 #. module: mail_message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_account__message_search
-#: model:ir.model.fields,field_description:mail_message_search.field_account_account_template__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_analytic_account__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_bank_statement_line__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_journal__message_search
@@ -31,18 +30,20 @@ msgstr "Discussione e-mail"
 #: model:ir.model.fields,field_description:mail_message_search.field_account_payment__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_reconcile_model__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_setup_bank_manual_config__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_account_tax__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_calendar_event__message_search
-#: model:ir.model.fields,field_description:mail_message_search.field_event_event__message_search
-#: model:ir.model.fields,field_description:mail_message_search.field_event_registration__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_discuss_channel__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_blacklist__message_search
-#: model:ir.model.fields,field_description:mail_message_search.field_mail_channel__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_blacklist__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_cc__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_main_attachment__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_phone__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mailing_contact__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mailing_mailing__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_phone_blacklist__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_product_category__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_product_pricelist__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_product_product__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_product_template__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_res_company__message_search
@@ -54,7 +55,6 @@ msgstr "Ricerca messaggio"
 
 #. module: mail_message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_account__message_search
-#: model:ir.model.fields,help:mail_message_search.field_account_account_template__message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_analytic_account__message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_bank_statement_line__message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_journal__message_search
@@ -62,18 +62,20 @@ msgstr "Ricerca messaggio"
 #: model:ir.model.fields,help:mail_message_search.field_account_payment__message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_reconcile_model__message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_setup_bank_manual_config__message_search
+#: model:ir.model.fields,help:mail_message_search.field_account_tax__message_search
 #: model:ir.model.fields,help:mail_message_search.field_calendar_event__message_search
-#: model:ir.model.fields,help:mail_message_search.field_event_event__message_search
-#: model:ir.model.fields,help:mail_message_search.field_event_registration__message_search
+#: model:ir.model.fields,help:mail_message_search.field_discuss_channel__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_blacklist__message_search
-#: model:ir.model.fields,help:mail_message_search.field_mail_channel__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_thread__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_thread_blacklist__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_thread_cc__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_thread_main_attachment__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_thread_phone__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mailing_contact__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mailing_mailing__message_search
 #: model:ir.model.fields,help:mail_message_search.field_phone_blacklist__message_search
+#: model:ir.model.fields,help:mail_message_search.field_product_category__message_search
+#: model:ir.model.fields,help:mail_message_search.field_product_pricelist__message_search
 #: model:ir.model.fields,help:mail_message_search.field_product_product__message_search
 #: model:ir.model.fields,help:mail_message_search.field_product_template__message_search
 #: model:ir.model.fields,help:mail_message_search.field_res_company__message_search
