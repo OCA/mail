@@ -4,22 +4,15 @@
         <field name="model">mail.template</field>
         <field name="inherit_id" ref="mail.email_template_form" />
         <field name="arch" type="xml">
-            <xpath
-                expr="//field[@name='report_template']/parent::group"
-                position="after"
-            >
+            <xpath expr="//page[@name='email_settings']" position="inside">
                 <group string="Conditional Attachments">
-                    <field
-                        name="conditional_attachment_ids"
-                        context="{'default_mail_template_id': id}"
-                    >
-                        <tree>
-                            <field name="mail_template_id" invisible="1" />
-                            <field name="model_name" invisible="1" />
+                    <field name="conditional_attachment_ids" nolabel="1">
+                        <list>
                             <field name="name" />
+                            <field name="model_name" column_invisible="1" />
                             <field name="filter_domain" />
                             <field name="attachment_ids" />
-                        </tree>
+                        </list>
                         <form>
                             <sheet>
                                 <div class="oe_title">
@@ -29,7 +22,6 @@
                                     </h1>
                                 </div>
                                 <group>
-                                    <field name="mail_template_id" invisible="1" />
                                     <field name="model_name" invisible="1" />
                                     <field
                                         name="filter_domain"

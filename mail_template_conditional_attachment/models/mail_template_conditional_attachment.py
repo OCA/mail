@@ -1,10 +1,5 @@
-import datetime
-import time
-
-import dateutil
-
-from odoo import api, fields, models
-from odoo.tools import safe_eval
+from odoo import fields, models
+from odoo.tools.safe_eval import datetime, dateutil, safe_eval, time
 
 
 class MailTemplateConditionalAttachment(models.Model):
@@ -52,7 +47,6 @@ class MailTemplateConditionalAttachment(models.Model):
         else:
             return True
 
-    @api.multi
     def get_attachment_ids(self, res_id):
         self.mapped("mail_template_id").ensure_one()
         return self.filtered(lambda r: r._check_condition(res_id)).mapped(

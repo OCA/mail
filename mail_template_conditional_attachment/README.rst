@@ -69,6 +69,9 @@ Contributors
 ------------
 
 - Iván Todorovich <ivan.todorovich@druidoo.io> (https://www.druidoo.io)
+- `Trobz <https://www.trobz.com>`__
+
+  - Phan Hong Phuc <phucph@trobz.com>
 
 Maintainers
 -----------
