@@ -6,10 +6,10 @@
 
 {
     "name": "Mass Mailing - Access Right",
-    "version": "12.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Tools",
     "summary": "Limit mass sending to new 'Mass Mailing Manager' group member",
-    "author": "La Louve, Druidoo",
+    "author": "La Louve, Druidoo, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
     "depends": [
         "mass_mailing",

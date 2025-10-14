@@ -12,6 +12,9 @@
             name="implied_ids"
             eval="[(6, False, [ref('mass_mailing.group_mass_mailing_user')])]"
         />
-        <field name="category_id" ref="base.module_category_mass_mailing" />
+        <field
+            name="category_id"
+            ref="base.module_category_marketing_email_marketing"
+        />
     </record>
 </odoo>
