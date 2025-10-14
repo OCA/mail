@@ -1,19 +1,19 @@
-from odoo import api, models, fields
+from odoo import api, fields, models
 from odoo.tools import pycompat
 
 
 class MailTemplate(models.Model):
-    _inherit = 'mail.template'
+    _inherit = "mail.template"
 
     conditional_attachment_ids = fields.One2many(
-        'mail.template.conditional.attachment',
-        'mail_template_id',
-        string='Conditional Attachments',
+        "mail.template.conditional.attachment",
+        "mail_template_id",
+        string="Conditional Attachments",
     )
 
     @api.multi
     def generate_email(self, res_ids, **kwargs):
-        """ Overload this method to attach conditional attachments """
+        """Overload this method to attach conditional attachments"""
         self.ensure_one()
 
         # Odoo way of handling different result for multi/one res_ids
@@ -28,8 +28,9 @@ class MailTemplate(models.Model):
         # Add conditional attachments
         if self.conditional_attachment_ids:
             for res_id in res_ids:
-                attachment_ids = \
-                    self.conditional_attachment_ids.get_attachment_ids(res_id)
-                results[res_id]['attachment_ids'] = attachment_ids.ids
+                attachment_ids = self.conditional_attachment_ids.get_attachment_ids(
+                    res_id
+                )
+                results[res_id]["attachment_ids"] = attachment_ids.ids
 
         return multi_mode and results or results[res_ids[0]]

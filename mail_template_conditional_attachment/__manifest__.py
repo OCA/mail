@@ -6,11 +6,9 @@
     "summary": "Allow to add conditional attachments to email templates",
     "version": "12.0.1.0.0",
     "category": "Uncategorized",
-    "website": "https://github.com/druidoo/druidoo-addons",
+    "website": "https://github.com/OCA/mail",
     "author": "La Louve, Druidoo, Odoo Community Association (OCA)",
-    "maintainers": [
-        "ivantodorovich"
-    ],
+    "maintainers": ["ivantodorovich"],
     "license": "AGPL-3",
     "depends": [
         "mail",
