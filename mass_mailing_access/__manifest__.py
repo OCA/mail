@@ -5,22 +5,22 @@
 
 
 {
-    'name': 'Mass Mailing - Access Right',
-    'version': '12.0.1.0.0',
-    'category': 'Tools',
-    'summary': "Limit mass sending to new 'Mass Mailing Manager' group member",
-    'author': 'La Louve, Druidoo',
-    'website': 'http://www.lalouve.net',
-    'depends': [
-        'mass_mailing',
+    "name": "Mass Mailing - Access Right",
+    "version": "12.0.1.0.0",
+    "category": "Tools",
+    "summary": "Limit mass sending to new 'Mass Mailing Manager' group member",
+    "author": "La Louve, Druidoo",
+    "website": "https://github.com/OCA/mail",
+    "depends": [
+        "mass_mailing",
     ],
-    'data': [
+    "data": [
         "security/res_groups.xml",
         "views/view_mail_mass_mailing.xml",
     ],
-    'license': 'AGPL-3',
-    'demo': [
+    "license": "AGPL-3",
+    "demo": [
         "demo/res_groups.xml",
     ],
-    'installable': True,
+    "installable": True,
 }
