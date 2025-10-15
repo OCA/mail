@@ -15,17 +15,18 @@ class MailThread(models.AbstractModel):
 
     def _search_message_content(self, operator, value):
         model_domain = [("model", "=", self._name)]
-        if operator not in expression.NEGATIVE_TERM_OPERATORS:
-            model_domain += ["|"] * 4
+        is_negative = operator in expression.NEGATIVE_TERM_OPERATORS
+        op = expression.TERM_OPERATORS_NEGATION.get(operator, operator)
+        model_domain += ["|"] * 4
+        model_domain += [("body", "ilike" if op == "%" else op, value)]
         model_domain += [
-            ("record_name", operator, value),
-            ("subject", operator, value),
-            ("body", operator, value),
-            ("email_from", operator, value),
-            ("reply_to", operator, value),
+            ("record_name", op, value),
+            ("subject", op, value),
+            ("email_from", op, value),
+            ("reply_to", op, value),
         ]
-        recs = self.env["mail.message"].search(model_domain)
-        return [("id", "in", recs.mapped("res_id"))]
+
+        return [("message_ids", "not any" if is_negative else "any", model_domain)]
 
     message_content = fields.Text(
         help="Message content, to be used only in searches",

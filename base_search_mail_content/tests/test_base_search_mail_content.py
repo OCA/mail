@@ -11,7 +11,7 @@ class TestBaseSearchMailContent(BaseCommon):
         cls.channel_obj = cls.env["discuss.channel"]
 
     def test_base_search_mail_content_1(self):
-        res = self.channel_obj.search([("message_content", "ilike", "xxxyyyzzz")])
+        res = self.channel_obj.search([("message_content", "%", "xxxyyyzzz")])
         self.assertFalse(res, "You have a channel with xxxyyyzzz :O")
 
     def test_base_search_mail_content_2(self):
@@ -28,9 +28,14 @@ class TestBaseSearchMailContent(BaseCommon):
         Partner = self.env["res.partner"]
         partner = Partner.create({"name": "Test Partner"})
         partner.message_post(
-            body="Hello World",
+            subject="Hello World",
         )
-        partner_find = Partner.search([("message_content", "ilike", "world hell")])
-        self.assertFalse(partner_find)
-        partner_find = Partner.search([("message_content", "%", "world hell")])
-        self.assertEqual(partner, partner_find)
+        partner.message_post(
+            subject="Lorem ipsum",
+        )
+        # If positive, the partner should be in the result
+        partner_find = Partner.search([("message_content", "ilike", "Hello World")])
+        self.assertIn(partner, partner_find)
+        # If negative, the partner should be not in the result
+        partner_find = Partner.search([("message_content", "not ilike", "Hello World")])
+        self.assertNotIn(partner, partner_find)

@@ -7,3 +7,4 @@
   - Ernesto Tejeda
   - David Bañón
 - Nguyen Minh Chien \<<chien@trobz.com>\>
+- Joel Estrada ([Moduon](https://moduon.es))
