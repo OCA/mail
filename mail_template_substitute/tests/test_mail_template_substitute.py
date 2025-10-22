@@ -5,44 +5,45 @@ from odoo.tests import Form, TransactionCase
 
 
 class TestMailTemplateSubstitute(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.smt2 = self.env["mail.template"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.smt2 = cls.env["mail.template"].create(
             {
                 "name": "substitute_template_2",
-                "model_id": self.env.ref("base.model_res_partner").id,
+                "model_id": cls.env.ref("base.model_res_partner").id,
             }
         )
-        self.smt1 = self.env["mail.template"].create(
+        cls.smt1 = cls.env["mail.template"].create(
             {
                 "name": "substitute_template_1",
-                "model_id": self.env.ref("base.model_res_partner").id,
+                "model_id": cls.env.ref("base.model_res_partner").id,
                 "mail_template_substitution_rule_ids": [
                     (
                         0,
                         0,
                         {
-                            "substitution_mail_template_id": self.smt2.id,
+                            "substitution_mail_template_id": cls.smt2.id,
                             "domain": "[('id', '=', False)]",
                         },
                     )
                 ],
             }
         )
-        self.mt = self.env["mail.template"].create(
+        cls.mt = cls.env["mail.template"].create(
             {
                 "name": "base_template",
-                "model_id": self.env.ref("base.model_res_partner").id,
+                "model_id": cls.env.ref("base.model_res_partner").id,
                 "mail_template_substitution_rule_ids": [
-                    (0, 0, {"substitution_mail_template_id": self.smt1.id})
+                    (0, 0, {"substitution_mail_template_id": cls.smt1.id})
                 ],
             }
         )
-        self.mail_compose = self.env["mail.compose.message"].create(
-            {"template_id": self.mt.id, "composition_mode": "mass_mail"}
+        cls.mail_compose = cls.env["mail.compose.message"].create(
+            {"template_id": cls.mt.id, "composition_mode": "mass_mail"}
         )
-        self.partners = self.env["res.partner"].search([])
-        self.partner = self.env["res.partner"].search([], limit=1)
+        cls.partners = cls.env["res.partner"].search([])
+        cls.partner = cls.env["res.partner"].search([], limit=1)
 
     def test_get_email_template_partners(self):
         self.assertEqual(
@@ -93,3 +94,126 @@ class TestMailTemplateSubstitute(TransactionCase):
             )
         )
         self.assertEqual(mail_compose_form.template_id, self.smt1)
+
+    def test_get_substitution_template_account_move_send(self):
+        account_id = (
+            self.env["account.account"]
+            .search([("account_type", "=", "asset_receivable")], limit=1)
+            .id
+        )
+        move = self.env["account.move"].create(
+            {
+                "name": "Test Move",
+                "journal_id": self.env["account.journal"].search([], limit=1).id,
+                "date": "2024-01-01",
+                "move_type": "out_invoice",  # Asegúrate de que sea una factura
+                "partner_id": self.partner.id,
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Test line",
+                            "quantity": 1,
+                            "price_unit": 100,
+                            "account_id": account_id,
+                        },
+                    )
+                ],
+            }
+        )
+        move.action_post()
+        wizard = (
+            self.env["account.move.send.wizard"]
+            .with_context(active_ids=[move.id])
+            .create({})
+        )
+        template = self.env["mail.template"].create(
+            {
+                "name": "Test Template",
+                "model_id": self.env.ref("account.model_account_move").id,
+            }
+        )
+        res = wizard._get_substitution_template(template, [move.id])
+        self.assertTrue(res == template or res is False)
+
+    def test_compute_mail_template_id(self):
+        """Test el cálculo del template por defecto en account.move.send.wizard"""
+        # Crear un template adicional para facturas
+        self.env["mail.template"].create(
+            {
+                "name": "Test Invoice Template",
+                "model_id": self.env.ref("account.model_account_move").id,
+            }
+        )
+
+        # Crear una factura utilizando la configuración de setUp
+        account_id = (
+            self.env["account.account"]
+            .search([("account_type", "=", "asset_receivable")], limit=1)
+            .id
+        )
+        move = self.env["account.move"].create(
+            {
+                "name": "Test Move",
+                "journal_id": self.env["account.journal"].search([], limit=1).id,
+                "date": "2024-01-01",
+                "move_type": "out_invoice",
+                "partner_id": self.partner.id,
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Test line",
+                            "quantity": 1,
+                            "price_unit": 100,
+                            "account_id": account_id,
+                        },
+                    )
+                ],
+            }
+        )
+        move.action_post()
+
+        # Crear el wizard y obtener el template por defecto
+        wizard = (
+            self.env["account.move.send.wizard"]
+            .with_context(active_ids=[move.id])
+            .create({})
+        )
+        original_template = wizard.mail_template_id
+
+        # Crear un template de sustitución
+        template2 = self.env["mail.template"].create(
+            {
+                "name": "Substitution Invoice Template",
+                "model_id": self.env.ref("account.model_account_move").id,
+            }
+        )
+
+        # Añadir regla de sustitución al template original
+        original_template.write(
+            {
+                "mail_template_substitution_rule_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "substitution_mail_template_id": template2.id,
+                            "domain": f"[('id', '=', {move.id})]",
+                        },
+                    )
+                ],
+            }
+        )
+
+        # Crear un nuevo wizard y verificar si aplica la sustitución
+        wizard2 = (
+            self.env["account.move.send.wizard"]
+            .with_context(active_ids=[move.id])
+            .create({})
+        )
+
+        # Comprobar que mail_template_id es ahora el template de sustitución
+        self.assertEqual(wizard2.mail_template_id, template2)
