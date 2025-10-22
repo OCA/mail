@@ -231,23 +231,28 @@ class MailTrackingEmail(models.Model):
             )
         )
         result = self.env.cr.fetchall()
-        for id_, mail_msg_id, mail_id, partner_id in result:
-            msg_ids = (
-                self.env["mail.message"].search([("id", "=", mail_msg_id)]).ids
-                if mail_msg_id
-                else []
-            )
+        _, msg_ids, mail_ids, partner_ids = zip(*result, strict=True)
+        msg_ids = (
+            self.env["mail.message"]
+            .search([("id", "in", [x for x in msg_ids if x])])
+            .ids
+        )
+        # Only users from group_system can read mail.mail
+        if self.env.user.has_group("base.group_system"):
             mail_ids = (
-                self.env["mail.mail"].search([("id", "=", mail_id)]).ids
-                if mail_id
-                else []
+                self.env["mail.mail"]
+                .search([("id", "in", [x for x in mail_ids if x])])
+                .ids
             )
-            partner_ids = (
-                self.env["res.partner"].search([("id", "=", partner_id)]).ids
-                if partner_id
-                else []
-            )
+        else:
+            mail_ids = []
+        partner_ids = (
+            self.env["res.partner"]
+            .search([("id", "in", [x for x in partner_ids if x])])
+            .ids
+        )
 
+        for id_, mail_msg_id, mail_id, partner_id in result:
             if (
                 (mail_msg_id in msg_ids)
                 or (mail_id in mail_ids)
