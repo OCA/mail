@@ -30,5 +30,4 @@
             "mail_activity_team/static/src/models/*",
         ],
     },
-    "post_load": "post_load_hook",
 }
