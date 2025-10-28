@@ -57,5 +57,5 @@ class MailThread(models.AbstractModel):
                     "field", {"name": "message_content", "operator": "%"}
                 )
                 node.addnext(elem)
-                res["arch"] = etree.tostring(doc)
+                res["arch"] = etree.tostring(doc, encoding="unicode")
         return res
