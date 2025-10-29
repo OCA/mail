@@ -56,5 +56,5 @@ class MailThread(models.AbstractModel):
                 # Add message_search in search view
                 elem = etree.Element("field", {"name": "message_search"})
                 node.addnext(elem)
-                res["arch"] = etree.tostring(doc)
+                res["arch"] = etree.tostring(doc, encoding="unicode")
         return res
