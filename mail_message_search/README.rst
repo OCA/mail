@@ -105,6 +105,12 @@ Contributors
   - Aung Ko Ko Lin
   - Yoshi Tashiro
 
+Other credits
+-------------
+
+The migration of this module from 18.0 to 19.0 was financially supported
+by Agent ERP GmbH
+
 Maintainers
 -----------
 

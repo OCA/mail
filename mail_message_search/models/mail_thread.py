@@ -7,25 +7,26 @@
 
 from lxml import etree
 
+import odoo.orm.domains as orm_domains
 from odoo import api, fields, models
-from odoo.osv import expression
+from odoo.fields import Domain
 
 
 class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
     def _search_message_search(self, operator, value):
-        fields = ["record_name", "subject", "body", "email_from", "reply_to"]
+        fields = ["subject", "body", "email_from", "reply_to"]
         words = value.split()
         word_domain_list = []
         for word in words:
             field_domain_list = [[(field, operator, word)] for field in fields]
-            if operator in expression.NEGATIVE_TERM_OPERATORS:
-                word_domain_list.append(expression.AND(field_domain_list))
+            if operator in orm_domains.NEGATIVE_CONDITION_OPERATORS:
+                word_domain_list.append(Domain.AND(field_domain_list))
             else:
-                word_domain_list.append(expression.OR(field_domain_list))
-        word_domain = expression.AND(word_domain_list)
-        domain = expression.AND([[("model", "=", self._name)], word_domain])
+                word_domain_list.append(Domain.OR(field_domain_list))
+        word_domain = Domain.AND(word_domain_list)
+        domain = Domain.AND([[("model", "=", self._name)], word_domain])
         limit_value = (
             self.env["ir.config_parameter"]
             .sudo()
