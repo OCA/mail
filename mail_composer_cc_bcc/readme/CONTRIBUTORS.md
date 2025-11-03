@@ -5,3 +5,8 @@
   > - Tri Doan \<<tridm@trobz.com>\>
 
 * Alberto Nieto <alberto.nieto@braintec.com> (https://braintec.com)
+- [Camptocamp](https://www.camptocamp.com):
+
+  > - Cyril Jeanneret \<<cyril.jeanneret@camptocam.com>\>
+  > - Italo Lopes \<<italo.lopes@camptocam.com>\>
+

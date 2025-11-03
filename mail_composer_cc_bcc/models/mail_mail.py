@@ -25,13 +25,10 @@ class MailMail(models.Model):
 
     email_bcc = fields.Char("Bcc", help="Blind Cc message recipients")
 
-    def _prepare_outgoing_list(
-        self, mail_server=False, recipients_follower_status=None
-    ):
+    def _prepare_outgoing_list(self, mail_server=False, doc_to_followers=None):
         # First, return if we're not coming from the Mail Composer
         res = super()._prepare_outgoing_list(
-            mail_server=mail_server,
-            recipients_follower_status=recipients_follower_status,
+            mail_server=mail_server, doc_to_followers=doc_to_followers
         )
         is_out_of_scope = len(self.ids) > 1
         is_from_composer = self.env.context.get("is_from_composer", False)
@@ -79,8 +76,6 @@ class MailMail(models.Model):
                     "email_cc": email_cc,
                 }
             )
-
-        self.env.context = {**self.env.context, "recipients": list(recipients)}
 
         if len(res) > len(recipients):
             res.pop()
