@@ -11,5 +11,10 @@
     "author": "Odoo Community Association (OCA)",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": ["base"],
+    "depends": ["mail"],
+    "assets": {
+        "mail.assets_messaging": [
+            "/mail_chatter_remove_call_buttons/static/src/xml/discuss_sidebar.xml",
+        ],
+    },
 }
