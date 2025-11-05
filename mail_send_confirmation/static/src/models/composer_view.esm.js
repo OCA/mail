@@ -15,7 +15,8 @@ patch(Composer.prototype, {
         this.dialogService = useService("dialog");
     },
     async sendMessage() {
-        if (this.props.type === "message") {
+        const thread = this.thread ?? this.message?.thread;
+        if (this.props.type === "message" && thread?.model !== "discuss.channel") {
             this.dialogService.add(ConfirmationDialog, {
                 body: _t(
                     "This message will be sent to external partners as well. Are you sure you would like to send this message?"
