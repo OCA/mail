@@ -14,6 +14,7 @@
     "depends": ["mail"],
     "assets": {
         "mail.assets_messaging": [
+            "/mail_chatter_remove_call_buttons/static/src/js/remove_call_buttons.esm.js",
             "/mail_chatter_remove_call_buttons/static/src/xml/discuss_sidebar.xml",
         ],
     },
