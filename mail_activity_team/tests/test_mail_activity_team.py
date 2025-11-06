@@ -447,3 +447,60 @@ class TestMailActivityTeam(TransactionCase):
         mod.migrate(self.env.cr, "18.0.1.0.0")
 
         self.assertFalse(rule.perm_create)
+
+    def test_mail_activity_plan(self):
+        """Activities for teams can be scheduled using an activity plan"""
+        plan = self.env["mail.activity.plan"].create(
+            {
+                "name": __name__,
+                "res_model": "res.partner",
+            }
+        )
+        self.env["mail.activity.plan.template"].create(
+            {
+                "summary": __name__,
+                "responsible_type": "other",
+                "responsible_id": self.employee3.id,
+                "activity_type_id": self.activity1.id,
+                "plan_id": plan.id,
+                "sequence": 1,
+                "delay_count": 1,
+            }
+        )
+        self.env["mail.activity.plan.template"].create(
+            {
+                "summary": __name__,
+                "responsible_type": "team",
+                "activity_team_id": self.team1.id,
+                "activity_type_id": self.activity2.id,
+                "plan_id": plan.id,
+                "sequence": 2,
+                "delay_count": 2,
+            }
+        )
+        activities = self.partner_client.activity_ids
+        self.env["mail.activity.schedule"].with_context(
+            active_ids=self.partner_client.ids,
+            active_model=self.partner_client._name,
+        ).create(
+            {
+                "plan_id": plan.id,
+                "plan_date": date.today(),
+            }
+        ).action_schedule_plan()
+        new_activities = self.partner_client.activity_ids - activities
+        self.assertRecordValues(
+            new_activities,
+            [
+                {
+                    "activity_type_id": self.activity2.id,
+                    "team_id": self.team1.id,
+                    "user_id": False,
+                },
+                {
+                    "activity_type_id": self.activity1.id,
+                    "team_id": False,
+                    "user_id": self.employee3.id,
+                },
+            ],
+        )
