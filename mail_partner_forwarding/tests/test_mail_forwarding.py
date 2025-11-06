@@ -1,8 +1,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo_test_helper import FakeModelLoader
-
-from odoo import _
+from odoo.orm.model_classes import add_to_registry
 from odoo.tests.common import TransactionCase, tagged
 
 
@@ -11,35 +9,44 @@ class TestMailForwarding(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Setup env
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-        # Load fake order model
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
+
         from .models.fake_order import FakeOrder
 
-        cls.loader.update_registry((FakeOrder,))
+        add_to_registry(cls.registry, FakeOrder)
+
+        test_models = ["fake.order"]
+        cls.registry._setup_models__(cls.env.cr, test_models)
+        cls.registry.init_models(cls.env.cr, test_models, {"models_to_check": True})
+
+        for model_name in test_models:
+            cls.addClassCleanup(cls.registry.__delitem__, model_name)
+
         cls.fake_order_model = cls.env["ir.model"].search(
             [("model", "=", "fake.order")]
         )
-        # Partner To forward
-        cls.partner_1 = cls.env.ref("base.user_demo").partner_id
-        cls.partner_2 = cls.env.ref("base.user_admin").partner_id
 
-        # Configurate in the user setting the user to be forwarding
+        cls.partner_1 = cls.env["res.partner"].create(
+            {
+                "name": "Test Partner 1 (Forwarding)",
+                "email": "partner1@test.example.com",
+            }
+        )
+        cls.partner_2 = cls.env["res.partner"].create(
+            {
+                "name": "Test Partner 2 (Main)",
+                "email": "partner2@test.example.com",
+            }
+        )
+
         cls.partner_2.forwarding_partner_id = cls.partner_1
-        # Empty fake.order
-        cls.order = cls.env["fake.order"].create({"partner_id": cls.partner_2.id})
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.loader.restore_registry()
-        return super().tearDownClass()
+        cls.order = cls.env["fake.order"].create({"partner_id": cls.partner_2.id})
 
     def test_message_post_forwarding(self):
         """Test forwarding when send a message for the user"""
         self.order.message_post(
-            body=_("Test"),
+            body=self.env._("Test"),
             message_type="comment",
             subtype_id=self.env.ref("mail.mt_comment").id,
             partner_ids=[self.partner_2.id],
