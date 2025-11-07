@@ -143,7 +143,15 @@ class MailTrackingEmail(models.Model):
     @api.model
     @api.model
     @api.model
-    def _search(self, domain, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+    def _search(
+        self,
+        domain,
+        offset=0,
+        limit=None,
+        order=None,
+        count=False,
+        access_rights_uid=None,
+    ):
         """Odoo 18: count NICHT an super()._search geben; access_rights_uid korrekt anwenden."""
         env_model = self.with_user(access_rights_uid) if access_rights_uid else self
         if count:
@@ -214,6 +222,7 @@ class MailTrackingEmail(models.Model):
         """
         self.check_access("read")
         return super().read(fields=fields, load=load)
+
     def _get_allowed_ids(self, ids):
         allowed_ids = set()
         self.env.cr.execute(
@@ -239,12 +248,14 @@ class MailTrackingEmail(models.Model):
             if ptnr:
                 partner_ids.add(ptnr)
 
-        msg_ids = self.env["mail.message"].search([("id","in", list(msg_ids))]).ids
+        msg_ids = self.env["mail.message"].search([("id", "in", list(msg_ids))]).ids
         if self.env.user.has_group("base.group_system"):
-            mail_ids = self.env["mail.mail"].search([("id","in", list(mail_ids))]).ids
+            mail_ids = self.env["mail.mail"].search([("id", "in", list(mail_ids))]).ids
         else:
             mail_ids = []
-        partner_ids = self.env["res.partner"].search([("id","in", list(partner_ids))]).ids
+        partner_ids = (
+            self.env["res.partner"].search([("id", "in", list(partner_ids))]).ids
+        )
 
         for row in result:
             if not row or len(row) < 4:
