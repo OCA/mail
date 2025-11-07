@@ -87,6 +87,7 @@ class TestMailActivityReminder(common.TransactionCase):
                     "res_model_id": self.model_res_partner.id,
                     "res_id": self.partner.id,
                     "date_deadline": self.today + relativedelta(days=5),
+                    "user_id": self.env.user.id,
                 }
             )
 
@@ -130,6 +131,7 @@ class TestMailActivityReminder(common.TransactionCase):
                     "res_model_id": self.model_res_partner.id,
                     "res_id": self.partner.id,
                     "date_deadline": self.today + relativedelta(days=5),
+                    "user_id": self.env.user.id,
                 }
             )
 
@@ -166,6 +168,7 @@ class TestMailActivityReminder(common.TransactionCase):
                     "res_model_id": self.model_res_partner.id,
                     "res_id": self.partner.id,
                     "date_deadline": self.today + relativedelta(days=1),
+                    "user_id": self.env.user.id,
                 }
             )
 
@@ -189,6 +192,7 @@ class TestMailActivityReminder(common.TransactionCase):
                     "res_model_id": self.model_res_partner.id,
                     "res_id": self.partner.id,
                     "date_deadline": self.today + relativedelta(days=1),
+                    "user_id": self.env.user.id,
                 }
             )
 
