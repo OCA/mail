@@ -16,12 +16,6 @@
                     style="color: red;"
                 > - Warning : Followers will not be notified but they can access the notification directly from the document (if they are allowed to)</span>
             </xpath>
-            <xpath
-                expr="//widget[@name='mail_composer_recipient_list']"
-                position="attributes"
-            >
-                <attribute name="invisible" add="not notify_followers" separator="or" />
-            </xpath>
         </field>
     </record>
 </odoo>
