@@ -1,1 +1,1 @@
-from . import test_mail_optional_follower_notifications
+from . import test_mail_optional_follower_notification
