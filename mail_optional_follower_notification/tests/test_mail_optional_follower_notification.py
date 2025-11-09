@@ -8,11 +8,21 @@ class TestMailOptionalFollowernotifications(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.partner_obj = cls.env["res.partner"]
-        cls.partner_01 = cls.env.ref("base.res_partner_2")
-        demo_user = cls.env.ref("base.user_demo")
-        cls.partner_follower = demo_user.partner_id
-        cls.partner_no_follower = demo_user.copy().partner_id
+        cls.user = cls.env["res.users"].create(
+            {
+                "name": "Test User",
+                "login": "test",
+                "notification_type": "inbox",
+            }
+        )
+        cls.partner_01 = cls.env["res.partner"].create(
+            {
+                "name": "Test Contact",
+            }
+        )
+        cls.partner_01 = cls.user.partner_id
+        cls.partner_follower = cls.user.partner_id
+        cls.partner_no_follower = cls.user.copy().partner_id
         cls.partner_no_follower.email = "test@example.com"
         cls.partner_01.message_subscribe(partner_ids=[cls.partner_follower.id])
         ctx = cls.env.context.copy()
