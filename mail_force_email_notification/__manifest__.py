@@ -6,7 +6,7 @@
     "name": "Mail Force Email Notification",
     "summary": "Context key to define notifications to be sent by email"
     "defined by force_notification_by_email context key",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Hidden",

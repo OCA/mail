@@ -11,18 +11,14 @@ class TestMailThread(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-
-        cls.demo_user = cls.env.ref("base.user_demo")
-
-        cls.demo_user.write(
+        cls.user = cls.env["res.users"].create(
             {
-                "country_id": cls.env.ref("base.be").id,
-                "login": "demo",
+                "name": "Mark Test",
+                "login": "test",
                 "notification_type": "inbox",
-                "tz": "Europe/Brussels",
             }
         )
-        cls.partner = cls.demo_user.partner_id
+        cls.partner = cls.user.partner_id
 
     def test_force_email_notification(self):
         """Test that notifications are sent by email when forced"""
