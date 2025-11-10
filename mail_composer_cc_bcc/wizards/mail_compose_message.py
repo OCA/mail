@@ -59,6 +59,7 @@ class MailComposeMessage(models.TransientModel):
                 rendered_values = composer._generate_template_for_composer(
                     res_ids,
                     {"email_cc"},
+                    allow_suggested=False,
                     find_or_create_partners=False,
                 )[res_ids[0]]
                 composer._set_partner_ids_from_mails(
@@ -67,6 +68,7 @@ class MailComposeMessage(models.TransientModel):
                 rendered_values = composer._generate_template_for_composer(
                     res_ids,
                     {"email_bcc"},
+                    allow_suggested=False,
                     find_or_create_partners=False,
                 )[res_ids[0]]
                 composer._set_partner_ids_from_mails(
@@ -99,6 +101,7 @@ class MailComposeMessage(models.TransientModel):
                     res_ids,
                     # DIFFERENT FROM ODOO NATIVE:
                     {"email_to", "partner_ids"},
+                    allow_suggested=False,
                     find_or_create_partners=True,
                 )[res_ids[0]]
                 if rendered_values.get("partner_ids"):

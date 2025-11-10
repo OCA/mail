@@ -5,29 +5,59 @@ import inspect
 
 from odoo import tools
 from odoo.tests import Form, tagged
-from odoo.tests.common import TransactionCase
 
 from odoo.addons.mail.tests.common import MailCase
 from odoo.addons.mail.tests.test_mail_composer import TestMailComposerForm
 from odoo.addons.mail.wizard.mail_compose_message import (
-    MailComposer as MailComposer_upstream,
+    MailComposeMessage as MailComposer_upstream,
 )
 
 VALID_HASHES = {
-    "mail.composer:_compute_partner_ids": ["813ef112e3948fe625b9a89428f2518d"],
+    "mail.composer:_compute_partner_ids": ["4e49f0d6c53f41ac24b02176e97b600a"],
 }
 
 
-class TestMailCcBcc(TestMailComposerForm):
+class MailComposerCcBccMixin:
+    @classmethod
+    def _setup_mail_composer_cc_bcc_data(cls):
+        env = cls.env
+        cls.partner = env["res.partner"].create(
+            {
+                "name": "partner",
+                "email": "partner@example.com",
+            }
+        )
+        cls.partner_cc = env["res.partner"].create(
+            {
+                "name": "partner_cc",
+                "email": "partner_cc@example.com",
+            }
+        )
+        cls.partner_cc2 = env["res.partner"].create(
+            {
+                "name": "partner_cc2",
+                "email": "partner_cc2@example.com",
+            }
+        )
+        cls.partner_cc3 = env["res.partner"].create(
+            {
+                "name": "partner_cc3",
+                "email": "partner_cc3@example.com",
+            }
+        )
+        cls.partner_bcc = env["res.partner"].create(
+            {
+                "name": "partner_bcc",
+                "email": "partner_bcc@example.com",
+            }
+        )
+
+
+class TestMailCcBcc(TestMailComposerForm, MailComposerCcBccMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        env = cls.env
-        cls.partner = env.ref("base.res_partner_address_31")
-        cls.partner_cc = env.ref("base.partner_demo")
-        cls.partner_cc2 = env.ref("base.partner_demo_portal")
-        cls.partner_cc3 = env.ref("base.res_partner_main1")
-        cls.partner_bcc = env.ref("base.res_partner_main2")
+        cls._setup_mail_composer_cc_bcc_data()
 
     def open_mail_composer_form(self):
         # Use form to populate data
@@ -86,13 +116,13 @@ class TestMailCcBcc(TestMailComposerForm):
         mail = message.mail_ids
         expecting = ", ".join(
             [
-                '"Marc Demo" <mark.brown23@example.com>',
-                '"Joel Willis" <joel.willis63@example.com>',
-                '"Chester Reed" <chester.reed79@example.com>',
+                '"partner_cc" <partner_cc@example.com>',
+                '"partner_cc2" <partner_cc2@example.com>',
+                '"partner_cc3" <partner_cc3@example.com>',
             ]
         )
         self.assertEqual(mail.email_cc, expecting)
-        expecting = '"Dwayne Newman" <dwayne.newman28@example.com>'
+        expecting = '"partner_bcc" <partner_bcc@example.com>'
         self.assertEqual(mail.email_bcc, expecting)
 
     def test_template_cc_bcc(self):
@@ -116,6 +146,7 @@ Test Template<br></p>""",
             "email_bcc": tools.formataddr(
                 (partner_bcc.name or "False", partner_bcc.email or "False")
             ),
+            "use_default_to": False,
         }
         partner_tmpl = env["mail.template"].create(vals)
 
@@ -160,7 +191,7 @@ Test Template<br></p>""",
         self.assertEqual(composer.partner_bcc_ids, expecting)
 
     def test_template_cc_bcc_with_placeholders(self):
-        """Test that template with placeholders for email_cc and email_bcc"""
+        """Test mail template with placeholders for email_cc and email_bcc"""
         # Add child record to test_record
         self.test_record.child_ids |= (
             self.partner_cc + self.partner_cc2 + self.partner_cc3
@@ -177,6 +208,7 @@ Test Template<br></p>""",
             # Use placeholders
             "email_cc": "{{ ','.join(object.mapped('child_ids.email')) }}",
             "email_bcc": "{{ ','.join(object.mapped('child_ids.email')) }}",
+            "use_default_to": False,
         }
         partner_tmpl = self.env["mail.template"].create(vals)
 
@@ -251,13 +283,11 @@ Test Template<br></p>""",
 
 
 @tagged("-at_install", "post_install")
-class TestMailComposerCcBccWithTracking(TransactionCase, MailCase):
+class TestMailComposerCcBccWithTracking(MailCase, MailComposerCcBccMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.partner = cls.env.ref("base.res_partner_address_31")
-        cls.partner_cc = cls.env.ref("base.partner_demo")
-        cls.partner_bcc = cls.env.ref("base.res_partner_main2")
+        cls._setup_mail_composer_cc_bcc_data()
         cls.admin_user = cls.env.ref("base.user_admin")
 
         if "purchase.order" in cls.env:

@@ -25,13 +25,17 @@ class MailThread(models.AbstractModel):
     # NOTIFICATION API
     # ------------------------------------------------------
 
-    def _notify_by_email_get_base_mail_values(self, message, additional_values=None):
+    def _notify_by_email_get_base_mail_values(
+        self, message, partners_data, additional_values=None
+    ):
         """
         This is to add cc, bcc addresses to mail.mail objects so that email
         can be sent to those addresses.
         """
+        for pd in partners_data:
+            pd.setdefault("email_normalized", pd.get("email") or "")
         res = super()._notify_by_email_get_base_mail_values(
-            message, additional_values=additional_values
+            message, partners_data, additional_values=additional_values
         )
         context = self.env.context
         skip_adding_cc_bcc = context.get("skip_adding_cc_bcc", False)
@@ -120,6 +124,7 @@ class MailThread(models.AbstractModel):
             customer_data["notification_group_name"] = "customer"
             customer_data["recipients"] = ids
         else:
+            customer_data.setdefault("recipients", [])
             customer_data["recipients"] += ids
         return [customer_data]
 
