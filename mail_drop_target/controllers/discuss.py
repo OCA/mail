@@ -11,22 +11,28 @@ from odoo.addons.mail.controllers.attachment import AttachmentController
 
 class DiscussControllerInherit(AttachmentController):
     @http.route("/mail/attachment/upload", methods=["POST"], type="http", auth="public")
-    def mail_attachment_upload(self, ufile, thread_id, thread_model, is_pending=False, **kwargs):
+    def mail_attachment_upload(
+        self, ufile, thread_id, thread_model, is_pending=False, **kwargs
+    ):
         if not is_pending or is_pending == "false":
             # Add this point, make sure the message related to the uploaded
             # file does exist.
-            resp = self.mail_attachment_upload_email(
-                ufile, thread_id, thread_model)
+            resp = self.mail_attachment_upload_email(ufile, thread_id, thread_model)
             if resp:
                 return resp
 
-        return super().mail_attachment_upload(ufile, thread_id, thread_model, is_pending, **kwargs)
+        return super().mail_attachment_upload(
+            ufile, thread_id, thread_model, is_pending, **kwargs
+        )
 
     def mail_attachment_upload_email(self, ufile, thread_id, thread_model):
         channel_member = request.env["discuss.channel.member"]
         if thread_model == "mail.channel":
-            channel_member = request.env["discuss.channel.member"]._get_as_sudo_from_request_or_raise(
-                request=request, channel_id=int(thread_id))
+            channel_member = request.env[
+                "discuss.channel.member"
+            ]._get_as_sudo_from_request_or_raise(
+                request=request, channel_id=int(thread_id)
+            )
 
         try:
             mail_resp = channel_member.env["ir.attachment"].read_mail_file_content(

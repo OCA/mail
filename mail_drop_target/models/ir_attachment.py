@@ -27,8 +27,7 @@ class IrAttachment(models.Model):
         if not hasattr(res_obj, "message_drop"):
             return False
         message = raw_content
-        thread_id = res_obj.message_drop(
-            res_obj._name, message, thread_id=res_obj.id)
+        thread_id = res_obj.message_drop(res_obj._name, message, thread_id=res_obj.id)
         return thread_id
 
     def read_mail_file_content(self, file_name, raw_content, res_id, res_model):
@@ -42,7 +41,7 @@ class IrAttachment(models.Model):
         if not res_obj:
             return False
 
-        handler = "_process_email_file_{}".format(file_extension)
+        handler = f"_process_email_file_{file_extension}"
         if not hasattr(self, handler):
             handler = "_process_email_file_default"
 

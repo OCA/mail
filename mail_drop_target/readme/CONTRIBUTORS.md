@@ -1,0 +1,6 @@
+- Holger Brunn \<hbrunn@therp.nl\>
+- Enric Tobella \<etobella@creublanca.es\>
+- Lois Rilo \<lois.rilo@forgeflow.com\>
+- Nguyen Minh Chien \<chien@trobz.com\>
+- Prabhu Appalapuri\<prabhu.appalapuri@samsa-it.de\>
+- Artiom Kichojal\<Artiom.Kichojal@samsa-it.de\>

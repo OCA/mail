@@ -1,11 +1,11 @@
 /* @odoo-module */
 
-import { AttachmentUploadService } from "@mail/core/common/attachment_upload_service";
+import {AttachmentUploadService} from "@mail/core/common/attachment_upload_service";
 
-import { patch } from "@web/core/utils/patch";
-import { url } from "@web/core/utils/urls";
-import { _t } from "@web/core/l10n/translation";
-import { Deferred } from "@web/core/utils/concurrency";
+import {patch} from "@web/core/utils/patch";
+import {url} from "@web/core/utils/urls";
+import {_t} from "@web/core/l10n/translation";
+import {Deferred} from "@web/core/utils/concurrency";
 
 patch(AttachmentUploadService.prototype, {
     setup(env, services) {
@@ -24,7 +24,7 @@ patch(AttachmentUploadService.prototype, {
 
         this.fileUploadService.bus.addEventListener(
             "FILE_UPLOAD_ADDED",
-            ({ detail: { upload } }) => {
+            ({detail: {upload}}) => {
                 const tmpId = parseInt(upload.data.get("temporary_id"));
                 if (!this.uploadingAttachmentIds.has(tmpId)) {
                     return;
@@ -53,7 +53,7 @@ patch(AttachmentUploadService.prototype, {
         );
         this.fileUploadService.bus.addEventListener(
             "FILE_UPLOAD_LOADED",
-            ({ detail: { upload } }) => {
+            ({detail: {upload}}) => {
                 const tmpId = parseInt(upload.data.get("temporary_id"));
                 if (!this.uploadingAttachmentIds.has(tmpId)) {
                     return;
@@ -63,36 +63,43 @@ patch(AttachmentUploadService.prototype, {
                 this.abortByAttachmentId.delete(tmpId);
                 const hooker = this.hookersByTmpId.get(tmpId);
                 if (upload.xhr.status === 413) {
-                    this.notificationService.add(_t("File too large"), { type: "danger" });
+                    this.notificationService.add(_t("File too large"), {
+                        type: "danger",
+                    });
                     this.hookersByTmpId.delete(tmpId);
                     return;
                 }
                 if (upload.xhr.status !== 200) {
-                    this.notificationService.add(_t("Server error"), { type: "danger" });
+                    this.notificationService.add(_t("Server error"), {type: "danger"});
                     this.hookersByTmpId.delete(tmpId);
                     return;
                 }
                 const response = JSON.parse(upload.xhr.response);
                 if (response.error) {
-                    this.notificationService.add(response.error, { type: "danger" });
+                    this.notificationService.add(response.error, {type: "danger"});
                     this.hookersByTmpId.delete(tmpId);
                     return;
                 }
                 let xhrResp = JSON.parse(upload.xhr.response);
-                if(xhrResp.email_upload){
+                if (xhrResp.email_upload) {
                     location.reload();
-                    return
+                    return;
                 }
                 const threadId = parseInt(upload.data.get("thread_id"));
                 const threadModel = upload.data.get("thread_model");
-                const originThread = this.store.Thread.get({ model: threadModel, id: threadId });
+                const originThread = this.store.Thread.get({
+                    model: threadModel,
+                    id: threadId,
+                });
                 const attachment = this.store.Attachment.insert({
                     ...response,
                     extension: upload.title.split(".").pop(),
                     originThread: hooker.composer ? undefined : originThread,
                 });
                 if (hooker.composer) {
-                    const index = hooker.composer.attachments.findIndex(({ id }) => id === tmpId);
+                    const index = hooker.composer.attachments.findIndex(
+                        ({id}) => id === tmpId
+                    );
                     if (index >= 0) {
                         hooker.composer.attachments[index] = attachment;
                     } else {
@@ -111,7 +118,7 @@ patch(AttachmentUploadService.prototype, {
         );
         this.fileUploadService.bus.addEventListener(
             "FILE_UPLOAD_ERROR",
-            ({ detail: { upload } }) => {
+            ({detail: {upload}}) => {
                 const tmpId = parseInt(upload.data.get("temporary_id"));
                 if (!this.uploadingAttachmentIds.has(tmpId)) {
                     return;
@@ -122,5 +129,5 @@ patch(AttachmentUploadService.prototype, {
                 this.hookersByTmpId.delete(tmpId);
             }
         );
-    }
+    },
 });

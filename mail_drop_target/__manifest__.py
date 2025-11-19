@@ -6,17 +6,15 @@
     "author": "Therp BV,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Discuss",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "summary": "Attach emails to Odoo by dragging them from your desktop",
     "depends": ["mail"],
     "external_dependencies": {"python": ["extract_msg", "cryptography<37"]},
-    "data": [
-        "views/res_config_settings_views.xml"
-    ],
+    "data": ["views/res_config_settings_views.xml"],
     "assets": {
         "web.assets_backend": [
             "mail_drop_target/static/src/core/common/thread_service_patch.js",
-            "mail_drop_target/static/src/js/attachment_upload_service.js"
+            "mail_drop_target/static/src/js/attachment_upload_service.js",
         ],
     },
 }
