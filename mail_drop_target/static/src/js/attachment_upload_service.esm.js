@@ -1,20 +1,20 @@
-/* @odoo-module */
+/** @odoo-module **/
 
 import {AttachmentUploadService} from "@mail/core/common/attachment_upload_service";
 
 import {patch} from "@web/core/utils/patch";
-import {url} from "@web/core/utils/urls";
+// Import {url} from "@web/core/utils/urls";
 import {_t} from "@web/core/l10n/translation";
-import {Deferred} from "@web/core/utils/concurrency";
+// Import {Deferred} from "@web/core/utils/concurrency";
 
 patch(AttachmentUploadService.prototype, {
     setup(env, services) {
         this.env = env;
-        this.fileUploadService = services["file_upload"];
-        /** @type {import("@mail/core/common/store_service").Store} */
+        this.fileUploadService = services.file_upload;
+        /** @type {import("@mail/core/common/store_service").Store} **/
         this.store = services["mail.store"];
-        this.notificationService = services["notification"];
-        /** @type {import("@mail/core/common/attachment_service").AttachmentService} */
+        this.notificationService = services.notification;
+        /** @type {import("@mail/core/common/attachment_service").AttachmentService} **/
         this.attachmentService = services["mail.attachment"];
 
         this.abortByAttachmentId = new Map();
@@ -80,7 +80,7 @@ patch(AttachmentUploadService.prototype, {
                     this.hookersByTmpId.delete(tmpId);
                     return;
                 }
-                let xhrResp = JSON.parse(upload.xhr.response);
+                const xhrResp = JSON.parse(upload.xhr.response);
                 if (xhrResp.email_upload) {
                     location.reload();
                     return;

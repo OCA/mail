@@ -1,4 +1,4 @@
-/** @odoo-module */
+/** @odoo-module **/
 
 import {ThreadService} from "@mail/core/common/thread_service";
 import {patch} from "@web/core/utils/patch";
@@ -17,7 +17,7 @@ patch(ThreadService.prototype, {
             return [];
         }
         try {
-            // ordered messages received: newest to oldest
+            // Ordered messages received: newest to oldest
             const {messages: rawMessages} = await this.rpc(this.getFetchRoute(thread), {
                 ...this.getFetchParams(thread),
                 limit: FETCH_LIMIT,

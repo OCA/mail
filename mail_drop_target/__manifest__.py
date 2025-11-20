@@ -13,8 +13,8 @@
     "data": ["views/res_config_settings_views.xml"],
     "assets": {
         "web.assets_backend": [
-            "mail_drop_target/static/src/core/common/thread_service_patch.js",
-            "mail_drop_target/static/src/js/attachment_upload_service.js",
+            "mail_drop_target/static/src/core/common/thread_service_patch.esm.js",
+            "mail_drop_target/static/src/js/attachment_upload_service.esm.js",
         ],
     },
 }
