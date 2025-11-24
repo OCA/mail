@@ -140,24 +140,28 @@ class MailTrackingEmail(models.Model):
         return res
 
     @api.model
+    @api.model
+    @api.model
+    @api.model
     def _search(
         self,
         domain,
         offset=0,
         limit=None,
         order=None,
+        count=False,
+        access_rights_uid=None,
     ):
-        """Override that adds specific access rights of mail.tracking.email, to remove
-        ids uid could not see according to our custom rules. Please refer to
-        _check_access() for more details about those rules.
-        """
-        query = super()._search(domain, offset, limit, order)
-        if not self.env.is_superuser():
-            records = self.browse(query)
-            allowed_ids = self._get_allowed_ids(records.ids)
-            return self.browse(allowed_ids)._as_query(order)
-
-        return query
+        """Odoo 18: count NICHT an super()._search geben; access_rights_uid korrekt anwenden."""
+        env_model = self.with_user(access_rights_uid) if access_rights_uid else self
+        if count:
+            return env_model.search_count(domain)
+        return super(MailTrackingEmail, env_model)._search(
+            domain,
+            offset=offset,
+            limit=limit,
+            order=order,
+        )
 
     def _make_access_error(self, operation: str) -> AccessError:
         return AccessError(
@@ -230,29 +234,33 @@ class MailTrackingEmail(models.Model):
                 (ids,),
             )
         )
-        result = self.env.cr.fetchall()
-        _, msg_ids, mail_ids, partner_ids = zip(*result, strict=True)
-        msg_ids = (
-            self.env["mail.message"]
-            .search([("id", "in", [x for x in msg_ids if x])])
-            .ids
-        )
-        # Only users from group_system can read mail.mail
+        result = self.env.cr.fetchall() or []
+
+        msg_ids, mail_ids, partner_ids = set(), set(), set()
+        for row in result:
+            if not row or len(row) < 4:
+                continue
+            _, mmsg, mmail, ptnr = row
+            if mmsg:
+                msg_ids.add(mmsg)
+            if mmail:
+                mail_ids.add(mmail)
+            if ptnr:
+                partner_ids.add(ptnr)
+
+        msg_ids = self.env["mail.message"].search([("id", "in", list(msg_ids))]).ids
         if self.env.user.has_group("base.group_system"):
-            mail_ids = (
-                self.env["mail.mail"]
-                .search([("id", "in", [x for x in mail_ids if x])])
-                .ids
-            )
+            mail_ids = self.env["mail.mail"].search([("id", "in", list(mail_ids))]).ids
         else:
             mail_ids = []
         partner_ids = (
-            self.env["res.partner"]
-            .search([("id", "in", [x for x in partner_ids if x])])
-            .ids
+            self.env["res.partner"].search([("id", "in", list(partner_ids))]).ids
         )
 
-        for id_, mail_msg_id, mail_id, partner_id in result:
+        for row in result:
+            if not row or len(row) < 4:
+                continue
+            id_, mail_msg_id, mail_id, partner_id = row
             if (
                 (mail_msg_id in msg_ids)
                 or (mail_id in mail_ids)
@@ -262,7 +270,6 @@ class MailTrackingEmail(models.Model):
                 allowed_ids.add(id_)
         return allowed_ids
 
-    @api.model
     def email_is_bounced(self, email):
         if not email:
             return False
