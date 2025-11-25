@@ -231,7 +231,9 @@ class MailTrackingEmail(models.Model):
             )
         )
         result = self.env.cr.fetchall()
-        _, msg_ids, mail_ids, partner_ids = zip(*result, strict=True)
+        msg_ids, mail_ids, partner_ids = [], [], []
+        if result:
+            _, msg_ids, mail_ids, partner_ids = zip(*result, strict=True)
         msg_ids = (
             self.env["mail.message"]
             .search([("id", "in", [x for x in msg_ids if x])])
