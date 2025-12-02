@@ -52,9 +52,7 @@ class MailActivityTeam(models.Model):
     @api.onchange("user_id")
     def _onchange_user_id(self):
         if self.user_id and self.user_id not in self.member_ids:
-            members_ids = self.member_ids.ids
-            members_ids.append(self.user_id.id)
-            self.member_ids = [(4, member) for member in members_ids]
+            self.member_ids += self.user_id
 
     def assign_team_to_unassigned_activities(self):
         activity_model = self.env["mail.activity"]

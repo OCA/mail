@@ -44,6 +44,13 @@ class MailActivityMixin(models.AbstractModel):
         user-team missmatch. We can hook onto `act_values` dict as it's passed
         to the create activity method.
         """
+        # Pick up some defaults from mail.activity.schedule
+        for field in ("team_id", "team_user_id", "user_id"):
+            if self.env.context.get(f"schedule_default_{field}") and not act_values.get(
+                field
+            ):
+                act_values[field] = self.env.context[f"schedule_default_{field}"]
+
         if self.env.context.get("force_activity_team"):
             act_values["team_id"] = self.env.context["force_activity_team"].id
         if "team_id" not in act_values:

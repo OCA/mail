@@ -6,7 +6,7 @@
         <field
             name="domain_force"
         >[('team_id', 'in', user.activity_team_ids.ids)]</field>
-        <field name="groups" eval="[(4, ref('base.group_user'))]" />
+        <field name="groups" eval="[Command.link(ref('base.group_user'))]" />
         <field name="perm_create" eval="False" />
         <field name="perm_read" eval="False" />
         <field name="perm_write" eval="True" />
