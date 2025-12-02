@@ -4,6 +4,7 @@ import os
 from datetime import date
 
 from odoo.exceptions import ValidationError
+from odoo.fields import Command
 from odoo.modules.migration import load_script
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
@@ -24,9 +25,7 @@ class TestMailActivityTeam(TransactionCase):
                 "login": "csu",
                 "email": "crmuser@yourcompany.com",
                 "groups_id": [
-                    (
-                        6,
-                        0,
+                    Command.set(
                         [
                             cls.env.ref("base.group_user").id,
                             cls.env.ref("base.group_partner_manager").id,
@@ -41,7 +40,7 @@ class TestMailActivityTeam(TransactionCase):
                 "name": "Employee 2",
                 "login": "csu2",
                 "email": "crmuser2@yourcompany.com",
-                "groups_id": [(6, 0, [cls.env.ref("base.group_user").id])],
+                "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
         cls.employee3 = cls.env["res.users"].create(
@@ -50,7 +49,7 @@ class TestMailActivityTeam(TransactionCase):
                 "name": "Employee 3",
                 "login": "csu3",
                 "email": "crmuser3@yourcompany.com",
-                "groups_id": [(6, 0, [cls.env.ref("base.group_user").id])],
+                "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
         # Create Activity Types
@@ -91,15 +90,15 @@ class TestMailActivityTeam(TransactionCase):
         cls.team1 = cls.env["mail.activity.team"].create(
             {
                 "name": "Team 1",
-                "res_model_ids": [(6, 0, [cls.partner_ir_model.id])],
-                "member_ids": [(6, 0, [cls.employee.id])],
+                "res_model_ids": [Command.set([cls.partner_ir_model.id])],
+                "member_ids": [Command.set([cls.employee.id])],
             }
         )
         cls.team2 = cls.env["mail.activity.team"].create(
             {
                 "name": "Team 2",
-                "res_model_ids": [(6, 0, [cls.partner_ir_model.id])],
-                "member_ids": [(6, 0, [cls.employee.id, cls.employee2.id])],
+                "res_model_ids": [Command.set([cls.partner_ir_model.id])],
+                "member_ids": [Command.set([cls.employee.id, cls.employee2.id])],
             }
         )
         cls.act2 = (
@@ -318,6 +317,62 @@ class TestMailActivityTeam(TransactionCase):
         # As we are in a 'team activity' context, the user should not be set
         self.assertEqual(next_activities.user_id, self.env["res.users"])
 
+    def test_mail_activity_schedule_wizard(self):
+        self.activity1.default_team_id = self.team1
+        wizard_form = Form(
+            self.env["mail.activity.schedule"].with_context(
+                active_ids=self.partner_client.ids,
+                active_model=self.partner_client._name,
+            )
+        )
+        wizard_form.activity_type_id = self.activity1
+        # The activity's default team is set, and its member is the assigned user
+        self.assertEqual(wizard_form.activity_team_id, self.team1)
+        self.assertEqual(wizard_form.activity_team_user_id, self.employee)
+
+        # Assign a team with a default member
+        self.team2.user_id = self.employee2
+        wizard_form.activity_team_id = self.team2
+        # Original team user is kept because it is also a member of the new team
+        self.assertEqual(wizard_form.activity_team_user_id, self.employee)
+
+        # Reset some values and assign the team with the default user again
+        wizard_form.activity_team_user_id = self.env["res.users"]
+        wizard_form.activity_team_id = self.team2
+        # Now the team user is the default user of the team
+        self.assertEqual(wizard_form.activity_team_user_id, self.employee2)
+
+        other_team = self.env["mail.activity.team"].create(
+            {
+                "name": "Team 3",
+                "member_ids": [
+                    Command.link(self.employee.id),
+                    Command.link(self.employee3.id),
+                ],
+            },
+        )
+        wizard_form.activity_team_id = other_team
+        # Employee 2 is not a member of the new team, so team user is reset
+        self.assertFalse(wizard_form.activity_team_user_id)
+
+        # Set one of the members of the team and schedule the activity
+        wizard_form.activity_team_user_id = self.employee3
+
+        activities = self.partner_client.activity_ids
+        # Schedule the activity
+        wizard_form.save().action_schedule_activities()
+        activity = self.partner_client.activity_ids - activities
+        self.assertRecordValues(
+            activity,
+            [
+                {
+                    "activity_type_id": self.activity1.id,
+                    "team_id": other_team.id,
+                    "user_id": self.employee3.id,
+                },
+            ],
+        )
+
     def test_schedule_activity_from_server_action(self):
         partner = self.env["res.partner"].create({"name": "Test Partner"})
         action = self.env["ir.actions.server"].create(
@@ -447,3 +502,178 @@ class TestMailActivityTeam(TransactionCase):
         mod.migrate(self.env.cr, "18.0.1.0.0")
 
         self.assertFalse(rule.perm_create)
+
+    def test_mail_activity_plan_ui_logic(self):
+        """Check team/team user consistency in plan template view"""
+        plan = self.env["mail.activity.plan"].create(
+            {
+                "name": __name__,
+                "res_model": "res.partner",
+            }
+        )
+        self.activity1.default_team_id = self.team1
+        template = self.env["mail.activity.plan.template"].create(
+            {
+                "summary": __name__,
+                "responsible_type": "other",
+                "responsible_id": self.employee3.id,
+                "activity_type_id": self.activity1.id,
+                "plan_id": plan.id,
+                "sequence": 1,
+                "delay_count": 1,
+            }
+        )
+        # Team is not set by default
+        self.assertFalse(template.activity_team_id)
+        # If template is set to assign to team, default team of the activity is set
+        template.responsible_type = "team"
+        self.assertEqual(template.activity_team_id, self.team1)
+
+        # Can't just remove the team without changing the assignment type
+        with self.assertRaisesRegex(
+            ValidationError,
+            "Please enter an activity team",
+        ):
+            with self.env.cr.savepoint():
+                template.activity_team_id = False
+
+        # Team is reset if type is not team
+        template.write(
+            {
+                "responsible_type": "other",
+                "responsible_id": self.env.user.id,
+            },
+        )
+        self.assertFalse(template.activity_team_id)
+
+        # The default team user is set to the only member of the team
+        template.write(
+            {
+                "responsible_type": "team",
+                "activity_team_id": self.team1.id,
+            }
+        )
+        self.assertEqual(template.activity_team_user_id, self.employee)
+        # The responsible is reset if assignment is changed to team
+        self.assertFalse(template.responsible_id)
+        # Assign a team with a default member
+        self.team2.user_id = self.employee2
+        template.activity_team_id = self.team2
+        # Original team user is kept because it is also a member of the new team
+        self.assertEqual(template.activity_team_user_id, self.employee)
+        # Team user is reset if team is reset
+        template.write(
+            {
+                "responsible_type": "other",
+                "responsible_id": self.env.user.id,
+                "activity_team_id": False,
+            },
+        )
+        self.assertFalse(template.activity_team_user_id)
+        # Assign the team with the default user again
+        template.write(
+            {
+                "responsible_type": "team",
+                "activity_team_id": self.team2.id,
+            },
+        )
+        # Now the team user is the default user of the team
+        self.assertEqual(template.activity_team_user_id, self.employee2)
+
+        other_team = self.env["mail.activity.team"].create(
+            {
+                "name": "Team 3",
+                "member_ids": [
+                    Command.link(self.employee.id),
+                    Command.link(self.employee3.id),
+                ],
+            },
+        )
+        template.activity_team_id = other_team
+        # Employee 2 is not a member of the new team, so team user is reset
+        self.assertFalse(template.activity_team_user_id)
+
+    def test_mail_activity_plan(self):
+        """Activities for teams can be scheduled using an activity plan"""
+        plan = self.env["mail.activity.plan"].create(
+            {
+                "name": __name__,
+                "res_model": "res.partner",
+            }
+        )
+        self.env["mail.activity.plan.template"].create(
+            {
+                "summary": __name__,
+                "responsible_type": "other",
+                "responsible_id": self.employee3.id,
+                "activity_type_id": self.activity1.id,
+                "plan_id": plan.id,
+                "sequence": 1,
+                "delay_count": 1,
+            }
+        )
+        self.env["mail.activity.plan.template"].create(
+            {
+                "summary": __name__,
+                "responsible_type": "team",
+                "activity_team_id": self.team1.id,
+                "activity_type_id": self.activity2.id,
+                "plan_id": plan.id,
+                "sequence": 2,
+                "delay_count": 2,
+            }
+        )
+        activities = self.partner_client.activity_ids
+
+        wizard = (
+            self.env["mail.activity.schedule"]
+            .with_context(
+                active_ids=self.partner_client.ids,
+                active_model=self.partner_client._name,
+            )
+            .create(
+                {
+                    "plan_id": plan.id,
+                    "plan_date": date.today(),
+                }
+            )
+        )
+        wizard.action_schedule_plan()
+        new_activities = self.partner_client.activity_ids - activities
+        self.assertRecordValues(
+            new_activities,
+            [
+                {
+                    "activity_type_id": self.activity2.id,
+                    "team_id": self.team1.id,
+                    "user_id": False,
+                },
+                {
+                    "activity_type_id": self.activity1.id,
+                    "team_id": False,
+                    "user_id": self.employee3.id,
+                },
+            ],
+        )
+
+        # Coverage: _plan_filter_activity_templates_to_schedule will still
+        # return both activities if called without special context key
+        self.assertEqual(
+            wizard._plan_filter_activity_templates_to_schedule(),
+            plan.template_ids,
+        )
+        # or when upper frame inspection fails
+        with self.assertLogs(
+            "odoo.addons.mail_activity_team.wizard.mail_activity_schedule",
+            level="WARNING",
+        ) as log_catcher:
+            self.assertEqual(
+                wizard.with_context(
+                    fire_team_activities=True,
+                )._plan_filter_activity_templates_to_schedule(),
+                plan.template_ids,
+            )
+            self.assertIn(
+                "Could not find 'activity_descriptions' list in inspected frames",
+                log_catcher.output[0],
+            )

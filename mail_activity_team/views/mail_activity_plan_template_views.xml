@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mail_activity_plan_template_view_form" model="ir.ui.view">
+        <field name="inherit_id" ref="mail.mail_activity_plan_template_view_form" />
+        <field name="model">mail.activity.plan.template</field>
+        <field name="arch" type="xml">
+            <field name="responsible_id" position="after">
+                <field
+                    name="activity_team_user_id"
+                    invisible="not activity_team_required"
+                    options="{'no_create': True}"
+                    domain="[('activity_team_ids', '=', activity_team_id)]"
+                />
+                <field
+                    name="activity_team_id"
+                    invisible="not activity_team_required"
+                    required="activity_team_required"
+                    options="{'no_create': True}"
+                    domain="['|', ('res_model_ids', '=', False), ('res_model_ids.model', '=', res_model)]"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>

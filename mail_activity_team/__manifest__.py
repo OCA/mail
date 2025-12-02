@@ -18,6 +18,8 @@
         "security/mail_activity_team_security.xml",
         "wizard/mail_activity_schedule.xml",
         "views/ir_actions_server_views.xml",
+        "views/mail_activity_plan_template_views.xml",
+        "views/mail_activity_plan_views.xml",
         "views/mail_activity_type.xml",
         "views/mail_activity_team_views.xml",
         "views/mail_activity_views.xml",

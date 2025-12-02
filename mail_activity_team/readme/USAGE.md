@@ -12,5 +12,8 @@ Teams.
 When you create a new activity the application will propose the user's
 assigned team.
 
+When creating activity plans, instead of assigning an activity to a user, there
+is also the option to assign it to a team instead.
+
 You can report on the activities assigned to a team going to *Dashboards
 / Activities*, and then filter by a specific team or group by teams.

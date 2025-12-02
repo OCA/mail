@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mail_activity_plan_view_form" model="ir.ui.view">
+        <field name="inherit_id" ref="mail.mail_activity_plan_view_form" />
+        <field name="model">mail.activity.plan</field>
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='template_ids']/list/field[@name='responsible_id']"
+                position="after"
+            >
+                <field name="activity_team_id" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
