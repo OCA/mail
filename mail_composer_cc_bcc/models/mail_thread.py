@@ -118,14 +118,14 @@ class MailThread(models.AbstractModel):
             if rcpt_data["notification_group_name"] == "customer":
                 customer_data = rcpt_data
             else:
-                ids += rcpt_data["recipients"]
+                ids += rcpt_data["recipients_data"]
         if not customer_data:
             customer_data = res[0]
             customer_data["notification_group_name"] = "customer"
-            customer_data["recipients"] = ids
+            customer_data["recipients_data"] = ids
         else:
             customer_data.setdefault("recipients", [])
-            customer_data["recipients"] += ids
+            customer_data["recipients_data"] += ids
         return [customer_data]
 
     def _notify_thread(self, message, msg_vals=False, **kwargs):
