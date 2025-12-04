@@ -178,7 +178,7 @@ class TestMailActivityBoardMethods(TransactionCase):
         - if the method returns the correct action,
         - if the correct activities are shown.
         """
-        action_id = self.env.ref("mail_activity_board.open_boards_activities").id
+        action_id = self.env.ref("mail.mail_activity_action_my").id
         action = self.partner_client.redirect_to_activities(
             **{
                 "id": self.partner_client.id,

@@ -4,7 +4,7 @@
 {
     "name": "Mail Activity Board",
     "summary": "Add Activity Boards",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "development_status": "Beta",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
@@ -12,8 +12,8 @@
     " Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "installable": True,
-    "depends": ["calendar", "spreadsheet_dashboard"],
-    "data": ["security/groups.xml", "views/mail_activity_view.xml"],
+    "depends": ["calendar"],
+    "data": ["views/mail_activity_view.xml"],
     "assets": {
         "web.assets_backend": [
             "mail_activity_board/static/src/components/chatter/chatter.esm.js",

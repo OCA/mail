@@ -53,6 +53,9 @@ class MailActivity(models.Model):
     @api.model
     def action_activities_board(self):
         action = self.env["ir.actions.act_window"]._for_xml_id(
-            "mail_activity_board.open_boards_activities"
+            "mail.mail_activity_action_my"
         )
+
+        action["context"] = {}
+
         return action

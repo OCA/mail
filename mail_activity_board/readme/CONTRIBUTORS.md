@@ -6,3 +6,5 @@
   - Pedro Gonzalez (<pedro.gonzalez@pesol.es>)
 - [ACSONE SA/NV](https://www.acsone.eu)
   - Laurent Mignon \<<laurent.mignon@acsone.eu>\>
+- [glueckkanja AG](https://www.glueckkanja.com)
+  - Christopher Rogos \<<crogos@gmail.com>\>

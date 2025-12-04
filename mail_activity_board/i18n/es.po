@@ -18,41 +18,9 @@ msgstr ""
 "X-Generator: Weblate 4.17\n"
 
 #. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_kanban
-msgid "<i title=\"date\" class=\"fa fa-clock-o\"/>"
-msgstr "<i title=\"date\" class=\"fa fa-clock-o\"/>"
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_kanban
-msgid "<span><i title=\"date\" class=\"fa fa-clock-o\"/></span>"
-msgstr "<span><i title=\"date\" class=\"fa fa-clock-o\"/></span>"
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
-msgid "Act. next 6 months"
-msgstr "Act. próximos 6 meses"
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
-msgid "Act. next month"
-msgstr "Act. próximo mes"
-
-#. module: mail_activity_board
-#: model:ir.actions.act_window,name:mail_activity_board.open_boards_activities
-#: model:ir.ui.menu,name:mail_activity_board.board_menu_activities
-msgid "Activities"
-msgstr "Actividades"
-
-#. module: mail_activity_board
 #: model:ir.model,name:mail_activity_board.model_mail_activity
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_form_board
 msgid "Activity"
 msgstr "Actividad"
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_form_board
-msgid "Activity Form"
-msgstr "Formulario de actividad"
 
 #. module: mail_activity_board
 #: model:ir.model,name:mail_activity_board.model_mail_activity_mixin
@@ -65,6 +33,11 @@ msgid "Attendees"
 msgstr "Asistentes"
 
 #. module: mail_activity_board
+#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
+msgid "Deadline"
+msgstr ""
+
+#. module: mail_activity_board
 #: model:ir.model.fields,field_description:mail_activity_board.field_mail_activity__related_model_instance
 msgid "Document"
 msgstr "Documento"
@@ -75,30 +48,10 @@ msgid "Duration"
 msgstr "Duración"
 
 #. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_form_board
-msgid "Log a note..."
-msgstr "Registrar una nota..."
-
-#. module: mail_activity_board
 #: model:ir.model.fields,field_description:mail_activity_board.field_mail_activity__res_model_id_name
 #: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
 msgid "Origin"
 msgstr "Origen"
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
-msgid "Show activities scheduled for next 6 months."
-msgstr "Mostrar las actividades programadas para los próximos 6 meses."
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
-msgid "Show activities scheduled for next month."
-msgstr "Mostrar las actividades programadas para el próximo mes."
-
-#. module: mail_activity_board
-#: model:res.groups,name:mail_activity_board.group_show_mail_activity_board
-msgid "Show mail activity board"
-msgstr "Mostrar el tablero de actividades"
 
 #. module: mail_activity_board
 #: model:ir.model.fields,field_description:mail_activity_board.field_mail_activity__calendar_event_id_start
@@ -112,23 +65,46 @@ msgstr ""
 "Fecha de inicio de un evento, sin tiempo para eventos de días completos"
 
 #. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_form_board
-msgid "Start meeting"
-msgstr "Empezar reunión"
-
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_search
-msgid "User"
-msgstr "Usuario"
-
-#. module: mail_activity_board
 #. odoo-javascript
 #: code:addons/mail_activity_board/static/src/components/chatter/chatter.xml:0
-#, python-format
 msgid "View Activities"
 msgstr "Ver actividades"
 
-#. module: mail_activity_board
-#: model_terms:ir.ui.view,arch_db:mail_activity_board.mail_activity_view_form_board
-msgid "e.g. Discuss proposal"
-msgstr "Ej. Discutir propuesta"
+#~ msgid "<i title=\"date\" class=\"fa fa-clock-o\"/>"
+#~ msgstr "<i title=\"date\" class=\"fa fa-clock-o\"/>"
+
+#~ msgid "<span><i title=\"date\" class=\"fa fa-clock-o\"/></span>"
+#~ msgstr "<span><i title=\"date\" class=\"fa fa-clock-o\"/></span>"
+
+#~ msgid "Act. next 6 months"
+#~ msgstr "Act. próximos 6 meses"
+
+#~ msgid "Act. next month"
+#~ msgstr "Act. próximo mes"
+
+#~ msgid "Activities"
+#~ msgstr "Actividades"
+
+#~ msgid "Activity Form"
+#~ msgstr "Formulario de actividad"
+
+#~ msgid "Log a note..."
+#~ msgstr "Registrar una nota..."
+
+#~ msgid "Show activities scheduled for next 6 months."
+#~ msgstr "Mostrar las actividades programadas para los próximos 6 meses."
+
+#~ msgid "Show activities scheduled for next month."
+#~ msgstr "Mostrar las actividades programadas para el próximo mes."
+
+#~ msgid "Show mail activity board"
+#~ msgstr "Mostrar el tablero de actividades"
+
+#~ msgid "Start meeting"
+#~ msgstr "Empezar reunión"
+
+#~ msgid "User"
+#~ msgstr "Usuario"
+
+#~ msgid "e.g. Discuss proposal"
+#~ msgstr "Ej. Discutir propuesta"
