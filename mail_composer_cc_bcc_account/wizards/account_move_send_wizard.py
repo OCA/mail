@@ -55,15 +55,15 @@ class AccountMoveSendWizard(models.TransientModel):
             partners |= partners.find_or_create(mail_data)
         return partners
 
-    @api.depends("mail_template_id")
+    @api.depends("template_id")
     def _compute_mail_partner_cc_bcc_ids(self):
         for wizard in self:
-            if wizard.mail_template_id:
+            if wizard.template_id:
                 wizard.partner_cc_ids = self._get_partner_ids_from_mail(
-                    wizard.move_id, wizard.mail_template_id.email_cc
+                    wizard.move_id, wizard.template_id.email_cc
                 )
                 wizard.partner_bcc_ids = self._get_partner_ids_from_mail(
-                    wizard.move_id, wizard.mail_template_id.email_bcc
+                    wizard.move_id, wizard.template_id.email_bcc
                 )
             else:
                 wizard.partner_cc_ids = wizard.partner_bcc_ids = None
