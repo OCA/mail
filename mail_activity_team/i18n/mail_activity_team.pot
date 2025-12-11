@@ -20,6 +20,11 @@ msgid "(Team"
 msgstr ""
 
 #. module: mail_activity_team
+#: model_terms:ir.ui.view,arch_db:mail_activity_team.mail_activity_view_kanban_open_target
+msgid "<span class=\"fw-bold\">Team: </span>"
+msgstr ""
+
+#. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__active
 msgid "Active"
 msgstr ""
@@ -143,7 +148,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mail_activity_team/static/src/core/web/activity.xml:0
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity__team_id
-#: model_terms:ir.ui.view,arch_db:mail_activity_team.mail_activity_view_search
 msgid "Team"
 msgstr ""
 
@@ -172,11 +176,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity__team_user_id
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_schedule__activity_team_user_id
 msgid "Team user"
-msgstr ""
-
-#. module: mail_activity_team
-#: model_terms:ir.ui.view,arch_db:mail_activity_team.mail_activity_view_kanban
-msgid "Team:"
 msgstr ""
 
 #. module: mail_activity_team
