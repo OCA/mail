@@ -105,3 +105,19 @@ class MailActivity(models.Model):
             if self.user_id not in members and members:
                 self.user_id = members[:1]
         return res
+
+    @api.model
+    def get_team_activity_count(self):
+        """Get count of activities assigned to user's teams."""
+        user_team_ids = self.env.user.activity_team_ids.ids
+        if not user_team_ids:
+            return {"team_count": 0}
+
+        team_activities = self.search_count(
+            [
+                ("team_id", "in", user_team_ids),
+                ("date_deadline", ">=", fields.Date.today()),
+            ]
+        )
+
+        return {"team_count": team_activities}

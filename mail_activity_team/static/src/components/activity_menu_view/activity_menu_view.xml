@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates>
     <t
-        t-name="ActivityMenuView"
+        t-name="mail.ActivityMenu"
         t-inherit="mail.ActivityMenu"
         t-inherit-mode="extension"
     >
@@ -31,6 +31,16 @@
                     </li>
                 </ul>
             </div>
+        </xpath>
+
+        <xpath
+            expr="//span[hasclass('o-mail-ActivityMenu-counter')]"
+            position="replace"
+        >
+            <span class="o-mail-ActivityMenu-counter badge rounded-pill">
+                <t t-esc="store.activityCounter" />
+                <t t-if="this.teamCounter > 0">/<t t-esc="this.teamCounter" /></t>
+            </span>
         </xpath>
     </t>
 </templates>
