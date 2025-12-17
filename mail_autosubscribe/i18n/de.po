@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-03-20 19:06+0000\n"
-"Last-Translator: Nils Coenen <nils.coenen@nico-solutions.de>\n"
+"PO-Revision-Date: 2025-12-17 11:47+0000\n"
+"Last-Translator: MJD <maximilian@si-gmbh.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_res_partner__mail_autosubscribe_ids
@@ -26,7 +26,7 @@ msgstr "Autosubscribe-Modelle"
 #. module: mail_autosubscribe
 #: model:ir.model,name:mail_autosubscribe.model_base
 msgid "Base"
-msgstr ""
+msgstr "Basis"
 
 #. module: mail_autosubscribe
 #: model:ir.model,name:mail_autosubscribe.model_res_partner
@@ -61,7 +61,7 @@ msgstr "E-Mail-Thread"
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: mail_autosubscribe
 #: model_terms:ir.ui.view,arch_db:mail_autosubscribe.view_partner_form
@@ -102,7 +102,7 @@ msgstr "Modellname"
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe__name
 #: model_terms:ir.ui.view,arch_db:mail_autosubscribe.view_mail_autosubscribe_form
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #. module: mail_autosubscribe
 #: model:ir.model.constraint,message:mail_autosubscribe.constraint_mail_autosubscribe_model_id_unique
@@ -112,4 +112,4 @@ msgstr "Für dieses Modell gibt es bereits eine Regel"
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_template__use_autosubscribe_followers
 msgid "Use Autosubscribe Followers"
-msgstr "Verwenden Sie die automatische Abonnenten-Funktion"
+msgstr "Verwenden Sie die automatische Abonnierfunktion"
