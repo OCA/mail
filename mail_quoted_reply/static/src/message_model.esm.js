@@ -15,6 +15,7 @@ patch(Message.prototype, {
                             ["messages"]
                         );
                         self.store.env.bus.trigger("update-messages");
+                        await thread?.fetchNewMessages();
                     },
                 });
             });
