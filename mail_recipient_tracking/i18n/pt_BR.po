@@ -64,12 +64,6 @@ msgstr ""
 "suavemente pelo servidor Mail Exchange (MX) do destinatário.\n"
 
 #. module: mail_tracking
-#. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_messages_panel/failed_messages_panel.esm.js:0
-msgid "%s failed messages found"
-msgstr ""
-
-#. module: mail_tracking
 #: model:ir.model.fields,help:mail_tracking.field_mail_message__email_cc
 msgid "Additional recipients that receive a \"Carbon Copy\" of the e-mail"
 msgstr "Destinatários adicionais que recebem uma \"cópia carbono\" do e-mail"
@@ -352,7 +346,6 @@ msgstr "Destinatários com Falha:"
 
 #. module: mail_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_messages_panel/failed_messages_panel.esm.js:0
 #: code:addons/mail_tracking/static/src/core/chatter/chatter.xml:0
 msgid "Failed messages"
 msgstr "Mensagens Falhadas"

@@ -11,6 +11,7 @@ patch(MailCoreCommon.prototype, {
                 const {message_ids: messageIds} = payload;
                 for (const id of messageIds) {
                     const message = this.store.Message.get({id});
+                    if (!message) continue;
                     const failedBox = this.store.failed;
                     if (notifId > failedBox.counter_bus_id) {
                         failedBox.counter--;

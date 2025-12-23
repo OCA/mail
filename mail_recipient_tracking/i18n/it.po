@@ -65,12 +65,6 @@ msgstr ""
 "modalità leggera dal server Mail Exchange (MX) del destinatario.\n"
 
 #. module: mail_tracking
-#. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_messages_panel/failed_messages_panel.esm.js:0
-msgid "%s failed messages found"
-msgstr "Trovati %s messaggi falliti"
-
-#. module: mail_tracking
 #: model:ir.model.fields,help:mail_tracking.field_mail_message__email_cc
 msgid "Additional recipients that receive a \"Carbon Copy\" of the e-mail"
 msgstr ""
@@ -354,7 +348,6 @@ msgstr "Destinatari falliti:"
 
 #. module: mail_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_messages_panel/failed_messages_panel.esm.js:0
 #: code:addons/mail_tracking/static/src/core/chatter/chatter.xml:0
 msgid "Failed messages"
 msgstr "Messaggi falliti"
@@ -865,6 +858,9 @@ msgstr "In attesa"
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Waiting Status"
 msgstr "Stato attesa"
+
+#~ msgid "%s failed messages found"
+#~ msgstr "Trovati %s messaggi falliti"
 
 #~ msgid "Guest"
 #~ msgstr "Ospite"
