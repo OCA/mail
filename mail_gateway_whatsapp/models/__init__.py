@@ -1,3 +1,4 @@
+from . import ir_actions_server
 from . import mail_gateway
 from . import mail_thread
 from . import mail_gateway_whatsapp
