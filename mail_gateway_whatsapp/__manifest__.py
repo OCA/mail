@@ -3,8 +3,7 @@
 
 {
     "name": "Mail Whatsapp Gateway",
-    "summary": """
-        Set a gateway for whatsapp""",
+    "summary": "Set a gateway for WhatsApp",
     "version": "18.0.2.0.0",
     "license": "AGPL-3",
     "author": "Creu Blanca, Dixmit, Odoo Community Association (OCA)",
@@ -14,6 +13,7 @@
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
+        "views/ir_actions_server_views.xml",
         "wizards/whatsapp_composer.xml",
         "wizards/mail_compose_gateway_message.xml",
         "views/mail_whatsapp_template_views.xml",
