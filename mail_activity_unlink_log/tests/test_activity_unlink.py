@@ -57,9 +57,7 @@ class TestActivityUnlink(BaseCommon):
         )
 
         # Create an activity on the partner
-        self.partner.activity_schedule(
-            act_type_xmlid="mail.mail_activity_data_todo"
-        )
+        self.partner.activity_schedule(act_type_xmlid="mail.mail_activity_data_todo")
         self.assertTrue(self.partner.activity_ids)
 
         # Unlink the partner → triggers mail.activity.mixin.unlink
@@ -70,4 +68,3 @@ class TestActivityUnlink(BaseCommon):
             [("subtype_id", "=", self.unlink_subtype.id)]
         )
         self.assertFalse(messages)
-
