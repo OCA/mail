@@ -8,7 +8,7 @@
     "version": "19.0.1.0.0",
     "license": "AGPL-3",
     "author": "CreuBlanca,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail"],
     "data": ["data/unlink_message.xml"],
 }
