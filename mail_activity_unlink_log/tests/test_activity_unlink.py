@@ -47,3 +47,27 @@ class TestActivityUnlink(BaseCommon):
                 lambda r: r.subtype_id == self.unlink_subtype
             )
         )
+
+    def test_mixin_unlink(self):
+        # No unlink messages initially
+        self.assertFalse(
+            self.partner.message_ids.filtered(
+                lambda r: r.subtype_id == self.unlink_subtype
+            )
+        )
+
+        # Create an activity on the partner
+        self.partner.activity_schedule(
+            act_type_xmlid="mail.mail_activity_data_todo"
+        )
+        self.assertTrue(self.partner.activity_ids)
+
+        # Unlink the partner → triggers mail.activity.mixin.unlink
+        self.partner.unlink()
+
+        # No unlink message should be posted because of the context flag
+        messages = self.env["mail.message"].search(
+            [("subtype_id", "=", self.unlink_subtype.id)]
+        )
+        self.assertFalse(messages)
+
