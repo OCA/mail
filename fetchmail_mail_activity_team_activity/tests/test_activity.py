@@ -1,4 +1,3 @@
-# © 2022 initOS GmbH
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
@@ -11,9 +10,13 @@ _logger = logging.getLogger(__name__)
 
 
 class TestActivity(TransactionCase):
+    def setUp(self):
+        super().setUp()
+        # Clean up any existing teams before each test
+        self.env["mail.activity.team"].search([]).unlink()
+
     def generate_reply(self, message):
         return (
-            # "Date: Thu, 22 Sep 2022 12:23:20 +0000",
             "From: ext.partner@example.org\r\n"
             "To: odoo.test@local\r\n"
             f"Message-ID: {uuid.uuid4()}\r\n"
@@ -22,20 +25,35 @@ class TestActivity(TransactionCase):
         )
 
     def test_no_team(self):
+        """Test that no activity is created when no team exists"""
+        # Ensure no teams exist
+        teams = self.env["mail.activity.team"].search([])
+        self.assertEqual(len(teams), 0, "Should have no teams before test")
+
         thread = self.env.user.partner_id
         msg = thread.message_notify(
             partner_ids=self.env.user.partner_id.ids,
             body="Testing",
         )
 
-        messages = thread.message_ids
-        activities = thread.activity_ids
-        reply = self.generate_reply(msg)
+        # Record initial state
+        initial_activities = thread.activity_ids
+        initial_message_count = len(thread.message_ids)
 
+        # Process email reply
+        reply = self.generate_reply(msg)
         thread_id = thread.message_process(thread._name, reply)
-        self.assertTrue(len(messages) < len(thread.message_ids))
-        self.assertEqual(activities, thread.activity_ids)
+
+        # Assertions
         self.assertEqual(thread_id, thread.id)
+        self.assertTrue(len(thread.message_ids) > initial_message_count)
+
+        # CRITICAL: No new activity should be created
+        self.assertEqual(
+            thread.activity_ids.ids,
+            initial_activities.ids,
+            "No activity should be created when no team exists",
+        )
 
     def test_with_team(self):
         thread = self.env.user.partner_id
