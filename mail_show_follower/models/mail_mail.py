@@ -80,6 +80,8 @@ class MailMail(models.Model):
             # recipients from any Notification Type (i.e. email, inbox, etc.)
             recipients = mail.notification_ids.res_partner_id
             record = self.env[mail.model].browse(mail.res_id)
+            if not record.exists():
+                continue
             company = getattr(record, "company_id", False)
             if not company:
                 company = self.env.company
