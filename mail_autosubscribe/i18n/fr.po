@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-01-09 05:42+0000\n"
+"PO-Revision-Date: 2026-01-09 10:42+0000\n"
 "Last-Translator: Julien Hémono <julien@hemono.fr>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -81,7 +81,7 @@ msgstr "Mis à jour le"
 #. module: mail_autosubscribe
 #: model:ir.actions.act_window,name:mail_autosubscribe.action_mail_autosubscribe
 msgid "Mail Auto Subscribe"
-msgstr "Auto-abonnement par e-mail"
+msgstr "Abonnement automatique par e-mail"
 
 #. module: mail_autosubscribe
 #: model:ir.model,name:mail_autosubscribe.model_mail_autosubscribe
@@ -91,25 +91,25 @@ msgstr "Abonnement automatique par e-mail"
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe__model_id
 msgid "Model"
-msgstr ""
+msgstr "Modèle"
 
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe__model
 msgid "Model Name"
-msgstr ""
+msgstr "Nom du modèle"
 
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_autosubscribe__name
 #: model_terms:ir.ui.view,arch_db:mail_autosubscribe.view_mail_autosubscribe_form
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #. module: mail_autosubscribe
 #: model:ir.model.constraint,message:mail_autosubscribe.constraint_mail_autosubscribe_model_id_unique
 msgid "There's already a rule for this model"
-msgstr ""
+msgstr "Il existe déjà une règle pour ce modèle"
 
 #. module: mail_autosubscribe
 #: model:ir.model.fields,field_description:mail_autosubscribe.field_mail_template__use_autosubscribe_followers
 msgid "Use Autosubscribe Followers"
-msgstr ""
+msgstr "Utiliser les abonnés automatiques"
