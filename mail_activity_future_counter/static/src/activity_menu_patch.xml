@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<t t-name="mail.ActivityMenu" t-inherit="mail.ActivityMenu" t-inherit-mode="extension">
+    <xpath expr="//span[hasclass('o-mail-ActivityMenu-counter')]" position="after">
+        <span
+                t-if="store.activityFutureCounter"
+                class="o-mail-ActivityMenu-futureCounter badge rounded-pill"
+            ><t t-esc="store.activityFutureCounter" /></span>
+    </xpath>
+</t>
+
+</templates>
