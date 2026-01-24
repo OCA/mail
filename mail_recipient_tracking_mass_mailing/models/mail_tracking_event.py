@@ -11,7 +11,6 @@ class MailTrackingEvent(models.Model):
     mass_mailing_id = fields.Many2one(
         string="Mass mailing",
         comodel_name="mailing.mailing",
-        readonly=True,
         related="tracking_email_id.mass_mailing_id",
         store=True,
     )

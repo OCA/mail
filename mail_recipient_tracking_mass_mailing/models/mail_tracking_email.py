@@ -31,11 +31,12 @@ class MailTrackingEmail(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        tracking = super().create(vals_list)
+        res = super().create(vals_list)
         # Link mail statistics with this tracking
-        if tracking.mail_stats_id:
-            tracking.mail_stats_id.write(self._statistics_link_prepare(tracking))
-        return tracking
+        for tracking in res:
+            if tracking.mail_stats_id:
+                tracking.mail_stats_id.write(self._statistics_link_prepare(tracking))
+        return res
 
     def _contacts_email_bounced_set(self, reason, event=None):
         recipients = []

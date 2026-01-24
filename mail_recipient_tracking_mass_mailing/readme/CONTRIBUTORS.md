@@ -10,3 +10,6 @@
 - [Trobz](https://trobz.com):
   - nguyenhk \<<nguyenhk@trobz.com>\>
   - Tris Doan \<<tridm@trobz.com>\>
+
+- [Komit](https://komit-consulting.com):
+  - Quoc Pham Ngoc \<<quoc-pn@komit-consulting.com>\>
