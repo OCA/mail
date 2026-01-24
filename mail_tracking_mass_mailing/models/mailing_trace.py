@@ -9,13 +9,12 @@ class MailTrace(models.Model):
     _inherit = "mailing.trace"
 
     mail_tracking_id = fields.Many2one(
-        string="Mail tracking", comodel_name="mail.tracking.email", readonly=True
+        comodel_name="mail.tracking.email", readonly=True
     )
     tracking_event_ids = fields.One2many(
         string="Tracking events",
         comodel_name="mail.tracking.event",
         related="mail_tracking_id.tracking_event_ids",
-        readonly=True,
     )
 
     def write(self, values):
