@@ -17,7 +17,7 @@ export class MessageTracking extends Component {
             res_model: "mail.tracking.email",
             views: [[false, "form"]],
             target: "new",
-            res_id: parseInt(tracking_email_id),
+            res_id: parseInt(tracking_email_id, 10),
         });
     }
 }

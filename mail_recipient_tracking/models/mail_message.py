@@ -5,7 +5,7 @@
 from email.utils import getaddresses
 
 from odoo import api, fields, models
-from odoo.osv import expression
+from odoo.fields import Domain
 from odoo.tools import email_split
 
 from odoo.addons.mail.tools.discuss import Store
@@ -22,7 +22,7 @@ class MailMessage(models.Model):
     mail_tracking_ids = fields.One2many(
         comodel_name="mail.tracking.email",
         inverse_name="mail_message_id",
-        auto_join=True,
+        bypass_search_access=True,
         string="Mail Trackings",
     )
     mail_tracking_needs_action = fields.Boolean(
@@ -73,7 +73,7 @@ class MailMessage(models.Model):
         )
         self.env["mail.notification"].flush_model(["mail_message_id", "res_partner_id"])
         self.env["mail.tracking.email"].flush_model(["state"])
-        is_involve = expression.OR(
+        is_involve = Domain.OR(
             [
                 [
                     ("notification_ids.res_partner_id", "=", pid),
@@ -83,7 +83,7 @@ class MailMessage(models.Model):
                 ],
             ]
         )
-        domain = expression.AND(
+        domain = Domain.AND(
             [
                 [
                     (
@@ -177,7 +177,7 @@ class MailMessage(models.Model):
                     "recipient": recipient,
                     "partner_id": tracking.partner_id.id,
                     "isCc": False,
-                    "tracking_delta": "%i-%i" % (self.id, tracking_delta),
+                    "tracking_delta": f"{self.id}-{tracking_delta}",
                 }
             )
             if tracking.partner_id:
@@ -218,7 +218,7 @@ class MailMessage(models.Model):
                     "recipient": partner.name,
                     "partner_id": partner.id,
                     "isCc": isCc,
-                    "tracking_delta": "%i-%i" % (self.id, tracking_delta),
+                    "tracking_delta": f"{self.id}-{tracking_delta}",
                 }
             )
             partner_trackings.append(tracking_status)
@@ -232,7 +232,7 @@ class MailMessage(models.Model):
                         "recipient": email,
                         "partner_id": False,
                         "isCc": cc,
-                        "tracking_delta": "%i-%i" % (self.id, tracking_delta),
+                        "tracking_delta": f"{self.id}-{tracking_delta}",
                     }
                 )
                 partner_trackings.append(tracking_status)

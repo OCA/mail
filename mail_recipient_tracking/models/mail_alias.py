@@ -15,7 +15,9 @@ class MailAlias(models.Model):
             x["display_name"]
             for x in self.search_read([("alias_name", "!=", False)], ["display_name"])
         }
-        mail_alias_domain = self.env["mail.alias.domain"].search([])
+        mail_alias_domain = self.env["mail.alias.domain"].search_fetch(
+            [], field_names=["catchall_email", "default_from", "default_from_email"]
+        )
         catchall_emails = set(mail_alias_domain.mapped("catchall_email"))
         default_from_emails = set(
             mail_alias_domain.filtered("default_from").mapped("default_from_email")

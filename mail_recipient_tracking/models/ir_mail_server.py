@@ -27,18 +27,21 @@ class IrMailServer(models.Model):
         # while tracking_email_id is not needed in this implementation, it can
         # be useful for other addons extending this function to make a more
         # fine-grained decision
-        return (
+        value = (
             self.env["ir.config_parameter"]
             .sudo()
             .get_param("mail_tracking.tracking_img_disabled", False)
         )
+        if isinstance(value, str):
+            return tools.str2bool(value, bool(value))
+        return bool(value)
 
     def _tracking_img_remove(self, body):
         return re.sub(
             r'<img[^>]*data-odoo-tracking-email=["\'][0-9]*["\'][^>]*>', "", body
         )
 
-    def build_email(
+    def _build_email__(
         self,
         email_from,
         email_to,
@@ -78,11 +81,11 @@ class IrMailServer(models.Model):
             # the tracking image in case it's to be disabled
             if self._tracking_img_disabled(tracking_email_id):
                 body = self._tracking_img_remove(body)
-        msg = super().build_email(
-            email_from=email_from,
-            email_to=email_to,
-            subject=subject,
-            body=body,
+        return super()._build_email__(
+            email_from,
+            email_to,
+            subject,
+            body,
             email_cc=email_cc,
             email_bcc=email_bcc,
             reply_to=reply_to,
@@ -95,15 +98,14 @@ class IrMailServer(models.Model):
             body_alternative=body_alternative,
             subtype_alternative=subtype_alternative,
         )
-        return msg
 
     def _tracking_email_get(self, message):
         try:
             tracking_email_id = int(
-                message.get(
-                    "X-Odoo-MailTracking-ID",
+                message.get("X-Odoo-MailTracking-ID")
+                or message.get(
                     # Deprecated tracking header, kept as fallback
-                    message["X-Odoo-Tracking-ID"],
+                    "X-Odoo-Tracking-ID"
                 )
             )
         except (TypeError, ValueError, KeyError):

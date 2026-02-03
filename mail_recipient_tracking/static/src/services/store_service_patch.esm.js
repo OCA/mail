@@ -1,12 +1,12 @@
-import {Record} from "@mail/core/common/record";
 import {Store} from "@mail/core/common/store_service";
 import {_t} from "@web/core/l10n/translation";
+import {fields} from "@mail/core/common/record";
 import {patch} from "@web/core/utils/patch";
 
 patch(Store.prototype, {
     setup() {
         super.setup(...arguments);
-        this.failed = Record.one("Thread");
+        this.failed = fields.One("Thread");
     },
 
     onStarted() {
@@ -14,7 +14,7 @@ patch(Store.prototype, {
         this.failed = {
             id: "failed",
             model: "mail.box",
-            name: _t("Failed"),
+            display_name: _t("Failed"),
         };
     },
 });

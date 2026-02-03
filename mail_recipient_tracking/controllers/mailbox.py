@@ -7,7 +7,7 @@ from odoo.addons.mail.tools.discuss import Store
 
 
 class MailTrackingMailBoxController(MailboxController):
-    @route("/mail/failed/messages", methods=["POST"], type="json", auth="user")
+    @route("/mail/failed/messages", methods=["POST"], type="jsonrpc", auth="user")
     def discuss_failed_messages(
         self, search_term=None, before=None, after=None, limit=30, around=None
     ):
@@ -23,6 +23,6 @@ class MailTrackingMailBoxController(MailboxController):
         messages = res.pop("messages")
         return {
             **res,
-            "data": Store(messages, for_current_user=True).get_result(),
-            "messages": Store.many_ids(messages),
+            "data": Store().add(messages).get_result(),
+            "messages": messages.ids,
         }

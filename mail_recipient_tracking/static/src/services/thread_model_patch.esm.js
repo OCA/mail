@@ -1,5 +1,5 @@
-import {Thread} from "@mail/core/common/thread_model";
 import "@mail/chatter/web_portal/thread_model_patch";
+import {Thread} from "@mail/core/common/thread_model";
 import {patch} from "@web/core/utils/patch";
 
 patch(Thread.prototype, {

@@ -1,5 +1,5 @@
-import {patch} from "@web/core/utils/patch";
 import {MailCoreCommon} from "@mail/core/common/mail_core_common_service";
+import {patch} from "@web/core/utils/patch";
 
 patch(MailCoreCommon.prototype, {
     setup() {
@@ -8,9 +8,8 @@ patch(MailCoreCommon.prototype, {
             "mail.tracking/set_need_action_done",
             (payload, metadata) => {
                 const {id: notifId} = metadata;
-                const {message_ids: messageIds} = payload;
-                for (const id of messageIds) {
-                    const message = this.store.Message.get({id});
+                for (const messageId of payload.message_ids) {
+                    const message = this.store["mail.message"].get(messageId);
                     if (!message) continue;
                     const failedBox = this.store.failed;
                     if (notifId > failedBox.counter_bus_id) {

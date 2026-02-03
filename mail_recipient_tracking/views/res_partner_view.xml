@@ -24,10 +24,10 @@
                     />
                 </button>
             </div>
-            <xpath expr="//field[@name='email']/.." position="after">
+            <field name="function" position="before">
                 <field name="email_score" widget="progressbar" invisible="not email" />
                 <field name="email_bounced" invisible="not email" />
-            </xpath>
+            </field>
         </field>
     </record>
 

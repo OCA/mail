@@ -23,7 +23,7 @@ def db_env(dbname):
         raise werkzeug.exceptions.BadRequest()
     cr = None
     if dbname == http.request.db:
-        cr = http.request.cr
+        cr = http.request.env.cr
     if not cr:
         cr = odoo.sql_db.db_connect(dbname).cursor()
     yield api.Environment(cr, SUPERUSER_ID, {})
