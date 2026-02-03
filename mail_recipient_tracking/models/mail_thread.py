@@ -6,7 +6,7 @@ from email.utils import getaddresses
 from lxml import etree
 
 from odoo import api, fields, models
-from odoo.tools.mail import email_split, email_split_and_format
+from odoo.tools.mail import email_split_and_format_normalize
 
 
 class MailThread(models.AbstractModel):
@@ -62,42 +62,27 @@ class MailThread(models.AbstractModel):
             mail_trackings.event_create("soft_bounce", message_dict)
         return super()._routing_handle_bounce(email_message, message_dict)
 
-    def _message_get_suggested_recipients(self):
-        """Adds email 'extra' recipients as suggested recipients.
-
-        If the recipient has a res.partner, use it.
-        """
-        res = super()._message_get_suggested_recipients()
-        self._add_extra_recipients_suggestions(res, "email_cc", self.env._("Cc"))
-        self._add_extra_recipients_suggestions(res, "email_to", self.env._("Anon. To"))
-        return res
-
-    def _add_extra_recipients_suggestions(self, suggestions, field_mail, reason):
-        ResPartnerObj = self.env["res.partner"]
-        aliases = self.env["mail.alias"].get_aliases()
-        email_extra_formated_list = []
+    def _message_add_suggested_recipients(self, force_primary_email=False):
+        suggested = super()._message_add_suggested_recipients(
+            force_primary_email=force_primary_email
+        )
         for record in self:
-            emails_extra = record.message_ids.mapped(field_mail)
-            for email in emails_extra:
-                email_extra_formated_list.extend(email_split_and_format(email))
-        email_extra_formated_list = set(email_extra_formated_list)
-        email_extra_list = [x[1] for x in getaddresses(email_extra_formated_list)]
-        partners_info = self.sudo()._message_partner_info_from_emails(email_extra_list)
-        for pinfo in partners_info:
-            partner_id = pinfo["partner_id"]
-            email_formed = email_split(pinfo["full_name"])
-            email = email_formed and email_formed[0].lower()
-            if not partner_id:
-                if email not in aliases:
-                    self._message_add_suggested_recipient(
-                        suggestions, email=email, reason=reason
-                    )
-            else:
-                partner = ResPartnerObj.browse(partner_id)
-                if partner.email not in aliases:
-                    self._message_add_suggested_recipient(
-                        suggestions, partner=partner, reason=reason
-                    )
+            self._add_extra_recipients_suggestions(record, suggested, "email_cc")
+            self._add_extra_recipients_suggestions(record, suggested, "email_to")
+        return suggested
+
+    def _add_extra_recipients_suggestions(self, record, suggestions, field_mail):
+        email_extra_formatted_list = []
+        emails_extra = record.message_ids.mapped(field_mail)
+        for email in emails_extra:
+            email_extra_formatted_list.extend(email_split_and_format_normalize(email))
+        email_extra_formatted_list = set(email_extra_formatted_list)
+        email_extra_list = [x[1] for x in getaddresses(email_extra_formatted_list)]
+        for email in email_extra_list:
+            if email not in suggestions[record.id]["email_to_lst"]:
+                suggestions[record.id]["email_to_lst"] += (
+                    email_split_and_format_normalize(email)
+                )
 
     @api.model
     def get_view(self, view_id=None, view_type="form", **options):

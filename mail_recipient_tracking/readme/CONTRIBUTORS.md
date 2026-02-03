@@ -11,3 +11,5 @@
   - Agustín Payen Sandoval
 - [Trobz](https://www.trobz.com):
   - Tris Doan
+- [Komit](https://komit-consulting.com):
+  - Quoc Pham Ngoc

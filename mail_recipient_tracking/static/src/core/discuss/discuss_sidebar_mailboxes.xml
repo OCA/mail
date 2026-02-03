@@ -5,11 +5,15 @@
         t-inherit="mail.Mailbox.main"
         t-inherit-mode="extension"
     >
-        <xpath expr="//span[@t-esc='mailbox.counter']" position="attributes">
-            <!-- Rewrite the original so we can set our own color in failed mailbox -->
+        <xpath
+            expr="//t[@t-call='mail.discuss_badge']/t[@t-set='badgeClass']"
+            position="attributes"
+        >
             <attribute
-                name="t-att-class"
-            >{'o-muted': mailbox.id === 'starred', 'o-danger': mailbox.id === 'failed'}</attribute>
+                name="t-value"
+                separator="+"
+                value="(mailbox.id === 'starred' ? 'o-muted' : '') + mailbox.id === 'failed' ? 'o-danger' : ''"
+            />
         </xpath>
     </t>
     <t
@@ -22,8 +26,8 @@
         </xpath>
     </t>
     <t
-        t-name="mail_tracking.Discuss.mobileTopbar"
-        t-inherit="mail.Discuss.mobileTopbar"
+        t-name="mail_tracking.DiscussContent.mobileTopbar"
+        t-inherit="mail.DiscussContent.mobileTopbar"
         t-inherit-mode="extension"
     >
         <xpath expr="//div" position="inside">

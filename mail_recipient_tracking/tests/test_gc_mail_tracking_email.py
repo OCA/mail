@@ -15,7 +15,7 @@ class TestMailTrackingEmailCleanUp(SavepointCaseWithUserDemo):
             {"mail_tracking_email_max_age_days": 365}
         )
         cls.settings.set_values()
-        cls.partner = cls.env.ref("base.res_partner_address_28")
+        cls.partner = cls.env["res.partner"].create({"name": "Test Partner"})
         cls.message = cls.env["mail.message"].create(
             {
                 "model": "res.partner",

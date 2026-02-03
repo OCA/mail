@@ -1,3 +1,4 @@
+import {Component, toRaw, useState} from "@odoo/owl";
 import {AvatarCardPopover} from "@mail/discuss/web/avatar_card/avatar_card_popover";
 import {FailedMessageReview} from "@mail_tracking/components/failed_message_review/failed_message_review.esm";
 import {MessageTracking} from "@mail_tracking/components/message_tracking/message_tracking.esm";
@@ -5,7 +6,6 @@ import {RelativeTime} from "@mail/core/common/relative_time";
 import {url} from "@web/core/utils/urls";
 import {usePopover} from "@web/core/popover/popover_hook";
 import {useService} from "@web/core/utils/hooks";
-import {Component, toRaw, useState} from "@odoo/owl";
 
 export class FailedMessage extends Component {
     static props = ["message", "onUpdate?", "reloadParentView"];

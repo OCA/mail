@@ -8,13 +8,11 @@ class ResUsers(models.Model):
 
     def _init_messaging(self, store):
         res = super()._init_messaging(store)
-        store.add(
-            {
-                "failed": {
-                    "id": "failed",
-                    "model": "mail.box",
-                    "counter": self.env["mail.message"].get_failed_count(),
-                }
+        store.add_global_values(
+            failed={
+                "id": "failed",
+                "model": "mail.box",
+                "counter": self.env["mail.message"].get_failed_count(),
             }
         )
         return res

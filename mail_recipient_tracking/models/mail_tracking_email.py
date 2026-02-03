@@ -140,18 +140,14 @@ class MailTrackingEmail(models.Model):
         return res
 
     @api.model
-    def _search(
-        self,
-        domain,
-        offset=0,
-        limit=None,
-        order=None,
-    ):
+    def _search(self, domain, offset=0, limit=None, order=None, **kwargs):
         """Override that adds specific access rights of mail.tracking.email, to remove
         ids uid could not see according to our custom rules. Please refer to
         _check_access() for more details about those rules.
         """
-        query = super()._search(domain, offset, limit, order)
+        query = super()._search(
+            domain, offset=offset, limit=limit, order=order, **kwargs
+        )
         if not self.env.is_superuser():
             records = self.browse(query)
             allowed_ids = self._get_allowed_ids(records.ids)
@@ -289,12 +285,12 @@ class MailTrackingEmail(models.Model):
     def email_score_from_email(self, email):
         if not email:
             return 0.0
-        data = self.sudo().read_group(
-            [("recipient_address", "=", email.lower())],
-            ["recipient_address", "state"],
-            ["state"],
+        groups = self.sudo()._read_group(
+            domain=[("recipient_address", "=", email.lower())],
+            groupby=["state"],
+            aggregates=["recipient_address:count"],
         )
-        mapped_data = {state["state"]: state["state_count"] for state in data}
+        mapped_data = {state: count for (state, count) in groups}
         return self.with_context(mt_states=mapped_data).sudo().email_score()
 
     @api.model
