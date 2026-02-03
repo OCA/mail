@@ -18,7 +18,7 @@ from odoo.addons.mail.tests.common import mail_new_test_user
 from odoo.addons.mail.tools.discuss import Store
 from odoo.addons.mail_tracking.controllers.main import BLANK, MailTrackingController
 
-mock_send_email = "odoo.addons.base.models.ir_mail_server." "IrMailServer.send_email"
+mock_send_email = "odoo.addons.base.models.ir_mail_server.IrMailServer.send_email"
 
 
 class FakeUserAgent:
