@@ -1,18 +1,18 @@
-/** @odoo-module */
-
 import {registry} from "@web/core/registry";
 
 const contact_steps = [
     {
         trigger: ".o_navbar_apps_menu button",
+        run: "click",
     },
     {
         trigger: '.o_app[data-menu-xmlid="contacts.menu_contacts"]',
+        run: "click",
     },
     {
         content: "Search Contact",
         trigger: ".o_searchview_input",
-        run: "text Test Forward",
+        run: "edit Test Forward",
     },
     {
         trigger: ".o_menu_item",
@@ -27,6 +27,7 @@ const contact_steps = [
     {
         content: "Open contact",
         trigger: ".o_list_table td[name='complete_name']:contains('Test Forward')",
+        run: "click",
     },
 ];
 registry.category("web_tour.tours").add("mail_forward.mail_forward_tour", {
@@ -35,8 +36,13 @@ registry.category("web_tour.tours").add("mail_forward.mail_forward_tour", {
     steps: () => [
         ...contact_steps,
         {
-            content: "Hover a message",
-            trigger: "div.o-mail-Message[aria-label='Message'] button.dropdown-toggle",
+            content: "Hover a message to show actions",
+            trigger: "div.o-mail-Message[aria-label='Message']",
+            run: "hover",
+        },
+        {
+            content: "Click message options button",
+            trigger: "div.o-mail-Message-actions button.dropdown-toggle",
             run: "click",
         },
         {
@@ -47,18 +53,16 @@ registry.category("web_tour.tours").add("mail_forward.mail_forward_tour", {
         {
             content: "Select a Forward",
             trigger: ".o_field_widget[name=partner_ids] input",
-            extra_trigger: ".modal-dialog",
-            run: "text Forward",
+            run: "edit Forward",
         },
         {
             content: "Valid Forward",
             trigger: ".ui-menu-item a:contains(Forward)",
             run: "click",
-            in_modal: false,
         },
         {
             content: "Send mail",
-            trigger: "button[name=action_send_mail]",
+            trigger: "button.o_mail_send",
             run: "click",
         },
         {
