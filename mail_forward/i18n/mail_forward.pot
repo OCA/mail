@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,18 +16,15 @@ msgstr ""
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
 msgid "---------- Forwarded message ---------"
 msgstr ""
 
 #. module: mail_forward
-#: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_gateway_message__forward_type__another_thread
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__another_thread
 msgid "Another thread"
 msgstr ""
 
 #. module: mail_forward
-#: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_gateway_message__forward_type__current_thread
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__current_thread
 msgid "Current thread"
 msgstr ""
@@ -35,7 +32,6 @@ msgstr ""
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
 msgid "Date"
 msgstr ""
 
@@ -68,7 +64,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
 #: code:addons/mail_forward/static/src/core/common/message_actions.esm.js:0
-#, python-format
 msgid "Forward"
 msgstr ""
 
@@ -77,34 +72,28 @@ msgstr ""
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
 #: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
 msgid "Forward Message"
 msgstr ""
 
 #. module: mail_forward
 #. odoo-javascript
 #: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
 msgid "Forward Message Center"
 msgstr ""
 
 #. module: mail_forward
 #. odoo-javascript
 #: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
 msgid "Forward Message Left"
 msgstr ""
 
 #. module: mail_forward
 #. odoo-javascript
 #: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
 msgid "Forward Message Right"
 msgstr ""
 
 #. module: mail_forward
-#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_type
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_type
 msgid "Forward Type"
 msgstr ""
@@ -112,14 +101,12 @@ msgstr ""
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
 msgid "From"
 msgstr ""
 
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/wizards/mail_compose_message.py:0
-#, python-format
 msgid "Fwd:"
 msgstr ""
 
@@ -136,19 +123,16 @@ msgstr ""
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/wizards/mail_compose_message.py:0
-#, python-format
 msgid "Re:"
 msgstr ""
 
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
 msgid "Subject"
 msgstr ""
 
 #. module: mail_forward
-#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_thread
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_thread
 msgid "Thread to forward"
 msgstr ""
@@ -156,6 +140,5 @@ msgstr ""
 #. module: mail_forward
 #. odoo-python
 #: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
 msgid "To"
 msgstr ""

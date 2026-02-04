@@ -1,6 +1,6 @@
 # Copyright 2024 Tecnativa - Carlos Lopez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import _, models
+from odoo import models
 from odoo.tools import format_datetime
 
 
@@ -12,7 +12,7 @@ class MailMessage(models.Model):
         action = self.env["ir.actions.actions"]._for_xml_id(
             "mail.action_email_compose_message_wizard"
         )
-        action["name"] = _("Forward Message")
+        action["name"] = self.env._("Forward Message")
         action["view_mode"] = view.type
         action["views"] = [(view.id, view.type)]
         action["context"] = {
@@ -42,14 +42,14 @@ class MailMessage(models.Model):
             <br/><br/>
             {body}
         """.format(
-            str_forwarded_message=_("---------- Forwarded message ---------"),
+            str_forwarded_message=self.env._("---------- Forwarded message ---------"),
             email_from=self.email_from,
             date=format_datetime(self.env, self.date),
             subject=self.subject,
             to=", ".join(partner_emails),
-            str_date=_("Date"),
-            str_subject=_("Subject"),
-            str_from=_("From"),
-            str_to=_("To"),
+            str_date=self.env._("Date"),
+            str_subject=self.env._("Subject"),
+            str_from=self.env._("From"),
+            str_to=self.env._("To"),
             body=self.body,
         )
