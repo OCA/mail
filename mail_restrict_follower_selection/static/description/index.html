@@ -398,9 +398,16 @@ followers globally, if you want to restrict only the followers for a
 certain record type (or have different restrictions for different record
 types), create a parameter
 mail_restrict_follower_selection.domain.$your_model.</p>
-<p>As an example, you could use [(‘category_id.name’, ‘=’, ‘Employees’)] to
-allow only contacts with ‘Employees’ tag to be added as follower - this
-also is the default.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">[(&quot;category_id.name&quot;,</span> <span class="pre">&quot;=&quot;,</span> <span class="pre">&quot;Employees&quot;)]</span></tt> : Only allow contacts
+with ‘Employees’ tag</li>
+<li><tt class="docutils literal"><span class="pre">[(&quot;is_company&quot;,</span> <span class="pre">&quot;=&quot;,</span> False)]</tt> : Restrict company contacts to be
+added as follower (to avoid emails to info&#64; email address)</li>
+<li><tt class="docutils literal"><span class="pre">[(&quot;user_ids&quot;,&quot;!=&quot;,False)]</span></tt> : Restrict to contacts with user
+(internal and portal)</li>
+<li><tt class="docutils literal"><span class="pre">[(&quot;employee_ids&quot;,&quot;!=&quot;,False)]</span></tt> : Restrict to employees</li>
+</ul>
 <p>Note: This module won’t change existing followers!</p>
 </div>
 <div class="section" id="bug-tracker">
