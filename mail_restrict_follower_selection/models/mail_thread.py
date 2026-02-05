@@ -1,4 +1,4 @@
-from odoo import models
+from odoo import fields, models
 from odoo.tools import config
 from odoo.tools.safe_eval import safe_eval
 
@@ -7,6 +7,12 @@ from ..utils import _id_get
 
 class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
+
+    message_partner_ids = fields.Many2many(
+        domain=lambda thread: thread.env[
+            "mail.wizard.invite"
+        ]._mail_restrict_follower_selection_get_domain(thread._name)
+    )
 
     def _message_add_suggested_recipient(
         self, result, partner=None, email=None, lang=None, reason=""
