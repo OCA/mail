@@ -35,6 +35,38 @@ msgid "Email Thread"
 msgstr "Discussione e-mail"
 
 #. module: mail_restrict_follower_selection
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_account__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_analytic_account__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_bank_statement_line__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_journal__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_move__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_payment__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_reconcile_model__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_setup_bank_manual_config__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_tax__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_calendar_event__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_discuss_channel__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_blacklist__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_blacklist__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_cc__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_main_attachment__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_phone__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mailing_contact__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mailing_mailing__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_phone_blacklist__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_category__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_pricelist__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_product__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_template__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_res_company__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_res_partner__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_res_partner_bank__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_res_users__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: mail_restrict_follower_selection
 #: model:ir.model,name:mail_restrict_follower_selection.model_mail_wizard_invite
 msgid "Invite wizard"
 msgstr "Procedura guidata invito"
