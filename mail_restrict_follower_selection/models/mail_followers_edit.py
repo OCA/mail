@@ -6,14 +6,14 @@
 from lxml import etree
 
 from odoo import api, models
-from odoo.osv import expression
+from odoo.fields import Domain
 from odoo.tools.safe_eval import safe_eval
 
 from ..utils import _id_get
 
 
-class MailWizardInvite(models.TransientModel):
-    _inherit = "mail.wizard.invite"
+class MailFollowersEdit(models.TransientModel):
+    _inherit = "mail.followers.edit"
 
     @api.model
     def _mail_restrict_follower_selection_get_domain(self, res_model=None):
@@ -30,7 +30,7 @@ class MailWizardInvite(models.TransientModel):
                 .get_param(parameter_name, default="[]"),
             )
         )
-        domain = expression.AND(
+        domain = Domain.AND(
             [safe_eval(parameter_domain), self._fields["partner_ids"].domain]
         )
         return domain
@@ -41,7 +41,7 @@ class MailWizardInvite(models.TransientModel):
         arch = etree.fromstring(result["arch"])
         domain = self._mail_restrict_follower_selection_get_domain()
         eval_domain = safe_eval(
-            str(domain), locals_dict={"ref": lambda str_id: _id_get(self.env, str_id)}
+            str(domain), context={"ref": lambda str_id: _id_get(self.env, str_id)}
         )
         for field in arch.xpath('//field[@name="partner_ids"]'):
             field.attrib["domain"] = str(eval_domain)

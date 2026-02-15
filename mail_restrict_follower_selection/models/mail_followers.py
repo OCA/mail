@@ -33,14 +33,14 @@ class MailFollowers(models.Model):
                 existing_policy=existing_policy,
             )
         domain = str(
-            self.env["mail.wizard.invite"]._mail_restrict_follower_selection_get_domain(
-                res_model=res_model
-            )
+            self.env[
+                "mail.followers.edit"
+            ]._mail_restrict_follower_selection_get_domain(res_model=res_model)
         )
         partners = self.env["res.partner"].search(
             [("id", "in", partner_ids)]
             + safe_eval(
-                domain, locals_dict={"ref": lambda str_id: _id_get(self.env, str_id)}
+                domain, context={"ref": lambda str_id: _id_get(self.env, str_id)}
             )
         )
         _res_ids = res_ids.copy() or [0]
