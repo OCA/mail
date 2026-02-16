@@ -1,7 +1,7 @@
 # Copyright 2021 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, models
+from odoo import models
 from odoo.tools import format_datetime, html_sanitize
 
 
@@ -36,9 +36,9 @@ class MailMessage(models.Model):
             subject=self.subject,
             body=self._get_sanitized_body(),
             signature=self.env.user.signature,
-            str_date=_("Date"),
-            str_subject=_("Subject"),
-            str_from=_("From"),
+            str_date=self.env._("Date"),
+            str_subject=self.env._("Subject"),
+            str_from=self.env._("From"),
         )
 
     def _default_reply_partner(self):

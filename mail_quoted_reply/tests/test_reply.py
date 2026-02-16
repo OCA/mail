@@ -7,7 +7,7 @@ from odoo.tests import TransactionCase
 
 
 class TestMessageReply(TransactionCase):
-    def test_reply(self):
+    def test_quoted_reply(self):
         partner = self.env["res.partner"].create({"name": "demo partner"})
         self.assertFalse(
             partner.message_ids.filtered(lambda r: r.message_type != "notification")
@@ -15,8 +15,9 @@ class TestMessageReply(TransactionCase):
         # pylint: disable=C8107
         message = partner.message_post(
             body="demo message",
+            subject="demo subject",
             message_type="email",
-            partner_ids=self.env.ref("base.partner_demo").ids,
+            partner_ids=self.env.ref("base.partner_admin").ids,
         )
         partner.invalidate_recordset()
         self.assertIn(
@@ -34,9 +35,92 @@ class TestMessageReply(TransactionCase):
         )
         self.assertTrue(wizard.partner_ids)
         self.assertEqual(message.email_from, wizard.partner_ids.email_formatted)
+        self.assertEqual(action["context"]["default_subject"], "Re: demo subject")
         # the onchange in the composer isn't triggered in tests, so we check for the
         # correct quote in the context
-        email_quote = re.search("<p>.*?</p>", wizard._context["quote_body"]).group()
+        email_quote = re.search("<p>.*?</p>", wizard.env.context["quote_body"]).group()
+        self.assertEqual("<p>demo message</p>", email_quote)
+        wizard.action_send_mail()
+        new_message = partner.message_ids.filtered(
+            lambda r: r.message_type != "notification" and r != message
+        )
+        self.assertTrue(new_message)
+        self.assertEqual(1, len(new_message))
+
+    def test_unquoted_reply(self):
+        partner = self.env["res.partner"].create({"name": "demo partner"})
+        self.assertFalse(
+            partner.message_ids.filtered(lambda r: r.message_type != "notification")
+        )
+        # pylint: disable=C8107
+        message = partner.message_post(
+            body="demo message",
+            message_type="email",
+            partner_ids=self.env.ref("base.partner_admin").ids,
+        )
+        partner.invalidate_recordset()
+        self.assertIn(
+            message,
+            partner.message_ids.filtered(lambda r: r.message_type != "notification"),
+        )
+        self.assertFalse(
+            partner.message_ids.filtered(
+                lambda r: r.message_type != "notification" and r != message
+            )
+        )
+        action = message.reply_message()
+        action["context"]["is_quoted_reply"] = False
+        wizard = (
+            self.env[action["res_model"]].with_context(**action["context"]).create({})
+        )
+        wizard = wizard.with_context(
+            default_subject="Some subject for testing purposes",
+        )
+        self.assertTrue(wizard.partner_ids)
+        self.assertEqual(message.email_from, wizard.partner_ids.email_formatted)
+        # the onchange in the composer isn't triggered in tests, so we check for the
+        # correct quote in the context
+        email_quote = re.search("<p>.*?</p>", wizard.env.context["quote_body"]).group()
+        self.assertEqual("<p>demo message</p>", email_quote)
+        wizard.action_send_mail()
+        new_message = partner.message_ids.filtered(
+            lambda r: r.message_type != "notification" and r != message
+        )
+        self.assertTrue(new_message)
+        self.assertEqual(1, len(new_message))
+
+    def test_reply_with_existing_body(self):
+        partner = self.env["res.partner"].create({"name": "demo partner"})
+        self.assertFalse(
+            partner.message_ids.filtered(lambda r: r.message_type != "notification")
+        )
+        # pylint: disable=C8107
+        message = partner.message_post(
+            body="demo message",
+            message_type="email",
+            partner_ids=self.env.ref("base.partner_admin").ids,
+        )
+        partner.invalidate_recordset()
+        self.assertIn(
+            message,
+            partner.message_ids.filtered(lambda r: r.message_type != "notification"),
+        )
+        self.assertFalse(
+            partner.message_ids.filtered(
+                lambda r: r.message_type != "notification" and r != message
+            )
+        )
+        action = message.reply_message()
+        action["context"]["is_quoted_reply"] = False
+        wizard = (
+            self.env[action["res_model"]].with_context(**action["context"]).create({})
+        )
+        wizard.body = "Some body for testing purposes"
+        self.assertTrue(wizard.partner_ids)
+        self.assertEqual(message.email_from, wizard.partner_ids.email_formatted)
+        # the onchange in the composer isn't triggered in tests, so we check for the
+        # correct quote in the context
+        email_quote = re.search("<p>.*?</p>", wizard.env.context["quote_body"]).group()
         self.assertEqual("<p>demo message</p>", email_quote)
         wizard.action_send_mail()
         new_message = partner.message_ids.filtered(
