@@ -30,10 +30,10 @@ class MailActivitySchedule(models.TransientModel):
             if scheduler.activity_type_id.default_team_id:
                 scheduler.activity_team_id = scheduler.activity_type_id.default_team_id
             elif not scheduler.activity_team_id:
-                scheduler.activity_team_id = (
-                    self.env["mail.activity"]
-                    .with_context(default_res_model=scheduler.sudo().res_model_id.model)
-                    ._get_default_team_id(user_id=scheduler.activity_team_user_id.id)
+                scheduler.activity_team_id = self.env[
+                    "mail.activity"
+                ]._get_default_team_id(
+                    scheduler.activity_team_user_id.id, scheduler.sudo().res_model_id.id
                 )
 
     @api.onchange("activity_team_id")
@@ -58,10 +58,8 @@ class MailActivitySchedule(models.TransientModel):
             and self.activity_team_user_id in self.activity_team_id.member_ids
         ):
             return
-        self.activity_team_id = (
-            self.env["mail.activity"]
-            .with_context(default_res_model=self.sudo().res_model_id.model)
-            ._get_default_team_id(user_id=self.activity_team_user_id.id)
+        self.activity_team_id = self.env["mail.activity"]._get_default_team_id(
+            self.activity_team_user_id.id, self.sudo().res_model_id.id
         )
 
     def _action_schedule_activities(self):

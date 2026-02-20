@@ -8,17 +8,34 @@ from odoo.exceptions import ValidationError
 class MailActivity(models.Model):
     _inherit = "mail.activity"
 
-    def _get_default_team_id(self, user_id=None):
+    @api.model
+    def _get_default_team_id(self, user_id=None, model_id=None):
         if not user_id:
             user_id = self.env.uid
-        res_model = self.env.context.get("default_res_model")
-        model = self.sudo().env["ir.model"].search([("model", "=", res_model)], limit=1)
-        domain = [("member_ids", "in", [user_id])]
-        if res_model:
-            domain.extend(
-                ["|", ("res_model_ids", "=", False), ("res_model_ids", "in", model.ids)]
+        if not model_id:
+            res_model = self.env.context.get("default_res_model")
+            model = (
+                self.sudo().env["ir.model"].search([("model", "=", res_model)], limit=1)
             )
-        return self.env["mail.activity.team"].search(domain, limit=1)
+            model_id = model.id if model else None
+        domain = [("member_ids", "in", [user_id])]
+        if model_id:
+            domain.extend(
+                [
+                    "|",
+                    ("res_model_ids", "=", False),
+                    ("res_model_ids", "in", [model_id]),
+                ]
+            )
+        results = self.env["mail.activity.team"].search(domain)
+        if model_id:
+            result_with_model = results.filtered(
+                lambda team: model_id in team.res_model_ids.ids
+            )
+            if result_with_model:
+                return result_with_model[0]
+
+        return results[0] if results else self.env["mail.activity.team"]
 
     user_id = fields.Many2one(string="User", required=False, default=False)
     team_user_id = fields.Many2one(
@@ -27,7 +44,6 @@ class MailActivity(models.Model):
 
     team_id = fields.Many2one(
         comodel_name="mail.activity.team",
-        default=lambda s: s._get_default_team_id(),
         index=True,
     )
 
@@ -45,8 +61,20 @@ class MailActivity(models.Model):
             if vals.get("team_id"):
                 # using team, we have user_id = team_user_id,
                 # so if we don't have a user_team_id we don't want user_id too
-                if "user_id" in vals and not vals.get("team_user_id", False):
+                if "user_id" in vals and not vals.get("team_user_id"):
                     del vals["user_id"]
+            elif (
+                "team_id" not in vals
+                and "user_id" in vals
+                and "team_user_id" not in vals
+            ):
+                # legacy behavior, if we have user_id but no team_id, set the team_id
+                team_id = self._get_default_team_id(
+                    vals["user_id"], vals.get("res_model_id")
+                )
+                if team_id:
+                    vals["team_id"] = team_id.id
+                    vals["team_user_id"] = vals["user_id"]
         return super().create(vals_list)
 
     @api.onchange("user_id")
@@ -55,9 +83,9 @@ class MailActivity(models.Model):
             self.team_id and self.user_id in self.team_id.member_ids
         ):
             return
-        self.team_id = self.with_context(
-            default_res_model=self.sudo().res_model_id.model
-        )._get_default_team_id(user_id=self.user_id.id)
+        self.team_id = self._get_default_team_id(
+            self.user_id.id, self.sudo().res_model_id.id
+        )
 
     @api.onchange("team_id")
     def _onchange_team_id(self):
