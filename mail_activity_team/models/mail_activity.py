@@ -1,24 +1,38 @@
 # Copyright 2018-22 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import SUPERUSER_ID, _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
 class MailActivity(models.Model):
     _inherit = "mail.activity"
 
-    def _get_default_team_id(self, user_id=None):
+    def _get_default_team_id(self, user_id=None, model_id=None):
         if not user_id:
-            user_id = self.env.uid
-        res_model = self.env.context.get("default_res_model")
-        model = self.sudo().env["ir.model"].search([("model", "=", res_model)], limit=1)
-        domain = [("member_ids", "in", [user_id])]
-        if res_model:
-            domain.extend(
-                ["|", ("res_model_ids", "=", False), ("res_model_ids", "in", model.ids)]
+            user_id = self.user_id.id or self.env.user.id
+        if not model_id:
+            model_id = self.res_model_id.id if self.res_model_id else None
+        domain = []
+        domain.append(("member_ids", "=", user_id))
+        if model_id:
+            domain += [
+                "|",
+                ("res_model_ids", "=", False),
+                ("res_model_ids", "=", model_id),
+            ]
+        if not domain:
+            return self.env["mail.activity.team"]
+        teams = self.env["mail.activity.team"].search(domain)
+        if model_id:
+            # Prefer teams with a matching model
+            teams = (
+                teams.filtered(
+                    lambda mat, model_id=model_id: model_id in mat.res_model_ids.ids
+                )
+                or teams
             )
-        return self.env["mail.activity.team"].search(domain, limit=1)
+        return teams[:1]
 
     user_id = fields.Many2one(string="User", required=False, default=False)
     team_user_id = fields.Many2one(
@@ -27,9 +41,29 @@ class MailActivity(models.Model):
 
     team_id = fields.Many2one(
         comodel_name="mail.activity.team",
-        default=lambda s: s._get_default_team_id(),
         index=True,
+        compute="_compute_team_id",
+        store=True,
+        readonly=False,
     )
+
+    @api.depends("res_model_id", "user_id")
+    def _compute_team_id(self):
+        """Assign team if no team yet or team is incompatible"""
+        for activity in self:
+            if (
+                not activity.team_id
+                or activity.user_id
+                and activity.user_id not in activity.team_id.member_ids
+                or (
+                    activity.res_model_id
+                    and activity.team_id.res_model_ids
+                    and activity.res_model_id not in activity.team_id.res_model_ids
+                )
+            ):
+                activity.team_id = activity._get_default_team_id(
+                    activity.user_id.id, activity.res_model_id.id
+                )
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -45,19 +79,9 @@ class MailActivity(models.Model):
             if vals.get("team_id"):
                 # using team, we have user_id = team_user_id,
                 # so if we don't have a user_team_id we don't want user_id too
-                if "user_id" in vals and not vals.get("team_user_id", False):
+                if "user_id" in vals and not vals.get("team_user_id"):
                     del vals["user_id"]
         return super().create(vals_list)
-
-    @api.onchange("user_id")
-    def _onchange_user_id(self):
-        if not self.user_id or (
-            self.team_id and self.user_id in self.team_id.member_ids
-        ):
-            return
-        self.team_id = self.with_context(
-            default_res_model=self.sudo().res_model_id.model
-        )._get_default_team_id(user_id=self.user_id.id)
 
     @api.onchange("team_id")
     def _onchange_team_id(self):
@@ -81,14 +105,14 @@ class MailActivity(models.Model):
             # We must consider also users that could be archived but come from
             # an automatic scheduled activity
             if (
-                activity.user_id.id != SUPERUSER_ID
+                activity.user_id.id != api.SUPERUSER_ID
                 and activity.team_id
                 and activity.user_id
                 and activity.user_id
                 not in activity.team_id.with_context(active_test=False).member_ids
             ):
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "The assigned user %(user_name)s is "
                         "not member of the team %(team_name)s.",
                         user_name=activity.user_id.name,

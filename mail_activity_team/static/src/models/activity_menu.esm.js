@@ -1,6 +1,7 @@
 import {ActivityMenu} from "@mail/core/web/activity_menu";
 import {patch} from "@web/core/utils/patch";
 import {useRef} from "@odoo/owl";
+import {useService} from "@web/core/utils/hooks";
 import {user} from "@web/core/user";
 
 patch(ActivityMenu.prototype, {
@@ -8,6 +9,7 @@ patch(ActivityMenu.prototype, {
         super.setup();
         this.currentFilter = "my";
         this.rootRef = useRef("mail_activity_team_dropdown");
+        this.store = useService("mail.store");
     },
     activateFilter(filter_el) {
         this.deactivateButtons();
@@ -15,7 +17,7 @@ patch(ActivityMenu.prototype, {
         filter_el.classList.add("active");
         this.currentFilter = filter_el.dataset.filter;
         this.updateTeamActivitiesContext();
-        this.store.fetchData({systray_get_activities: true});
+        this.store.fetchStoreData("systray_get_activities");
     },
     updateTeamActivitiesContext() {
         var active = false;
@@ -30,7 +32,9 @@ patch(ActivityMenu.prototype, {
     },
 
     deactivateButtons() {
-        this.rootRef.el.querySelector(".o_filter_nav_item").classList.remove("active");
+        this.rootRef.el.querySelectorAll(".o_filter_nav_item").forEach((el) => {
+            el.classList.remove("active");
+        });
     },
     onClickActivityFilter(filter) {
         this.activateFilter(this.rootRef.el.querySelector("." + filter));

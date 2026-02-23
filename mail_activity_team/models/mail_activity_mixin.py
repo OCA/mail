@@ -19,7 +19,7 @@ class MailActivityMixin(models.AbstractModel):
             rec.activity_team_user_ids = rec.activity_ids.mapped("team_id.member_ids")
 
     def _search_my_activity_date_deadline(self, operator, operand):
-        if not self._context.get("team_activities", False):
+        if not self.env.context.get("team_activities", False):
             return super()._search_my_activity_date_deadline(operator, operand)
         activity_ids = self.env["mail.activity"]._search(
             [
@@ -44,6 +44,13 @@ class MailActivityMixin(models.AbstractModel):
         user-team missmatch. We can hook onto `act_values` dict as it's passed
         to the create activity method.
         """
+        # Pick up some defaults from mail.activity.schedule
+        for field in ("team_id", "team_user_id", "user_id"):
+            if self.env.context.get(f"schedule_default_{field}") and not act_values.get(
+                field
+            ):
+                act_values[field] = self.env.context[f"schedule_default_{field}"]
+
         if self.env.context.get("force_activity_team"):
             act_values["team_id"] = self.env.context["force_activity_team"].id
         if "team_id" not in act_values:
@@ -64,17 +71,6 @@ class MailActivityMixin(models.AbstractModel):
                     act_values.update(
                         {"user_id": activity_type.default_team_id.member_ids[:1].id}
                     )
-            else:
-                user_id = act_values.get("user_id")
-                if user_id:
-                    team = (
-                        self.env["mail.activity"]
-                        .with_context(
-                            default_res_model=self._name,
-                        )
-                        ._get_default_team_id(user_id=user_id)
-                    )
-                    act_values.update({"team_id": team.id})
         return super().activity_schedule(
             act_type_xmlid=act_type_xmlid,
             date_deadline=date_deadline,
