@@ -96,12 +96,10 @@ class ResPartner(models.Model):
             # and 'mailbox_verification' as None
             if not content["is_valid"]:
                 partner.email_bounced = True
-                body = (
-                    self.env._(
-                        "%s is not a valid email address. Please check it"
-                        " in order to avoid sending issues"
-                    )
-                    % partner.email
+                body = self.env._(
+                    "%s is not a valid email address. Please check it"
+                    " in order to avoid sending issues",
+                    partner.email,
                 )
                 if not self.env.context.get("mailgun_auto_check"):
                     raise UserError(body)
@@ -110,12 +108,10 @@ class ResPartner(models.Model):
             # as a string with value 'false'
             if content["mailbox_verification"] == "false":
                 partner.email_bounced = True
-                body = (
-                    self.env._(
-                        "%s failed the mailbox verification. Please check it"
-                        " in order to avoid sending issues"
-                    )
-                    % partner.email
+                body = self.env._(
+                    "%s failed the mailbox verification. Please check it"
+                    " in order to avoid sending issues",
+                    partner.email,
                 )
                 if not self.env.context.get("mailgun_auto_check"):
                     raise UserError(body)
@@ -128,9 +124,9 @@ class ResPartner(models.Model):
                         self.env._(
                             "%s couldn't be verified. Either the request couln't"
                             " be completed or the mailbox provider doesn't "
-                            "support email verification"
+                            "support email verification",
+                            partner.email,
                         )
-                        % (partner.email)
                     )
 
     def check_email_bounced(self):

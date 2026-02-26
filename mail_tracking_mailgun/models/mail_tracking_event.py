@@ -7,9 +7,10 @@ from odoo import fields, models
 class MailTrackingEvent(models.Model):
     _inherit = "mail.tracking.event"
 
-    _sql_constraints = [
-        ("mailgun_id_unique", "UNIQUE(mailgun_id)", "Mailgun event IDs must be unique!")
-    ]
+    _mailgun_id_unique = models.Constraint(
+        "UNIQUE(mailgun_id)",
+        "Mailgun event IDs must be unique!",
+    )
 
     mailgun_id = fields.Char(
         string="Mailgun Event ID",

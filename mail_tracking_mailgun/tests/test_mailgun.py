@@ -17,9 +17,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 from ..controllers.main import MailTrackingController
 
-# HACK https://github.com/odoo/odoo/pull/78424 because website is not dependency
 try:
-    from odoo.addons.website.tools import MockRequest
+    from odoo.addons.http_routing.tests.common import MockRequest
 except ImportError:
     MockRequest = None
 
@@ -44,6 +43,15 @@ class TestMailgun(BaseCommon):
         tracking_email = self.env["mail.tracking.email"].search(
             [("mail_id", "=", mail.id)]
         )
+        if not tracking_email:
+            # In test mode, mail._send() returns early (IrMailServer._disable_send()),
+            # so _prepare_outgoing_list is never called and tracking emails are not
+            # automatically created. Create the tracking email manually.
+            tracking_email = (
+                self.env["mail.tracking.email"]
+                .sudo()
+                .create(mail._tracking_email_prepare({"email_to": [self.recipient]}))
+            )
         return mail, tracking_email
 
     @classmethod

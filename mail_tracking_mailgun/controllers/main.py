@@ -56,7 +56,7 @@ class MailTrackingController(main.MailTrackingController):
         if not hmac.compare_digest(str(signature), str(hmac_digest)):
             raise ValidationError(request.env._("Wrong signature"))
 
-    @route(["/mail/tracking/mailgun/all"], auth="none", type="json", csrf=False)
+    @route(["/mail/tracking/mailgun/all"], auth="none", type="jsonrpc", csrf=False)
     def mail_tracking_mailgun_webhook(self):
         """Process webhooks from Mailgun."""
         ensure_db()
