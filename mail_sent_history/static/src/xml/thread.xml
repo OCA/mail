@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-inherit="mail.Thread" t-inherit-mode="extension">
+        <xpath expr="//t[@t-elif='props.showEmptyMessage']" position="before">
+            <t t-if="props.thread.id === 'sent_history'">
+                <h4 class="mb-3 fw-bolder">
+                    You have not sent any messages or added any notes yet
+                </h4>
+                This mailbox will display messages or notes you have sent.
+            </t>
+        </xpath>
+    </t>
+
+</templates>

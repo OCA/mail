@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <t t-inherit="mail.DiscussSidebarMailboxes" t-inherit-mode="extension">
+        <xpath expr="." position="inside">
+            <t t-call="mail.Mailbox">
+                <t t-set="mailbox" t-value="store.discuss.sent_history" />
+            </t>
+        </xpath>
+    </t>
+
+</odoo>
