@@ -89,8 +89,7 @@ class ResPartner(models.Model):
                 if not self.env.context.get("mailgun_auto_check"):
                     raise UserError(
                         self.env._(
-                            "Mailgun Error. Mailbox verification value wasn't"
-                            " returned"
+                            "Mailgun Error. Mailbox verification value wasn't returned"
                         )
                     )
             # Not a valid address: API sets 'is_valid' as False

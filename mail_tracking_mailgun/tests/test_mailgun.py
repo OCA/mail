@@ -72,7 +72,7 @@ class TestMailgun(BaseCommon):
         cls.token = "f1349299097a51b9a7d886fcb5c2735b426ba200ada6e9e149"
         cls.timestamp = "1471021089"
         cls.signature = (
-            "4fb6d4dbbe10ce5d620265dcd7a3c0b8" "ca0dede1433103891bc1ae4086e9d5b2"
+            "4fb6d4dbbe10ce5d620265dcd7a3c0b8ca0dede1433103891bc1ae4086e9d5b2"
         )
         cls.event = {
             "log-level": "info",
