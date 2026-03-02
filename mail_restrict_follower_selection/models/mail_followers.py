@@ -2,10 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models
-from odoo.tools import config
 from odoo.tools.safe_eval import safe_eval
-
-from ..utils import _id_get
 
 
 class MailFollowers(models.Model):
@@ -20,10 +17,7 @@ class MailFollowers(models.Model):
         check_existing=False,
         existing_policy="skip",
     ):
-        test_condition = config["test_enable"] and not self.env.context.get(
-            "test_restrict_follower"
-        )
-        if test_condition or self.env.context.get("no_restrict_follower"):
+        if self.env.context.get("no_restrict_follower"):
             return super()._add_followers(
                 res_model,
                 res_ids,
@@ -39,9 +33,7 @@ class MailFollowers(models.Model):
         )
         partners = self.env["res.partner"].search(
             [("id", "in", partner_ids)]
-            + safe_eval(
-                domain, context={"ref": lambda str_id: _id_get(self.env, str_id)}
-            )
+            + safe_eval(domain, context={"ref": lambda str_id: self.env.ref(str_id).id})
         )
         _res_ids = res_ids.copy() or [0]
         new, update = super()._add_followers(

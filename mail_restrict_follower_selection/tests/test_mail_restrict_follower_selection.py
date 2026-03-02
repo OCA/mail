@@ -14,8 +14,11 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         cls.category_employees = cls.env["res.partner.category"].create(
             {"name": "Employees"}
         )
-        cls.param = cls.env.ref(
-            "mail_restrict_follower_selection.parameter_res_partner_domain"
+        cls.param = cls.env["ir.config_parameter"].create(
+            {
+                "key": "mail_restrict_follower_selection.domain.res.partner",
+                "value": [(1, "=", 1)],
+            }
         )
         cls.param.update({"value": "[('category_id.name', '=', 'Employees')]"})
 
@@ -49,7 +52,6 @@ class TestMailRestrictFollowerSelection(TransactionCase):
                 default_composition_mode="comment",
                 default_model="res.partner",
                 default_use_active_domain=True,
-                test_restrict_follower=True,
             )
             .create(
                 {
@@ -78,14 +80,12 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         )
 
     def test_message_get_suggested_recipients(self):
-        res = self.partner.with_context(
-            test_restrict_follower=True
-        )._message_get_suggested_recipients(additional_partners=self.partner)
+        res = self.partner._message_get_suggested_recipients(
+            additional_partners=self.partner
+        )
         self.assertEqual(res[0]["partner_id"], self.partner.id)
 
-        new_res = self.partner.with_context(
-            test_restrict_follower=True
-        )._message_get_suggested_recipients()
+        new_res = self.partner._message_get_suggested_recipients()
         self.assertFalse(new_res[0].get("partner_id"))
 
     def test_get_view_eval(self):
@@ -102,7 +102,7 @@ class TestMailRestrictFollowerSelection(TransactionCase):
     def test_message_get_suggested_recipients_eval(self):
         """Check using safe_eval when adding recipients."""
         self._use_ref_in_domain()
-        partner = self.partner.with_context(test_restrict_follower=True)
+        partner = self.partner
         res = partner._message_get_suggested_recipients(
             additional_partners=self.partner
         )

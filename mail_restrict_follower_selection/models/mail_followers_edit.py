@@ -9,8 +9,6 @@ from odoo import api, models
 from odoo.fields import Domain
 from odoo.tools.safe_eval import safe_eval
 
-from ..utils import _id_get
-
 
 class MailFollowersEdit(models.TransientModel):
     _inherit = "mail.followers.edit"
@@ -41,7 +39,7 @@ class MailFollowersEdit(models.TransientModel):
         arch = etree.fromstring(result["arch"])
         domain = self._mail_restrict_follower_selection_get_domain()
         eval_domain = safe_eval(
-            str(domain), context={"ref": lambda str_id: _id_get(self.env, str_id)}
+            str(domain), context={"ref": lambda str_id: self.env.ref(str_id).id}
         )
         for field in arch.xpath('//field[@name="partner_ids"]'):
             field.attrib["domain"] = str(eval_domain)
