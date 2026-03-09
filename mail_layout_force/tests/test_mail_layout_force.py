@@ -49,7 +49,7 @@ class TestMailLayoutForce(TransactionCase):
                 "force_email_layout_id": cls.view.id,
             }
         )
-        cls.partner = cls.env.ref("base.res_partner_10")
+        cls.partner = cls.env["res.partner"].create({"name": "Test Partner"})
         cls.partner.message_ids.unlink()
         cls.partner.message_subscribe([cls.partner.id])
 

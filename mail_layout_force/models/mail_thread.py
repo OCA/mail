@@ -17,10 +17,10 @@ class MailThread(models.AbstractModel):
         model_description=False,
         force_email_company=False,
         force_email_lang=False,
+        subtitles=None,
         resend_existing=False,
         force_send=True,
         send_after_commit=True,
-        subtitles=None,
         **kwargs,
     ):
         msg_vals = msg_vals or {}
@@ -56,9 +56,9 @@ class MailThread(models.AbstractModel):
             model_description=model_description,
             force_email_company=force_email_company,
             force_email_lang=force_email_lang,
+            subtitles=subtitles,
             resend_existing=resend_existing,
             force_send=force_send,
             send_after_commit=send_after_commit,
-            subtitles=subtitles,
             **kwargs,
         )

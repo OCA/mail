@@ -12,10 +12,10 @@
                     invisible="type != 'qweb'"
                 >
                     <field name="layout_mapping_line_ids" nolabel="1">
-                        <tree editable="bottom">
+                        <list editable="bottom">
                             <field name="substitute_layout_id" />
                             <field name="model_ids" widget="many2many_tags" />
-                        </tree>
+                        </list>
                     </field>
                 </page>
             </xpath>
