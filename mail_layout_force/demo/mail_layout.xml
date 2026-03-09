@@ -5,7 +5,6 @@
     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <template id="mail_layout_custom">
         <table
             border="0"
@@ -78,7 +77,8 @@
                                         style="background-color: red; border: medium none; clear: both; display: block; margin:4px 0px 32px 0px;"
                                     />
                                     <div style="color: #FF9999;">
-                                    <b t-esc="company.name" /><br />
+                                        <b t-esc="company.name" />
+                                        <br />
                                         <t t-esc="company.name" />
                                         <t t-if="company.phone">
                                             ::
@@ -87,20 +87,20 @@
                                         <t t-if="company.email">
                                             ::
                                             <a
-                                                t-att-href="'mailto:%s' % company.email"
-                                                style="text-decoration:none;color:red;"
-                                            >
-                                                <t t-esc="company.email" />
-                                            </a>
+                                            t-att-href="'mailto:%s' % company.email"
+                                            style="text-decoration:none;color:red;"
+                                        >
+                                            <t t-esc="company.email" />
+                                        </a>
                                         </t>
                                         <t t-if="company.website">
                                             ::
                                             <a
-                                                t-att-href="'%s' % company.website"
-                                                style="text-decoration:none;color:red;"
-                                            >
-                                                <t t-esc="company.website" />
-                                            </a>
+                                            t-att-href="'%s' % company.website"
+                                            style="text-decoration:none;color:red;"
+                                        >
+                                            <t t-esc="company.website" />
+                                        </a>
                                         </t>
                                     </div>
                                 </td>
@@ -111,5 +111,4 @@
             </tr>
         </table>
     </template>
-
 </odoo>

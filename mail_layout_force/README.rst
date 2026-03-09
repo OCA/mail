@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =================
 Mail Layout Force
 =================
@@ -17,17 +13,17 @@ Mail Layout Force
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github
-    :target: https://github.com/OCA/social/tree/17.0/mail_layout_force
-    :alt: OCA/social
+.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
+    :target: https://github.com/OCA/mail/tree/18.0/mail_layout_force
+    :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/social-17-0/social-17-0-mail_layout_force
+    :target: https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_layout_force
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=17.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -43,9 +39,9 @@ There are notably two main layouts used in Odoo, and the user can't
 control when they're used, as it's hardcoded into the different
 applications.
 
-- ``mail.message_notification_email``
-- ``mail.mail_notification_light``
-- ``mail.mail_notification_paynow``
+-  ``mail.message_notification_email``
+-  ``mail.mail_notification_light``
+-  ``mail.mail_notification_paynow``
 
 This module allows to force a specific layout for a given
 ``email.template``, effectively overwritting the one hardcoded by Odoo.
@@ -76,9 +72,9 @@ To configure a custom layout of your own, some technical knowledge is
 needed. You can see how the existing layouts are defined for details or
 inspiration:
 
-- ``mail.mail_notification_light``
-- ``mail.mail_notification_paynow``
-- ``mail.mail_notification_borders``
+-  ``mail.mail_notification_light``
+-  ``mail.mail_notification_paynow``
+-  ``mail.mail_notification_borders``
 
 To force a new custom layout for emails that do not use an existing
 ``email.template`` record (e.g., emails sent from the chatter):
@@ -94,10 +90,10 @@ If left empty, the email layout will be replaced for all models.
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_layout_force%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_layout_force%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -112,16 +108,16 @@ Authors
 Contributors
 ------------
 
-- ``Camptocamp <https://www.camptocamp.com>``\ \_
+-  ``Camptocamp <https://www.camptocamp.com>``\ \_
 
-  - Iván Todorovich ivan.todorovich@camptocamp.com
+   -  Iván Todorovich ivan.todorovich@camptocamp.com
 
-- Abraham Anes abrahamanes@gmail.com
+-  Abraham Anes abrahamanes@gmail.com
 
-- ``Quartile <https://www.quartile.co>``\ \_
+-  ``Quartile <https://www.quartile.co>``\ \_
 
-  - Aung Ko Ko Lin
-  - Yoshi Tashiro
+   -  Aung Ko Ko Lin
+   -  Yoshi Tashiro
 
 Maintainers
 -----------
@@ -144,6 +140,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-ivantodorovich| 
 
-This module is part of the `OCA/social <https://github.com/OCA/social/tree/17.0/mail_layout_force>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/18.0/mail_layout_force>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
