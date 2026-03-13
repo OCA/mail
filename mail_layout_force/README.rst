@@ -79,8 +79,10 @@ inspiration:
 -  ``mail.mail_notification_light``
 
 To force a custom layout for emails that do not use an existing
-``email.template`` record (e.g., emails sent from the chatter), you can
-use the Layout Mapping feature:
+``email.template`` record (e.g., emails sent from the chatter) or for
+cases where emails are sent directly via ``message_post`` without
+opening the mail composer (e.g., invoice send actions like
+``action_invoice_sent``), you can use the Layout Mapping feature:
 
 1. Go to *Settings > Technical > User Interface > Views*
 2. Copy the current layout (e.g.,

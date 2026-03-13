@@ -423,8 +423,10 @@ inspiration:</p>
 <li><tt class="docutils literal">mail.mail_notification_light</tt></li>
 </ul>
 <p>To force a custom layout for emails that do not use an existing
-<tt class="docutils literal">email.template</tt> record (e.g., emails sent from the chatter), you can
-use the Layout Mapping feature:</p>
+<tt class="docutils literal">email.template</tt> record (e.g., emails sent from the chatter) or for
+cases where emails are sent directly via <tt class="docutils literal">message_post</tt> without
+opening the mail composer (e.g., invoice send actions like
+<tt class="docutils literal">action_invoice_sent</tt>), you can use the Layout Mapping feature:</p>
 <ol class="arabic simple">
 <li>Go to <em>Settings &gt; Technical &gt; User Interface &gt; Views</em></li>
 <li>Copy the current layout (e.g.,
