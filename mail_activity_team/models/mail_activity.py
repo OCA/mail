@@ -8,34 +8,26 @@ from odoo.exceptions import ValidationError
 class MailActivity(models.Model):
     _inherit = "mail.activity"
 
-    @api.model
-    def _get_default_team_id(self, user_id=None, model_id=None):
-        if not user_id:
-            user_id = self.env.uid
-        if not model_id:
-            res_model = self.env.context.get("default_res_model")
-            model = (
-                self.sudo().env["ir.model"].search([("model", "=", res_model)], limit=1)
+    def _get_default_team_id(self):
+        self.ensure_one()
+        domain = []
+        domain.append(("member_ids", "=", self.user_id.id or self.env.user.id))
+        if self.res_model_id:
+            domain += [
+                "|",
+                ("res_model_ids", "=", False),
+                ("res_model_ids", "=", self.res_model_id.id),
+            ]
+        if not domain:
+            return self.env["mail.activity.team"]
+        teams = self.env["mail.activity.team"].search(domain)
+        if self.res_model_id:
+            # Prefer teams with a matching model
+            teams = (
+                teams.filtered(lambda mat: self.res_model_id in mat.res_model_ids)
+                or teams
             )
-            model_id = model.id if model else None
-        domain = [("member_ids", "in", [user_id])]
-        if model_id:
-            domain.extend(
-                [
-                    "|",
-                    ("res_model_ids", "=", False),
-                    ("res_model_ids", "in", [model_id]),
-                ]
-            )
-        results = self.env["mail.activity.team"].search(domain)
-        if model_id:
-            result_with_model = results.filtered(
-                lambda team: model_id in team.res_model_ids.ids
-            )
-            if result_with_model:
-                return result_with_model[0]
-
-        return results[0] if results else self.env["mail.activity.team"]
+        return teams[:1]
 
     user_id = fields.Many2one(string="User", required=False, default=False)
     team_user_id = fields.Many2one(
@@ -45,7 +37,26 @@ class MailActivity(models.Model):
     team_id = fields.Many2one(
         comodel_name="mail.activity.team",
         index=True,
+        compute="_compute_team_id",
+        store=True,
+        readonly=False,
     )
+
+    @api.depends("res_model_id", "user_id")
+    def _compute_team_id(self):
+        """Assign team if no team yet or team is incompatible"""
+        for activity in self:
+            if (
+                not activity.team_id
+                or activity.user_id
+                and activity.user_id not in activity.team_id.member_ids
+                or (
+                    activity.res_model_id
+                    and activity.team_id.res_model_ids
+                    and activity.res_model_id not in activity.team_id.res_model_ids
+                )
+            ):
+                activity.team_id = activity._get_default_team_id()
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -63,29 +74,7 @@ class MailActivity(models.Model):
                 # so if we don't have a user_team_id we don't want user_id too
                 if "user_id" in vals and not vals.get("team_user_id"):
                     del vals["user_id"]
-            elif (
-                "team_id" not in vals
-                and "user_id" in vals
-                and "team_user_id" not in vals
-            ):
-                # legacy behavior, if we have user_id but no team_id, set the team_id
-                team_id = self._get_default_team_id(
-                    vals["user_id"], vals.get("res_model_id")
-                )
-                if team_id:
-                    vals["team_id"] = team_id.id
-                    vals["team_user_id"] = vals["user_id"]
         return super().create(vals_list)
-
-    @api.onchange("user_id")
-    def _onchange_user_id(self):
-        if not self.user_id or (
-            self.team_id and self.user_id in self.team_id.member_ids
-        ):
-            return
-        self.team_id = self._get_default_team_id(
-            self.user_id.id, self.sudo().res_model_id.id
-        )
 
     @api.onchange("team_id")
     def _onchange_team_id(self):

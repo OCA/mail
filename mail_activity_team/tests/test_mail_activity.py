@@ -1,5 +1,5 @@
 from odoo import Command
-from odoo.tests import users
+from odoo.tests import Form, users
 
 from odoo.addons.base.tests.common import BaseCommon
 
@@ -63,30 +63,20 @@ class TestMailActivity(BaseCommon):
                 }
             )
         )
-        # Test with model_id parameter - should find the team
-        result_team_from_user = (
-            self.env["mail.activity"]
-            .with_context(default_res_model="res.partner")
-            ._get_default_team_id(user_id=self.user.id)
+        form_team_from_user = Form(
+            self.env["mail.activity"].with_context(
+                default_res_model="res.partner",
+                default_res_id=self.partner_client.id,
+            )
         )
         self.assertEqual(
-            result_team_from_user,
+            form_team_from_user.team_id,
             team_partner,
             "Should return the team matching the model_id",
         )
-        result_team = self.env["mail.activity"]._get_default_team_id(
-            user_id=self.user.id, model_id=self.partner_ir_model.id
-        )
+        activity = form_team_from_user.save()
         self.assertEqual(
-            result_team,
-            team_partner,
-            "Should return the team matching the model_id",
-        )
-        result_team_from_model = self.env["mail.activity"]._get_default_team_id(
-            model_id=self.partner_ir_model.id
-        )
-        self.assertEqual(
-            result_team_from_model,
+            activity.team_id,
             team_partner,
             "Should return the team matching the model_id",
         )
@@ -106,31 +96,22 @@ class TestMailActivity(BaseCommon):
                 }
             )
         )
-        # Test with a different model - should find the generic team
-        user_ir_model = self.env["ir.model"]._get("res.users")
-        result_team = self.env["mail.activity"]._get_default_team_id(
-            user_id=self.user.id, model_id=user_ir_model.id
-        )
+        # Test without a model - should find the generic team
+        form_result_team = Form(self.env["mail.activity"])
         self.assertEqual(
-            result_team,
+            form_result_team.team_id,
             team_generic,
             "Should return team without model restrictions",
         )
-        result_team_from_user = self.env["mail.activity"]._get_default_team_id(
-            user_id=self.user.id
+        # Test with a model - still finds the generic team
+        form_result_team_from_model = Form(
+            self.env["mail.activity"].with_context(
+                default_res_model="res.partner",
+                default_res_id=self.partner_client.id,
+            ),
         )
         self.assertEqual(
-            result_team_from_user,
-            team_generic,
-            "Should return team without model restrictions",
-        )
-        result_team_from_model = (
-            self.env["mail.activity"]
-            .with_context(default_res_model="res.partner")
-            ._get_default_team_id(model_id=user_ir_model.id)
-        )
-        self.assertEqual(
-            result_team_from_model,
+            form_result_team_from_model.team_id,
             team_generic,
             "Should return team without model restrictions",
         )
@@ -138,20 +119,28 @@ class TestMailActivity(BaseCommon):
     def test_get_default_team_id_no_match(self):
         """Test _get_default_team_id returns empty when no team matches"""
         # Create a team for a specific model
-        user_ir_model = self.env["ir.model"]._get("res.users")
         self.env["mail.activity.team"].sudo().create(
             {
                 "name": "Users Team",
-                "res_model_ids": [Command.set([user_ir_model.id])],
+                "res_model_ids": [Command.set([self.partner_ir_model.id])],
                 "member_ids": [Command.set([self.user.id])],
             }
         )
         # Search for a different user who is not a member
-        result_team = self.env["mail.activity"]._get_default_team_id(
-            user_id=self.user2.id, model_id=user_ir_model.id
+        form_result_team = Form(
+            self.env["mail.activity"].with_context(
+                default_res_model="res.partner",
+                default_res_id=self.partner_client.id,
+            )
         )
+        form_result_team.user_id = self.user2
         self.assertFalse(
-            result_team,
+            form_result_team.team_id,
+            "Should return empty recordset when user is not a team member",
+        )
+        activity = form_result_team.save()
+        self.assertFalse(
+            activity.team_id,
             "Should return empty recordset when user is not a team member",
         )
 
@@ -173,23 +162,31 @@ class TestMailActivity(BaseCommon):
             }
         )
         # Test - should return the first match (based on search order)
-        result_team = self.env["mail.activity"]._get_default_team_id(
-            user_id=self.user.id, model_id=self.partner_ir_model.id
+        form_result_team = Form(
+            self.env["mail.activity"].with_context(
+                default_res_model_id=self.partner_ir_model.id,
+                default_res_id=self.partner_client.id,
+            )
         )
+        form_result_team.user_id = self.user
         self.assertEqual(
-            result_team,
+            form_result_team.team_id,
             team_b,
             "Should return the team with model match",
         )
-        # Verify it's a single record
-        self.assertEqual(len(result_team), 1, "Should return only one team")
+        activity = form_result_team.save()
+        self.assertEqual(
+            activity.team_id,
+            team_b,
+            "Should return the team with model match",
+        )
 
-    def test_create_activity_without_team_assigns_no_team(self):
+    def test_create_activity_without_team_assigns_team_by_model_and_user(self):
         """Test creating activity with user_id but no team_id assigns default team"""
         # Clean up existing activities
         self.env["mail.activity"].search([]).unlink()
         # Create a team for the partner model
-        self.env["mail.activity.team"].create(
+        team = self.env["mail.activity.team"].create(
             {
                 "name": "Auto Assign Team",
                 "res_model_ids": [Command.set([self.partner_ir_model.id])],
@@ -207,9 +204,10 @@ class TestMailActivity(BaseCommon):
             }
         )
         # Verify team was not assigned
-        self.assertFalse(
+        self.assertEqual(
             activity.team_id,
-            "Team should not be assigned when team_user_id is used without team_id",
+            team,
+            "Team should be selected by model and (team) user",
         )
 
     def test_create_activity_without_team_assigns_correct_team(self):
