@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_users_form_simple_modif_notification_volume" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.notification.volume</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+        <field name="arch" type="xml">
+            <field name="email" position="before">
+                <field
+                    name="notification_volume"
+                    readonly="0"
+                    widget="volume_slider"
+                    invisible="notification_type != 'inbox'"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>
