@@ -1,0 +1,109 @@
+# Copyright 2023 Camptocamp SA
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+
+from odoo import fields, models, tools
+
+from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
+
+
+def format_emails(partners):
+    return [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
+
+
+def format_emails_raw(partners):
+    return [p.email for p in partners if p.email]
+
+
+def format_emails_str(partners):
+    emails = format_emails(partners)
+    return ", ".join(emails)
+
+
+class MailMail(models.Model):
+    _inherit = "mail.mail"
+
+    email_bcc = fields.Char("Bcc", help="Blind Cc message recipients")
+
+    def _prepare_outgoing_list(self, mail_server=False, doc_to_followers=None):
+        # First, return if we're not coming from the Mail Composer
+        res = super()._prepare_outgoing_list(
+            mail_server=mail_server,
+            doc_to_followers=doc_to_followers,
+        )
+        is_out_of_scope = len(self.ids) > 1
+        is_from_composer = self.env.context.get("is_from_composer", False)
+
+        if is_out_of_scope or not is_from_composer:
+            return res
+
+        # Prepare values for To, Cc headers
+        partners_cc_bcc = self.recipient_cc_ids + self.recipient_bcc_ids
+        partner_to_ids = [r.id for r in self.recipient_ids if r not in partners_cc_bcc]
+        partner_to = self.env["res.partner"].browse(partner_to_ids)
+        email_to = format_emails(partner_to)
+        email_to_raw = ", ".join(format_emails_raw(partner_to))
+        email_to_normalized = tools.mail.email_normalize_all(
+            ", ".join(format_emails_raw(partner_to))
+        )
+        email_cc = (
+            tools.mail.email_split_and_format_normalize(
+                format_emails_str(self.recipient_cc_ids)
+            )
+            if self.recipient_cc_ids
+            else []
+        )
+        email_cc_normalized = tools.mail.email_normalize_all(
+            format_emails_str(self.recipient_cc_ids)
+        ) if self.recipient_cc_ids else []
+        email_bcc = [r.email for r in self.recipient_bcc_ids if r.email]
+        email_bcc_normalized = tools.mail.email_normalize_all(
+            ", ".join(email_bcc)
+        ) if email_bcc else []
+
+        # All normalized addresses for send_validated_to filter
+        all_normalized = (
+            (email_to_normalized or [])
+            + (email_cc_normalized or [])
+            + (email_bcc_normalized or [])
+        )
+
+        # Collect recipients (RCPT TO) and update all emails
+        # with the same To, Cc headers (to be shown by email client as users expect)
+        recipients = set()
+        for m in res:
+            rcpt_to = None
+            if m["email_to"]:
+                rcpt_to = extract_rfc2822_addresses(m["email_to"][0])[0]
+
+                # If the recipient is a Bcc, we add an explicit header X-Odoo-Bcc
+                # - It won't be shown by the email client, but can be useful for a
+                #   recipient to understand why he received a given email
+                # - Also note that in python3, the smtp.send_message method does not
+                #   transmit the Bcc field of a Message object
+                if rcpt_to in email_bcc:
+                    m["headers"] = {**m["headers"], "X-Odoo-Bcc": m["email_to"][0]}
+
+            # in the absence of self.email_to, Odoo creates one special mail for CC
+            # see https://github.com/odoo/odoo/commit/46bad8f0
+            elif m["email_cc"]:
+                rcpt_to = extract_rfc2822_addresses(m["email_cc"][0])[0]
+
+            if rcpt_to:
+                recipients.add(rcpt_to)
+
+            m.update(
+                {
+                    "email_to": email_to,
+                    "email_to_raw": email_to_raw,
+                    "email_to_normalized": all_normalized,
+                    "email_cc": email_cc,
+                }
+            )
+
+        self.env.context = {**self.env.context, "recipients": list(recipients)}
+
+        if len(res) > len(recipients):
+            res.pop()
+
+        return res
