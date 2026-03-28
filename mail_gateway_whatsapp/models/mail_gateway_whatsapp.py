@@ -139,6 +139,10 @@ class MailGatewayWhatsappService(models.AbstractModel):
                     proxies=self._get_proxies(),
                 )
                 image_request.raise_for_status()
+                attachment_info = {}
+                if "audio/" in image_info["mime_type"]:
+                    # Tell discuss to treat this attachment as voice.
+                    attachment_info["voice"] = True
                 attachments.append(
                     (
                         "{}{}".format(
@@ -146,6 +150,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                             mimetypes.guess_extension(image_info["mime_type"]),
                         ),
                         image_request.content,
+                        attachment_info,
                     )
                 )
         if message.get("location"):
