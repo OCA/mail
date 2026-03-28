@@ -143,6 +143,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                 if "audio/" in image_info["mime_type"]:
                     # Tell discuss to treat this attachment as voice.
                     attachment_info["voice"] = True
+                body += message.get(key).get("caption", "")
                 attachments.append(
                     (
                         "{}{}".format(

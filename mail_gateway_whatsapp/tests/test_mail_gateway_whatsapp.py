@@ -299,7 +299,8 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
 
         with patch("requests.get") as get_mock:
             get_mock.return_value = GetImageResponse()
-            self.receive_message(self.message_02)
+            message = self.receive_message(self.message_02)
+            self.assertEqual(message.body, "<p>CAPTION</p>")
 
     def test_receive_audio_message(self):
         class GetAudioResponse:
