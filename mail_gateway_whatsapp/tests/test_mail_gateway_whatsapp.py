@@ -120,6 +120,42 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
                 }
             ],
         }
+        cls.audio_message = {
+            "object": "whatsapp_business_account",
+            "entry": [
+                {
+                    "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+                    "changes": [
+                        {
+                            "value": {
+                                "messaging_product": "whatsapp",
+                                "metadata": {
+                                    "display_phone_number": "1234",
+                                    "phone_number_id": "1234",
+                                },
+                                "contacts": [
+                                    {"profile": {"name": "NAME"}, "wa_id": "1234"}
+                                ],
+                                "messages": [
+                                    {
+                                        "from": "1234",
+                                        "id": "wamid.ID",
+                                        "timestamp": "1234",
+                                        "type": "audio",
+                                        "audio": {
+                                            "mime_type": "audio/oga",
+                                            "sha256": "IMAGE_HASH",
+                                            "id": "12356",
+                                        },
+                                    }
+                                ],
+                            },
+                            "field": "messages",
+                        }
+                    ],
+                }
+            ],
+        }
 
     def test_webhook_management(self):
         self.gateway.webhook_key = self.webhook
@@ -207,6 +243,22 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         with patch("requests.get") as get_mock:
             get_mock.return_value = GetImageResponse()
             self.receive_message(self.message_02)
+
+    def test_receive_audio_message(self):
+        class GetAudioResponse:
+            def raise_for_status(self):
+                pass
+
+            def json(self):
+                return {"url": "http://demo.url", "mime_type": "audio/oga"}
+
+            content = b"binary_data"
+
+        with patch("requests.get") as get_mock:
+            get_mock.return_value = GetAudioResponse()
+            message = self.receive_message(self.audio_message)
+            # Check that the attachment is marked as voice
+            self.assertTrue(message.attachment_ids.voice_ids)
 
     @mute_logger("odoo.addons.mail_gateway.controllers.gateway")
     def test_post_no_signature_no_message(self):
