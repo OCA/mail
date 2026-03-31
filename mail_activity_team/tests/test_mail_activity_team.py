@@ -115,6 +115,21 @@ class TestMailActivityTeam(TransactionCase):
                 }
             )
         )
+        cls.schedule_act2 = (
+            cls.env["mail.activity.schedule"]
+            .with_user(cls.employee)
+            .with_context(
+                active_model=cls.partner_client._name,
+                active_ids=cls.partner_client.ids,
+                default_activity_user_id=cls.employee.id,
+            )
+            .create(
+                {
+                    "activity_type_id": cls.activity2.id,
+                    "note": "Partner activity 2.",
+                }
+            )
+        )
 
     def test_activity_members(self):
         self.team1.member_ids |= self.employee2
@@ -222,6 +237,100 @@ class TestMailActivityTeam(TransactionCase):
         with Form(self.act2) as form:
             form.activity_type_id = self.activity1
             self.assertEqual(form.team_id, self.team1)
+
+    ### Test mail.activity.schedule onchange / compute functionality, analogous
+    ### to the mail.activity tests above.
+    def test_schedule_activity_onchanges_keep_user(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: wizard should have Team 1.",
+        )
+        with Form(self.schedule_act2) as form:
+            form.activity_team_id = self.env["mail.activity.team"]
+            self.assertEqual(form.activity_user_id, self.employee)
+
+    def test_schedule_activity_onchanges_user_no_member_team(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        with self.assertRaises(
+            AssertionError, msg="can't write on invisible field user_id"
+        ):
+            with Form(self.schedule_act2) as form:
+                form.activity_user_id = self.employee2
+
+    def test_schedule_activity_onchanges_user_no_team(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        with Form(self.schedule_act2) as form:
+            form.activity_team_id = self.env["mail.activity.team"]
+            form.activity_user_id = self.employee2
+            self.assertEqual(form.activity_team_id, self.team2)
+
+    def test_schedule_activity_onchanges_team_no_member(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        self.team2.user_id = False
+        self.team2.member_ids = False
+        with Form(self.schedule_act2) as form:
+            form.activity_team_id = self.team2
+            self.assertFalse(form.activity_user_id)
+
+    def test_schedule_activity_onchanges_team_different_member(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        self.team2.user_id = self.employee2
+        self.team2.member_ids = self.employee2
+        with Form(self.schedule_act2) as form:
+            form.activity_team_id = self.team2
+            self.assertEqual(form.activity_user_id, self.employee2)
+
+    def test_schedule_activity_onchanges_team_different_member_no_leader(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        self.team2.user_id = False
+        self.team2.member_ids = self.employee2
+        with Form(self.schedule_act2) as form:
+            form.activity_team_id = self.team2
+            self.assertEqual(form.activity_user_id, self.employee2)
+
+    def test_schedule_activity_onchanges_activity_type_set_team(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        self.activity1.default_team_id = self.team2
+        self.assertEqual(self.schedule_act2.activity_type_id, self.activity2)
+        with Form(self.schedule_act2) as form:
+            form.activity_type_id = self.activity1
+            self.assertEqual(form.activity_team_id, self.team2)
+
+    def test_schedule_activity_onchanges_activity_type_no_team(self):
+        self.assertEqual(
+            self.schedule_act2.activity_team_id,
+            self.team1,
+            "Error: Activity 2 should have Team 1.",
+        )
+        self.assertEqual(self.schedule_act2.activity_type_id, self.activity2)
+        with Form(self.schedule_act2) as form:
+            form.activity_type_id = self.activity1
+            self.assertEqual(form.activity_team_id, self.team1)
 
     def test_activity_constrain(self):
         with self.assertRaises(ValidationError):
