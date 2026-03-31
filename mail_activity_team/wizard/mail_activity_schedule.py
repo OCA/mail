@@ -19,17 +19,28 @@ class MailActivitySchedule(models.TransientModel):
         readonly=False,
     )
 
-    @api.depends("activity_type_id")
+    @api.depends("res_model_id", "activity_user_id")
     def _compute_activity_team_id(self):
-        for scheduler in self:
-            if scheduler.activity_type_id.default_team_id:
-                scheduler.activity_team_id = scheduler.activity_type_id.default_team_id
-            elif not scheduler.activity_team_id:
-                scheduler.activity_team_id = self.env[
-                    "mail.activity"
-                ]._get_default_team_id(
-                    scheduler.activity_team_user_id.id, scheduler.sudo().res_model_id.id
+        """Assign team if no team yet or team is incompatible"""
+        for wizard in self:
+            if (
+                not wizard.activity_team_id
+                or wizard.activity_user_id
+                and wizard.activity_user_id not in wizard.activity_team_id.member_ids
+                or (
+                    wizard.res_model_id
+                    and wizard.activity_team_id.res_model_ids
+                    and wizard.res_model_id not in wizard.activity_team_id.res_model_ids
                 )
+            ):
+                # Reuse mail.activity default team logic
+                activity = self.env["mail.activity"].new(
+                    values={
+                        "res_model_id": wizard.sudo().res_model_id.id,
+                        "user_id": wizard.activity_user_id.id,
+                    },
+                )
+                wizard.activity_team_id = activity._get_default_team_id()
 
     @api.onchange("activity_team_id")
     def _onchange_activity_team_id(self):
@@ -46,16 +57,13 @@ class MailActivitySchedule(models.TransientModel):
             self.activity_team_user_id = new_user_id
             self.activity_user_id = new_user_id
 
-    @api.onchange("activity_team_user_id")
-    def _onchange_activity_team_user_id(self):
-        if not self.activity_team_user_id or (
-            self.activity_team_user_id
-            and self.activity_team_user_id in self.activity_team_id.member_ids
-        ):
-            return
-        self.activity_team_id = self.env["mail.activity"]._get_default_team_id(
-            self.activity_team_user_id.id, self.sudo().res_model_id.id
-        )
+    @api.onchange("activity_type_id")
+    def _onchange_activity_type_id(self):
+        if self.activity_type_id.default_team_id:
+            self.activity_team_id = self.activity_type_id.default_team_id
+            members = self.activity_type_id.default_team_id.member_ids
+            if self.activity_user_id not in members and members:
+                self.activity_user_id = members[:1]
 
     def _action_schedule_activities(self):
         return self._get_applied_on_records().activity_schedule(
