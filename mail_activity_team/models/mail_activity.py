@@ -8,23 +8,28 @@ from odoo.exceptions import ValidationError
 class MailActivity(models.Model):
     _inherit = "mail.activity"
 
-    def _get_default_team_id(self):
-        self.ensure_one()
+    def _get_default_team_id(self, user_id=None, model_id=None):
+        if not user_id:
+            user_id = self.user_id.id or self.env.user.id
+        if not model_id:
+            model_id = self.res_model_id.id if self.res_model_id else None
         domain = []
-        domain.append(("member_ids", "=", self.user_id.id or self.env.user.id))
-        if self.res_model_id:
+        domain.append(("member_ids", "=", user_id))
+        if model_id:
             domain += [
                 "|",
                 ("res_model_ids", "=", False),
-                ("res_model_ids", "=", self.res_model_id.id),
+                ("res_model_ids", "=", model_id),
             ]
         if not domain:
             return self.env["mail.activity.team"]
         teams = self.env["mail.activity.team"].search(domain)
-        if self.res_model_id:
+        if model_id:
             # Prefer teams with a matching model
             teams = (
-                teams.filtered(lambda mat: self.res_model_id in mat.res_model_ids)
+                teams.filtered(
+                    lambda mat, model_id=model_id: model_id in mat.res_model_ids.ids
+                )
                 or teams
             )
         return teams[:1]
@@ -56,7 +61,9 @@ class MailActivity(models.Model):
                     and activity.res_model_id not in activity.team_id.res_model_ids
                 )
             ):
-                activity.team_id = activity._get_default_team_id()
+                activity.team_id = activity._get_default_team_id(
+                    activity.user_id.id, activity.res_model_id.id
+                )
 
     @api.model_create_multi
     def create(self, vals_list):

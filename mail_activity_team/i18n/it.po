@@ -17,6 +17,12 @@ msgstr ""
 "X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_activity_team
+#. odoo-python
+#: code:addons/mail_activity_team/wizard/mail_activity_schedule.py:0
+msgid "%(activity)s, assigned to team %(name)s, due on the %(deadline)s"
+msgstr ""
+
+#. module: mail_activity_team
 #. odoo-javascript
 #: code:addons/mail_activity_team/static/src/core/web/activity.xml:0
 msgid "(Team"
@@ -50,6 +56,11 @@ msgid "Activity Team"
 msgstr "Team Attività"
 
 #. module: mail_activity_team
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__activity_team_required
+msgid "Activity Team Required"
+msgstr ""
+
+#. module: mail_activity_team
 #: model:ir.actions.act_window,name:mail_activity_team.mail_activity_team_action
 #: model:ir.model.fields,field_description:mail_activity_team.field_res_users__activity_team_ids
 #: model:ir.ui.menu,name:mail_activity_team.menu_mail_activity_team
@@ -60,6 +71,11 @@ msgstr "Team Attività"
 #: model:ir.model,name:mail_activity_team.model_mail_activity_type
 msgid "Activity Type"
 msgstr "Tipo attività"
+
+#. module: mail_activity_team
+#: model:ir.model,name:mail_activity_team.model_mail_activity_plan_template
+msgid "Activity plan template"
+msgstr ""
 
 #. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_mail_activity_schedule
@@ -75,6 +91,16 @@ msgstr "In archivio"
 #: model_terms:ir.ui.view,arch_db:mail_activity_team.mail_activity_team_view_form
 msgid "Assign to missing activities"
 msgstr "Assegna ad attività mancanti"
+
+#. module: mail_activity_team
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__responsible_id
+msgid "Assigned to"
+msgstr ""
+
+#. module: mail_activity_team
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__responsible_type
+msgid "Assignment"
+msgstr ""
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__create_uid
@@ -100,6 +126,11 @@ msgstr "Nome visualizzato"
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__id
 msgid "ID"
 msgstr "ID"
+
+#. module: mail_activity_team
+#: model:ir.model.fields,help:mail_activity_team.field_mail_activity_plan_template__activity_team_required
+msgid "Indicate if this plan template must have an activity team"
+msgstr ""
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__write_uid
@@ -143,6 +174,12 @@ msgid "Name"
 msgstr "Nome"
 
 #. module: mail_activity_team
+#. odoo-python
+#: code:addons/mail_activity_team/models/mail_activity_plan_template.py:0
+msgid "Please enter an activity team."
+msgstr ""
+
+#. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_ir_actions_server
 msgid "Server Action"
 msgstr "Azione server"
@@ -151,6 +188,7 @@ msgstr "Azione server"
 #. odoo-javascript
 #: code:addons/mail_activity_team/static/src/core/web/activity.xml:0
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity__team_id
+#: model:ir.model.fields.selection,name:mail_activity_team.selection__mail_activity_plan_template__responsible_type__team
 msgid "Team"
 msgstr "Team"
 
@@ -171,12 +209,14 @@ msgid "Team Members"
 msgstr "Membri Team"
 
 #. module: mail_activity_team
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__activity_team_id
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_schedule__activity_team_id
 msgid "Team assigned to"
 msgstr "Team assegnato a"
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity__team_user_id
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__activity_team_user_id
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_schedule__activity_team_user_id
 msgid "Team user"
 msgstr "Utente del team"
@@ -188,6 +228,11 @@ msgid ""
 "The assigned user %(user_name)s is not member of the team %(team_name)s."
 msgstr ""
 "L'utente assegnato %(user_name)s nn è un membro del team %(team_name)s."
+
+#. module: mail_activity_team
+#: model:ir.model.fields,help:mail_activity_team.field_mail_activity_plan_template__activity_team_user_id
+msgid "The team member that the activity will be assigned to specifically"
+msgstr ""
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__res_model_ids
