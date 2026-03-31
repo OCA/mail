@@ -15,3 +15,5 @@
 - [CorporateHub](https://corporatehub.eu/)
   - Alexey Pelykh <alexey.pelykh@corphub.eu>
 - Stefan Rijnhart (<stefan@opener.amsterdam>)
+- [glueckkanja AG](https://glueckkanja.com/)
+  - Christopher Rogos (<crogos@gmail.com>)

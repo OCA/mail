@@ -33,6 +33,7 @@
                             <field name="active" invisible="1" />
                             <field name="name" />
                             <field name="user_id" />
+                            <field name="notify_members" />
                         </group>
                         <group name="models">
                             <field

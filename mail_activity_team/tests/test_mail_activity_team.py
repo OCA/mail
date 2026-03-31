@@ -97,6 +97,7 @@ class TestMailActivityTeam(TransactionCase):
                 "name": "Team 2",
                 "res_model_ids": [Command.set([cls.partner_ir_model.id])],
                 "member_ids": [Command.set([cls.employee.id, cls.employee2.id])],
+                "notify_members": True,
             }
         )
         cls.act2 = (
@@ -590,6 +591,334 @@ class TestMailActivityTeam(TransactionCase):
                 {"team_activities": True},
             ),
             set(self.partner_client.ids),
+        )
+
+    def test_notify_members_disabled(self):
+        """Test that when notify_members is False, only assigned user is notified."""
+        # Create an activity for the team
+        self.team1.member_ids = [
+            (6, 0, [self.employee.id, self.employee2.id, self.employee3.id])
+        ]
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Test activity without notify_members.",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "team_user_id": self.employee.id,
+                "team_id": self.team1.id,
+            }
+        )
+
+        # Count initial messages for team members
+        initial_msg_count_emp = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+        initial_msg_count_emp2 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee2.partner_id.id])]
+            )
+        )
+        initial_msg_count_emp3 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee3.partner_id.id])]
+            )
+        )
+
+        # Call action_notify
+        activity.action_notify()
+
+        # Verify only the assigned user (employee) received a notification
+        final_msg_count_emp = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+        final_msg_count_emp2 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee2.partner_id.id])]
+            )
+        )
+        final_msg_count_emp3 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee3.partner_id.id])]
+            )
+        )
+
+        self.assertGreater(
+            final_msg_count_emp,
+            initial_msg_count_emp,
+            "Assigned user should receive notification",
+        )
+        self.assertEqual(
+            final_msg_count_emp2,
+            initial_msg_count_emp2,
+            "Non-assigned team member should not receive notification",
+        )
+        self.assertEqual(
+            final_msg_count_emp3,
+            initial_msg_count_emp3,
+            "Non-assigned team member should not receive notification",
+        )
+
+    def test_notify_members_enabled(self):
+        """Test that when notify_members is True, all team members are notified."""
+        # Create an activity for the team
+        self.team2.member_ids = [
+            (6, 0, [self.employee.id, self.employee2.id, self.employee3.id])
+        ]
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Test activity with notify_members enabled.",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "team_user_id": self.employee.id,
+                "team_id": self.team2.id,
+            }
+        )
+
+        # Count initial messages for team members
+        initial_msg_count_emp = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+        initial_msg_count_emp2 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee2.partner_id.id])]
+            )
+        )
+        initial_msg_count_emp3 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee3.partner_id.id])]
+            )
+        )
+
+        # Call action_notify
+        activity.action_notify()
+
+        # Verify all team members received notifications
+        final_msg_count_emp = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+        final_msg_count_emp2 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee2.partner_id.id])]
+            )
+        )
+        final_msg_count_emp3 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee3.partner_id.id])]
+            )
+        )
+
+        self.assertGreater(
+            final_msg_count_emp,
+            initial_msg_count_emp,
+            "Assigned user should receive notification",
+        )
+        self.assertGreater(
+            final_msg_count_emp2,
+            initial_msg_count_emp2,
+            "Team member 2 should receive notification",
+        )
+        self.assertGreater(
+            final_msg_count_emp3,
+            initial_msg_count_emp3,
+            "Team member 3 should receive notification",
+        )
+
+    def test_notify_members_no_duplicate_for_assigned_user(self):
+        """Test that the assigned user doesn't get duplicate notifications."""
+        # Create an activity assigned to employee (who is in the team)
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Test no duplicate notifications.",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "user_id": self.employee.id,
+                "team_id": self.team2.id,
+            }
+        )
+
+        # Count initial messages for the assigned user
+        initial_msg_count = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+
+        # Call action_notify
+        activity.action_notify()
+
+        # Verify the assigned user received exactly one new notification
+        final_msg_count = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+
+        # The assigned user should receive only 1 notification (from parent method)
+        # not 2 (parent + team member notification)
+        self.assertEqual(
+            final_msg_count - initial_msg_count,
+            1,
+            "Assigned user should receive exactly one notification, not duplicates",
+        )
+
+    def test_notify_members_activity_without_team(self):
+        """Test that activities without a team still work correctly."""
+        # Create an activity without a team
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Test activity without team.",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "user_id": self.employee.id,
+            }
+        )
+
+        # Count initial messages
+        initial_msg_count = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+
+        # Call action_notify - should not raise any error
+        activity.action_notify()
+
+        # Verify the assigned user received a notification
+        final_msg_count = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+
+        self.assertGreater(
+            final_msg_count,
+            initial_msg_count,
+            "Assigned user should receive notification even without team",
+        )
+
+    def test_notify_members_activity_without_assigned_user(self):
+        """Test that team notifications work when activity has no assigned user."""
+        # Create an activity without an assigned user
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Test activity without assigned user.",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "team_id": self.team2.id,
+            }
+        )
+
+        # Count initial messages for team members
+        initial_msg_count_emp = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+        initial_msg_count_emp2 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee2.partner_id.id])]
+            )
+        )
+
+        # Call action_notify
+        activity.action_notify()
+
+        # Verify all team members received notifications
+        final_msg_count_emp = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee.partner_id.id])]
+            )
+        )
+        final_msg_count_emp2 = len(
+            self.env["mail.message"].search(
+                [("partner_ids", "in", [self.employee2.partner_id.id])]
+            )
+        )
+
+        self.assertGreater(
+            final_msg_count_emp,
+            initial_msg_count_emp,
+            "Team member 1 should receive notification",
+        )
+        self.assertGreater(
+            final_msg_count_emp2,
+            initial_msg_count_emp2,
+            "Team member 2 should receive notification",
+        )
+
+    def test_notify_no_duplicate_when_team_and_user_assigned_on_create(self):
+        """
+        Activity created by user A, assigned to team A (user B and C,
+        notify_members=True) and explicitly to user B.
+        Verifies that B and C are each notified exactly once through the full
+        create flow.
+
+        Setup:
+        - employee = user A (creator, not in team)
+        - team2: notify_members=True, members: employee2 (B) and employee3 (C)
+        - Activity assigned to team2 AND employee2 (B) via team_user_id
+
+        Expected: B gets 1 notification (from action_notify), C gets 1 notification
+        (from action_notify_team) — no duplicate for C due to action_notify_team
+        being called twice in create.
+        """
+        self.team2.write(
+            {"member_ids": [(6, 0, [self.employee2.id, self.employee3.id])]}
+        )
+        partner = self.env["res.partner"].create(
+            {"name": "Test No Dup On Create Partner"}
+        )
+        employee_b_pid = self.employee2.partner_id.id
+        employee_c_pid = self.employee3.partner_id.id
+
+        before_b = self.env["mail.message"].search_count(
+            [("partner_ids", "in", [employee_b_pid])]
+        )
+        before_c = self.env["mail.message"].search_count(
+            [("partner_ids", "in", [employee_c_pid])]
+        )
+
+        # User A (employee) creates activity for team A (team2) and assigns to user B
+        self.env["mail.activity"].with_user(self.employee).create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Dedup test: team + assigned user on create.",
+                "res_id": partner.id,
+                "res_model_id": self.partner_ir_model.id,
+                "team_id": self.team2.id,
+                "team_user_id": self.employee2.id,
+            }
+        )
+
+        after_b = self.env["mail.message"].search_count(
+            [("partner_ids", "in", [employee_b_pid])]
+        )
+        after_c = self.env["mail.message"].search_count(
+            [("partner_ids", "in", [employee_c_pid])]
+        )
+
+        self.assertEqual(
+            after_b - before_b,
+            1,
+            "User B (assigned user and team member) should be notified exactly once",
+        )
+        self.assertEqual(
+            after_c - before_c,
+            1,
+            "User C (team member only) should be notified exactly once, not twice",
         )
 
     def test_mail_activity_plan_ui_logic(self):

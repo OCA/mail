@@ -45,6 +45,11 @@ class MailActivityTeam(models.Model):
         string="Team Members",
     )
     user_id = fields.Many2one(comodel_name="res.users", string="Team Leader")
+    notify_members = fields.Boolean(
+        default=False,
+        help="When enabled, all team members will be notified "
+        "when an activity is assigned to this team.",
+    )
     count_missing_activities = fields.Integer(
         string="Missing Activities", compute="_compute_missing_activities", default=0
     )
