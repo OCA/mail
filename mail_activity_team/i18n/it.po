@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-02-18 11:09+0000\n"
+"PO-Revision-Date: 2026-04-03 09:45+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -20,7 +20,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/mail_activity_team/wizard/mail_activity_schedule.py:0
 msgid "%(activity)s, assigned to team %(name)s, due on the %(deadline)s"
-msgstr ""
+msgstr "%(activity)s, assegnata al team %(name)s, con scadenza il %(deadline)s"
 
 #. module: mail_activity_team
 #. odoo-javascript
@@ -58,7 +58,7 @@ msgstr "Team Attività"
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__activity_team_required
 msgid "Activity Team Required"
-msgstr ""
+msgstr "Richiesto team attività"
 
 #. module: mail_activity_team
 #: model:ir.actions.act_window,name:mail_activity_team.mail_activity_team_action
@@ -75,7 +75,7 @@ msgstr "Tipo attività"
 #. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_mail_activity_plan_template
 msgid "Activity plan template"
-msgstr ""
+msgstr "Modello piano attività"
 
 #. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_mail_activity_schedule
@@ -95,12 +95,12 @@ msgstr "Assegna ad attività mancanti"
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__responsible_id
 msgid "Assigned to"
-msgstr ""
+msgstr "Assegnata a"
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__responsible_type
 msgid "Assignment"
-msgstr ""
+msgstr "Incarico"
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__create_uid
@@ -130,7 +130,7 @@ msgstr "ID"
 #. module: mail_activity_team
 #: model:ir.model.fields,help:mail_activity_team.field_mail_activity_plan_template__activity_team_required
 msgid "Indicate if this plan template must have an activity team"
-msgstr ""
+msgstr "Indica se questo modello piano deve avere un team attività"
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__write_uid
@@ -177,7 +177,7 @@ msgstr "Nome"
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity_plan_template.py:0
 msgid "Please enter an activity team."
-msgstr ""
+msgstr "Inserire un team attività."
 
 #. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_ir_actions_server
@@ -232,7 +232,7 @@ msgstr ""
 #. module: mail_activity_team
 #: model:ir.model.fields,help:mail_activity_team.field_mail_activity_plan_template__activity_team_user_id
 msgid "The team member that the activity will be assigned to specifically"
-msgstr ""
+msgstr "Il membro del team a cui verrà specificatamente assegnata l'attività"
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__res_model_ids
