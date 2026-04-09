@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
+from odoo.fields import Domain
 from odoo.tools.safe_eval import safe_eval
 
 
@@ -20,8 +21,8 @@ class MailTemplate(models.Model):
             active_ids = [active_ids]
         model = self.env[model_id.sudo().model]
         for substitution_template_rule in self.mail_template_substitution_rule_ids:
-            domain = safe_eval(substitution_template_rule.domain)
-            domain.append(("id", "in", active_ids))
+            domain = Domain(safe_eval(substitution_template_rule.domain))
+            domain &= Domain("id", "in", active_ids)
             if set(model.search(domain).ids) == set(active_ids):
                 return substitution_template_rule.substitution_mail_template_id
         return False

@@ -1,7 +1,11 @@
 # Copyright 2019 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+
 from odoo.tests import Form, TransactionCase
+
+_logger = logging.getLogger(__name__)
 
 
 class TestMailTemplateSubstitute(TransactionCase):
@@ -44,6 +48,24 @@ class TestMailTemplateSubstitute(TransactionCase):
         )
         cls.partners = cls.env["res.partner"].search([])
         cls.partner = cls.env["res.partner"].search([], limit=1)
+        cls.env["account.journal"].create(
+            {
+                "name": "account_journal_purchase",
+                "code": "purcj",
+                "type": "purchase",
+            }
+        )
+        cls.env["account.journal"].create(
+            {"name": "account_journal_sale", "code": "salej", "type": "sale"}
+        )
+
+        cls.account_receivable = cls.env["account.account"].create(
+            {
+                "name": "Asset Receivable",
+                "account_type": "asset_receivable",
+                "code": "AccR",
+            }
+        )
 
     def test_get_email_template_partners(self):
         self.assertEqual(
@@ -96,15 +118,13 @@ class TestMailTemplateSubstitute(TransactionCase):
         self.assertEqual(mail_compose_form.template_id, self.smt1)
 
     def test_get_substitution_template_account_move_send(self):
-        account_id = (
-            self.env["account.account"]
-            .search([("account_type", "=", "asset_receivable")], limit=1)
-            .id
-        )
+        account_id = self.account_receivable.id
         move = self.env["account.move"].create(
             {
                 "name": "Test Move",
-                "journal_id": self.env["account.journal"].search([], limit=1).id,
+                "journal_id": self.env["account.journal"]
+                .search([("type", "=", "sale")], limit=1)
+                .id,
                 "date": "2024-01-01",
                 "move_type": "out_invoice",  # Asegúrate de que sea una factura
                 "partner_id": self.partner.id,
@@ -153,10 +173,13 @@ class TestMailTemplateSubstitute(TransactionCase):
             .search([("account_type", "=", "asset_receivable")], limit=1)
             .id
         )
+
         move = self.env["account.move"].create(
             {
                 "name": "Test Move",
-                "journal_id": self.env["account.journal"].search([], limit=1).id,
+                "journal_id": self.env["account.journal"]
+                .search([("type", "=", "sale")], limit=1)
+                .id,
                 "date": "2024-01-01",
                 "move_type": "out_invoice",
                 "partner_id": self.partner.id,
@@ -182,7 +205,7 @@ class TestMailTemplateSubstitute(TransactionCase):
             .with_context(active_ids=[move.id])
             .create({})
         )
-        original_template = wizard.mail_template_id
+        original_template = wizard.template_id
 
         # Crear un template de sustitución
         template2 = self.env["mail.template"].create(
@@ -216,4 +239,4 @@ class TestMailTemplateSubstitute(TransactionCase):
         )
 
         # Comprobar que mail_template_id es ahora el template de sustitución
-        self.assertEqual(wizard2.mail_template_id, template2)
+        self.assertEqual(wizard2.template_id, template2)

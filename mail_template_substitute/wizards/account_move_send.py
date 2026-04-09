@@ -7,14 +7,14 @@ from odoo import api, models
 class AccountMoveSend(models.TransientModel):
     _inherit = "account.move.send.wizard"
 
-    def _compute_mail_template_id(self):
-        res = super()._compute_mail_template_id()
+    def _compute_template_id(self):
+        res = super()._compute_template_id()
         for wizard in self:
             template = wizard._get_substitution_template(
-                wizard.mail_template_id, wizard.move_id.ids
+                wizard.template_id, wizard.move_id.ids
             )
             if template:
-                wizard.mail_template_id = template
+                wizard.template_id = template
         return res
 
     @api.model
