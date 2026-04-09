@@ -100,11 +100,8 @@ class TestMailActivityRestrict(TransactionCase):
         activity = self._create_activity(
             self.activity_type_restricted, self.user_assigned
         )
-        activity_id = activity.id
-
         activity.with_user(self.user_assigned).action_done()
-
-        self.assertFalse(self.env["mail.activity"].browse(activity_id).exists())
+        self.assertEqual(activity.state, "done")
 
     def test_restrict_field_default_value(self):
         """The restriction flag defaults to False."""

@@ -1,0 +1,3 @@
+- [glueckkanja AG](https://www.glueckkanja.com):
+  - Christopher Rogos
+  
