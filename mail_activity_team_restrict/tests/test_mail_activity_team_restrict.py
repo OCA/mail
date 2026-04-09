@@ -142,9 +142,8 @@ class MailActivityTeamRestrictTest(TransactionCase):
         activity = self._create_activity(
             self.activity_type_restricted, self.user_assigned, self.team
         )
-        activity_id = activity.id
         activity.with_user(self.user_team_member_1).action_done()
-        self.assertFalse(self.env["mail.activity"].browse(activity_id).exists())
+        self.assertEqual(activity.state, "done")
 
     def test_activity_action_done_denies_outsider(self):
         """Users outside the team cannot mark restricted activities as done."""
@@ -154,6 +153,7 @@ class MailActivityTeamRestrictTest(TransactionCase):
 
         with self.assertRaises(AccessError):
             activity.with_user(self.user_outsider).action_done()
+        self.assertNotEqual(activity.state, "done")
 
     def test_activity_team_change_updates_allowed_members(self):
         """Changing the activity team updates who may edit restricted activities."""
