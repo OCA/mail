@@ -88,3 +88,8 @@ class TestMailComposer(TransactionCase):
         values = composer._prepare_mail_values(self.partner_01.ids)
         self.assertIn(self.attach1.id, values[self.partner_01.id]["attachment_ids"])
         self.assertIn(attach2.id, values[self.partner_01.id]["attachment_ids"])
+
+    def test_03_display_object_attachment_no_model(self):
+        """Test that display_object_attachment_ids is empty without model"""
+        composer = self.env["mail.compose.message"].create({})
+        self.assertFalse(composer.display_object_attachment_ids)
