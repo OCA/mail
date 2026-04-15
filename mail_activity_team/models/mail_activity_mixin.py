@@ -19,7 +19,7 @@ class MailActivityMixin(models.AbstractModel):
             rec.activity_team_user_ids = rec.activity_ids.mapped("team_id.member_ids")
 
     def _search_my_activity_date_deadline(self, operator, operand):
-        if not self._context.get("team_activities", False):
+        if not self.env.context.get("team_activities", False):
             return super()._search_my_activity_date_deadline(operator, operand)
         activity_ids = self.env["mail.activity"]._search(
             [

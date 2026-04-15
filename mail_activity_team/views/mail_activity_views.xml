@@ -54,7 +54,7 @@
         <field name="inherit_id" ref="mail.mail_activity_view_search" />
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <xpath expr='//field[@name="res_model"]' position='before'>
+            <xpath expr='//field[@name="activity_type_id"]' position='after'>
                 <field name="team_id" />
             </xpath>
             <xpath expr='//filter[@name="filter_user_id_uid"]' position='after'>
