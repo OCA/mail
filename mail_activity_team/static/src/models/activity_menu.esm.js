@@ -15,7 +15,7 @@ patch(ActivityMenu.prototype, {
         filter_el.classList.add("active");
         this.currentFilter = filter_el.dataset.filter;
         this.updateTeamActivitiesContext();
-        this.store.fetchData({systray_get_activities: true});
+        this.store.fetchStoreData("systray_get_activities");
     },
     updateTeamActivitiesContext() {
         var active = false;

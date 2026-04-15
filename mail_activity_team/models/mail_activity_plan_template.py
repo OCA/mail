@@ -91,5 +91,9 @@ class MailActivityPlanTemplate(models.Model):
         # Avoid signalling an error for a 'team' template without a user.
         self.ensure_one()
         if self.activity_team_required:
-            return {"error": False}
+            return {
+                "responsible": self.activity_team_user_id,
+                "error": False,
+                "warning": False,
+            }
         return super()._determine_responsible(on_demand_responsible, applied_on_record)
