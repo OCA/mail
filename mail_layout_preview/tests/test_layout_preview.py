@@ -5,6 +5,7 @@
 from lxml import etree
 
 from odoo import tools
+from odoo.fields import Domain
 from odoo.tests.common import HttpCase, TransactionCase, tagged
 
 
@@ -28,7 +29,7 @@ class TestLayoutPreview(TransactionCase, TestLayoutMixin):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.wiz_model = cls.env["mail.template.preview"]
-        cls.partner = cls.env.ref("base.res_partner_4")
+        cls.partner = cls.env.ref("base.public_partner")
         cls.tmpl = cls._create_template(cls.env, cls.partner._name)
 
     def test_wizard_preview_url(self):
@@ -51,7 +52,7 @@ class TestController(HttpCase, TestLayoutMixin):
         super().setUpClass()
         host = "127.0.0.1"
         port = tools.config["http_port"]
-        cls.base_url = "http://%s:%d/email-preview/" % (host, port)
+        cls.base_url = f"http://{host}:{port}/email-preview/"
 
     def test_controller1(self):
         self.authenticate("admin", "admin")
@@ -60,7 +61,9 @@ class TestController(HttpCase, TestLayoutMixin):
         content = response.content
         tree = etree.fromstring(content)
         list_items = tree.xpath("//ol[@class='email-template-list']/li/a")
-        templates = self.env["mail.template"].search([("model_id.model", "=", model)])
+        templates = self.env["mail.template"].search(
+            Domain("model_id.model", "=", model)
+        )
         url_pattern = "/email-preview/res.partner/{templ_id}"
         for el, tmpl in zip(list_items, templates, strict=False):
             self.assertEqual(el.attrib["class"], "preview")
@@ -71,7 +74,7 @@ class TestController(HttpCase, TestLayoutMixin):
 
     def test_controller2(self):
         self.authenticate("admin", "admin")
-        partner = self.env.ref("base.res_partner_4")
+        partner = self.env.ref("base.public_partner")
         model = partner._name
         tmpl = self._create_template(self.env, model)
         response = self.url_open(self.base_url + f"{model}/{tmpl.id}/{partner.id}/")

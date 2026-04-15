@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 
 from odoo import http
+from odoo.fields import Domain
 from odoo.http import request
 
 
@@ -13,7 +14,7 @@ class Preview(http.Controller):
     )
     def template_list(self, model, **kw):
         env = request.env
-        templates = env["mail.template"].search([("model_id.model", "=", model)])
+        templates = env["mail.template"].search(Domain("model_id.model", "=", model))
         xids = templates.get_external_id()
         return request.render(
             self._list_template, {"model": model, "templates": templates, "xids": xids}
