@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--
+    VIEWS
+-->
+
+    <!-- FORM VIEW -->
+    <record id="mail_activity_view_form_board" model="ir.ui.view">
+        <field name="name">mail.activity.boards.view.form</field>
+        <field name="model">mail.activity</field>
+        <field
+            name="inherit_id"
+            ref="mail_activity_board.mail_activity_view_form_popup"
+        />
+        <field name="arch" type="xml">
+            <field name="activity_type_id" position="before">
+                <field name="partner_id" readonly="True" />
+                <field name="commercial_partner_id" />
+            </field>
+        </field>
+    </record>
+
+    <!-- LIST VIEW -->
+    <record id="mail_activity_view_tree" model="ir.ui.view">
+        <field name="name">mail.activity.boards.view.list</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail_activity_board.mail_activity_view_tree" />
+        <field name="arch" type="xml">
+            <field name="activity_type_id" position="before">
+                <field name="partner_id" readonly="True" />
+                <field name="commercial_partner_id" />
+            </field>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="mail_activity_view_search" model="ir.ui.view">
+        <field name="name">mail.activity.boards.view.search</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail_activity_board.mail_activity_view_search" />
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="res_model"]' position='before'>
+                <field name="partner_id" />
+                <field name="commercial_partner_id" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
