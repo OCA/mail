@@ -29,6 +29,7 @@ msgid "ID"
 msgstr ""
 
 #. module: mail_message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_calendar_event__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_discuss_channel__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_ir_actions_server__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_ir_cron__message_search
@@ -44,6 +45,7 @@ msgid "Message Search"
 msgstr ""
 
 #. module: mail_message_search
+#: model:ir.model.fields,help:mail_message_search.field_calendar_event__message_search
 #: model:ir.model.fields,help:mail_message_search.field_discuss_channel__message_search
 #: model:ir.model.fields,help:mail_message_search.field_ir_actions_server__message_search
 #: model:ir.model.fields,help:mail_message_search.field_ir_cron__message_search
