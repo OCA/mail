@@ -4,7 +4,7 @@
 
 {
     "name": "Restrict follower selection",
-    "version": "18.0.1.1.0",
+    "version": "19.0.1.0.0",
     "author": "Therp BV,Creu Blanca,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Social Network",
@@ -13,5 +13,10 @@
     "depends": ["mail"],
     "data": ["data/ir_config_parameter.xml", "data/ir_actions.xml"],
     "demo": ["demo/ir_config_parameter_demo.xml"],
+    "assets": {
+        "web.assets_backend": [
+            "mail_restrict_follower_selection/static/src/follower_list_patch.esm.js",
+        ],
+    },
     "installable": True,
 }

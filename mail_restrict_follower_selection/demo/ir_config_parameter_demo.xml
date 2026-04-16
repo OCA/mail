@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<odoo>
+<odoo noupdate="1">
     <record id="parameter_res_partner_domain" model="ir.config_parameter">
         <field name="key">mail_restrict_follower_selection.domain.res.partner</field>
         <field name="value">[(1, '=', 1)]</field>
