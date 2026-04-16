@@ -3,3 +3,4 @@
 - Enric Tobella \<<etobella@creublanca.es>\>
 - [Quartile](https://www.quartile.co):
   - Aung Ko Ko Lin
+- Christopher Rogos \<<crogos@gmail.com>\>
