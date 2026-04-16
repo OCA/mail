@@ -12,6 +12,5 @@ class MailMessage(models.Model):
 
     subject = fields.Char(index="trigram")
     body = fields.Html(index="trigram")
-    record_name = fields.Char(index="trigram")
     email_from = fields.Char(index="trigram")
     reply_to = fields.Char(index="trigram")

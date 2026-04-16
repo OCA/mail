@@ -11,7 +11,7 @@ class TestBaseSearchMailContent(BaseCommon):
         cls.channel_obj = cls.env["discuss.channel"]
 
     def test_base_search_mail_content_1(self):
-        res = self.channel_obj.search([("message_content", "%", "xxxyyyzzz")])
+        res = self.channel_obj.search([("message_content", "ilike", "xxxyyyzzz")])
         self.assertFalse(res, "You have a channel with xxxyyyzzz :O")
 
     def test_base_search_mail_content_2(self):
