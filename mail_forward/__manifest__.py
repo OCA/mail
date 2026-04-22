@@ -6,7 +6,7 @@
     "summary": "Forward messages from the chatter of any document to other users.",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
-    "depends": ["mail", "contacts"],
+    "depends": ["mail", "contacts", "partner_autocomplete"],
     "data": ["wizards/mail_compose_message_view.xml", "views/ir_model_views.xml"],
     "assets": {
         "web.assets_backend": [

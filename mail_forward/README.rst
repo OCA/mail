@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 ====================
 Mail Forward Message
 ====================
@@ -17,7 +13,7 @@ Mail Forward Message
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
@@ -35,10 +31,10 @@ Mail Forward Message
 This module allows users to forward messages from the chatter of any
 document to:
 
-- Other users in the same thread, adding them as followers of the
-  document without notifying the current followers.
-- Another thread, but not adding them as followers—only notifying the
-  current followers of the other thread.
+-  Other users in the same thread, adding them as followers of the
+   document without notifying the current followers.
+-  Another thread, but not adding them as followers—only notifying the
+   current followers of the other thread.
 
 **Table of contents**
 
@@ -50,27 +46,27 @@ Configuration
 
 To enable a model to forward messages to another thread:
 
-- With debug mode activated, go to
-  ``Settings -> Technical -> Database Structure -> Models``.
-- Search for the model you wish to enable.
-- Mark the option ``Enable Forward To`` and save. Transient models or
-  those without mail thread won't have this check visible.
+-  With debug mode activated, go to
+   ``Settings -> Technical -> Database Structure -> Models``.
+-  Search for the model you wish to enable.
+-  Mark the option ``Enable Forward To`` and save. Transient models or
+   those without mail thread won't have this check visible.
 
 Usage
 =====
 
 To use this module, follow these steps:
 
-- Navigate to the chatter of any document.
-- Hover the mouse over any message in the chatter (excluding internal
-  notes).
-- A Forward icon will appear next to the message.
-- Click the button to display a wizard with the message.
-- Select the forward type (current thread or another thread).
-- Select the users to forward the message to, or select the other thread
-  according to the previous step.
-- Click the 'Send Mail' button to send the message to the selected users
-  or thread.
+-  Navigate to the chatter of any document.
+-  Hover the mouse over any message in the chatter (excluding internal
+   notes).
+-  A Forward icon will appear next to the message.
+-  Click the button to display a wizard with the message.
+-  Select the forward type (current thread or another thread).
+-  Select the users to forward the message to, or select the other
+   thread according to the previous step.
+-  Click the 'Send Mail' button to send the message to the selected
+   users or thread.
 
 Bug Tracker
 ===========
@@ -93,9 +89,9 @@ Authors
 Contributors
 ------------
 
-- `Tecnativa <https://www.tecnativa.com>`__:
+-  `Tecnativa <https://www.tecnativa.com>`__:
 
-  - Carlos López
+   -  Carlos López
 
 Maintainers
 -----------
