@@ -46,11 +46,12 @@ class MailThread(models.AbstractModel):
             if subject:
                 # If it already had a defined subject, we must respect it
                 domain += [("position", "!=", "replace")]
+            # Read templates with sudo: they are admin-managed configuration
+            # records, akin to mail.template. Portal and public users may
+            # trigger message_post (e.g. via portal controllers) and must be
+            # able to iterate the templates without hitting ACL errors.
             custom_subjects = (
-                self.env["mail.message.custom.subject"]
-                .sudo()
-                .search(domain)
-                .sudo(False)
+                self.env["mail.message.custom.subject"].sudo().search(domain)
             )
             if not subject:
                 record_name = (

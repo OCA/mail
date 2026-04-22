@@ -10,3 +10,6 @@
 
 - Moduon \<<https://www.moduon.team>\>  
   - Eduardo de Miguel
+
+- Codeforward \<<https://www.codeforward.nl>\>  
+  - Sander Lienaerts

@@ -20,6 +20,7 @@ class TestMailNotificationCustomSubject(BaseCommon):
         )
         cls.admin = new_test_user(cls.env, "boss", "base.group_system")
         new_test_user(cls.env, "worker_custom_subject")
+        new_test_user(cls.env, "portal_custom_subject", "base.group_portal")
         cls.subject_model = cls.env["mail.message.custom.subject"].with_user(cls.admin)
 
     @users("worker_custom_subject")
@@ -210,3 +211,32 @@ class TestMailNotificationCustomSubject(BaseCommon):
         # Get message and check subject
         # No exception should be raised but subject should remain as original.
         self.assertEqual(mail_message_1.subject, "Test partner 1")
+
+    @users("portal_custom_subject")
+    def test_email_subject_template_portal_user(self):
+        """Portal users triggering message_post via sudo (e.g. from a portal
+        controller) must render custom subject templates without hitting ACL
+        errors on mail.message.custom.subject — templates are admin-managed
+        configuration records and should be read with sudo."""
+        self.subject_model.create(
+            {
+                "name": "Test portal template",
+                "model_id": self.env.ref("base.model_res_partner").id,
+                "subtype_ids": [(6, 0, [self.env.ref("mail.mt_comment").id])],
+                "subject_template": "{{object.name or 'n/a'}} - portal",
+            }
+        )
+        portal_user = self.env.user
+        self.assertTrue(portal_user.has_group("base.group_portal"))
+        self.assertFalse(portal_user.has_group("base.group_user"))
+        # Mimic the portal controller pattern: the caller is the portal user,
+        # the record is sudo'd for message_post, and author_id is set to the
+        # portal user's partner.
+        partner = self.env["res.partner"].browse(self.partner_1.id)
+        mail_message = partner.sudo().message_post(
+            body="Test from portal",
+            subtype_xmlid="mail.mt_comment",
+            author_id=portal_user.partner_id.id,
+        )
+        self.assertEqual(mail_message.author_id, portal_user.partner_id)
+        self.assertEqual(mail_message.subject, "Test partner 1 - portal")
