@@ -1,0 +1,1523 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_gateway_whatsapp
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-04-23 18:45+0000\n"
+"Last-Translator: Marcos Chavarría Teijeiro <chavarria1991@gmail.com>\n"
+"Language-Team: none\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"<span>Define the values of the fields <b>Webhook Key</b> and <b>Whatsapp Security Key</b>.\n"
+"                            You should set some random value of your choice for this fields.\n"
+"                            Ensure that facebook will be able to comunicate with your server.</span>"
+msgstr ""
+"<span>Define os valores dos campos <b>Clave do webhook</b> e <b>Clave de "
+"seguridade de WhatsApp</b>.\n"
+"                                                                Deberías "
+"establecer algún valor aleatorio da túa elección para estes campos.\n"
+"                                                                Asegúrate de "
+"que Facebook poida comunicarse co teu servidor.</span>"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "A maximum of 1 Call Number button is allowed."
+msgstr "Permítense como máximo un botón de Chamar ao Número."
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "A maximum of 10 buttons is allowed."
+msgstr "Permítese como máximo 10 botóns."
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "A maximum of 2 URL buttons is allowed."
+msgstr "Permítense como máximo 2 botóns de URL."
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Access"
+msgstr "Acceso"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Access the menu <b>Configuration / Advanced Options</b>."
+msgstr "Acceda ao menú <b>Configuración/Opcións Avanzadas</b>."
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Access the menu <b>Configuration / Basic information</b>."
+msgstr "Acceda ao menú <b>Configuración / Información Básica</b>."
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Access your"
+msgstr "Acceder ao seu"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Access your business settings menu"
+msgstr "Acceda ao seu menú de axustes para empresas"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_needaction
+msgid "Action Needed"
+msgstr "Precísase Acción"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Add a new number."
+msgstr "Engada un novo número."
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__af
+msgid "Afrikaans"
+msgstr "Africáner"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sq
+msgid "Albanian"
+msgstr "Albanés"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "All dynamic urls must have a placeholder."
+msgstr "Todas as URL dinámicas deben ter un comodín."
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__model_id
+msgid "Applies to"
+msgstr "Aplica a"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__approved
+msgid "Approved"
+msgstr "Aprobada"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ar
+msgid "Arabic"
+msgstr "Árabe"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__archived
+msgid "Archived"
+msgstr "Arquivado"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_attachment_count
+msgid "Attachment Count"
+msgstr "Número de anexos"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__category__authentication
+msgid "Authentication"
+msgstr "Autenticación"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__az
+msgid "Azerbaijani"
+msgstr "Azerí"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+msgid "Back to draft"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__bn
+#, fuzzy
+msgid "Bengali"
+msgstr "Bengalí"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__mobile_blacklisted
+msgid "Blacklisted Phone Is Mobile"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_blacklisted
+msgid "Blacklisted Phone is Phone"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__body
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_variable__line_type__body
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
+msgid "Body"
+msgstr "Corpo"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/wizards/whatsapp_composer.py:0
+msgid "Body is required"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "Body variables should start at 1 and not skip any number, missing %d"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__bg
+#, fuzzy
+msgid "Bulgarian"
+msgstr "Búlgaro"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__button_id
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_variable__line_type__button
+#, fuzzy
+msgid "Button"
+msgstr "Botón"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__name
+msgid "Button Text"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.constraint,message:mail_gateway_whatsapp.constraint_mail_whatsapp_template_button_unique_name_per_template
+msgid "Button name must be unique by template"
+msgstr "O nome do botón debe ser único para cada modelo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__button_ids
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+msgid "Buttons"
+msgstr "Botóns"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "Buttons may only contain one placeholder."
+msgstr "Os botóns só poden conter un comodín."
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__call_number
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__phone_number
+msgid "Call Number"
+msgstr "Chamar ao Número"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.whatsapp_composer_form_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ca
+msgid "Catalan"
+msgstr "Catalán"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__category
+msgid "Category"
+msgstr "Categoría"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__zh_cn
+msgid "Chinese (CHN)"
+msgstr "Chino(CHN)"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__zh_hk
+msgid "Chinese (HKG)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__zh_tw
+msgid "Chinese (TAI)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Click on <b>Edit Button</b> on the webhook area."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__company_id
+#, fuzzy
+msgid "Company"
+msgstr "Empresa"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_whatsapp_composer
+msgid "Compose a whatsapp message"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_res_partner
+#, fuzzy
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Copy the API Version on the <b>Whastapp Version</b> field."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"Copy the phone identification number to the field <b>Whastapp From phone</b>"
+" field."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Copy the token value to token field in this page."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Create a new application."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__create_uid
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__create_uid
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__create_uid
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__create_uid
+#, fuzzy
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__create_date
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__create_date
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__create_date
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__create_date
+#, fuzzy
+msgid "Created on"
+msgstr "Criado o"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Creating a permanent token"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Creating the Application from meta developer"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hr
+#, fuzzy
+msgid "Croatian"
+msgstr "Croata"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__cs
+#, fuzzy
+msgid "Czech"
+msgstr "Checo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__da
+#, fuzzy
+msgid "Danish"
+msgstr "Dinamarqués"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__deleted
+#, fuzzy
+msgid "Deleted"
+msgstr "Eliminado"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__disabled
+#, fuzzy
+msgid "Disabled"
+msgstr "Desactivados"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_discuss_channel
+msgid "Discussion Channel"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__display_name
+#, fuzzy
+msgid "Display Name"
+msgstr "presentar nome"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__res_id
+#, fuzzy
+msgid "Document ID"
+msgstr "ID do documento"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__res_model
+#, fuzzy
+msgid "Document Model Name"
+msgstr "Nome do Modelo de Documento"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Download Templates"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__draft
+#, fuzzy
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.constraint,message:mail_gateway_whatsapp.constraint_mail_whatsapp_template_unique_name_gateway_id
+msgid "Duplicate name is not allowed for Gateway."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__nl
+#, fuzzy
+msgid "Dutch"
+msgstr "Neerlandés"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__url_type__dynamic
+#, fuzzy
+msgid "Dynamic"
+msgstr "Dinámica"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_thread
+#, fuzzy
+msgid "Email Thread"
+msgstr "Fïo de Email"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__en
+#, fuzzy
+msgid "English"
+msgstr "Inglés"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__en_gb
+#, fuzzy
+msgid "English (UK)"
+msgstr "inglés (reino unido)"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__en_us
+#, fuzzy
+msgid "English (US)"
+msgstr "Inglés (US)"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__et
+#, fuzzy
+msgid "Estonian"
+msgstr "Estonio"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
+msgid "Export Template"
+msgstr "Exportar a plantilla"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__field_name
+#, fuzzy
+msgid "Field"
+msgstr "campo"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid ""
+"Field template variables %(variables)s must be associated with a field."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_sanitized
+msgid ""
+"Field used to store sanitized phone number. Helps speeding up searches and "
+"comparisons."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fil
+#, fuzzy
+msgid "Filipino"
+msgstr "Filipino"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__find_gateway
+msgid "Find Gateway"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fi
+#, fuzzy
+msgid "Finnish"
+msgstr "Finlandés"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "First steps"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_follower_ids
+#, fuzzy
+msgid "Followers"
+msgstr "Seguidoras"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_partner_ids
+#, fuzzy
+msgid "Followers (Partners)"
+msgstr "Seguidores (Contactos)"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__footer
+#, fuzzy
+msgid "Footer"
+msgstr "rodapé"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fr
+#, fuzzy
+msgid "French"
+msgstr "Francés"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__gateway_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__gateway_id
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
+#, fuzzy
+msgid "Gateway"
+msgstr "Pasarela"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__gateway_type
+msgid "Gateway Type"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ka
+#, fuzzy
+msgid "Georgian"
+msgstr "Xeorxiano"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__de
+#, fuzzy
+msgid "German"
+msgstr "Alemán"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"Go to <b>Users / System Users</b> and create a new one with administrator"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Go to <b>Whatsapp / API Configuration</b> menú."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__el
+#, fuzzy
+msgid "Greek"
+msgstr "Grego"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__gu
+#, fuzzy
+msgid "Gujarati"
+msgstr "Guxaratí"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__has_message
+#, fuzzy
+msgid "Has Message"
+msgstr "Ten Mensaxe"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ha
+#, fuzzy
+msgid "Hausa"
+msgstr "Hausa"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__header
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_variable__line_type__header
+#, fuzzy
+msgid "Header"
+msgstr "cabeceira"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__he
+#, fuzzy
+msgid "Hebrew"
+msgstr "Hebreu"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hi
+#, fuzzy
+msgid "Hindi"
+msgstr "Hindi"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hu
+#, fuzzy
+msgid "Hungarian"
+msgstr "Húngaro"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__id
+#, fuzzy
+msgid "ID"
+msgstr "IDID"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_needaction
+#, fuzzy
+msgid "If checked, new messages require your attention."
+msgstr "Se está marcado, as novas mensaxes requirirán da túa atención."
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_has_error
+#, fuzzy
+msgid "If checked, some messages have a delivery error."
+msgstr "Se está marcado, algúns mensaxes tiveron erros ao entregarse."
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"If no error is raised, refresh this gateway data, and you should see that it is integrated.\n"
+"                                You should be able to receive and send messages.\n"
+"                                If an error is raised, check that the fields are filled properly and that facebook server is able to access your server."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_sanitized_blacklisted
+msgid ""
+"If the sanitized phone number is on the blacklist, the contact won't receive"
+" mass mailing sms anymore, from any list"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__in_appeal
+msgid "In Appeal"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__mobile_blacklisted
+msgid ""
+"Indicates if a blacklisted sanitized phone number is a mobile number. Helps "
+"distinguish which number is blacklisted             when there is both a "
+"mobile and phone field in a model."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_blacklisted
+msgid ""
+"Indicates if a blacklisted sanitized phone number is a phone number. Helps "
+"distinguish which number is blacklisted             when there is both a "
+"mobile and phone field in a model."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__id
+#, fuzzy
+msgid "Indonesian"
+msgstr "Indonesio"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
+msgid "Insert here the Jinja expression to get the partner ID"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ga
+#, fuzzy
+msgid "Irish"
+msgstr "Irlandés"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_is_follower
+#, fuzzy
+msgid "Is Follower"
+msgstr "É Seguidor"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__is_required_template
+msgid "Is Required Template"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__is_supported
+msgid "Is Supported"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__it
+#, fuzzy
+msgid "Italian"
+msgstr "Italiano"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ja
+#, fuzzy
+msgid "Japanese"
+msgstr "Xaponés"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__kn
+#, fuzzy
+msgid "Kannada"
+msgstr "Kannada"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__kk
+#, fuzzy
+msgid "Kazakh"
+msgstr "cazaxo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__rw_rw
+#, fuzzy
+msgid "Kinyarwanda"
+msgstr "Quiñaruanda"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ko
+#, fuzzy
+msgid "Korean"
+msgstr "Coreanas"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ky_kg
+#, fuzzy
+msgid "Kyrgyz (Kyrgyzstan)"
+msgstr "Quirguiz (Quirguicistán)"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__language
+#, fuzzy
+msgid "Language"
+msgstr "Lingua"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lo
+#, fuzzy
+msgid "Lao"
+msgstr "Lao"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__write_uid
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__write_uid
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__write_uid
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__write_uid
+#, fuzzy
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__write_date
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__write_date
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__write_date
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__write_date
+#, fuzzy
+msgid "Last Updated on"
+msgstr "Última actualización o"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lv
+#, fuzzy
+msgid "Latvian"
+msgstr "Letón"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__limit_exceeded
+msgid "Limit Exceeded"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__line_type
+msgid "Line Type"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lt
+#, fuzzy
+msgid "Lithuanian"
+msgstr "Lituano"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__mk
+#, fuzzy
+msgid "Macedonian"
+msgstr "Macedonio"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_compose_gateway_message
+msgid "Mail Compose Gateway Message"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_gateway
+msgid "Mail Gateway"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_whatsapp_template
+msgid "Mail WhatsApp template"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ms
+#, fuzzy
+msgid "Malay"
+msgstr "Malaio"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ml
+#, fuzzy
+msgid "Malayalam"
+msgstr "Malayalam"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__mr
+#, fuzzy
+msgid "Marathi"
+msgstr "maratí"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__category__marketing
+#, fuzzy
+msgid "Marketing"
+msgstr "Marketing"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__body
+#, fuzzy
+msgid "Message"
+msgstr "Mensaxe"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_has_error
+#, fuzzy
+msgid "Message Delivery error"
+msgstr "Erro na entrega da Mensaxe"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_ids
+#, fuzzy
+msgid "Messages"
+msgstr "Mensaxes"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Meta developer platform"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_gateway_whatsapp.py:0
+msgid "Mimetype is not valid"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__model
+#, fuzzy
+msgid "Model Name"
+msgstr "Nome do modelo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__name
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
+msgid "Name"
+msgstr "Nome"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__nb
+#, fuzzy
+msgid "Norwegian"
+msgstr "Noruegués"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__number_field_name
+msgid "Number Field Name"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_needaction_counter
+#, fuzzy
+msgid "Number of Actions"
+msgstr "Número de Accións"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_has_error_counter
+#, fuzzy
+msgid "Number of errors"
+msgstr "Número de erros"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_needaction_counter
+#, fuzzy
+msgid "Number of messages requiring action"
+msgstr "Número de mensaxes que requiren atención"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_has_error_counter
+#, fuzzy
+msgid "Number of messages with delivery error"
+msgstr "Número de mensaxes cun erro de entrega"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"On Facebook Develpment, return to the app menu and go to <b>Whatsapp / "
+"Configuration</b>."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"On the wizard, fill the URL field with <b>Webhook URL</b> field of the "
+"gateway. For the verification identifier, use the <b>Whatsapp Security "
+"Key</b> field."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"Once it is created, Generate a new token related to the created app with no "
+"expiry and give access to all whatsapp permissions."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "Only dynamic urls may have a placeholder."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
+#, fuzzy
+msgid "Partner"
+msgstr "Parceiro"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__paused
+#, fuzzy
+msgid "Paused"
+msgstr "En pausa"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__pending
+#, fuzzy
+msgid "Pending"
+msgstr "Pendente"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__pending_deletion
+msgid "Pending Deletion"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fa
+#, fuzzy
+msgid "Persian"
+msgstr "Persa"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_sanitized_blacklisted
+msgid "Phone Blacklisted"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_thread.py:0
+msgid "Phone cannot be sanitized"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_mobile_search
+#, fuzzy
+msgid "Phone/Mobile"
+msgstr "Teléfono/móbil"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__name
+#, fuzzy
+msgid "Placeholder"
+msgstr "Comodín"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "Please enter a valid URL in the format 'https://www.example.com'."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pl
+#, fuzzy
+msgid "Polish"
+msgstr "Polaco"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pt_br
+msgid "Portuguese (BR)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pt_pt
+msgid "Portuguese (POR)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Press the button Integrate webhook."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pa
+#, fuzzy
+msgid "Punjabi"
+msgstr "Punxabi"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__quick_reply
+msgid "Quick Reply"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__rejected
+#, fuzzy
+msgid "Rejected"
+msgstr "Rexeitado"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__model
+msgid "Related model"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ro
+#, fuzzy
+msgid "Romanian"
+msgstr "Romanés"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ru
+#, fuzzy
+msgid "Russian"
+msgstr "Ruso"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__sample_value
+msgid "Sample Value"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_sanitized
+msgid "Sanitized Number"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Save this record. All the values have been filled"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Select a name and create it"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"Select the <b>Other</b> option, then <b>Business</b> in order to create "
+"Whatsapp manager"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Select the Whatsapp API on the products of the application"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Select the business that you will use"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.whatsapp_composer_form_view
+#, fuzzy
+msgid "Send"
+msgstr "Enviar"
+
+#. module: mail_gateway_whatsapp
+#. odoo-javascript
+#: code:addons/mail_gateway_whatsapp/static/src/components/send_whatsapp_button/send_whatsapp_button.esm.js:0
+#: model:ir.actions.act_window,name:mail_gateway_whatsapp.whatsapp_composer_act_window
+msgid "Send Whatsapp Message"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/ir_actions_server.py:0
+msgid ""
+"Sending WhatsApp message can only be done on a non transient mail.thread "
+"model"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__sequence
+#, fuzzy
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sr
+#, fuzzy
+msgid "Serbian"
+msgstr "Serbio"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_ir_actions_server
+#, fuzzy
+msgid "Server Action"
+msgstr "Acción de Servidor"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Setting webhook and version"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.whatsapp_composer_form_view
+msgid "Show Chat"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid ""
+"Show the secret key of the application and copy it to the <b>Webhook "
+"secret</b> field."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sk
+#, fuzzy
+msgid "Slovak"
+msgstr "Eslovaco"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sl
+#, fuzzy
+msgid "Slovenian"
+msgstr "Esloveno"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__es
+#, fuzzy
+msgid "Spanish"
+msgstr "Español"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__es_ar
+msgid "Spanish (ARG)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__es_mx
+msgid "Spanish (MEX)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__es_es
+msgid "Spanish (SPA)"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__state
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_search
+#, fuzzy
+msgid "State"
+msgstr "Estado"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__url_type__static
+#, fuzzy
+msgid "Static"
+msgstr "Estático"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sw
+#, fuzzy
+msgid "Swahili"
+msgstr "Suahili"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sv
+#, fuzzy
+msgid "Swedish"
+msgstr "Sueco"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+msgid "Sync Template"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
+msgid "Synchronization successfully."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ta
+#, fuzzy
+msgid "Tamil"
+msgstr "Tamil"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__te
+#, fuzzy
+msgid "Telugu"
+msgstr "Telugu"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__template_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__template_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__template_id
+#, fuzzy
+msgid "Template"
+msgstr "Modelo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__template_name
+#, fuzzy
+msgid "Template Name"
+msgstr "Nome do modelo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__template_uid
+msgid "Template Uid"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid ""
+"Template variable should be in format {{number}}. Cannot parse "
+"'%(placeholder)s'"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+#, fuzzy
+msgid "Templates"
+msgstr "modelos"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__th
+#, fuzzy
+msgid "Thai"
+msgstr "Tailandés"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "The placeholder for a button can only be {{1}}."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "There should be exactly 1 variable in the header."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+msgid ""
+"This template is not supported because has <strong>variables</strong> or "
+"<strong>buttons</strong>."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__tr
+#, fuzzy
+msgid "Turkish"
+msgstr "Turco"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__state
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_cron__state
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__button_type
+#, fuzzy
+msgid "Type"
+msgstr "Tipo"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_ir_actions_server__state
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_ir_cron__state
+msgid ""
+"Type of server action. The following values are available:\n"
+"- 'Update a Record': update the values of a record\n"
+"- 'Create Activity': create an activity (Discuss)\n"
+"- 'Send Email': post a message, a note or send an email (Discuss)\n"
+"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': add or remove followers to a record (Discuss)\n"
+"- 'Create Record': create a new record with new values\n"
+"- 'Execute Code': a block of Python code that will be executed\n"
+"- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
+"- 'Execute Existing Actions': define an action that triggers several other server actions\n"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__uk
+#, fuzzy
+msgid "Ukrainian"
+msgstr "Ucraíno"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_gateway_whatsapp.py:0
+msgid "Unable to send the whatsapp message"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ur
+#, fuzzy
+msgid "Urdu"
+msgstr "Urdú"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__url_type
+msgid "Url Type"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__category__utility
+#, fuzzy
+msgid "Utility"
+msgstr "Utilidade"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__uz
+#, fuzzy
+msgid "Uzbek"
+msgstr "uzbeko"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__variable_ids
+#, fuzzy
+msgid "Variable"
+msgstr "variábel"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "Variable in the header should be used as {{1}}"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.constraint,message:mail_gateway_whatsapp.constraint_mail_whatsapp_template_variable_name_type_template_unique
+msgid "Variable names must be unique by template"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__variable_ids
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
+msgid "Variables"
+msgstr "variábeis"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid ""
+"Variables %(field_names)s do not seem to be valid field path for model "
+"%(model_name)s."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Verify and save the wizard."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__vi
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Vietnamita"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__url
+#, fuzzy
+msgid "Visit Website"
+msgstr "Visitar sitio web"
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
+msgid "WathsApp Templates"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "We were not able to fetch value of field: %(field)s"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__website_url
+msgid "Website Url"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_gateway__gateway_type__whatsapp
+msgid "WhatsApp"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
+msgid "WhatsApp Account is required to import templates."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_whatsapp_template_button
+msgid "WhatsApp Template Button"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_whatsapp_template_variable
+msgid "WhatsApp Template Variable"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.actions.act_window,name:mail_gateway_whatsapp.action_mail_whatsapp_template_gateway
+msgid "WhatsApp Templates"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__ir_actions_server__state__whatsapp
+msgid "WhatsApp message"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
+msgid "WhatsApp template"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-javascript
+#: code:addons/mail_gateway_whatsapp/static/src/components/send_whatsapp_button/send_whatsapp_button.xml:0
+msgid "Whatsapp"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__whatsapp_account_id
+msgid "Whatsapp Account"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.whatsapp_composer_form_view
+msgid "Whatsapp Composer"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__whatsapp_from_phone
+msgid "Whatsapp From Phone"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__whatsapp_gateway_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_cron__whatsapp_gateway_id
+msgid "Whatsapp Gateway"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_gateway_whatsapp
+msgid "Whatsapp Gateway services"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__whatsapp_partner
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_cron__whatsapp_partner
+msgid "Whatsapp Partner"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__whatsapp_security_key
+msgid "Whatsapp Security Key"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__whatsapp_template_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_cron__whatsapp_template_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_compose_gateway_message__whatsapp_template_id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__whatsapp_template_ids
+msgid "Whatsapp Template"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__whatsapp_template_count
+msgid "Whatsapp Template Count"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__whatsapp_version
+msgid "Whatsapp Version"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "Whatsapp configuration info"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
+msgid "You can not select field of %(model)s."
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__zu
+#, fuzzy
+msgid "Zulu"
+msgstr "Zulú"
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+msgid "e.g. https://www.example.com"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+msgid "meta business site."
+msgstr ""
