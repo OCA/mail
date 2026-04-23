@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-04-23 13:15+0000\n"
+"PO-Revision-Date: 2026-04-23 15:45+0000\n"
 "Last-Translator: Marcos Chavarría Teijeiro <chavarria1991@gmail.com>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -86,53 +86,53 @@ msgstr "Engada un novo número."
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__af
 msgid "Afrikaans"
-msgstr ""
+msgstr "Africáner"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sq
 msgid "Albanian"
-msgstr ""
+msgstr "Albanés"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid "All dynamic urls must have a placeholder."
-msgstr ""
+msgstr "Todas as URL dinámicas deben ter un comodín."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__model_id
 msgid "Applies to"
-msgstr ""
+msgstr "Aplica a"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__approved
 msgid "Approved"
-msgstr ""
+msgstr "Aprobada"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ar
 msgid "Arabic"
-msgstr ""
+msgstr "Árabe"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__archived
 msgid "Archived"
-msgstr ""
+msgstr "Arquivado"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Número de anexos"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__category__authentication
 msgid "Authentication"
-msgstr ""
+msgstr "Autenticación"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__az
 msgid "Azerbaijani"
-msgstr ""
+msgstr "Azerí"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
@@ -141,8 +141,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__bn
+#, fuzzy
 msgid "Bengali"
-msgstr ""
+msgstr "Bengalí"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__mobile_blacklisted
@@ -158,8 +159,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__body
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_variable__line_type__body
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
 msgid "Body"
-msgstr ""
+msgstr "Corpo"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -175,14 +177,16 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__bg
+#, fuzzy
 msgid "Bulgarian"
-msgstr ""
+msgstr "Búlgaro"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__button_id
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_variable__line_type__button
+#, fuzzy
 msgid "Button"
-msgstr ""
+msgstr "Botón"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__name
@@ -197,8 +201,9 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__button_ids
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
 msgid "Buttons"
-msgstr ""
+msgstr "Botóns"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -214,18 +219,21 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.whatsapp_composer_form_view
+#, fuzzy
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ca
+#, fuzzy
 msgid "Catalan"
-msgstr ""
+msgstr "Catalán"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__category
+#, fuzzy
 msgid "Category"
-msgstr ""
+msgstr "Categoría"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__zh_cn
@@ -249,8 +257,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__company_id
+#, fuzzy
 msgid "Company"
-msgstr ""
+msgstr "Empresa"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_whatsapp_composer
@@ -259,8 +268,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_res_partner
+#, fuzzy
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -289,16 +299,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__create_uid
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__create_uid
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__create_uid
+#, fuzzy
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__create_date
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__create_date
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__create_date
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__create_date
+#, fuzzy
 msgid "Created on"
-msgstr ""
+msgstr "Criado o"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -312,28 +324,33 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hr
+#, fuzzy
 msgid "Croatian"
-msgstr ""
+msgstr "Croata"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__cs
+#, fuzzy
 msgid "Czech"
-msgstr ""
+msgstr "Checo"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__da
+#, fuzzy
 msgid "Danish"
-msgstr ""
+msgstr "Dinamarqués"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__deleted
+#, fuzzy
 msgid "Deleted"
-msgstr ""
+msgstr "Eliminado"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__disabled
+#, fuzzy
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivados"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_discuss_channel
@@ -345,18 +362,21 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__display_name
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__display_name
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__display_name
+#, fuzzy
 msgid "Display Name"
-msgstr ""
+msgstr "presentar nome"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__res_id
+#, fuzzy
 msgid "Document ID"
-msgstr ""
+msgstr "ID do documento"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__res_model
+#, fuzzy
 msgid "Document Model Name"
-msgstr ""
+msgstr "Nome do Modelo de Documento"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -365,8 +385,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__draft
+#, fuzzy
 msgid "Draft"
-msgstr ""
+msgstr "Borrador"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.constraint,message:mail_gateway_whatsapp.constraint_mail_whatsapp_template_unique_name_gateway_id
@@ -375,48 +396,57 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__nl
+#, fuzzy
 msgid "Dutch"
-msgstr ""
+msgstr "Neerlandés"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__url_type__dynamic
+#, fuzzy
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinámica"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_mail_thread
+#, fuzzy
 msgid "Email Thread"
-msgstr ""
+msgstr "Fïo de Email"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__en
+#, fuzzy
 msgid "English"
-msgstr ""
+msgstr "Inglés"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__en_gb
+#, fuzzy
 msgid "English (UK)"
-msgstr ""
+msgstr "inglés (reino unido)"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__en_us
+#, fuzzy
 msgid "English (US)"
-msgstr ""
+msgstr "Inglés (US)"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__et
+#, fuzzy
 msgid "Estonian"
-msgstr ""
+msgstr "Estonio"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
 msgid "Export Template"
-msgstr ""
+msgstr "Exportar a plantilla"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__field_name
+#, fuzzy
 msgid "Field"
-msgstr ""
+msgstr "campo"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -434,8 +464,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fil
+#, fuzzy
 msgid "Filipino"
-msgstr ""
+msgstr "Filipino"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__find_gateway
@@ -444,8 +475,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fi
+#, fuzzy
 msgid "Finnish"
-msgstr ""
+msgstr "Finlandés"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -454,30 +486,35 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_follower_ids
+#, fuzzy
 msgid "Followers"
-msgstr ""
+msgstr "Seguidoras"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_partner_ids
+#, fuzzy
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (Contactos)"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__footer
+#, fuzzy
 msgid "Footer"
-msgstr ""
+msgstr "rodapé"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fr
+#, fuzzy
 msgid "French"
-msgstr ""
+msgstr "Francés"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__gateway_id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__gateway_id
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
+#, fuzzy
 msgid "Gateway"
-msgstr ""
+msgstr "Pasarela"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__gateway_type
@@ -486,13 +523,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ka
+#, fuzzy
 msgid "Georgian"
-msgstr ""
+msgstr "Xeorxiano"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__de
+#, fuzzy
 msgid "German"
-msgstr ""
+msgstr "Alemán"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -507,62 +546,73 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__el
+#, fuzzy
 msgid "Greek"
-msgstr ""
+msgstr "Grego"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__gu
+#, fuzzy
 msgid "Gujarati"
-msgstr ""
+msgstr "Guxaratí"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__has_message
+#, fuzzy
 msgid "Has Message"
-msgstr ""
+msgstr "Ten Mensaxe"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ha
+#, fuzzy
 msgid "Hausa"
-msgstr ""
+msgstr "Hausa"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__header
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_variable__line_type__header
+#, fuzzy
 msgid "Header"
-msgstr ""
+msgstr "cabeceira"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__he
+#, fuzzy
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreu"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hi
+#, fuzzy
 msgid "Hindi"
-msgstr ""
+msgstr "Hindi"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hu
+#, fuzzy
 msgid "Hungarian"
-msgstr ""
+msgstr "Húngaro"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__id
+#, fuzzy
 msgid "ID"
-msgstr ""
+msgstr "IDID"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_needaction
+#, fuzzy
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Se está marcado, as novas mensaxes requirirán da túa atención."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_has_error
+#, fuzzy
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Se está marcado, algúns mensaxes tiveron erros ao entregarse."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -602,8 +652,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__id
+#, fuzzy
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesio"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
@@ -612,13 +663,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ga
+#, fuzzy
 msgid "Irish"
-msgstr ""
+msgstr "Irlandés"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_is_follower
+#, fuzzy
 msgid "Is Follower"
-msgstr ""
+msgstr "É Seguidor"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__is_required_template
@@ -632,69 +685,81 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__it
+#, fuzzy
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ja
+#, fuzzy
 msgid "Japanese"
-msgstr ""
+msgstr "Xaponés"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__kn
+#, fuzzy
 msgid "Kannada"
-msgstr ""
+msgstr "Kannada"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__kk
+#, fuzzy
 msgid "Kazakh"
-msgstr ""
+msgstr "cazaxo"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__rw_rw
+#, fuzzy
 msgid "Kinyarwanda"
-msgstr ""
+msgstr "Quiñaruanda"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ko
+#, fuzzy
 msgid "Korean"
-msgstr ""
+msgstr "Coreanas"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ky_kg
+#, fuzzy
 msgid "Kyrgyz (Kyrgyzstan)"
-msgstr ""
+msgstr "Quirguiz (Quirguicistán)"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__language
+#, fuzzy
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lo
+#, fuzzy
 msgid "Lao"
-msgstr ""
+msgstr "Lao"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__write_uid
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__write_uid
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__write_uid
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__write_uid
+#, fuzzy
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última actualización por"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__write_date
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__write_date
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__write_date
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__write_date
+#, fuzzy
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última actualización o"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lv
+#, fuzzy
 msgid "Latvian"
-msgstr ""
+msgstr "Letón"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__limit_exceeded
@@ -708,13 +773,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lt
+#, fuzzy
 msgid "Lithuanian"
-msgstr ""
+msgstr "Lituano"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__mk
+#, fuzzy
 msgid "Macedonian"
-msgstr ""
+msgstr "Macedonio"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_mail_compose_gateway_message
@@ -733,38 +800,45 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ms
+#, fuzzy
 msgid "Malay"
-msgstr ""
+msgstr "Malaio"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ml
+#, fuzzy
 msgid "Malayalam"
-msgstr ""
+msgstr "Malayalam"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__mr
+#, fuzzy
 msgid "Marathi"
-msgstr ""
+msgstr "maratí"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__category__marketing
+#, fuzzy
 msgid "Marketing"
-msgstr ""
+msgstr "Marketing"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__body
+#, fuzzy
 msgid "Message"
-msgstr ""
+msgstr "Mensaxe"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_has_error
+#, fuzzy
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Erro na entrega da Mensaxe"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_ids
+#, fuzzy
 msgid "Messages"
-msgstr ""
+msgstr "Mensaxes"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -779,19 +853,22 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__model
+#, fuzzy
 msgid "Model Name"
-msgstr ""
+msgstr "Nome do modelo"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__name
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__nb
+#, fuzzy
 msgid "Norwegian"
-msgstr ""
+msgstr "Noruegués"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__number_field_name
@@ -800,23 +877,27 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_needaction_counter
+#, fuzzy
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de Accións"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_has_error_counter
+#, fuzzy
 msgid "Number of errors"
-msgstr ""
+msgstr "Número de erros"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_needaction_counter
+#, fuzzy
 msgid "Number of messages requiring action"
-msgstr ""
+msgstr "Número de mensaxes que requiren atención"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_has_error_counter
+#, fuzzy
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Número de mensaxes cun erro de entrega"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -848,18 +929,21 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.ir_actions_server_view_form
+#, fuzzy
 msgid "Partner"
-msgstr ""
+msgstr "Parceiro"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__paused
+#, fuzzy
 msgid "Paused"
-msgstr ""
+msgstr "En pausa"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__pending
+#, fuzzy
 msgid "Pending"
-msgstr ""
+msgstr "Pendente"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__pending_deletion
@@ -868,8 +952,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fa
+#, fuzzy
 msgid "Persian"
-msgstr ""
+msgstr "Persa"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_sanitized_blacklisted
@@ -884,13 +969,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_mobile_search
+#, fuzzy
 msgid "Phone/Mobile"
-msgstr ""
+msgstr "Teléfono/móbil"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__name
+#, fuzzy
 msgid "Placeholder"
-msgstr ""
+msgstr "Comodín"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -900,8 +987,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pl
+#, fuzzy
 msgid "Polish"
-msgstr ""
+msgstr "Polaco"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pt_br
@@ -920,8 +1008,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__pa
+#, fuzzy
 msgid "Punjabi"
-msgstr ""
+msgstr "Punxabi"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__quick_reply
@@ -930,8 +1019,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__rejected
+#, fuzzy
 msgid "Rejected"
-msgstr ""
+msgstr "Rexeitado"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__model
@@ -940,13 +1030,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ro
+#, fuzzy
 msgid "Romanian"
-msgstr ""
+msgstr "Romanés"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ru
+#, fuzzy
 msgid "Russian"
-msgstr ""
+msgstr "Ruso"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__sample_value
@@ -987,8 +1079,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.whatsapp_composer_form_view
+#, fuzzy
 msgid "Send"
-msgstr ""
+msgstr "Enviar"
 
 #. module: mail_gateway_whatsapp
 #. odoo-javascript
@@ -1007,18 +1100,21 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__sequence
+#, fuzzy
 msgid "Sequence"
-msgstr ""
+msgstr "Secuencia"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sr
+#, fuzzy
 msgid "Serbian"
-msgstr ""
+msgstr "Serbio"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_ir_actions_server
+#, fuzzy
 msgid "Server Action"
-msgstr ""
+msgstr "Acción de Servidor"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -1039,18 +1135,21 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sk
+#, fuzzy
 msgid "Slovak"
-msgstr ""
+msgstr "Eslovaco"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sl
+#, fuzzy
 msgid "Slovenian"
-msgstr ""
+msgstr "Esloveno"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__es
+#, fuzzy
 msgid "Spanish"
-msgstr ""
+msgstr "Español"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__es_ar
@@ -1070,23 +1169,27 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__state
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_search
+#, fuzzy
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__url_type__static
+#, fuzzy
 msgid "Static"
-msgstr ""
+msgstr "Estático"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sw
+#, fuzzy
 msgid "Swahili"
-msgstr ""
+msgstr "Suahili"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__sv
+#, fuzzy
 msgid "Swedish"
-msgstr ""
+msgstr "Sueco"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
@@ -1101,25 +1204,29 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ta
+#, fuzzy
 msgid "Tamil"
-msgstr ""
+msgstr "Tamil"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__te
+#, fuzzy
 msgid "Telugu"
-msgstr ""
+msgstr "Telugu"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__template_id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__template_id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__template_id
+#, fuzzy
 msgid "Template"
-msgstr ""
+msgstr "Modelo"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__template_name
+#, fuzzy
 msgid "Template Name"
-msgstr ""
+msgstr "Nome do modelo"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__template_uid
@@ -1136,13 +1243,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
+#, fuzzy
 msgid "Templates"
-msgstr ""
+msgstr "modelos"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__th
+#, fuzzy
 msgid "Thai"
-msgstr ""
+msgstr "Tailandés"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -1165,15 +1274,17 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__tr
+#, fuzzy
 msgid "Turkish"
-msgstr ""
+msgstr "Turco"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__state
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_cron__state
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__button_type
+#, fuzzy
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_ir_actions_server__state
@@ -1192,8 +1303,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__uk
+#, fuzzy
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ucraíno"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -1203,8 +1315,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ur
+#, fuzzy
 msgid "Urdu"
-msgstr ""
+msgstr "Urdú"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__url_type
@@ -1213,18 +1326,21 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__category__utility
+#, fuzzy
 msgid "Utility"
-msgstr ""
+msgstr "Utilidade"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__uz
+#, fuzzy
 msgid "Uzbek"
-msgstr ""
+msgstr "uzbeko"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__variable_ids
+#, fuzzy
 msgid "Variable"
-msgstr ""
+msgstr "variábel"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -1240,8 +1356,9 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__variable_ids
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
+#, fuzzy
 msgid "Variables"
-msgstr ""
+msgstr "variábeis"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -1258,13 +1375,15 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__vi
+#, fuzzy
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamita"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__url
+#, fuzzy
 msgid "Visit Website"
-msgstr ""
+msgstr "Visitar sitio web"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -1393,8 +1512,9 @@ msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__zu
+#, fuzzy
 msgid "Zulu"
-msgstr ""
+msgstr "Zulú"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.view_mail_whatsapp_template_form
