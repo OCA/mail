@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-04-23 13:15+0000\n"
+"Last-Translator: Marcos Chavarría Teijeiro <chavarria1991@gmail.com>\n"
 "Language-Team: none\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -21,59 +23,65 @@ msgid ""
 "                            You should set some random value of your choice for this fields.\n"
 "                            Ensure that facebook will be able to comunicate with your server.</span>"
 msgstr ""
+"<span>Define os valores dos campos <b>Clave do webhook</b> e <b>Clave de "
+"seguridade de WhatsApp</b>.\n"
+"                                                                Deberías "
+"establecer algún valor aleatorio da túa elección para estes campos.\n"
+"                                                                Asegúrate de "
+"que Facebook poida comunicarse co teu servidor.</span>"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid "A maximum of 1 Call Number button is allowed."
-msgstr ""
+msgstr "Permítense como máximo un botón de Chamar ao Número."
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid "A maximum of 10 buttons is allowed."
-msgstr ""
+msgstr "Permítese como máximo 10 botóns."
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid "A maximum of 2 URL buttons is allowed."
-msgstr ""
+msgstr "Permítense como máximo 2 botóns de URL."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Access"
-msgstr ""
+msgstr "Acceso"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Access the menu <b>Configuration / Advanced Options</b>."
-msgstr ""
+msgstr "Acceda ao menú <b>Configuración/Opcións Avanzadas</b>."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Access the menu <b>Configuration / Basic information</b>."
-msgstr ""
+msgstr "Acceda ao menú <b>Configuración / Información Básica</b>."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Access your"
-msgstr ""
+msgstr "Acceder ao seu"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Access your business settings menu"
-msgstr ""
+msgstr "Acceda ao seu menú de axustes para empresas"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Precísase Acción"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Add a new number."
-msgstr ""
+msgstr "Engada un novo número."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__af
