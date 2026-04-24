@@ -83,7 +83,8 @@
                 decoration-info="state == 'unsub'"
             >
                 <field name="time" />
-                <field name="date" invisible="1" />
+                <field name="date" />
+                <field name="company_id" invisible="1" />
                 <field name="name" />
                 <field name="sender" string="Sender" />
                 <field name="recipient" string="Recipient" />
