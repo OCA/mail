@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class IrMailServer(models.Model):
     _inherit = "ir.mail_server"
 
-    def _prepare_email_message(self, message, smtp_session):
+    def _prepare_email_message__(self, message, smtp_session):  # noqa: PLW3201
         """
         Define smtp_to based on context instead of To+Cc+Bcc
         """
@@ -22,7 +22,7 @@ class IrMailServer(models.Model):
         if x_odoo_bcc_value:
             message["Bcc"] = x_odoo_bcc_value
 
-        smtp_from, smtp_to_list, message = super()._prepare_email_message(
+        smtp_from, smtp_to_list, message = super()._prepare_email_message__(
             message, smtp_session
         )
 

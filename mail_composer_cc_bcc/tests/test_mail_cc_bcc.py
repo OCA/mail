@@ -5,12 +5,11 @@ import inspect
 
 from odoo import tools
 from odoo.tests import Form, tagged
-from odoo.tests.common import TransactionCase
 
 from odoo.addons.mail.tests.common import MailCase
 from odoo.addons.mail.tests.test_mail_composer import TestMailComposerForm
 from odoo.addons.mail.wizard.mail_compose_message import (
-    MailComposer as MailComposer_upstream,
+    MailComposeMessage as MailComposer_upstream,
 )
 
 VALID_HASHES = {
@@ -251,7 +250,7 @@ Test Template<br></p>""",
 
 
 @tagged("-at_install", "post_install")
-class TestMailComposerCcBccWithTracking(TransactionCase, MailCase):
+class TestMailComposerCcBccWithTracking(MailCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

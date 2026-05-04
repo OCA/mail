@@ -80,7 +80,13 @@ class MailComposeMessage(models.TransientModel):
                 composer.partner_bcc_ids = self.env.company.default_partner_bcc_ids
 
     @api.depends(
-        "composition_mode", "model", "parent_id", "res_domain", "res_ids", "template_id"
+        "composition_mode",
+        "model",
+        "parent_id",
+        "res_domain",
+        "res_ids",
+        "subtype_id",
+        "template_id",
     )
     def _compute_partner_ids(self):
         """
