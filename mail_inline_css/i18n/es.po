@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-16 03:47+0000\n"
-"PO-Revision-Date: 2018-01-16 03:47+0000\n"
-"Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>, 2018\n"
+"PO-Revision-Date: 2026-05-07 18:19+0000\n"
+"Last-Translator: Ed-Spain <eduamoros@gmail.com>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_inline_css
 #: model:mail.template,body_html:mail_inline_css.email_template_demo
@@ -115,7 +116,7 @@ msgstr ""
 #. module: mail_inline_css
 #: model:mail.template,subject:mail_inline_css.email_template_demo
 msgid "Demo email inline styles"
-msgstr ""
+msgstr "Demo de estilos CSS en línea de email"
 
 #. module: mail_inline_css
 #: model:ir.model,name:mail_inline_css.model_mail_template
@@ -125,4 +126,4 @@ msgstr "Plantillas de correo electrónico"
 #. module: mail_inline_css
 #: model:mail.template,name:mail_inline_css.email_template_demo
 msgid "Inline styles demo"
-msgstr ""
+msgstr "Demo de estilos en línea"
