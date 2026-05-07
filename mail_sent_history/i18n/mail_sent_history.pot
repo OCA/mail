@@ -4,13 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-27 12:50+0000\n"
-"PO-Revision-Date: 2026-02-27 12:50+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -19,7 +16,7 @@ msgstr ""
 #. module: mail_sent_history
 #: model:ir.model,name:mail_sent_history.model_mail_message
 msgid "Message"
-msgstr "Mensaje"
+msgstr ""
 
 #. module: mail_sent_history
 #. odoo-javascript
@@ -27,18 +24,18 @@ msgstr "Mensaje"
 #: code:addons/mail_sent_history/static/src/xml/thread_icon.xml:0
 #, python-format
 msgid "Sent History"
-msgstr "Historial de enviados"
+msgstr ""
 
 #. module: mail_sent_history
 #. odoo-javascript
 #: code:addons/mail_sent_history/static/src/xml/thread.xml:0
 #, python-format
 msgid "This mailbox will display messages or notes you have sent."
-msgstr "Este buzón mostrará los mensajes o notas que hayas enviado."
+msgstr ""
 
 #. module: mail_sent_history
 #. odoo-javascript
 #: code:addons/mail_sent_history/static/src/xml/thread.xml:0
 #, python-format
 msgid "You have not sent any messages or added any notes yet"
-msgstr "Aún no has enviado ningún mensaje ni añadido ninguna nota."
+msgstr ""
