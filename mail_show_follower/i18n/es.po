@@ -6,25 +6,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-08 13:36+0000\n"
-"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
+"PO-Revision-Date: 2026-05-07 18:19+0000\n"
+"Last-Translator: Ed-Spain <eduamoros@gmail.com>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
 msgid "%(partner_email)s = Partner Email"
-msgstr ""
+msgstr "%(partner_email)s = Correo electrónico del contacto"
 
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
 msgid "%(partner_email_domain)s = Partner Email Domain"
-msgstr ""
+msgstr "%(partner_email_domain)s = Dominio del correo electrónico del contacto"
 
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
@@ -34,12 +34,12 @@ msgstr "%(partner_name)s <%(partner_email)s>"
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
 msgid "%(partner_name)s = Partner Name"
-msgstr ""
+msgstr "%(partner_name)s = Nombre del contacto"
 
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
 msgid "<strong>Supported parameters:</strong>"
-msgstr ""
+msgstr "<strong>Parámetros soportados:</strong>"
 
 #. module: mail_show_follower
 #: model:ir.model,name:mail_show_follower.model_res_company
@@ -54,7 +54,7 @@ msgstr "Ajustes Configuración"
 #. module: mail_show_follower
 #: model:ir.model,name:mail_show_follower.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #. module: mail_show_follower
 #: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_message_preview
@@ -64,7 +64,7 @@ msgstr "Vista previa del mensaje"
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
 msgid "Models to exclude"
-msgstr ""
+msgstr "Modelos a excluir"
 
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
@@ -87,7 +87,7 @@ msgstr "Formato socio"
 #. module: mail_show_follower
 #: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_models_to_exclude
 msgid "Show Followers Models To Exclude"
-msgstr ""
+msgstr "Mostrar modelos de seguidores a excluir"
 
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
@@ -127,7 +127,7 @@ msgstr ""
 #. module: mail_show_follower
 #: model:ir.model.fields,help:mail_show_follower.field_res_config_settings__show_followers_models_to_exclude
 msgid "Tecnichal model names separated by coma"
-msgstr ""
+msgstr "Nombres técnicos de modelos separados por coma"
 
 #. module: mail_show_follower
 #: model:ir.model.fields,field_description:mail_show_follower.field_res_company__show_followers_message_response_warning
@@ -154,4 +154,4 @@ msgstr "Usuario"
 #. module: mail_show_follower
 #: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
 msgid "blog.blog,blog.post"
-msgstr ""
+msgstr "blog.blog,blog.post"
