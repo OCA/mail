@@ -1,13 +1,26 @@
 # Copyright 2018 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from odoo.tests.common import TransactionCase
+
+from odoo_test_helper import FakeModelLoader
+
 from odoo import Command
+from odoo.tests.common import TransactionCase
 
 
 class TestMailActivityPartner(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.addClassCleanup(cls.loader.restore_registry)
+        cls.loader.backup_registry()
+
+        # Imported Test model must be done after the backup_registry
+        # pylint: disable=import-outside-toplevel
+        from .models import FakePartnerSubCustom, FakePartnerSubDefault
+
+        cls.loader.update_registry((FakePartnerSubDefault, FakePartnerSubCustom))
+
         # disable tracking test suite wise
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.user_model = cls.env["res.users"].with_context(no_reset_password=True)
@@ -104,3 +117,72 @@ class TestMailActivityPartner(TransactionCase):
         # Check commercial_partner_id for created activities
         self.assertEqual(self.act1.commercial_partner_id, self.partner_01)
         self.assertEqual(self.act2.commercial_partner_id, self.homer)
+
+    def test_default_partner_field_name(self):
+        """Test that _get_partner_field_name returns 'partner_id' by default."""
+        fake_model = self.env["fakepartner.subdefault"]
+        self.assertEqual(fake_model._get_partner_field_name(), "partner_id")
+
+    def test_custom_partner_field_name(self):
+        """Test that _get_partner_field_name can be overridden."""
+        fake_model = self.env["fakepartner.subcustom"]
+        self.assertEqual(fake_model._get_partner_field_name(), "contact_id")
+
+    def test_activity_partner_need_update_default(self):
+        """Test _activity_partner_need_update with default partner_id field."""
+        fake_model = self.env["fakepartner.subdefault"]
+        self.assertTrue(fake_model._activity_partner_need_update({"partner_id": 1}))
+        self.assertFalse(fake_model._activity_partner_need_update({"name": "test"}))
+
+    def test_activity_partner_need_update_custom(self):
+        """Test _activity_partner_need_update detects the custom partner field."""
+        fake_model = self.env["fakepartner.subcustom"]
+        self.assertTrue(fake_model._activity_partner_need_update({"contact_id": 1}))
+        self.assertFalse(fake_model._activity_partner_need_update({"name": "test"}))
+        # the default partner_id field should NOT trigger update on this model
+        self.assertFalse(fake_model._activity_partner_need_update({"partner_id": 1}))
+
+    def test_activity_partner_synced_on_create_custom(self):
+        """Test that creating a record syncs activity partner via custom field."""
+        fake_model = self.env["fakepartner.subcustom"]
+        ir_model = self.env["ir.model"]._get("fakepartner.subcustom")
+        activity_type = self.env["mail.activity.type"].create(
+            {
+                "name": "Test Activity",
+                "res_model": ir_model.model,
+            }
+        )
+        rec = fake_model.create({"name": "Test Record", "contact_id": self.homer.id})
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": activity_type.id,
+                "res_id": rec.id,
+                "res_model_id": ir_model.id,
+                "user_id": self.user_admin.id,
+            }
+        )
+        self.assertEqual(activity.partner_id, self.homer)
+
+    def test_activity_partner_synced_on_write_custom(self):
+        """Test that updating the custom partner field syncs activity partner."""
+        fake_model = self.env["fakepartner.subcustom"]
+        ir_model = self.env["ir.model"]._get("fakepartner.subcustom")
+        activity_type = self.env["mail.activity.type"].create(
+            {
+                "name": "Test Activity",
+                "res_model": ir_model.model,
+            }
+        )
+        rec = fake_model.create({"name": "Test Record", "contact_id": self.homer.id})
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": activity_type.id,
+                "res_id": rec.id,
+                "res_model_id": ir_model.id,
+                "user_id": self.user_admin.id,
+            }
+        )
+        self.assertEqual(activity.partner_id, self.homer)
+        # update the custom partner field to another partner
+        rec.write({"contact_id": self.partner_01.id})
+        self.assertEqual(activity.partner_id, self.partner_01)
