@@ -49,6 +49,14 @@ class MailTrackingEmail(models.Model):
     partner_id = fields.Many2one(
         string="Partner", comodel_name="res.partner", readonly=True
     )
+    company_id = fields.Many2one(
+        string="Company",
+        comodel_name="res.company",
+        related="mail_message_id.record_company_id",
+        store=True,
+        readonly=True,
+        index=True,
+    )
     recipient = fields.Char(string="Recipient email", readonly=True)
     recipient_address = fields.Char(
         string="Recipient email address",
@@ -152,12 +160,9 @@ class MailTrackingEmail(models.Model):
         _check_access() for more details about those rules.
         """
         query = super()._search(domain, offset, limit, order)
-        if not self.env.is_superuser():
-            records = self.browse(query)
-            allowed_ids = self._get_allowed_ids(records.ids)
-            return self.browse(allowed_ids)._as_query(order)
-
-        return query
+        records = self.browse(query)
+        allowed_ids = self._get_allowed_ids(records.ids)
+        return self.browse(allowed_ids)._as_query(order)
 
     def _make_access_error(self, operation: str) -> AccessError:
         return AccessError(
@@ -234,11 +239,15 @@ class MailTrackingEmail(models.Model):
         msg_ids, mail_ids, partner_ids = [], [], []
         if result:
             _, msg_ids, mail_ids, partner_ids = zip(*result, strict=True)
-        msg_ids = (
-            self.env["mail.message"]
-            .search([("id", "in", [x for x in msg_ids if x])])
-            .ids
+        msg_ids = self.env["mail.message"].search(
+            [("id", "in", [x for x in msg_ids if x])]
         )
+        active_company_id = self.env.company.id
+        msg_ids = msg_ids.filtered(
+            lambda msg: not msg.record_company_id
+            or msg.record_company_id.id == active_company_id
+        )
+        msg_ids = msg_ids.ids
         # Only users from group_system can read mail.mail
         if self.env.user.has_group("base.group_system"):
             mail_ids = (

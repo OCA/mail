@@ -26,7 +26,8 @@ const contact_steps = [
     },
     {
         content: "Open contact",
-        trigger: ".o_list_table td[name='complete_name']:contains('Test Forward')",
+        trigger:
+            ".o_list_table tr.o_data_row:has(td:contains('Test Forward')) td:contains('Test Forward')",
         run: "click",
     },
 ];
