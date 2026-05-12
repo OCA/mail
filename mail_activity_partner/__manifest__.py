@@ -3,7 +3,7 @@
 {
     "name": "Mail Activity Partner",
     "summary": "Add Partner to Activities",
-    "version": "16.0.1.0.0",
+    "version": "18.0.1.0.0",
     "development_status": "Beta",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
@@ -11,5 +11,5 @@
     "license": "AGPL-3",
     "installable": True,
     "data": ["views/mail_activity_views.xml"],
-    "depends": ["mail_activity_board"],
+    "depends": ["mail"],
 }
