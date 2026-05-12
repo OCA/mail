@@ -374,21 +374,54 @@ ul.auto-toc {
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-2">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-3">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-4">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-5">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-6">Maintainers</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a><ul>
+<li><a class="reference internal" href="#for-developers" id="toc-entry-2">For developers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="usage">
 <h1><a class="toc-backref" href="#toc-entry-1">Usage</a></h1>
+<div class="section" id="for-developers">
+<h2><a class="toc-backref" href="#toc-entry-2">For developers</a></h2>
+<p>By default, this module links activities to the <tt class="docutils literal">partner_id</tt> field of
+the record. If your model uses a different field to hold the related
+partner (e.g. <tt class="docutils literal">address_id</tt>, <tt class="docutils literal">contact_id</tt>), you must override
+<tt class="docutils literal">_get_partner_field_name</tt> to return that field name, otherwise
+activity partner synchronization will have no effect on your model.</p>
+<p><strong>When to override:</strong></p>
+<ul class="simple">
+<li>Your model inherits <tt class="docutils literal">mail.activity.mixin</tt> but does not have a
+<tt class="docutils literal">partner_id</tt> field.</li>
+<li>Your model has a partner relationship stored under a field with a name
+other than <tt class="docutils literal">partner_id</tt>.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre class="code python literal-block">
+<span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span><span class="w">
+</span>    <span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;my.model&quot;</span><span class="w">
+</span>    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mail.activity.mixin&quot;</span><span class="p">,</span> <span class="s2">&quot;mail.thread&quot;</span><span class="p">]</span><span class="w">
+
+</span>    <span class="n">address_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="s2">&quot;res.partner&quot;</span><span class="p">)</span><span class="w">
+
+</span>    <span class="nd">&#64;api</span><span class="o">.</span><span class="n">model</span><span class="w">
+</span>    <span class="k">def</span><span class="w"> </span><span class="nf">_get_partner_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="w">
+</span>        <span class="k">return</span> <span class="s2">&quot;address_id&quot;</span>
+</pre>
+<p>With this override, every time <tt class="docutils literal">address_id</tt> is set or changed on a
+record, all linked activities will automatically have their
+<tt class="docutils literal">partner_id</tt> updated to match.</p>
+</div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-2">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/mail/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -396,22 +429,23 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-3">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-4">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
 <ul class="simple">
 <li>ForgeFlow</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-5">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Contributors</a></h2>
 <ul class="simple">
 <li>Adrià Gil Sorribes (<a class="reference external" href="mailto:adria.gil&#64;forgeflow.com">adria.gil&#64;forgeflow.com</a>)</li>
 <li>Joan Mateu Jordi (<a class="reference external" href="mailto:joan.mateu&#64;forgeflow.com">joan.mateu&#64;forgeflow.com</a>)</li>
+<li>Yann Papouin (<a class="reference external" href="mailto:ypa&#64;decgroupe.com">ypa&#64;decgroupe.com</a>)</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-6">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />
