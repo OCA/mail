@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <record model="ir.actions.act_window" id="open_boards_activities">
-        <field name="name">Activitiy Dashboard</field>
+        <field name="name">Activity Dashboard</field>
         <field name="res_model">mail.activity</field>
         <field name="view_mode">kanban,list,form,calendar,pivot,graph</field>
         <field name="domain">[]</field>
