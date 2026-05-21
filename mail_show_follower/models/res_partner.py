@@ -19,7 +19,7 @@ class ResPartner(models.Model):
             internal_users = result.filtered_domain(
                 [
                     ("user_ids.active", "=", True),
-                    ("user_ids.groups_id", "in", self.env.ref("base.group_user").ids),
+                    ("user_ids.group_ids", "in", self.env.ref("base.group_user").ids),
                 ]
             )
             result -= internal_users
