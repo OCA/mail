@@ -46,6 +46,20 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         for field in arch.xpath('//field[@name="partner_ids"]'):
             self.assertEqual(field.get("domain"), "partner_ids_domain")
 
+    def test_get_view_non_form(self):
+        view = self.env["ir.ui.view"].create(
+            {
+                "name": "mail.wizard.invite.test.list",
+                "model": "mail.wizard.invite",
+                "type": "list",
+                "arch": "<list><field name='res_model'/></list>",
+            }
+        )
+        result = self.env["mail.wizard.invite"].get_view(
+            view_id=view.id, view_type="list"
+        )
+        self.assertNotIn("partner_ids_domain", result["arch"])
+
     def send_action(self):
         compose = (
             self.env["mail.compose.message"]
@@ -112,6 +126,14 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         """Check using safe_eval in the dynamic partner domain."""
         self._use_ref_in_domain(self.param)
         wizard = self.env["mail.wizard.invite"].new({"res_model": "res.partner"})
+        domain = str(wizard.partner_ids_domain)
+        self.assertTrue(domain.find("country_id") > 0)
+        self.assertTrue(domain.find(str(self.switzerland.id)) > 0)
+
+    def test_partner_ids_domain_eval_global_domain(self):
+        """Check using safe_eval in the dynamic global domain."""
+        self._use_ref_in_domain()
+        wizard = self.env["mail.wizard.invite"].new({})
         domain = str(wizard.partner_ids_domain)
         self.assertTrue(domain.find("country_id") > 0)
         self.assertTrue(domain.find(str(self.switzerland.id)) > 0)

@@ -26,7 +26,9 @@ class MailWizardInvite(models.TransientModel):
             )
             wizard.partner_ids_domain = safe_eval(
                 str(domain),
-                locals_dict={"ref": lambda str_id: _id_get(wizard.env, str_id)},
+                locals_dict={
+                    "ref": lambda str_id, env=wizard.env: _id_get(env, str_id)
+                },
             )
 
     @api.model
