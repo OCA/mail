@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-05-21 13:46+0000\n"
+"PO-Revision-Date: 2026-05-29 15:46+0000\n"
 "Last-Translator: Marcos Chavarría Teijeiro <chavarria1991@gmail.com>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -267,7 +267,7 @@ msgstr "Contacto"
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Copy the API Version on the <b>Whastapp Version</b> field."
-msgstr ""
+msgstr "Copia a versión da API no campo <b>Versión de Whatsapp</b>."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -275,16 +275,18 @@ msgid ""
 "Copy the phone identification number to the field <b>Whastapp From phone</b>"
 " field."
 msgstr ""
+"Copia o número de identificación do teléfono no campo <b>Whatsapp dende "
+"Teléfono</b>."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Copy the token value to token field in this page."
-msgstr ""
+msgstr "Copia o valor do token no campo token desta páxina."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Create a new application."
-msgstr ""
+msgstr "Crea unha nova aplicación."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__create_uid
@@ -305,12 +307,12 @@ msgstr "Criado o"
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Creating a permanent token"
-msgstr ""
+msgstr "Creando un token permanente"
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Creating the Application from meta developer"
-msgstr ""
+msgstr "Creando a Aplicación dende Desenvolvedor Meta"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__hr
@@ -340,7 +342,7 @@ msgstr "Desactivados"
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_discuss_channel
 msgid "Discussion Channel"
-msgstr ""
+msgstr "Canle de Conversas"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__display_name
@@ -363,7 +365,7 @@ msgstr "Nome do Modelo de Documento"
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "Download Templates"
-msgstr ""
+msgstr "Descargar Modelos"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__draft
@@ -373,7 +375,7 @@ msgstr "Bosquexo"
 #. module: mail_gateway_whatsapp
 #: model:ir.model.constraint,message:mail_gateway_whatsapp.constraint_mail_whatsapp_template_unique_name_gateway_id
 msgid "Duplicate name is not allowed for Gateway."
-msgstr ""
+msgstr "Non se permite nomes duplicados para as pasarelas."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__nl
@@ -442,7 +444,7 @@ msgstr "Filipino"
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__find_gateway
 msgid "Find Gateway"
-msgstr ""
+msgstr "Buscar Pasarela"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__fi
@@ -452,7 +454,7 @@ msgstr "Finlandés"
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "First steps"
-msgstr ""
+msgstr "Primeiros pasos"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_follower_ids
@@ -484,7 +486,7 @@ msgstr "Pasarela"
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__gateway_type
 msgid "Gateway Type"
-msgstr ""
+msgstr "Tipo de Pasarela"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__ka
