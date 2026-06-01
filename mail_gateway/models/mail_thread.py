@@ -55,7 +55,7 @@ class MailThread(models.AbstractModel):
                     "id": partner.id,
                     "is_follower": True,
                     "lang": partner.lang,
-                    "groups": set(user.groups_id.ids),
+                    "groups": set(user.group_ids.ids),
                     "notif": notification.get("channel_type"),
                     "share": partner.partner_share,
                     "uid": user[:1].id,
@@ -74,22 +74,39 @@ class MailThread(models.AbstractModel):
             return result
         return super()._notify_get_recipients(message, msg_vals, **kwargs)
 
-    def _thread_to_store(self, store: Store, /, *, fields=None, request_list=None):
+    def _thread_to_store(self, store: Store, fields, *, request_list=None):
         res = super()._thread_to_store(store, fields=fields, request_list=request_list)
+        # request_list=None means this is a recursive internal call (from
+        # store.add as_thread=True), not a direct client request — skip to avoid
+        # infinite recursion.
+        if request_list is None:
+            return res
         for record in self:
-            followers = record.message_get_followers()
-            if "mail.followers" in followers:
-                store.add(
-                    record,
-                    {
-                        "gateway_followers": [
-                            f["partner"]
-                            for f in followers["mail.followers"]
-                            if f["partner"]["gateway_channels"]
-                        ]
-                    },
-                    as_thread=True,
-                )
+            follower_partners = (
+                self.env["mail.followers"]
+                .sudo()
+                .search([("res_id", "=", record.id), ("res_model", "=", record._name)])
+                .partner_id.filtered(lambda p: p.gateway_channel_ids)
+            )
+            if not follower_partners:
+                continue
+            store.add(
+                record,
+                {
+                    "gateway_followers": [
+                        {
+                            "id": partner.id,
+                            "name": partner.name,
+                            "gateway_channels": [
+                                channel._mail_format()
+                                for channel in partner.gateway_channel_ids
+                            ],
+                        }
+                        for partner in follower_partners
+                    ]
+                },
+                as_thread=True,
+            )
         return res
 
     def _check_can_update_message_content(self, messages):
@@ -103,6 +120,8 @@ class MailThread(models.AbstractModel):
     def _message_update_content(
         self,
         message,
+        /,
+        *,
         body,
         attachment_ids=None,
         partner_ids=None,
@@ -110,7 +129,7 @@ class MailThread(models.AbstractModel):
         **kwargs,
     ):
         result = super()._message_update_content(
-            message=message,
+            message,
             body=body,
             attachment_ids=attachment_ids,
             partner_ids=partner_ids,
@@ -121,15 +140,18 @@ class MailThread(models.AbstractModel):
             # Unlink the message
             for gateway_msg in message.gateway_message_ids:
                 gateway_msg.gateway_message_id = False
-                gateway_msg._bus_send_store(
+                Store(bus_channel=gateway_msg._bus_channel()).add(
                     gateway_msg,
-                    {
-                        "gateway_thread_data": gateway_msg.sudo().gateway_thread_data,
-                    },
-                )
+                    {"gateway_thread_data": gateway_msg.sudo().gateway_thread_data},
+                ).bus_send()
         return result
 
     def _get_allowed_message_post_params(self):
-        result = super()._get_allowed_message_post_params()
+        parent = super()
+        result = (
+            parent._get_allowed_message_post_params()
+            if hasattr(parent, "_get_allowed_message_post_params")
+            else set()
+        )
         result.add("gateway_notifications")
         return result

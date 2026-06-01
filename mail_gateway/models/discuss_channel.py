@@ -3,7 +3,7 @@
 
 import base64
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 from odoo.addons.mail.tools.discuss import Store
 
@@ -28,24 +28,25 @@ class MailChannel(models.Model):
         required=False,
     )
 
-    def _to_store(self, store: Store):
-        result = super()._to_store(store)
-        if not self:
-            return result
+    def _to_store(self, store: Store, fields):
+        res = super()._to_store(store, fields)
         for record in self:
-            store.add(
-                record,
+            if not record:
+                continue
+            store.add_model_values(
+                self._name,
                 {
+                    "id": record.id,
                     "gateway": {
-                        "id": record.gateway_id.id,
-                        "name": record.gateway_id.name,
-                        "type": record.gateway_id.gateway_type,
+                        "id": record.id,
+                        "name": record.name,
+                        "type": record.channel_type,
                     },
-                    "gateway_name": record.gateway_id.name,
-                    "gateway_id": record.gateway_id.id,
+                    "gateway_name": record.name,
+                    "gateway_id": record.id,
                 },
             )
-        return result
+        return res
 
     def _generate_avatar_gateway(self):
         # We will use this function to set a default avatar on each module
@@ -59,7 +60,6 @@ class MailChannel(models.Model):
             return False
         return base64.b64encode(avatar.encode())
 
-    @api.returns("mail.message", lambda value: value.id)
     def message_post(
         self, *, message_type="notification", gateway_type=False, **kwargs
     ):
@@ -86,6 +86,8 @@ class MailChannel(models.Model):
     def _message_update_content(
         self,
         message,
+        /,
+        *,
         body,
         attachment_ids=None,
         partner_ids=None,
@@ -93,7 +95,7 @@ class MailChannel(models.Model):
         **kwargs,
     ):
         res = super()._message_update_content(
-            message=message,
+            message,
             body=body,
             attachment_ids=attachment_ids,
             partner_ids=partner_ids,
