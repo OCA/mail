@@ -1,10 +1,10 @@
 # Copyright 2022 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import requests
-from werkzeug.urls import url_join
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.urls import urljoin
 
 BASE_URL = "https://graph.facebook.com/"
 
@@ -35,7 +35,7 @@ class MailGateway(models.Model):
                 self.env._("WhatsApp Account is required to import templates.")
             )
         meta_info = {}
-        template_url = url_join(
+        template_url = urljoin(
             BASE_URL,
             f"v{self.whatsapp_version}/{self.whatsapp_account_id}/message_templates",
         )
@@ -69,7 +69,7 @@ class MailGateway(models.Model):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": self.env._("WathsApp Templates"),
+                "title": self.env._("WhatsApp Templates"),
                 "type": "success",
                 "message": self.env._("Synchronization successfully."),
                 "next": {"type": "ir.actions.act_window_close"},

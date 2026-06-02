@@ -123,11 +123,6 @@ msgid "Archived"
 msgstr "Archivado"
 
 #. module: mail_gateway_whatsapp
-#: model:ir.model,name:mail_gateway_whatsapp.model_mail_guest_manage
-msgid "Assign gateway guest to a partner"
-msgstr ""
-
-#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_attachment_count
 msgid "Attachment Count"
 msgstr "Recuento de archivos adjuntos"
@@ -1339,12 +1334,6 @@ msgstr "Vietnamita"
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__url
 msgid "Visit Website"
 msgstr "Visitar sitio web"
-
-#. module: mail_gateway_whatsapp
-#. odoo-python
-#: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
-msgid "WathsApp Templates"
-msgstr "Plantillas de WhatsApp"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
