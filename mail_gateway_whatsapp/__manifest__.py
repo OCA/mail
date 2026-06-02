@@ -4,10 +4,10 @@
 {
     "name": "Mail Whatsapp Gateway",
     "summary": "Set a gateway for WhatsApp",
-    "version": "18.0.2.1.5",
+    "version": "19.0.1.0.0",
     "license": "AGPL-3",
     "author": "Creu Blanca, Dixmit, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail_gateway", "phone_validation"],
     "external_dependencies": {"python": ["requests_toolbelt"]},
     "data": [

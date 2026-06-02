@@ -11,7 +11,7 @@ from markupsafe import Markup
 
 from odoo import Command
 from odoo.exceptions import UserError
-from odoo.tests import Form, RecordCapturer
+from odoo.tests import Form, HttpCase, RecordCapturer
 from odoo.tests.common import tagged
 from odoo.tools import mute_logger
 
@@ -19,7 +19,7 @@ from odoo.addons.mail_gateway.tests.common import MailGatewayTestCase
 
 
 @tagged("-at_install", "post_install")
-class TestMailGatewayWhatsApp(MailGatewayTestCase):
+class TestMailGatewayWhatsApp(MailGatewayTestCase, HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -46,7 +46,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             }
         )
         cls.partner = cls.env["res.partner"].create(
-            {"name": "Partner", "mobile": "+34 600 000 000"}
+            {"name": "Partner", "phone": "+34 600 000 000"}
         )
         cls.password = "my_new_password"
         cls.message_01 = {
@@ -233,6 +233,53 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         self.assertEqual(message.author_id, partner)
         self.assertFalse(message.parent_id)
 
+    def test_receive_message_internal_webhook_user(self):
+        # A regular internal user must be able to create the channel of a new
+        # contact, even if the HTTP request starts as the public user
+        self.gateway.webhook_user_id = self.env.ref("base.user_admin")
+        message = self.receive_message(self.message_01)
+        self.assertFalse(message.author_id)
+
+    def test_receive_message_gateway_webhook_user(self):
+        # A gateway user that is not an administrator can process the webhook:
+        # create the guest of a new contact and copy a reply on a linked record
+        self.gateway.webhook_user_id = self.env["res.users"].create(
+            {
+                "name": "Webhook user",
+                "login": "webhook_user",
+                "group_ids": [
+                    Command.set(
+                        [
+                            self.env.ref("base.group_user").id,
+                            self.env.ref("mail_gateway.gateway_user").id,
+                        ]
+                    )
+                ],
+            }
+        )
+        message = self.receive_message(self.message_01)
+        self.assertTrue(message.author_guest_id)
+        chat = self.env["discuss.channel"].browse(message.res_id)
+        response = MagicMock()
+        response.json.return_value = {"messages": [{"id": "wamid.SENT"}]}
+        with patch("requests.post", return_value=response):
+            sent = chat.message_post(
+                body="Question",
+                message_type="comment",
+                subtype_xmlid="mail.mt_comment",
+            )
+        sent.gateway_message_id = self.partner.message_post(
+            body="Question", message_type="comment"
+        )
+        reply = copy.deepcopy(self.message_01)
+        reply_value = reply["entry"][0]["changes"][0]["value"]["messages"][0]
+        reply_value["id"] = "wamid.REPLY"
+        reply_value["context"] = {"id": "wamid.SENT"}
+        self.set_message(reply, self.webhook)
+        reply_message = chat.message_ids.filtered(lambda m: m.parent_id == sent)
+        self.assertTrue(reply_message)
+        self.assertEqual(reply_message.gateway_message_id.res_id, self.partner.id)
+
     def test_receive_related_message(self):
         """
         Send outgoing message, and then receive a reply message
@@ -245,7 +292,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": partner._name,
             "default_res_id": partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -389,7 +436,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -417,7 +464,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -443,7 +490,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -470,7 +517,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": self.partner._name,
             "default_res_id": self.partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -530,7 +577,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -554,7 +601,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": self.partner._name,
             "default_res_id": self.partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -593,12 +640,12 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
                 "name": "{{2}}",
                 "line_type": "body",
                 "template_id": tmpl_with_vars.id,
-                "field_name": "mobile",
+                "field_name": "phone",
             }
         )
         self.env["mail.whatsapp.template.button"].create(
             {
-                "name": "mobile",
+                "name": "phone",
                 "button_type": "phone_number",
                 "template_id": tmpl_with_vars.id,
                 "call_number": "+34666555444",
@@ -635,7 +682,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": self.partner._name,
             "default_res_id": self.partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -666,7 +713,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
                 "name": "{{2}}",
                 "line_type": "body",
                 "template_id": tmpl_with_vars_dynamic.id,
-                "field_name": "mobile",
+                "field_name": "phone",
             }
         )
         self.env["mail.whatsapp.template.button"].create(

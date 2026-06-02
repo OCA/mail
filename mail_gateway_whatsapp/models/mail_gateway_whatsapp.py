@@ -19,6 +19,7 @@ from odoo.http import request
 from odoo.tools import html2plaintext, plaintext2html
 
 from odoo.addons.base.models.ir_mail_server import MailDeliveryException
+from odoo.addons.mail.tools.discuss import Store
 
 _logger = logging.getLogger(__name__)
 
@@ -156,7 +157,9 @@ class MailGatewayWhatsappService(models.AbstractModel):
                     image_info = image_info_request.json()
                     image_url = image_info["url"]
                 else:
-                    image_url = message.get(key).get("url")
+                    # The media data already holds the url and the mimetype
+                    image_info = message.get(key)
+                    image_url = image_info.get("url")
                 if not image_url:
                     continue
                 image_request = requests.get(
@@ -176,7 +179,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                 attachments.append(
                     (
                         "{}{}".format(
-                            image_id,
+                            image_id or key,
                             mimetypes.guess_extension(image_info["mime_type"]),
                         ),
                         image_request.content,
@@ -226,6 +229,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                     new_related_message = (
                         self.env[related_message.gateway_message_id.model]
                         .browse(related_message.gateway_message_id.res_id)
+                        .sudo()
                         .message_post(
                             body=body,
                             author_id=author
@@ -242,12 +246,10 @@ class MailGatewayWhatsappService(models.AbstractModel):
                     self._post_process_reply(related_message)
                     new_message.gateway_message_id = new_related_message
                     gateway_thread_data = new_message.sudo().gateway_thread_data
-                    new_message._bus_send_store(
+                    Store(bus_channel=new_message._bus_channel()).add(
                         new_message,
-                        {
-                            "gateway_thread_data": gateway_thread_data,
-                        },
-                    )
+                        {"gateway_thread_data": gateway_thread_data},
+                    ).bus_send()
 
     def _send(
         self,
@@ -460,7 +462,9 @@ class MailGatewayWhatsappService(models.AbstractModel):
                 return guest
             author_vals = self._get_author_vals(gateway, author_id, update)
             if author_vals:
-                return self.env["mail.guest"].create(author_vals)
+                # Guests are technical records that the webhook user may not
+                # be allowed to create
+                return self.env["mail.guest"].sudo().create(author_vals).sudo(False)
 
         return False
 

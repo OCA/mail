@@ -14,11 +14,9 @@
                         required="is_required_template"
                         options="{'no_create': True, 'no_open': True}"
                     />
-                    <field name="find_gateway" invisible="1" />
                     <field name="res_model" invisible="1" />
                     <field name="res_id" invisible="1" />
                     <field name="number_field_name" invisible="1" />
-                    <field name="is_required_template" invisible="1" />
                     <field name="body" readonly="template_id" force_save="1" />
                 </group>
                 <footer>

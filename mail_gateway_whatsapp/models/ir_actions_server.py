@@ -63,7 +63,7 @@ class IrServerAction(models.Model):
                 )[record.id]
             )
             partner = self.env["res.partner"].browse(partner_id)
-            partner._whatsapp_get_channel("mobile", self.whatsapp_gateway_id)
+            partner._whatsapp_get_channel("phone", self.whatsapp_gateway_id)
             gateway_channel = partner.gateway_channel_ids.filtered(
                 lambda x: x.gateway_id == self.whatsapp_gateway_id
             )
