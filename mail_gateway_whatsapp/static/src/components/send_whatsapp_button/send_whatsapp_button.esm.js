@@ -1,7 +1,7 @@
-import {useService} from "@web/core/utils/hooks";
-import {_t} from "@web/core/l10n/translation";
-import {user} from "@web/core/user";
 import {Component, status} from "@odoo/owl";
+import {_t} from "@web/core/l10n/translation";
+import {useService} from "@web/core/utils/hooks";
+import {user} from "@web/core/user";
 
 export class SendWhatsappButton extends Component {
     setup() {

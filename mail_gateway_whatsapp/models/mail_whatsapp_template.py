@@ -4,11 +4,10 @@ import re
 from urllib.parse import urlparse
 
 import requests
-from werkzeug.urls import url_join
 
 from odoo import Command, api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import ustr
+from odoo.tools.urls import urljoin
 
 from odoo.addons.phone_validation.tools import phone_validation
 
@@ -85,13 +84,10 @@ class MailWhatsAppTemplate(models.Model):
         "mail.whatsapp.template.button", "template_id", string="Buttons"
     )
 
-    _sql_constraints = [
-        (
-            "unique_name_gateway_id",
-            "unique(name, language, gateway_id)",
-            "Duplicate name is not allowed for Gateway.",
-        )
-    ]
+    _unique_name_gateway_id = models.Constraint(
+        "unique(name, language, gateway_id)",
+        "Duplicate name is not allowed for Gateway.",
+    )
 
     @api.constrains("button_ids")
     def _check_buttons(self):
@@ -220,7 +216,7 @@ class MailWhatsAppTemplate(models.Model):
     def button_export_template(self):
         self.ensure_one()
         gateway = self.gateway_id
-        template_url = url_join(
+        template_url = urljoin(
             BASE_URL,
             f"v{gateway.whatsapp_version}/{gateway.whatsapp_account_id}/message_templates",
         )
@@ -242,10 +238,10 @@ class MailWhatsAppTemplate(models.Model):
                 }
             )
         except requests.exceptions.HTTPError as ex:
-            msj = f"{ustr(ex)} \n{ex.response.text}"
+            msj = f"{ex} \n{ex.response.text}"
             raise UserError(msj) from ex
         except Exception as err:
-            raise UserError(ustr(err)) from err
+            raise UserError(str(err)) from err
 
     def _prepare_values_to_export(self):
         components = self._prepare_components_to_export()
@@ -295,7 +291,7 @@ class MailWhatsAppTemplate(models.Model):
     def button_sync_template(self):
         self.ensure_one()
         gateway = self.gateway_id
-        template_url = url_join(
+        template_url = urljoin(
             BASE_URL,
             f"{self.template_uid}",
         )
@@ -479,13 +475,10 @@ class MailWhatsAppTemplateVariable(models.Model):
     sample_value = fields.Char(default="Sample Value", required=True)
     button_id = fields.Many2one("mail.whatsapp.template.button", ondelete="cascade")
 
-    _sql_constraints = [
-        (
-            "name_type_template_unique",
-            "UNIQUE(name, line_type, template_id,button_id)",
-            "Variable names must be unique by template",
-        ),
-    ]
+    _name_type_template_unique = models.Constraint(
+        "UNIQUE(name, line_type, template_id,button_id)",
+        "Variable names must be unique by template",
+    )
 
     @api.constrains("field_name")
     def _check_field_name(self):
@@ -642,13 +635,10 @@ class MailWhatsAppTemplateButton(models.Model):
         copy=True,
     )
 
-    _sql_constraints = [
-        (
-            "unique_name_per_template",
-            "UNIQUE(name, template_id)",
-            "Button name must be unique by template",
-        )
-    ]
+    _unique_name_per_template = models.Constraint(
+        "UNIQUE(name, template_id)",
+        "Button name must be unique by template",
+    )
 
     @api.constrains("button_type", "url_type", "website_url")
     def _validate_website_url(self):

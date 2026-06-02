@@ -98,7 +98,6 @@
                                 options="{'no_create': True}"
                                 groups="base.group_multi_company"
                             />
-                            <field name="is_supported" invisible="1" />
                         </group>
                     </group>
                     <notebook>
