@@ -10,7 +10,7 @@ from markupsafe import Markup
 
 from odoo import Command
 from odoo.exceptions import UserError
-from odoo.tests import Form, RecordCapturer
+from odoo.tests import Form, HttpCase, RecordCapturer
 from odoo.tests.common import tagged
 from odoo.tools import mute_logger
 
@@ -18,7 +18,7 @@ from odoo.addons.mail_gateway.tests.common import MailGatewayTestCase
 
 
 @tagged("-at_install", "post_install")
-class TestMailGatewayWhatsApp(MailGatewayTestCase):
+class TestMailGatewayWhatsApp(MailGatewayTestCase, HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -45,7 +45,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             }
         )
         cls.partner = cls.env["res.partner"].create(
-            {"name": "Partner", "mobile": "+34 600 000 000"}
+            {"name": "Partner", "phone": "+34 600 000 000"}
         )
         cls.password = "my_new_password"
         cls.message_01 = {
@@ -244,7 +244,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": partner._name,
             "default_res_id": partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -360,7 +360,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -387,7 +387,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -414,7 +414,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": self.partner._name,
             "default_res_id": self.partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -474,7 +474,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
             {
                 "res_model": self.partner._name,
                 "res_id": self.partner.id,
-                "number_field_name": "mobile",
+                "number_field_name": "phone",
                 "gateway_id": self.gateway.id,
             }
         )
@@ -498,7 +498,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": self.partner._name,
             "default_res_id": self.partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -537,12 +537,12 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
                 "name": "{{2}}",
                 "line_type": "body",
                 "template_id": tmpl_with_vars.id,
-                "field_name": "mobile",
+                "field_name": "phone",
             }
         )
         self.env["mail.whatsapp.template.button"].create(
             {
-                "name": "mobile",
+                "name": "phone",
                 "button_type": "phone_number",
                 "template_id": tmpl_with_vars.id,
                 "call_number": "+34666555444",
@@ -579,7 +579,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
         ctx = {
             "default_res_model": self.partner._name,
             "default_res_id": self.partner.id,
-            "default_number_field_name": "mobile",
+            "default_number_field_name": "phone",
             "default_composition_mode": "comment",
             "default_gateway_id": self.gateway.id,
         }
@@ -610,7 +610,7 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase):
                 "name": "{{2}}",
                 "line_type": "body",
                 "template_id": tmpl_with_vars_dynamic.id,
-                "field_name": "mobile",
+                "field_name": "phone",
             }
         )
         self.env["mail.whatsapp.template.button"].create(

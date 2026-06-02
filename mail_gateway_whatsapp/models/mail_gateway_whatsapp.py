@@ -157,7 +157,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
         if message.get("location"):
             body += (
                 '<a target="_blank" href="https://www.google.com/'
-                f'maps/search/?api=1&query={message["location"]["latitude"]},'
+                f"maps/search/?api=1&query={message['location']['latitude']},"
                 f'{message["location"]["longitude"]}">Location</a>'
             )
         if message.get("contacts"):
