@@ -15,6 +15,5 @@ class ResPartner(models.Model):
         """This method returns the fields to use to find the number to use to
         send an SMS on a record."""
         result = set(super()._phone_get_number_fields())
-        result.add("mobile")
         result.add("phone")
         return list(result)
