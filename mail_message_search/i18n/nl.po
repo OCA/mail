@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_message_search
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: mail_message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: mail_message_search
+#: model:ir.model,name:mail_message_search.model_mail_thread
+msgid "Email Thread"
+msgstr ""
+
+#. module: mail_message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread__id
+msgid "ID"
+msgstr ""
+
+#. module: mail_message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_calendar_event__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_discuss_channel__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_ir_actions_server__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_ir_cron__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_blacklist__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_blacklist__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_cc__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_main_attachment__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mail_tracking_duration_mixin__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_res_partner__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_res_users__message_search
+msgid "Message Search"
+msgstr ""
+
+#. module: mail_message_search
+#: model:ir.model.fields,help:mail_message_search.field_calendar_event__message_search
+#: model:ir.model.fields,help:mail_message_search.field_discuss_channel__message_search
+#: model:ir.model.fields,help:mail_message_search.field_ir_actions_server__message_search
+#: model:ir.model.fields,help:mail_message_search.field_ir_cron__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_blacklist__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_thread__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_thread_blacklist__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_thread_cc__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_thread_main_attachment__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mail_tracking_duration_mixin__message_search
+#: model:ir.model.fields,help:mail_message_search.field_res_partner__message_search
+#: model:ir.model.fields,help:mail_message_search.field_res_users__message_search
+msgid "Message search, to be used only in searches"
+msgstr ""
