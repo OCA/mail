@@ -50,7 +50,7 @@
         <field name="model">mail.activity</field>
         <field name="inherit_id" ref="mail.mail_activity_view_search" />
         <field name="arch" type="xml">
-            <xpath expr='//field[@name="res_model"]' position='before'>
+            <xpath expr='//field[@name="activity_type_id"]' position='after'>
                 <field name="partner_id" />
                 <field name="commercial_partner_id" />
             </xpath>

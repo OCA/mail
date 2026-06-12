@@ -1,28 +1,28 @@
 # Copyright 2018 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo_test_helper import FakeModelLoader
-
 from odoo import Command
-from odoo.tests.common import TransactionCase
+from odoo.orm.model_classes import add_to_registry
+
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestMailActivityPartner(TransactionCase):
+class TestMailActivityPartner(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.addClassCleanup(cls.loader.restore_registry)
-        cls.loader.backup_registry()
 
-        # Imported Test model must be done after the backup_registry
         # pylint: disable=import-outside-toplevel
         from .models import FakePartnerSubCustom, FakePartnerSubDefault
 
-        cls.loader.update_registry((FakePartnerSubDefault, FakePartnerSubCustom))
+        test_models = [FakePartnerSubDefault._name, FakePartnerSubCustom._name]
+        for model_class in (FakePartnerSubDefault, FakePartnerSubCustom):
+            add_to_registry(cls.registry, model_class)
+        cls.registry._setup_models__(cls.env.cr, test_models)
+        cls.registry.init_models(cls.env.cr, test_models, {"models_to_check": True})
+        for model_name in test_models:
+            cls.addClassCleanup(cls.registry.__delitem__, model_name)
 
-        # disable tracking test suite wise
-        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.user_model = cls.env["res.users"].with_context(no_reset_password=True)
 
         cls.user_admin = cls.env.ref("base.user_root")
@@ -33,7 +33,7 @@ class TestMailActivityPartner(TransactionCase):
                 "name": "Employee",
                 "login": "csu",
                 "email": "crmuser@yourcompany.com",
-                "groups_id": [
+                "group_ids": [
                     Command.set(
                         [
                             cls.env.ref("base.group_user").id,
@@ -65,7 +65,7 @@ class TestMailActivityPartner(TransactionCase):
             }
         )
 
-        cls.partner_01 = cls.env.ref("base.res_partner_1")
+        cls.partner_01 = cls.env["res.partner"].create({"name": "Partner 01"})
 
         cls.homer = cls.env["res.partner"].create(
             {
