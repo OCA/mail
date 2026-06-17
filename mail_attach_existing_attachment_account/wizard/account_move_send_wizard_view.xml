@@ -10,7 +10,6 @@
         <field name="inherit_id" ref="account.account_move_send_wizard_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='mail_attachments_widget']" position="after">
-                <field name="can_attach_attachment" invisible="1" />
                 <field
                     name="object_attachment_ids"
                     widget="many2many_checkboxes"
