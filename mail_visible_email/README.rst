@@ -16,23 +16,26 @@ Make emails for to, cc and bcc visible
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fsocial-lightgray.png?logo=github
-    :target: https://github.com/OCA/social/tree/18.0/mail_visible_email
-    :alt: OCA/social
+.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
+    :target: https://github.com/OCA/mail/tree/18.0/mail_visible_email
+    :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/social-18-0/social-18-0-mail_visible_email
+    :target: https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_visible_email
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/social&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-In Odoo mails it is often unclear who where the other recipients of
-mails received, or what the actual mail addresses where of mails sent.
+In Odoo mails it is often unclear who were the other recipients of mails
+received, or what the actual mail addresses were of mails sent.
 
-This module adds the following fields to mail_message: - email_to -
-email_cc - email_bcc
+This module adds the following fields to mail_message:
+
+-  email_to
+-  email_cc
+-  email_bcc
 
 For both incoming and outgoing mails, the actual to and cc headers from
 the mails will be stored here. For outgoing mails also the bcc header.
@@ -45,14 +48,6 @@ mail, we will have the address in the Delivered-To header.
 Note that we will only store the unadorned email (without partner name),
 as this will be the relevant part, and the partner names are visible on
 other fields.
-
-For technical reasons this module depends on mail_composer_cc_bcc:
-
--  We need the email_bcc field on mail.mail;
--  The module mail_composer_bcc fundamentally changes the workings of
-   the \_send() method on mail.mail. In order not to have to support
-   both methods depending on whether mail_composer_bcc is installed or
-   not, it is easier to just make sure it is installed.
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -72,10 +67,10 @@ This module has no separate configuration options.
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/social/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/social/issues/new?body=module:%20mail_visible_email%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_visible_email%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -115,6 +110,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-NL66278| 
 
-This module is part of the `OCA/social <https://github.com/OCA/social/tree/18.0/mail_visible_email>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/18.0/mail_visible_email>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
