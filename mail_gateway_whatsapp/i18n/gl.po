@@ -19,9 +19,12 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid ""
-"<span>Define the values of the fields <b>Webhook Key</b> and <b>Whatsapp Security Key</b>.\n"
-"                            You should set some random value of your choice for this fields.\n"
-"                            Ensure that facebook will be able to comunicate with your server.</span>"
+"<span>Define the values of the fields <b>Webhook Key</b> and <b>Whatsapp "
+"Security Key</b>.\n"
+"                            You should set some random value of your choice "
+"for this fields.\n"
+"                            Ensure that facebook will be able to comunicate "
+"with your server.</span>"
 msgstr ""
 "<span>Define os valores dos campos <b>Clave do webhook</b> e <b>Clave de "
 "seguridade de WhatsApp</b>.\n"
@@ -118,6 +121,11 @@ msgstr "Árabe"
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__archived
 msgid "Archived"
 msgstr "Arquivado"
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_guest_manage
+msgid "Assign gateway guest to a partner"
+msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_attachment_count
@@ -272,8 +280,8 @@ msgstr "Copia a versión da API no campo <b>Versión de Whatsapp</b>."
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid ""
-"Copy the phone identification number to the field <b>Whastapp From phone</b>"
-" field."
+"Copy the phone identification number to the field <b>Whastapp From phone</b> "
+"field."
 msgstr ""
 "Copia o número de identificación do teléfono no campo <b>Whatsapp dende "
 "Teléfono</b>."
@@ -425,8 +433,7 @@ msgstr "Campo"
 #. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
-msgid ""
-"Field template variables %(variables)s must be associated with a field."
+msgid "Field template variables %(variables)s must be associated with a field."
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -571,16 +578,19 @@ msgstr "Se está marcado, algúns mensaxes tiveron erros ao entregarse."
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid ""
-"If no error is raised, refresh this gateway data, and you should see that it is integrated.\n"
-"                                You should be able to receive and send messages.\n"
-"                                If an error is raised, check that the fields are filled properly and that facebook server is able to access your server."
+"If no error is raised, refresh this gateway data, and you should see that it "
+"is integrated.\n"
+"                                You should be able to receive and send "
+"messages.\n"
+"                                If an error is raised, check that the fields "
+"are filled properly and that facebook server is able to access your server."
 msgstr ""
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_sanitized_blacklisted
 msgid ""
-"If the sanitized phone number is on the blacklist, the contact won't receive"
-" mass mailing sms anymore, from any list"
+"If the sanitized phone number is on the blacklist, the contact won't receive "
+"mass mailing sms anymore, from any list"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -828,15 +838,15 @@ msgid ""
 "On Facebook Develpment, return to the app menu and go to <b>Whatsapp / "
 "Configuration</b>."
 msgstr ""
-"En Desenvolvedores de Facebook, volve ao menú da aplicación e vai a <b>"
-"Whatsapp / Configuración</b>."
+"En Desenvolvedores de Facebook, volve ao menú da aplicación e vai a "
+"<b>Whatsapp / Configuración</b>."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid ""
 "On the wizard, fill the URL field with <b>Webhook URL</b> field of the "
-"gateway. For the verification identifier, use the <b>Whatsapp Security "
-"Key</b> field."
+"gateway. For the verification identifier, use the <b>Whatsapp Security Key</"
+"b> field."
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -1040,8 +1050,8 @@ msgstr "Amosar Chat"
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid ""
-"Show the secret key of the application and copy it to the <b>Webhook "
-"secret</b> field."
+"Show the secret key of the application and copy it to the <b>Webhook secret</"
+"b> field."
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -1137,8 +1147,8 @@ msgstr "UID do modelo"
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid ""
-"Template variable should be in format {{number}}. Cannot parse "
-"'%(placeholder)s'"
+"Template variable should be in format {{number}}. Cannot parse '%"
+"(placeholder)s'"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -1190,11 +1200,14 @@ msgid ""
 "- 'Update a Record': update the values of a record\n"
 "- 'Create Activity': create an activity (Discuss)\n"
 "- 'Send Email': post a message, a note or send an email (Discuss)\n"
-"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': add or remove followers to a record (Discuss)\n"
+"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': "
+"add or remove followers to a record (Discuss)\n"
 "- 'Create Record': create a new record with new values\n"
 "- 'Execute Code': a block of Python code that will be executed\n"
-"- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
-"- 'Execute Existing Actions': define an action that triggers several other server actions\n"
+"- 'Send Webhook Notification': send a POST request to an external system, "
+"also known as a Webhook\n"
+"- 'Execute Existing Actions': define an action that triggers several other "
+"server actions\n"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -1254,8 +1267,8 @@ msgstr "Variables"
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid ""
-"Variables %(field_names)s do not seem to be valid field path for model "
-"%(model_name)s."
+"Variables %(field_names)s do not seem to be valid field path for model %"
+"(model_name)s."
 msgstr ""
 
 #. module: mail_gateway_whatsapp
