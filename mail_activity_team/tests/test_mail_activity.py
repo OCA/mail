@@ -2,6 +2,7 @@ from odoo import Command
 from odoo.tests import Form, users
 
 from odoo.addons.base.tests.common import BaseCommon
+from odoo.addons.mail.tools.discuss import Store
 
 
 class TestMailActivity(BaseCommon):
@@ -287,3 +288,75 @@ class TestMailActivity(BaseCommon):
         )
         self.assertFalse(activity.team_id)
         self.assertEqual(activity.user_id, self.user2)
+
+    def test_activity_format_includes_team_id(self):
+        """Store payload should include team_id relation and team name data."""
+        team = self.env["mail.activity.team"].create(
+            {
+                "name": "Store Team",
+                "res_model_ids": [Command.set([self.partner_ir_model.id])],
+                "member_ids": [Command.set([self.user.id])],
+            }
+        )
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "Check store serialization",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "user_id": self.user.id,
+                "team_id": team.id,
+            }
+        )
+
+        payload = activity.activity_format()
+        self.assertIn("mail.activity", payload)
+        self.assertTrue(payload["mail.activity"])
+        activity_data = next(
+            rec for rec in payload["mail.activity"] if rec["id"] == activity.id
+        )
+        self.assertIn("team_id", activity_data)
+        self.assertTrue(activity_data["team_id"])
+
+        self.assertIn("mail.activity.team", payload)
+        self.assertIn(
+            team.id,
+            [team_data["id"] for team_data in payload["mail.activity.team"]],
+        )
+        team_data = next(
+            rec for rec in payload["mail.activity.team"] if rec["id"] == team.id
+        )
+        self.assertEqual(team_data["name"], team.name)
+
+    def test_activity_format_with_no_team(self):
+        """Store payload should expose an empty team_id when no team is assigned."""
+        activity = self.env["mail.activity"].create(
+            {
+                "activity_type_id": self.activity1.id,
+                "note": "No team assigned",
+                "res_id": self.partner_client.id,
+                "res_model_id": self.partner_ir_model.id,
+                "user_id": self.user.id,
+                "team_id": False,
+            }
+        )
+
+        payload = activity.activity_format()
+        activity_data = next(
+            rec for rec in payload["mail.activity"] if rec["id"] == activity.id
+        )
+        self.assertIn("team_id", activity_data)
+        self.assertFalse(activity_data["team_id"])
+
+    def test_to_store_defaults_contains_team_id_name(self):
+        defaults = self.env["mail.activity"]._to_store_defaults(target=self.env.user)
+        team_entry = next(
+            (
+                item
+                for item in defaults
+                if isinstance(item, Store.One) and item.field_name == "team_id"
+            ),
+            None,
+        )
+        self.assertTrue(team_entry, "team_id should be part of store defaults")
+        self.assertEqual(team_entry.fields, "name")

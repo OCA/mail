@@ -84,35 +84,35 @@ Authors
 Contributors
 ------------
 
-- `ForgeFlow <https://www.forgeflow.com>`__:
+-  `ForgeFlow <https://www.forgeflow.com>`__:
 
-  - Jordi Ballester Alomar (jordi.ballester@forgeflow.com)
-  - Miquel Raïch (miquel.raich@forgeflow.com)
-  - Bernat Puig Font (bernat.puig@forgeflow.com)
+   -  Jordi Ballester Alomar (jordi.ballester@forgeflow.com)
+   -  Miquel Raïch (miquel.raich@forgeflow.com)
+   -  Bernat Puig Font (bernat.puig@forgeflow.com)
 
-- Pedro Gonzalez (pedro.gonzalez@pesol.es)
-- `Tecnativa <https://www.tecnativa.com>`__:
+-  Pedro Gonzalez (pedro.gonzalez@pesol.es)
+-  `Tecnativa <https://www.tecnativa.com>`__:
 
-  - David Vidal
+   -  David Vidal
 
-- `Dynapps <https://www.dynapps.eu>`__:
+-  `Dynapps <https://www.dynapps.eu>`__:
 
-  - Raf Ven
+   -  Raf Ven
 
-- [Trobz] (https://trobz.com):
+-  [Trobz] (https://trobz.com):
 
-  - Son Ho sonhd@trobz.com
+   -  Son Ho sonhd@trobz.com
 
-- [Camptocamp] (https://camptocamp.com):
+-  [Camptocamp] (https://camptocamp.com):
 
-  - Vincent Van Rossem vincent.vanrossem@camptocamp.com
-  - Italo Lopes italo.lopes@camptocamp.com
+   -  Vincent Van Rossem vincent.vanrossem@camptocamp.com
+   -  Italo Lopes italo.lopes@camptocamp.com
 
-- `CorporateHub <https://corporatehub.eu/>`__
+-  `CorporateHub <https://corporatehub.eu/>`__
 
-  - Alexey Pelykh alexey.pelykh@corphub.eu
+   -  Alexey Pelykh alexey.pelykh@corphub.eu
 
-- Stefan Rijnhart (stefan@opener.amsterdam)
+-  Stefan Rijnhart (stefan@opener.amsterdam)
 
 Other credits
 -------------
