@@ -4,6 +4,8 @@
 from odoo import SUPERUSER_ID, api, fields, models
 from odoo.exceptions import ValidationError
 
+from odoo.addons.mail.tools.discuss import Store
+
 
 class MailActivity(models.Model):
     _inherit = "mail.activity"
@@ -120,6 +122,12 @@ class MailActivity(models.Model):
                         team_name=activity.team_id.name,
                     )
                 )
+
+    def _to_store_defaults(self, target):
+        return [
+            *super()._to_store_defaults(target),
+            Store.One("team_id", "name"),
+        ]
 
     @api.onchange("activity_type_id")
     def _onchange_activity_type_id(self):
