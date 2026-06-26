@@ -7,6 +7,7 @@
             <field name="responsible_id" position="after">
                 <field
                     name="activity_team_user_id"
+                    widget="many2one_avatar_user"
                     invisible="not activity_team_required"
                     options="{'no_create': True}"
                     domain="[('activity_team_ids', '=', activity_team_id)]"
