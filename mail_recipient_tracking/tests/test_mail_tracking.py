@@ -41,6 +41,12 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
 
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
+        # Keep a dedicated company alias domain. Otherwise, temporary alias domains
+        # created by tests may become referenced by aliases created by other modules.
+        self.alias_domain_dummy = self.env["mail.alias.domain"].create(
+            {"name": "mailtracking-dummy-domain.test"}
+        )
+        self.env.company.alias_domain_id = self.alias_domain_dummy
         self.sender = self.env["res.partner"].create(
             {"name": "Test sender", "email": "sender@example.com"}
         )
