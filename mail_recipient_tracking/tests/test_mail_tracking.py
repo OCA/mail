@@ -385,6 +385,9 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             "cc": "copy@example.com",
             "to": "recipient@example.com",
             "message_id": "test-message-id",
+            # Optional mail headers used by mail.thread overrides (e.g. mass_mailing).
+            "references": "",
+            "in_reply_to": "",
         }
         with patch.object(
             CoreMailThread,
