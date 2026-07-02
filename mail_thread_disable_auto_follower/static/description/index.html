@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Disable Mail Thread Auto-follower</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container my-5">
+        <!-- Header -->
+        <div class="row text-center mb-4">
+            <div class="col-12">
+                <h1 class="display-4 font-weight-bold">Disable Mail Thread Auto-Follower</h1>
+                <p class="lead text-muted">Selectively disable automatic follower subscriptions on specific Odoo
+                    models.</p>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h2 class="card-title h4 font-weight-bold">Overview</h2>
+                        <p class="card-text">
+                            Odoo automatically adds record creators and message senders as followers of document
+                            threads. While useful in many scenarios, this can lead to cluttered chatter mailboxes
+                            and unwanted email notifications on high-volume models like Sales Orders, Purchase
+                            Orders, or Contacts.
+                        </p>
+                        <p class="card-text">
+                            This module provides a centralized configuration page (accessible only in Developer
+                            Mode) where administrators can choose which models should skip Odoo's auto-follower
+                            subscription logic.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <hr class="my-4">
+        <div class="row text-center text-muted">
+            <div class="col-12">
+                <p>Developed for Odoo 18. Community Association (OCA) standards compliant.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
