@@ -11,7 +11,6 @@ class MailMessageCustomSubject(models.Model):
     name = fields.Char(string="Template Name")
     model_id = fields.Many2one(
         comodel_name="ir.model",
-        string="Model",
         required=True,
         help="Model where this template applies",
         ondelete="cascade",

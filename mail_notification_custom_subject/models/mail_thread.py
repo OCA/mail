@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import logging
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
@@ -13,23 +13,8 @@ _logger = logging.getLogger(__name__)
 class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
-    @api.returns("mail.message", lambda value: value.id)
     def message_post(
-        self,
-        *,
-        body="",
-        subject=None,
-        message_type="notification",
-        email_from=None,
-        author_id=None,
-        parent_id=False,
-        subtype_xmlid=None,
-        subtype_id=False,
-        partner_ids=None,
-        attachments=None,
-        attachment_ids=None,
-        body_is_html=False,
-        **kwargs,
+        self, *args, subject=None, subtype_xmlid=None, subtype_id=False, **kwargs
     ):
         if subtype_xmlid:
             subtype_id = self.env["ir.model.data"]._xmlid_to_res_id(
@@ -54,14 +39,7 @@ class MailThread(models.AbstractModel):
                 self.env["mail.message.custom.subject"].sudo().search(domain)
             )
             if not subject:
-                record_name = (
-                    self.env["mail.message"]
-                    .with_context(
-                        default_model=self._name,
-                        default_res_id=self.id,
-                    )
-                    ._get_record_name({})
-                )
+                record_name = self.message_ids[:1].record_name
                 subject = f"Re: {record_name}"
             for template in custom_subjects:
                 try:
@@ -98,17 +76,9 @@ class MailThread(models.AbstractModel):
                         f"message custom subject {template.name}"
                     )
         return super().message_post(
-            body=body,
+            *args,
             subject=subject,
-            message_type=message_type,
-            email_from=email_from,
-            author_id=author_id,
-            parent_id=parent_id,
             subtype_xmlid=subtype_xmlid,
             subtype_id=subtype_id,
-            partner_ids=partner_ids,
-            attachments=attachments,
-            attachment_ids=attachment_ids,
-            body_is_html=body_is_html,
             **kwargs,
         )
