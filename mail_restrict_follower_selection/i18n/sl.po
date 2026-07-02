@@ -26,8 +26,9 @@ msgid "Configure the restriction on followers"
 msgstr "Nastavitev omejitev za sledilce"
 
 #. module: mail_restrict_follower_selection
-#: model:ir.model,name:mail_restrict_follower_selection.model_mail_followers
-msgid "Document Followers"
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_followers_edit__display_name
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread__display_name
+msgid "Display Name"
 msgstr ""
 
 #. module: mail_restrict_follower_selection
@@ -47,15 +48,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_account_tax__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_calendar_event__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_discuss_channel__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_ir_actions_server__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_ir_cron__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_blacklist__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_blacklist__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_cc__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_main_attachment__message_partner_ids
-#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_phone__message_partner_ids
-#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mailing_contact__message_partner_ids
-#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mailing_mailing__message_partner_ids
-#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_phone_blacklist__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_tracking_duration_mixin__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_category__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_pricelist__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_product__message_partner_ids
@@ -68,6 +68,15 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: mail_restrict_follower_selection
-#: model:ir.model,name:mail_restrict_follower_selection.model_mail_wizard_invite
-msgid "Invite wizard"
-msgstr "Čarovnik za vabila"
+#: model:ir.model,name:mail_restrict_follower_selection.model_mail_followers_edit
+msgid "Followers edit wizard"
+msgstr ""
+
+#. module: mail_restrict_follower_selection
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_followers_edit__id
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread__id
+msgid "ID"
+msgstr ""
+
+#~ msgid "Invite wizard"
+#~ msgstr "Čarovnik za vabila"
