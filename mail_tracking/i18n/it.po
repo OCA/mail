@@ -71,12 +71,6 @@ msgstr ""
 "Destinatari aggiuntivi che ricevono una \"copia conoscenza\" dell'e-mail"
 
 #. module: mail_tracking
-#. odoo-python
-#: code:addons/mail_tracking/models/mail_thread.py:0
-msgid "Anon. To"
-msgstr "Anonimo a"
-
-#. module: mail_tracking
 #. odoo-javascript
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Anonymous Recipient"
@@ -104,8 +98,6 @@ msgstr "Rimbalzato"
 
 #. module: mail_tracking
 #. odoo-javascript
-#. odoo-python
-#: code:addons/mail_tracking/models/mail_thread.py:0
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_message__email_cc
 msgid "Cc"
@@ -208,8 +200,19 @@ msgid "Delivered Status Right Checkmark"
 msgstr "Spunta destra stato consegna"
 
 #. module: mail_tracking
+#: model:ir.model.fields,field_description:mail_tracking.field_ir_mail_server__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias_domain__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_bounced_mixin__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__display_name
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__display_name
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_res_company__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__display_name
+#: model:ir.model.fields,field_description:mail_tracking.field_res_users__display_name
 msgid "Display Name"
 msgstr "Nome visualizzato"
 
@@ -251,11 +254,6 @@ msgstr "Discussione e-mail"
 #: model_terms:ir.ui.view,arch_db:mail_tracking.view_res_partner_filter
 msgid "Email bounced"
 msgstr "Email rimbalzata"
-
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_resend_message
-msgid "Email resend wizard"
-msgstr "Procedura reinvio email"
 
 #. module: mail_tracking
 #. odoo-python
@@ -319,15 +317,14 @@ msgstr "Fallita"
 #: model:ir.model.fields,field_description:mail_tracking.field_account_tax__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_calendar_event__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_discuss_channel__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_ir_actions_server__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_ir_cron__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_blacklist__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_blacklist__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_cc__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_main_attachment__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_phone__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mailing_contact__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mailing_mailing__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_phone_blacklist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_duration_mixin__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_product_category__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_product_pricelist__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_product_product__failed_message_ids
@@ -355,6 +352,7 @@ msgstr "Messaggi falliti"
 #. module: mail_tracking
 #. odoo-python
 #: code:addons/mail_tracking/models/mail_thread.py:0
+#: code:addons/mail_tracking/tests/test_mail_tracking.py:0
 msgid "Failed sent messages"
 msgstr "Messaggi inviati falliti"
 
@@ -371,19 +369,24 @@ msgid "Go to message"
 msgstr "Vai al messaggio"
 
 #. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-msgid "Group By"
-msgstr "Raggruppa per"
-
-#. module: mail_tracking
 #: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__hard_bounce
 msgid "Hard bounce"
 msgstr "Rimbalzo forzato"
 
 #. module: mail_tracking
+#: model:ir.model.fields,field_description:mail_tracking.field_ir_mail_server__id
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias__id
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias_domain__id
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_bounced_mixin__id
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__id
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__id
+#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__id
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__id
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__id
+#: model:ir.model.fields,field_description:mail_tracking.field_res_company__id
+#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__id
+#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__id
+#: model:ir.model.fields,field_description:mail_tracking.field_res_users__id
 msgid "ID"
 msgstr "ID"
 
@@ -858,6 +861,15 @@ msgstr "In attesa"
 #: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Waiting Status"
 msgstr "Stato attesa"
+
+#~ msgid "Anon. To"
+#~ msgstr "Anonimo a"
+
+#~ msgid "Email resend wizard"
+#~ msgstr "Procedura reinvio email"
+
+#~ msgid "Group By"
+#~ msgstr "Raggruppa per"
 
 #~ msgid "%s failed messages found"
 #~ msgstr "Trovati %s messaggi falliti"
