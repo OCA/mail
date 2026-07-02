@@ -31,7 +31,7 @@
         </field>
     </record>
     <record model="ir.ui.view" id="mail_notification_custom_subject_tree">
-        <field name="name">mail.message.custom.subject.tree</field>
+        <field name="name">mail.message.custom.subject.list</field>
         <field name="model">mail.message.custom.subject</field>
         <field name="arch" type="xml">
             <list>
