@@ -1,6 +1,4 @@
-/** @odoo-module */
-
-import {Chatter} from "@mail/core/web/chatter";
+import {Chatter} from "@mail/chatter/web_portal/chatter";
 import {browser} from "@web/core/browser/browser";
 import {patch} from "@web/core/utils/patch";
 import {useEffect} from "@odoo/owl";

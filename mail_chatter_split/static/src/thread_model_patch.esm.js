@@ -1,23 +1,15 @@
-/** @odoo-module */
-
-import {Record} from "@mail/core/common/record";
 import {Thread} from "@mail/core/common/thread_model";
+import {fields} from "@mail/core/common/record";
 
 import {patch} from "@web/core/utils/patch";
 
 patch(Thread.prototype, {
-    update(data) {
-        super.update(data);
-        if (this.chatterViewMode === undefined) {
-            this.chatterViewMode = "all";
-        }
+    setup() {
+        super.setup();
+        this.chatterViewMode = fields.Attr("all");
     },
-});
 
-Thread.prototype.chatterViewMode = Record.attr("all");
-
-Object.defineProperty(Thread.prototype, "displayedMessages", {
-    get() {
+    get displayedMessages() {
         const messages = this.nonEmptyMessages;
         if (!this.chatterViewMode || this.chatterViewMode === "all") {
             return messages;
@@ -33,51 +25,54 @@ Object.defineProperty(Thread.prototype, "displayedMessages", {
         }
         return messages;
     },
-    configurable: true,
+
+    /**
+     * Check if a message is a user-generated message
+     * @param {Object} msg
+     * @returns {Boolean}
+     */
+    _isUserMessage(msg) {
+        const userTypes = ["comment", "email", "email_outgoing"];
+        if (userTypes.includes(msg.message_type)) {
+            return true;
+        }
+        if (
+            ["auto_comment", "user_notification"].includes(msg.message_type) &&
+            !msg.isBodyEmpty
+        ) {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Check if a message is a system-generated log
+     * @param {Object} msg
+     * @returns {Boolean}
+     */
+    _isLogMessage(msg) {
+        if (msg.message_type === "notification") {
+            return true;
+        }
+        if (msg.trackingValues && msg.trackingValues.length > 0) {
+            return true;
+        }
+        if (msg.isBodyEmpty && msg.subtype_id?.description) {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Check if a message is an activity
+     * @param {Object} msg
+     * @returns {Boolean}
+     */
+    _isActivity(msg) {
+        return (
+            msg.message_type === "user_notification" ||
+            (msg.subtype_id?.description &&
+                msg.subtype_id.description.includes("Activity"))
+        );
+    },
 });
-
-/**
- * Check if a message is a user-generated message
- * @param {Object} msg
- * @returns {Boolean}
- */
-Thread.prototype._isUserMessage = function (msg) {
-    const userTypes = ["comment", "email", "email_outgoing"];
-    if (userTypes.includes(msg.type)) {
-        return true;
-    }
-    if (["auto_comment", "user_notification"].includes(msg.type) && !msg.isBodyEmpty) {
-        return true;
-    }
-    return false;
-};
-
-/**
- * Check if a message is a system-generated log
- * @param {Object} msg
- * @returns {Boolean}
- */
-Thread.prototype._isLogMessage = function (msg) {
-    if (msg.type === "notification") {
-        return true;
-    }
-    if (msg.trackingValues && msg.trackingValues.length > 0) {
-        return true;
-    }
-    if (msg.isBodyEmpty && msg.subtype_description) {
-        return true;
-    }
-    return false;
-};
-
-/**
- * Check if a message is an activity
- * @param {Object} msg
- * @returns {Boolean}
- */
-Thread.prototype._isActivity = function (msg) {
-    return (
-        msg.type === "user_notification" ||
-        (msg.subtype_description && msg.subtype_description.includes("Activity"))
-    );
-};

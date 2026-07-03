@@ -2,7 +2,7 @@
 {
     "name": "Mail Chatter Split",
     "summary": "Separate user messages, activities and automatic logs in the chatter",
-    "version": "17.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
     "author": "Odoo Community Association (OCA)",
@@ -17,7 +17,6 @@
             "mail_chatter_split/static/src/chatter.scss",
             "mail_chatter_split/static/src/thread_model_patch.esm.js",
             "mail_chatter_split/static/src/thread_patch.esm.js",
-            "mail_chatter_split/static/src/thread_patch.xml",
         ],
         "web.assets_web_dark": [
             "mail_chatter_split/static/src/chatter.dark.scss",
