@@ -2,10 +2,7 @@
 <templates xml:space="preserve">
     <t t-name="mail.Chatter" t-inherit="mail.Chatter" t-inherit-mode="extension">
         <xpath expr="//div[hasclass('o-mail-Chatter-content')]" position="before">
-            <div
-                t-if="props.hasMessageList and state.thread"
-                class="o-mail-ChatterSplit-tabs d-flex px-3 py-2"
-            >
+            <div t-if="state.thread" class="o-mail-ChatterSplit-tabs d-flex px-3 py-2">
                 <div
                     class="btn-group btn-group-sm"
                     role="group"
