@@ -475,3 +475,28 @@ class TestMailgun(BaseCommon):
         mock_request.get.return_value.json.return_value = {}
         with self.assertRaises(UserError):
             self.tracking_email.action_manual_check_mailgun()
+
+    @patch(f"{_packagepath}.wizards.res_config_settings.requests")
+    def test_register_webhooks_error(self, mock_request):
+        mock_request.post.return_value.status_code = 500
+        mock_request.post.return_value.json.return_value = {"message": "fail"}
+        with self.assertRaises(UserError):
+            self.env["res.config.settings"].mail_tracking_mailgun_register_webhooks()
+
+    @patch(f"{_packagepath}.wizards.res_config_settings.requests")
+    def test_unregister_webhooks_error_on_get(self, mock_request):
+        mock_request.get.return_value.status_code = 500
+        mock_request.get.return_value.json.return_value = {"message": "fail"}
+        with self.assertRaises(UserError):
+            self.env["res.config.settings"].mail_tracking_mailgun_unregister_webhooks()
+
+    @patch(f"{_packagepath}.wizards.res_config_settings.requests")
+    def test_unregister_webhooks_error_on_delete(self, mock_request):
+        mock_request.get.return_value.status_code = 200
+        mock_request.get.return_value.json.return_value = {
+            "webhooks": {"clicked": {"url": "https://example.com/hook"}}
+        }
+        mock_request.delete.return_value.status_code = 500
+        mock_request.delete.return_value.json.return_value = {"message": "fail"}
+        with self.assertRaises(UserError):
+            self.env["res.config.settings"].mail_tracking_mailgun_unregister_webhooks()
