@@ -4,7 +4,7 @@
     "name": "Mail Activity Future Counter",
     "summary": """Add a badge counter on the bottom-right of the activity
     clock icon of the navigation bar, showing the count of future activities.""",
-    "version": "17.0.1.0.0",
+    "version": "19.0.1.0.0",
     "development_status": "Beta",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
