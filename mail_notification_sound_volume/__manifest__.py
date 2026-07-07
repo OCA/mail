@@ -3,7 +3,7 @@
 {
     "name": "Mail Notification Volume",
     "summary": "Allow users to configure notification sound volume",
-    "version": "17.0.1.0.0",
+    "version": "19.0.1.0.0",
     "development_status": "Beta",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
@@ -16,7 +16,7 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "mail_notification_sound_volume/static/src/user_settings_service_patch.esm.js",
+            "mail_notification_sound_volume/static/src/settings_model_patch.esm.js",
             "mail_notification_sound_volume/static/src/out_of_focus_service_patch.esm.js",
             "mail_notification_sound_volume/static/src/volume_slider_field.esm.js",
             "mail_notification_sound_volume/static/src/volume_slider_field.xml",

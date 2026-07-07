@@ -1,10 +1,9 @@
-/** @odoo-module */
-
 import {Component} from "@odoo/owl";
 import {_t} from "@web/core/l10n/translation";
 import {registry} from "@web/core/registry";
 import {standardFieldProps} from "@web/views/fields/standard_field_props";
 import {url} from "@web/core/utils/urls";
+import {useService} from "@web/core/utils/hooks";
 
 export class VolumeSliderField extends Component {
     static template = "mail_notification_sound_volume.VolumeSliderField";
@@ -14,6 +13,7 @@ export class VolumeSliderField extends Component {
 
     setup() {
         this.testAudio = null;
+        this.store = useService("mail.store");
     }
 
     get value() {
@@ -27,9 +27,8 @@ export class VolumeSliderField extends Component {
     onChange(ev) {
         const value = parseFloat(ev.target.value);
         this.props.record.update({[this.props.name]: value});
-        const userSettings = this.env.services["mail.user_settings"];
-        if (userSettings) {
-            userSettings.notificationVolume = value;
+        if (this.store.settings) {
+            this.store.settings.notification_volume = value;
         }
     }
 
