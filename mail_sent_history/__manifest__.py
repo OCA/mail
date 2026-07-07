@@ -3,7 +3,7 @@
 {
     "name": "Mail Sent History",
     "summary": "View and browse messages and notes you have sent",
-    "version": "17.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
