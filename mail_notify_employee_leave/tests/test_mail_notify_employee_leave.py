@@ -2,7 +2,7 @@
 #   (http://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from datetime import datetime, time
+from datetime import timedelta
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
@@ -13,12 +13,16 @@ class TestNotifyEmployeeLeave(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
 
+        internal_group = cls.env.ref("base.group_user")
+        partner_manager_group = cls.env.ref("base.group_partner_manager")
+
         cls.user = cls.env["res.users"].create(
             {
                 "name": "Test User",
                 "login": "test_user",
                 "email": "test@example.com",
                 "notification_type": "inbox",
+                "group_ids": [(4, internal_group.id), (4, partner_manager_group.id)],
             }
         )
 
@@ -28,6 +32,7 @@ class TestNotifyEmployeeLeave(TransactionCase):
                 "login": "absent_user",
                 "email": "absent@example.com",
                 "notification_type": "inbox",
+                "group_ids": [(4, internal_group.id)],
             }
         )
 
@@ -44,7 +49,7 @@ class TestNotifyEmployeeLeave(TransactionCase):
             {
                 "name": "Test Leave",
                 "leave_validation_type": "no_validation",
-                "requires_allocation": "no",
+                "requires_allocation": False,
             }
         )
 
@@ -60,12 +65,12 @@ class TestNotifyEmployeeLeave(TransactionCase):
                 {
                     "holiday_status_id": cls.leave_type.id,
                     "employee_id": cls.employee.id,
-                    "date_from": datetime.combine(today, time(0, 0, 0)),
-                    "date_to": datetime.combine(today, time(23, 59, 59)),
+                    "request_date_from": today - timedelta(days=1),
+                    "request_date_to": today + timedelta(days=1),
                 }
             )
         )
-        leave.sudo().action_validate()
+        leave.sudo()._action_validate()
         return leave
 
     def test_no_notify_when_user_not_absent(self):
