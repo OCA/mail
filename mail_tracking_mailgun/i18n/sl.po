@@ -9,15 +9,16 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-01 02:19+0000\n"
-"PO-Revision-Date: 2017-12-01 02:19+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"PO-Revision-Date: 2026-07-09 05:21+0000\n"
+"Last-Translator: Matjaz Mozetic <matjaz@luxim.si>\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
@@ -66,7 +67,7 @@ msgstr ""
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Nastavitve"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
@@ -76,7 +77,7 @@ msgstr ""
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Stik"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
@@ -152,7 +153,7 @@ msgstr ""
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_ir_mail_server
 msgid "Mail Server"
-msgstr ""
+msgstr "E-poštni strežnik"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_mail_tracking_email
@@ -230,7 +231,7 @@ msgstr ""
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "Other settings:"
-msgstr ""
+msgstr "Druge nastavitve:"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.mailgun_manual_check
@@ -314,7 +315,7 @@ msgstr ""
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "abcde0123456789abcde0123456789ab"
-msgstr ""
+msgstr "abcde0123456789abcde0123456789ab"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
@@ -324,31 +325,31 @@ msgstr ""
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "https://api.mailgun.net"
-msgstr ""
+msgstr "https://api.mailgun.net"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "https://odoo.example.com"
-msgstr ""
+msgstr "https://odoo.example.com"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "key-abcde0123456789abcde0123456789ab"
-msgstr ""
+msgstr "key-abcde0123456789abcde0123456789ab"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "odoo.example.com"
-msgstr ""
+msgstr "odoo.example.com"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "pubkey-abcde0123456789abcde0123456789ab"
-msgstr ""
+msgstr "pubkey-abcde0123456789abcde0123456789ab"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/models/res_partner.py:0
 #, python-format
 msgid "unknown"
-msgstr ""
+msgstr "neznano"
