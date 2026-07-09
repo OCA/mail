@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-01 02:19+0000\n"
-"PO-Revision-Date: 2026-07-09 05:21+0000\n"
+"PO-Revision-Date: 2026-07-09 06:25+0000\n"
 "Last-Translator: Matjaz Mozetic <matjaz@luxim.si>\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "Language: sl\n"
@@ -28,6 +28,8 @@ msgid ""
 "%s couldn't be verified. Either the request couln't be completed or the "
 "mailbox provider doesn't support email verification"
 msgstr ""
+"%s ni bilo mogoče preveriti. Zahteve ni bilo mogoče dokončati ali pa "
+"ponudnik poštnega predala ne podpira preverjanja e-pošte"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
@@ -37,6 +39,8 @@ msgid ""
 "%s failed the mailbox verification. Please check it in order to avoid "
 "sending issues"
 msgstr ""
+"%s ni prestal preverjanja poštnega predala. Preverite ga, da preprečite "
+"težave pri pošiljanju"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
@@ -46,23 +50,25 @@ msgid ""
 "%s is not a valid email address. Please check it in order to avoid sending "
 "issues"
 msgstr ""
+"%s ni veljaven e-poštni naslov. Preverite ga, da preprečite težave pri "
+"pošiljanju"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/models/mail_tracking_email.py:0
 #, python-format
 msgid "A Mailgun domain value is needed!"
-msgstr ""
+msgstr "Potrebna je vrednost domene Mailgun!"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.view_partner_form_mailgun
 msgid "Check Mailgun"
-msgstr ""
+msgstr "Preveri Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.view_partner_form_mailgun
 msgid "Check email validity"
-msgstr ""
+msgstr "Preveri veljavnost e-pošte"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_res_config_settings
@@ -72,7 +78,7 @@ msgstr "Nastavitve"
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "Connecting Odoo with"
-msgstr ""
+msgstr "Povezava Odoo z"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_res_partner
@@ -84,7 +90,7 @@ msgstr "Stik"
 #: code:addons/mail_tracking_mailgun/models/mail_tracking_email.py:0
 #, python-format
 msgid "Couldn't retrieve Mailgun information"
-msgstr ""
+msgstr "Podatkov Mailgun ni bilo mogoče pridobiti"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
@@ -95,30 +101,33 @@ msgid ""
 "Reason: %(reason)s\n"
 "Event: %(event_str)s"
 msgstr ""
+"E-pošta je bila odbita: %(email)s\n"
+"Razlog: %(reason)s\n"
+"Dogodek: %(event_str)s"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_enabled
 msgid "Enable mail tracking with Mailgun"
-msgstr ""
+msgstr "Omogoči sledenje e-pošti z Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_enabled
 msgid "Enable to enhance mail tracking with Mailgun"
-msgstr ""
+msgstr "Omogočite za izboljšano sledenje e-pošti z Mailgun"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/models/res_partner.py:0
 #, python-format
 msgid "Error %s trying to check mailof connection"
-msgstr ""
+msgstr "Napaka %s pri poskusu preverjanja povezave z e-pošto"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/models/mail_tracking_email.py:0
 #, python-format
 msgid "Event information not longer stored"
-msgstr ""
+msgstr "Informacije o dogodku niso več shranjene"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
@@ -127,21 +136,24 @@ msgid ""
 "unregister webhooks and register them again to get automatic updates about "
 "sent emails:"
 msgstr ""
+"Če spremenite nastavitve Mailgun, URL Odoo ali domeno za pošiljanje, "
+"odjavite spletne kljuke in jih znova registrirajte, da boste prejemali "
+"samodejne posodobitve o poslanih e-poštnih sporočilih:"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_validation_key
 msgid "Key used to validate emails."
-msgstr ""
+msgstr "Ključ za preverjanje e-poštnih naslovov."
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_webhooks_domain
 msgid "Leave empty to use the base Odoo URL."
-msgstr ""
+msgstr "Pustite prazno za uporabo osnovnega URL-ja Odoo."
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_domain
 msgid "Leave empty to use the catch-all domain."
-msgstr ""
+msgstr "Pustite prazno za uporabo domene za zajem vse pošte."
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_api_url
@@ -149,6 +161,8 @@ msgid ""
 "Leave this empty if your API endpoint is the default (https://api.mailgun."
 "net/)."
 msgstr ""
+"Pustite prazno, če je vaša končna točka API privzeta (https://"
+"api.mailgun.net/)."
 
 #. module: mail_tracking_mailgun
 #: model:ir.model,name:mail_tracking_mailgun.model_ir_mail_server
@@ -169,64 +183,64 @@ msgstr "Dogodek sledenja e-pošte"
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.view_partner_form_mailgun
 msgid "Mailgun"
-msgstr ""
+msgstr "Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "Mailgun &gt; Settings &gt; API keys"
-msgstr ""
+msgstr "Mailgun &gt; Nastavitve &gt; Ključi API"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_api_url
 msgid "Mailgun API endpoint"
-msgstr ""
+msgstr "Končna točka API Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_api_key
 msgid "Mailgun API key"
-msgstr ""
+msgstr "Ključ API Mailgun"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/models/res_partner.py:0
 #, python-format
 msgid "Mailgun Error. Mailbox verification value wasn't returned"
-msgstr ""
+msgstr "Napaka Mailgun. Vrednost preverjanja poštnega predala ni bila vrnjena"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_mail_tracking_event__mailgun_id
 msgid "Mailgun Event ID"
-msgstr ""
+msgstr "ID dogodka Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_domain
 msgid "Mailgun domain"
-msgstr ""
+msgstr "Domena Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.constraint,message:mail_tracking_mailgun.constraint_mail_tracking_event_mailgun_id_unique
 msgid "Mailgun event IDs must be unique!"
-msgstr ""
+msgstr "ID-ji dogodkov Mailgun morajo biti unikatni!"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_validation_key
 msgid "Mailgun validation key"
-msgstr ""
+msgstr "Ključ za preverjanje Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_webhook_signing_key
 msgid "Mailgun webhook signing key"
-msgstr ""
+msgstr "Podpisni ključ spletnih kljuk Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,field_description:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_webhooks_domain
 msgid "Mailgun webhooks domain"
-msgstr ""
+msgstr "Domena spletnih kljuk Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "Obtain keys in"
-msgstr ""
+msgstr "Pridobite ključe v"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
@@ -236,48 +250,48 @@ msgstr "Druge nastavitve:"
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.mailgun_manual_check
 msgid "Re-sync Mailgun"
-msgstr ""
+msgstr "Ponovno sinhroniziraj Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "Register Mailgun webhooks"
-msgstr ""
+msgstr "Registriraj spletne kljuke Mailgun"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/controllers/main.py:0
 #, python-format
 msgid "Request is too old"
-msgstr ""
+msgstr "Zahteva je prestara"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/controllers/main.py:0
 #, python-format
 msgid "Request was already processed"
-msgstr ""
+msgstr "Zahteva je bila že obdelana"
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_api_key
 msgid "Secret API key used to authenticate with Mailgun."
-msgstr ""
+msgstr "Skrivni ključ API za avtentikacijo z Mailgun."
 
 #. module: mail_tracking_mailgun
 #: model:ir.model.fields,help:mail_tracking_mailgun.field_res_config_settings__mail_tracking_mailgun_webhook_signing_key
 msgid "Secret key used to validate incoming webhooks payload."
-msgstr ""
+msgstr "Skrivni ključ za preverjanje vsebine dohodnih spletnih kljuk."
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.view_partner_form_mailgun
 msgid "Set Bounced"
-msgstr ""
+msgstr "Nastavi kot odbito"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/models/mail_tracking_email.py:0
 #, python-format
 msgid "There is no Mailgun API key!"
-msgstr ""
+msgstr "Ključ API Mailgun ni nastavljen!"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
@@ -285,23 +299,25 @@ msgid ""
 "This will unregister ALL webhooks from Mailgun, which can include webhooks "
 "for other apps."
 msgstr ""
+"S tem boste odjavili VSE spletne kljuke iz Mailgun, kar lahko vključuje tudi "
+"spletne kljuke za druge aplikacije."
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "Unregister Mailgun webhooks"
-msgstr ""
+msgstr "Odjavi spletne kljuke Mailgun"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.view_partner_form_mailgun
 msgid "Unset Bounced"
-msgstr ""
+msgstr "Odstrani oznako odbito"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
 #: code:addons/mail_tracking_mailgun/controllers/main.py:0
 #, python-format
 msgid "Wrong signature"
-msgstr ""
+msgstr "Napačen podpis"
 
 #. module: mail_tracking_mailgun
 #. odoo-python
@@ -311,6 +327,8 @@ msgid ""
 "You need to configure mailgun.validation_key in order to be able to check "
 "mails validity"
 msgstr ""
+"Za preverjanje veljavnosti e-pošte morate konfigurirati "
+"mailgun.validation_key"
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
@@ -320,7 +338,7 @@ msgstr "abcde0123456789abcde0123456789ab"
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
 msgid "enhances Odoo's mail tracking features."
-msgstr ""
+msgstr "izboljša funkcije sledenja e-pošti v Odoo."
 
 #. module: mail_tracking_mailgun
 #: model_terms:ir.ui.view,arch_db:mail_tracking_mailgun.res_config_settings_view_form
