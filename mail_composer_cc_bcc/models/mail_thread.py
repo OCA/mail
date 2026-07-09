@@ -3,7 +3,7 @@
 
 from odoo import models
 
-from .mail_mail import format_emails_str
+from .mail_mail import format_emails
 
 
 class MailThread(models.AbstractModel):
@@ -40,11 +40,11 @@ class MailThread(models.AbstractModel):
 
         partners_cc = context.get("partner_cc_ids", None)
         if partners_cc:
-            res["email_cc"] = format_emails_str(partners_cc)
+            res["email_cc"] = format_emails(partners_cc)
 
         partners_bcc = context.get("partner_bcc_ids", None)
         if partners_bcc:
-            res["email_bcc"] = format_emails_str(partners_bcc)
+            res["email_bcc"] = format_emails(partners_bcc)
 
         return res
 
@@ -86,14 +86,16 @@ class MailThread(models.AbstractModel):
                 ):  # notif is False, has no user, is therefore customer
                     notif = "email"
                 msg_type = "customer"
+                partner = ResPartner.browse(data.get("id"))
+                user = partner.user_ids[:1]  # Link partner → user
                 pdata = {
                     "id": data.get("id"),
+                    "uid": user.id if user else False,
                     "active": data.get("active"),
                     "share": data.get("share"),
                     "notif": data.get("notif") and data.get("notif") or notif,
                     "type": msg_type,
                     "is_follower": data.get("is_follower"),
-                    "uid": False,
                 }
                 rdata.append(pdata)
         return rdata
