@@ -175,7 +175,7 @@ class FetchmailServerFolder(models.Model):
                 this.check_imap_archive_folder(connection)
                 this.retrieve_imap_folder(connection)
                 connection.close()
-            except Exception:
+            except Exception:  # pragma: no cover
                 _logger.error(
                     (
                         "General failure when trying to connect to"
@@ -228,7 +228,7 @@ class FetchmailServerFolder(models.Model):
                 self.env.cr.execute("savepoint apply_matching")
                 self.apply_matching(connection, message_uid)
                 self.env.cr.execute("release savepoint apply_matching")
-            except Exception:
+            except Exception:  # pragma: no cover
                 self.env.cr.execute("rollback to savepoint apply_matching")
                 _logger.exception(
                     "Failed to fetch mail %(message_uid)s from server %(server)s",
@@ -260,9 +260,11 @@ class FetchmailServerFolder(models.Model):
         if result != "OK":
             raise UserError(
                 self.env._(
-                    "Could not search folder %(folder)s on server %(server)s",
+                    "Could not search folder %(folder)s on server %(server)s"
+                    " with criteria %(criteria)s",
                     folder=self.path,
                     server=server.name,
+                    criteria=criteria,
                 )
             )
         _logger.info(
@@ -305,7 +307,8 @@ class FetchmailServerFolder(models.Model):
             return
         records = self.env[self.model_id.model].browse(matched_object_ids)
         for record in records:
-            if not record.exists():
+            if not record.exists():  # pragma: no cover
+                # We have encountered cases where record not existed IRL.
                 continue
             action.with_context(
                 **{
@@ -359,7 +362,7 @@ class FetchmailServerFolder(models.Model):
         This uses some code copied from mail.thread.message_process, that
         unfortunately is not in a separate method.
         """
-        if isinstance(message, xmlrpclib.Binary):
+        if isinstance(message, xmlrpclib.Binary):  # pragma: no cover
             message = bytes(message.data)
         if isinstance(message, str):
             message = message.encode("utf-8")
@@ -396,8 +399,6 @@ class FetchmailServerFolder(models.Model):
         """Try to find existing object to link mail to."""
         self.ensure_one()
         matcher = self._get_algorithm()
-        if not matcher:
-            return None
         matches = matcher.search_matches(self, message_dict)
         if not matches:
             _logger.info(
@@ -435,12 +436,7 @@ class FetchmailServerFolder(models.Model):
         self.ensure_one()
         if self.match_algorithm == "email_domain":
             return match_algorithm.email_domain.EmailDomain()
-        if self.match_algorithm == "email_exact":
-            return match_algorithm.email_exact.EmailExact()
-        _logger.error(
-            "Unknown algorithm %(algorithm)s", {"algorithm": self.match_algorithm}
-        )
-        return None
+        return match_algorithm.email_exact.EmailExact()
 
     @api.model
     def attach_mail(self, match_object, message_dict):
@@ -485,4 +481,4 @@ class FetchmailServerFolder(models.Model):
             return match_object
         if "partner_id" in match_object._fields:
             return match_object.partner_id
-        return False
+        return self.env["res.partner"]

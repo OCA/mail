@@ -70,6 +70,14 @@ class FetchmailServer(models.Model):
     object_id = fields.Many2one(required=False)  # comodel_name='ir.model'
     server_type = fields.Selection(default="imap")
 
+    def write(self, vals):
+        """Should reset to draft if server type changes and state not specified."""
+        if "state" not in vals and (
+            "server_type" in vals or "is_ssl" in vals or "object_id" in vals
+        ):
+            vals["state"] = "draft"
+        return super().write(vals)
+
     @api.onchange("server_type", "is_ssl", "object_id")
     def onchange_server_type(self):
         result = super().onchange_server_type()
@@ -79,7 +87,7 @@ class FetchmailServer(models.Model):
     def fetch_mail(self, **kwargs):
         result = True
         for this in self:
-            if not this.folders_only:
+            if not this.folders_only:  # pragma: no cover
                 result = result and super(FetchmailServer, this).fetch_mail(**kwargs)
             this.folder_ids.fetch_mail()
         return result

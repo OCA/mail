@@ -19,7 +19,7 @@ class EmailExact:
         self, folder, message_dict, operator="=", values=None
     ):
         mailaddresses = values or self._get_mailaddresses(folder, message_dict)
-        if not mailaddresses:
+        if not mailaddresses:  # pragma: no cover
             return [(0, "=", 1)]
         search_domain = (
             (["|"] * (len(mailaddresses) - 1))
