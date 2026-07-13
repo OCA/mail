@@ -93,6 +93,7 @@ class MailThread(models.AbstractModel):
                     "notif": data.get("notif") and data.get("notif") or notif,
                     "type": msg_type,
                     "is_follower": data.get("is_follower"),
+                    "lang": data.get("lang"),
                     "uid": False,
                 }
                 rdata.append(pdata)
@@ -122,6 +123,19 @@ class MailThread(models.AbstractModel):
         else:
             customer_data["recipients"] += ids
         return [customer_data]
+
+    def _notify_thread_by_email(self, message, recipients_data, **kwargs):
+        # Pass the whole audience to `_prepare_outgoing_list`
+        # (only known here)
+        if self.env.context.get("is_from_composer") and not self.env.context.get(
+            "skip_adding_cc_bcc"
+        ):
+            self = self.with_context(
+                composer_recipient_ids=[
+                    data["id"] for data in recipients_data if data["notif"] == "email"
+                ]
+            )
+        return super()._notify_thread_by_email(message, recipients_data, **kwargs)
 
     def _notify_thread(self, message, msg_vals=False, **kwargs):
         if message.message_type == "notification":

@@ -159,12 +159,17 @@ Test Template<br></p>""",
         expecting = self.partner_cc2 + self.partner_bcc
         self.assertEqual(composer.partner_bcc_ids, expecting)
 
+    def _set_parent_partner(self, parent, childs):
+        # Ensure assign works even when other modules are installed
+        # e.g. account: expect single record
+        for c in childs:
+            c.parent_id = parent
+
     def test_template_cc_bcc_with_placeholders(self):
         """Test that template with placeholders for email_cc and email_bcc"""
         # Add child record to test_record
-        self.test_record.child_ids |= (
-            self.partner_cc + self.partner_cc2 + self.partner_cc3
-        )
+        child_ids = self.partner_cc + self.partner_cc2 + self.partner_cc3
+        self._set_parent_partner(self.test_record, child_ids)
 
         # Partner template values
         tmpl_model = self.env["ir.model"].search([("model", "=", "res.partner")])
