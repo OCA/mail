@@ -4,10 +4,19 @@ import logging
 import re
 
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
+# connection.list() returns an array of strings with each string containing
+# information about an available folder. The string contains three parts:
+# - Flags about the folder;
+# - The delimiter used in the folder path;
+# - The actual folder path (or name).
+# Examples:
+#  (\HasNoChildren) "/" "INBOX"
+#  (\HasNoChildren) "/" "Sent"
+#  (\HasChildren) "/" "Customers"
+#  (\HasNoChildren) "/" "Customers/Acme"
 list_response_pattern = re.compile(
     r'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)'
 )
@@ -31,11 +40,7 @@ class FetchmailServer(models.Model):
             if this.state != "done":
                 this.folders_available = self.env._("Confirm connection first.")
                 continue
-            try:
-                connection = this._connect__()
-            except UserError:
-                this.folders_available = self.env._("Confirm connection first.")
-                continue
+            connection = this._connect__()
             list_result = connection.list()
             if list_result[0] != "OK":
                 this.folders_available = self.env._("Unable to retrieve folders.")
