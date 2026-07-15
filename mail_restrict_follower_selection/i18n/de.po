@@ -52,6 +52,8 @@ msgstr "E-Mail-Thread"
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_cc__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_thread_main_attachment__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mail_tracking_duration_mixin__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mailing_contact__message_partner_ids
+#: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_mailing_mailing__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_category__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_pricelist__message_partner_ids
 #: model:ir.model.fields,field_description:mail_restrict_follower_selection.field_product_product__message_partner_ids
