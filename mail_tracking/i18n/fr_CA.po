@@ -305,6 +305,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_cc__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_main_attachment__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_duration_mixin__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_mailing_contact__failed_message_ids
+#: model:ir.model.fields,field_description:mail_tracking.field_mailing_mailing__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_product_category__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_product_pricelist__failed_message_ids
 #: model:ir.model.fields,field_description:mail_tracking.field_product_product__failed_message_ids
