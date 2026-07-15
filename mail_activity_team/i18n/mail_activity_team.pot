@@ -265,6 +265,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_activity_team.field_ir_actions_server__activity_team_user_ids
 #: model:ir.model.fields,field_description:mail_activity_team.field_ir_cron__activity_team_user_ids
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_mixin__activity_team_user_ids
+#: model:ir.model.fields,field_description:mail_activity_team.field_mailing_mailing__activity_team_user_ids
 #: model:ir.model.fields,field_description:mail_activity_team.field_product_pricelist__activity_team_user_ids
 #: model:ir.model.fields,field_description:mail_activity_team.field_product_product__activity_team_user_ids
 #: model:ir.model.fields,field_description:mail_activity_team.field_product_template__activity_team_user_ids
