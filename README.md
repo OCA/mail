@@ -36,6 +36,7 @@ addon | version | maintainers | summary
 [mail_restrict_send_button](mail_restrict_send_button/) | 19.0.1.0.0 |  | Security for Send Message Button on Chatter Area
 [mail_send_confirmation](mail_send_confirmation/) | 19.0.1.0.0 |  | Mail Send Confirmation
 [mail_tracking](mail_tracking/) | 19.0.1.0.4 |  | Email tracking system for all mails sent
+[mail_tracking_mass_mailing](mail_tracking_mass_mailing/) | 19.0.1.0.0 |  | Improve mass mailing email tracking
 
 [//]: # (end addons)
 

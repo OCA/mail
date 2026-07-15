@@ -1,6 +1,6 @@
 [project]
 name = "odoo-addons-oca-mail"
-version = "19.0.20260702.0"
+version = "19.0.20260715.0"
 dependencies = [
     "odoo-addon-base_user_signature==19.0.*",
     "odoo-addon-mail_activity_board==19.0.*",
@@ -17,6 +17,7 @@ dependencies = [
     "odoo-addon-mail_restrict_send_button==19.0.*",
     "odoo-addon-mail_send_confirmation==19.0.*",
     "odoo-addon-mail_tracking==19.0.*",
+    "odoo-addon-mail_tracking_mass_mailing==19.0.*",
 ]
 classifiers=[
     "Programming Language :: Python",
