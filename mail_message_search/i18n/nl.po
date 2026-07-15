@@ -49,6 +49,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_cc__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread_main_attachment__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_tracking_duration_mixin__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mailing_contact__message_search
+#: model:ir.model.fields,field_description:mail_message_search.field_mailing_mailing__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_product_category__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_product_pricelist__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_product_product__message_search
@@ -80,6 +82,8 @@ msgstr ""
 #: model:ir.model.fields,help:mail_message_search.field_mail_thread_cc__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_thread_main_attachment__message_search
 #: model:ir.model.fields,help:mail_message_search.field_mail_tracking_duration_mixin__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mailing_contact__message_search
+#: model:ir.model.fields,help:mail_message_search.field_mailing_mailing__message_search
 #: model:ir.model.fields,help:mail_message_search.field_product_category__message_search
 #: model:ir.model.fields,help:mail_message_search.field_product_pricelist__message_search
 #: model:ir.model.fields,help:mail_message_search.field_product_product__message_search
