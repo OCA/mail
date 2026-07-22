@@ -4,7 +4,7 @@
 import hashlib
 import hmac
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from werkzeug.exceptions import NotAcceptable
 
@@ -25,7 +25,9 @@ class MailTrackingController(main.MailTrackingController):
         See https://documentation.mailgun.com/en/latest/user_manual.html#securing-webhooks
         """  # noqa: E501
         # Request cannot be old
-        processing_time = datetime.utcnow() - datetime.utcfromtimestamp(int(timestamp))
+        processing_time = datetime.now(timezone.utc) - datetime.fromtimestamp(
+            int(timestamp), timezone.utc
+        )
         if not timedelta() < processing_time < timedelta(minutes=10):
             raise ValidationError(request.env._("Request is too old"))
         # Avoid replay attacks
