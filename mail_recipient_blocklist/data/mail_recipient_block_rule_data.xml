@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record
+        id="mail_recipient_block_rule_amazon_marketplace"
+        model="mail.recipient.block.rule"
+    >
+        <field name="name">Amazon Marketplace</field>
+        <field name="sequence">10</field>
+        <field name="pattern_type">contains</field>
+        <field name="pattern">@marketplace.amazon.</field>
+        <field name="notes">
+            Blocks Amazon marketplace alias addresses such as
+            abc123@marketplace.amazon.es.
+        </field>
+    </record>
+</odoo>

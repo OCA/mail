@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mail_recipient_block_rule_view_list" model="ir.ui.view">
+        <field name="name">mail.recipient.block.rule.list</field>
+        <field name="model">mail.recipient.block.rule</field>
+        <field name="arch" type="xml">
+            <list string="Recipient Block Rules">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="pattern_type" />
+                <field name="pattern" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="mail_recipient_block_rule_view_form" model="ir.ui.view">
+        <field name="name">mail.recipient.block.rule.form</field>
+        <field name="model">mail.recipient.block.rule</field>
+        <field name="arch" type="xml">
+            <form string="Recipient Block Rule">
+                <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="text-bg-danger"
+                        invisible="active"
+                    />
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="active" widget="boolean_toggle" />
+                            <field name="sequence" />
+                        </group>
+                        <group>
+                            <field name="pattern_type" />
+                            <field name="pattern" />
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mail_recipient_block_rule_view_search" model="ir.ui.view">
+        <field name="name">mail.recipient.block.rule.search</field>
+        <field name="model">mail.recipient.block.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="pattern" />
+                <filter
+                    string="Archived"
+                    name="inactive"
+                    domain="[('active', '=', False)]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Pattern Type"
+                        name="group_pattern_type"
+                        context="{'group_by': 'pattern_type'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="mail_recipient_block_rule_action" model="ir.actions.act_window">
+        <field name="name">Recipient Block Rules</field>
+        <field name="res_model">mail.recipient.block.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="mail_recipient_block_rule_view_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a recipient block rule</p>
+            <p
+            >Outgoing emails matching these rules will not be delivered to those recipients.</p>
+        </field>
+    </record>
+
+    <menuitem
+        id="mail_recipient_block_rule_menu"
+        name="Recipient Block Rules"
+        parent="mail.mail_menu_technical"
+        action="mail_recipient_block_rule_action"
+        sequence="23"
+        groups="base.group_system"
+    />
+</odoo>

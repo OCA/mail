@@ -1,0 +1,182 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_recipient_blocklist
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-02 15:47+0000\n"
+"PO-Revision-Date: 2026-07-02 17:53+0200\n"
+"Last-Translator: Sergio Teruel <sergio.teruel@tecnativa.com>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: mail_recipient_blocklist
+#: model:mail.recipient.block.rule,name:mail_recipient_blocklist.mail_recipient_block_rule_amazon_marketplace
+msgid "Amazon Marketplace"
+msgstr "Amazon Marketplace"
+
+#. module: mail_recipient_blocklist
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_form
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_search
+msgid "Archived"
+msgstr "Archivado"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields.selection,name:mail_recipient_blocklist.selection__mail_recipient_block_rule__pattern_type__contains
+msgid "Contains"
+msgstr "Contiene"
+
+#. module: mail_recipient_blocklist
+#: model_terms:ir.actions.act_window,help:mail_recipient_blocklist.mail_recipient_block_rule_action
+msgid "Create a recipient block rule"
+msgstr "Crear una regla de bloqueo de destinatarios"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields.selection,name:mail_recipient_blocklist.selection__mail_recipient_block_rule__pattern_type__domain
+msgid "Domain"
+msgstr "Dominio"
+
+#. module: mail_recipient_blocklist
+#. odoo-python
+#: code:addons/mail_recipient_blocklist/models/mail_mail.py:0
+msgid "Email delivery blocked by recipient blocklist rules."
+msgstr ""
+"El envío del correo electrónico ha sido bloqueado por las reglas de "
+"la lista de bloqueados del destinatario."
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields.selection,name:mail_recipient_blocklist.selection__mail_recipient_block_rule__pattern_type__exact
+msgid "Exact email"
+msgstr "Email exacto"
+
+#. module: mail_recipient_blocklist
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_search
+msgid "Group By"
+msgstr "Agrupado por"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mail_recipient_blocklist
+#. odoo-python
+#: code:addons/mail_recipient_blocklist/models/mail_recipient_block_rule.py:0
+msgid "Invalid regular expression: %s"
+msgstr "Expresión regular invalida (%s)"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model,name:mail_recipient_blocklist.model_mail_recipient_block_rule
+msgid "Mail Recipient Block Rule"
+msgstr "Regla de bloqueo de destinatarios de correo"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model,name:mail_recipient_blocklist.model_ir_mail_server
+msgid "Mail Server"
+msgstr "Servidor de correo"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__notes
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_form
+msgid "Notes"
+msgstr "Notas"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model,name:mail_recipient_blocklist.model_mail_mail
+msgid "Outgoing Mails"
+msgstr "Correos salientes"
+
+#. module: mail_recipient_blocklist
+#: model_terms:ir.actions.act_window,help:mail_recipient_blocklist.mail_recipient_block_rule_action
+msgid ""
+"Outgoing emails matching these rules will not be delivered to those "
+"recipients."
+msgstr ""
+"Los correos electrónicos salientes que cumplan estas reglas no se "
+"entregarán a dichos destinatarios."
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__pattern
+msgid "Pattern"
+msgstr "Patrón"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__pattern_type
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_search
+msgid "Pattern Type"
+msgstr "Tipo de patrón"
+
+#. module: mail_recipient_blocklist
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_form
+msgid "Recipient Block Rule"
+msgstr "Regla de bloqueo de destinatarios de correo"
+
+#. module: mail_recipient_blocklist
+#: model:ir.actions.act_window,name:mail_recipient_blocklist.mail_recipient_block_rule_action
+#: model:ir.ui.menu,name:mail_recipient_blocklist.mail_recipient_block_rule_menu
+#: model_terms:ir.ui.view,arch_db:mail_recipient_blocklist.mail_recipient_block_rule_view_list
+msgid "Recipient Block Rules"
+msgstr "Reglas de bloqueo de destinatarios de correo"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields.selection,name:mail_recipient_blocklist.selection__mail_recipient_block_rule__pattern_type__regex
+msgid "Regular expression"
+msgstr "Expresión regular"
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields,field_description:mail_recipient_blocklist.field_mail_recipient_block_rule__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: mail_recipient_blocklist
+#. odoo-python
+#: code:addons/mail_recipient_blocklist/models/mail_recipient_block_rule.py:0
+msgid "The block pattern cannot be empty."
+msgstr "El patrón de bloqueo no puede estar vacío."
+
+#. module: mail_recipient_blocklist
+#: model:ir.model.fields.selection,name:mail_recipient_blocklist.selection__mail_recipient_block_rule__pattern_type__wildcard
+msgid "Wildcard"
+msgstr "Carácter comodín"
