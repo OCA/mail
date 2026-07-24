@@ -54,6 +54,7 @@ addon | version | maintainers | summary
 [mail_partner_opt_out](mail_partner_opt_out/) | 18.0.1.0.0 |  | Add the partner's email to the blackmailed list
 [mail_post_defer](mail_post_defer/) | 18.0.1.0.2 | <a href='https://github.com/Yajo'><img src='https://github.com/Yajo.png' width='32' height='32' style='border-radius:50%;' alt='Yajo'/></a> | Faster and cancellable outgoing messages
 [mail_quoted_reply](mail_quoted_reply/) | 18.0.1.0.0 |  | Make a reply using a message
+[mail_recipient_blocklist](mail_recipient_blocklist/) | 18.0.1.0.0 | <a href='https://github.com/sergio-teruel'><img src='https://github.com/sergio-teruel.png' width='32' height='32' style='border-radius:50%;' alt='sergio-teruel'/></a> | Block outgoing emails by configurable recipient patterns
 [mail_restrict_follower_selection](mail_restrict_follower_selection/) | 18.0.1.1.0 |  | Define a domain from which followers can be selected
 [mail_restrict_send_button](mail_restrict_send_button/) | 18.0.1.0.0 |  | Security for Send Message Button on Chatter Area
 [mail_send_confirmation](mail_send_confirmation/) | 18.0.1.0.0 |  | Mail Send Confirmation
