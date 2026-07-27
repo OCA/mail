@@ -24,6 +24,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [base_search_mail_content](base_search_mail_content/) | 18.0.1.0.2 |  | Base Search Mail Content
 [base_user_signature](base_user_signature/) | 18.0.1.0.0 | <a href='https://github.com/imlopes'><img src='https://github.com/imlopes.png' width='32' height='32' style='border-radius:50%;' alt='imlopes'/></a> | Base User Signature
+[fetchmail_incoming_test](fetchmail_incoming_test/) | 18.0.1.0.0 |  | Simulate an incoming email from the Incoming Mail Server form
 [mail_activity_board](mail_activity_board/) | 18.0.1.1.1 |  | Add Activity Boards
 [mail_activity_dashboard](mail_activity_dashboard/) | 18.0.1.0.0 |  | Add Activity Dashboards
 [mail_activity_done](mail_activity_done/) | 18.0.1.0.0 |  | Mail Activity Done
