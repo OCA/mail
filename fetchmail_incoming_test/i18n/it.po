@@ -1,0 +1,114 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* fetchmail_incoming_test
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_bcc
+msgid "Bcc"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__body
+msgid "Body"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_view_form
+msgid "Cancel"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_cc
+msgid "Cc"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#. odoo-python
+#: code:addons/fetchmail_incoming_test/wizards/fetchmail_incoming_test.py:0
+msgid "Email processed"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_from
+msgid "From"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__id
+msgid "ID"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,help:fetchmail_incoming_test.field_fetchmail_incoming_test__email_to
+msgid "Recipient address, typically the alias routing to the target model."
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_view_form
+msgid "Send"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.actions.act_window,name:fetchmail_incoming_test.action_fetchmail_incoming_test
+#: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_view_form
+#: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.view_email_server_form
+msgid "Simulate Incoming Email"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model,name:fetchmail_incoming_test.model_fetchmail_incoming_test
+msgid "Simulate an Incoming Email"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__subject
+msgid "Subject"
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#. odoo-python
+#: code:addons/fetchmail_incoming_test/wizards/fetchmail_incoming_test.py:0
+msgid "The gateway created record #%s."
+msgstr ""
+
+#. module: fetchmail_incoming_test
+#: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_to
+msgid "To"
+msgstr ""
