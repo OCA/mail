@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t
+        t-name="mail_composer_cc_bcc_mail_tracking.Message"
+        t-inherit="mail.Message"
+        t-inherit-mode="extension"
+    >
+        <!--
+            Replace mail_tracking's flat "To" line with a collapsible one.
+            Collapsed (default): "To: <all recipients>".
+            Expanded (on click): real To / Cc / Bcc, each clickable.
+        -->
+        <xpath expr="//p[hasclass('o_mail_tracking') and strong]" position="replace">
+            <p
+                t-if="props.message.partner_trackings?.length and !props.messageSearch"
+                class="o_mail_tracking mb-0"
+                t-att-role="recipientsToggleAllowed ? 'button' : ''"
+                t-att-style="recipientsToggleAllowed ? 'cursor: pointer;' : ''"
+                t-on-click="toggleCcBcc"
+            >
+                <strong>To: </strong>
+                <MessageTracking
+                    t-if="!ccBccState.expanded"
+                    partner_trackings="props.message.partner_trackings"
+                    message="props.message"
+                />
+                <MessageTracking
+                    t-else=""
+                    partner_trackings="toTrackings"
+                    message="props.message"
+                />
+                <i
+                    t-if="recipientsToggleAllowed"
+                    class="fa ms-1 text-black-50"
+                    t-att-class="ccBccState.expanded ? 'fa-caret-up' : 'fa-caret-down'"
+                />
+            </p>
+            <p
+                t-if="ccBccState.expanded and ccTrackings.length"
+                class="o_mail_tracking mb-0"
+            >
+                <strong>Cc: </strong>
+                <MessageTracking
+                    partner_trackings="ccTrackings"
+                    message="props.message"
+                />
+            </p>
+            <p
+                t-if="ccBccState.expanded and bccTrackings.length"
+                class="o_mail_tracking mb-0"
+            >
+                <strong>Bcc: </strong>
+                <MessageTracking
+                    partner_trackings="bccTrackings"
+                    message="props.message"
+                />
+            </p>
+        </xpath>
+    </t>
+</templates>
