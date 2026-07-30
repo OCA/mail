@@ -8,15 +8,16 @@ from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
 
 
 def format_emails(partners):
-    return [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
+    emails = [
+        tools.formataddr((p.name or "", tools.email_normalize(p.email)))
+        for p in partners
+        if p.email
+    ]
+    return ", ".join(emails)
 
 
 def format_emails_raw(partners):
-    return [p.email for p in partners if p.email]
-
-
-def format_emails_str(partners):
-    emails = format_emails(partners)
+    emails = [p.email for p in partners if p.email]
     return ", ".join(emails)
 
 
@@ -45,7 +46,7 @@ class MailMail(models.Model):
         partner_to = self.env["res.partner"].browse(partner_to_ids)
         email_to = format_emails(partner_to)
         email_to_raw = format_emails_raw(partner_to)
-        email_cc = format_emails_str(self.recipient_cc_ids)
+        email_cc = format_emails(self.recipient_cc_ids)
         email_bcc = [r.email for r in self.recipient_bcc_ids if r.email]
 
         # Collect recipients (RCPT TO) and update all emails
@@ -54,20 +55,22 @@ class MailMail(models.Model):
         for m in res:
             rcpt_to = None
             if m["email_to"]:
-                rcpt_to = extract_rfc2822_addresses(m["email_to"][0])[0]
+                addresses = extract_rfc2822_addresses(m["email_to"][0])
+                rcpt_to = addresses[0] if addresses else None
 
                 # If the recipient is a Bcc, we had an explicit header X-Odoo-Bcc
                 # - It won't be shown by the email client, but can be useful for a recipient # noqa: E501
                 #   to understand why he received a given email
                 # - Also note that in python3, the smtp.send_message method does not
                 #   transmit the Bcc field of a Message object
-                if rcpt_to in email_bcc:
+                if rcpt_to and rcpt_to in email_bcc:
                     m["headers"].update({"X-Odoo-Bcc": m["email_to"][0]})
 
             # in the absence of self.email_to, Odoo creates one special mail for CC
             # see https://github.com/odoo/odoo/commit/46bad8f0
             elif m["email_cc"]:
-                rcpt_to = extract_rfc2822_addresses(m["email_cc"][0])[0]
+                addresses = extract_rfc2822_addresses(m["email_cc"][0])
+                rcpt_to = addresses[0] if addresses else None
 
             if rcpt_to:
                 recipients.add(rcpt_to)
