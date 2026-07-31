@@ -10,7 +10,7 @@ class TestNotificationErrorCleanUp(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-        cls.partner = cls.env.ref("base.res_partner_address_28")
+        cls.partner = cls.env.user.partner_id
         cls.message = cls.env["mail.message"].create(
             {
                 "model": "res.partner",
@@ -43,3 +43,37 @@ class TestNotificationErrorCleanUp(TransactionCase):
         self.notification.read_date = read_date
         self.env["mail.notification"]._gc_notifications(max_age_days=1)
         self.assertFalse(self.notification.exists())
+
+    def test_notification_exception_status(self):
+        msg = self.env["mail.message"].create(
+            {
+                "model": "res.partner",
+                "res_id": self.partner.id,
+                "body": "TEST EXC",
+                "message_type": "email",
+                "subtype_id": self.env.ref("mail.mt_comment").id,
+                "author_id": self.partner.id,
+                "date": "2024-03-26",
+            }
+        )
+        notification_exc = self.env["mail.notification"].create(
+            {
+                "mail_message_id": msg.id,
+                "res_partner_id": self.partner.id,
+                "notification_type": "email",
+                "notification_status": "exception",
+            }
+        )
+        read_date = fields.Datetime.subtract(fields.Datetime.now(), days=2)
+        notification_exc.is_read = True
+        notification_exc.read_date = read_date
+        self.env["mail.notification"]._gc_notifications(max_age_days=1)
+        self.assertFalse(notification_exc.exists())
+
+    def test_notification_in_error_recent_read(self):
+        # Read recently (read_date > max_age_days threshold), should not be deleted
+        read_date = fields.Datetime.now()
+        self.notification.is_read = True
+        self.notification.read_date = read_date
+        self.env["mail.notification"]._gc_notifications(max_age_days=1)
+        self.assertTrue(self.notification.exists())
