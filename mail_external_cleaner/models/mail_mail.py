@@ -8,11 +8,13 @@ import re
 from odoo import models
 from odoo.tools.mimetypes import guess_mimetype
 
-IMAGE_REGEX = r"(\<img [\w\b =\-\":;,.%]*src=\")(https?:\/\/[\w.:]+)((?:\/[\w@:%.+&~#=\/-]+)?(?:\?\S+)?)(\"[\w\b =\-\":;,.%]+\/?\>)"  # noqa: B950
+IMAGE_REGEX = (
+    r"(\<img [\w\b =\-\":;,.%]*src=\")(https?:\/\/[\w.:]+)"
+    r"((?:\/[\w@:%.+&~#=\/-]+)?(?:\?\S+)?)(\"[\w\b =\-\":;,.%]+\/?\>)"
+)
 
 
 class MailMail(models.Model):
-
     _inherit = "mail.mail"
 
     def _send_prepare_body(self):
@@ -53,6 +55,9 @@ class MailMail(models.Model):
                 if attachment:
                     body = body.replace(
                         img_data,
-                        f"{pre_data}data:{attachment[0]};base64,{attachment[1]}{post_data}",  # noqa: E231, E702, B950
+                        (
+                            f"{pre_data}data:{attachment[0]};"
+                            f"base64,{attachment[1]}{post_data}"
+                        ),
                     )
         return body

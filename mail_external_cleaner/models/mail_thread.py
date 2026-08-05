@@ -5,7 +5,6 @@ from odoo import models
 
 
 class MailThread(models.AbstractModel):
-
     _inherit = "mail.thread"
 
     def _notify_get_recipients_groups(self, msg_vals=None):

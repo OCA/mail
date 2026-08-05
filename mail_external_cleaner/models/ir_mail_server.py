@@ -16,7 +16,8 @@ def extract_inline_images_from_html(html, existing_names=()):
     Finds <img src="data:...base64,..."> and returns:
       new_html, inline_attachments, inline_names
     where:
-      - inline_attachments: list of (filename, bytes, mime) to append to your attachments
+      - inline_attachments: list of (filename, bytes, mime) to append to your
+        attachments
       - inline_names: set of the filenames we generated (these will become CIDs)
     """
     counter = itertools.count(1)
@@ -111,7 +112,8 @@ class IrMailServer(models.Model):
                         f'inline; filename="{fname}"',  # noqa: E702
                     )
 
-                # Ensure base64 transfer encoding (usually already set by add_attachment)
+                # Ensure base64 transfer encoding (usually already set by
+                # add_attachment)
                 cte = (part.get("Content-Transfer-Encoding") or "").lower()
                 if cte != "base64":
                     payload = part.get_payload(decode=True)
