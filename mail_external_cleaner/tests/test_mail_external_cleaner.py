@@ -3,7 +3,7 @@
 
 import base64
 
-from odoo_test_helper import FakeModelLoader
+from odoo.orm.model_classes import add_to_registry
 
 from odoo.addons.mail.tests.common import MailCommon
 
@@ -12,12 +12,15 @@ class TestMailExternalCleaner(MailCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
-        cls.addClassCleanup(cls.loader.restore_registry)
         from .portal_fake_model import PortalFakeModel
 
-        cls.loader.update_registry((PortalFakeModel,))
+        add_to_registry(cls.env.registry, PortalFakeModel)
+        cls.registry._setup_models__(cls.env.cr, ["portal.fake.model"])
+        cls.registry.init_models(
+            cls.env.cr, ["portal.fake.model"], {"models_to_check": True}
+        )
+        cls.addClassCleanup(cls.registry.__delitem__, "portal.fake.model")
+
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Partner Test",
@@ -47,7 +50,7 @@ class TestMailExternalCleaner(MailCommon):
     def test_company_logo(self):
         image_src = f"{self.url}/logo.png?company={self.env.company.id}"
         with self.mock_mail_gateway():
-            self.portal.message_post(
+            self.portal.with_context(mail_notify_force_send=True).message_post(
                 body=f'<p>Checking <img src="{image_src}" alt="My Image"/></p>',
                 subject="Test Email with External Image",
                 partner_ids=self.partner.ids,
@@ -66,7 +69,7 @@ class TestMailExternalCleaner(MailCommon):
         )
         image_src = f"{self.url}/web/image/{image.id}"
         with self.mock_mail_gateway():
-            self.portal.message_post(
+            self.portal.with_context(mail_notify_force_send=True).message_post(
                 body=f'<p>Checking <img src="{image_src}" alt="My Image"/></p>',
                 subject="Test Email with External Image",
                 partner_ids=self.partner.ids,
@@ -79,7 +82,7 @@ class TestMailExternalCleaner(MailCommon):
         """Should not replace as we don't know how to handle them."""
         image_src = f"{self.url}/image.png"
         with self.mock_mail_gateway():
-            self.portal.message_post(
+            self.portal.with_context(mail_notify_force_send=True).message_post(
                 body=f'<p>Checking <img src="{image_src}" alt="My Image"/></p>',
                 subject="Test Email with External Image",
                 partner_ids=self.partner.ids,
@@ -92,7 +95,7 @@ class TestMailExternalCleaner(MailCommon):
         """Should not replace them."""
         image_src = "http://localhostlocalhost:8069/image.png"
         with self.mock_mail_gateway():
-            self.portal.message_post(
+            self.portal.with_context(mail_notify_force_send=True).message_post(
                 body=f'<p>Checking <img src="{image_src}" alt="My Image"/></p>',
                 subject="Test Email with External Image",
                 partner_ids=self.partner.ids,

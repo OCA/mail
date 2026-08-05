@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
+import html
 import io
 import re
 
@@ -17,9 +18,9 @@ IMAGE_REGEX = (
 class MailMail(models.Model):
     _inherit = "mail.mail"
 
-    def _send_prepare_body(self):
-        body = super()._send_prepare_body()
-        return self._embed_images(body)
+    def _prepare_outgoing_body(self):
+        body = super()._prepare_outgoing_body()
+        return self._embed_images(html.unescape(body))
 
     def _get_image_attachment(self, path):
         if m := re.match(r"\/logo\.png\?company=(\d+)", path):
