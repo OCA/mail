@@ -9,3 +9,8 @@ it is then routed by alias and creates the target record
 
 It is meant for testing mail-driven flows on environments that have no inbound mail server,
 like test instances.
+
+It also adds a **Replay Email File** button, which takes a raw message file
+(usually a `.eml` exported from a mail client) and feeds it to the gateway
+untouched. Useful to reproduce how a specific email that a customer received
+was handled, byte for byte.

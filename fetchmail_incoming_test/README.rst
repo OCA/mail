@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =======================
 Fetchmail Incoming Test
 =======================
@@ -17,7 +13,7 @@ Fetchmail Incoming Test
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
@@ -44,6 +40,11 @@ record (helpdesk ticket, lead, task, ...).
 It is meant for testing mail-driven flows on environments that have no
 inbound mail server, like test instances.
 
+It also adds a **Replay Email File** button, which takes a raw message
+file (usually a ``.eml`` exported from a mail client) and feeds it to
+the gateway untouched. Useful to reproduce how a specific email that a
+customer received was handled, byte for byte.
+
 **Table of contents**
 
 .. contents::
@@ -69,6 +70,20 @@ To use this module, follow these steps:
 The message goes through the standard mail gateway and the created
 record (e.g. a Helpdesk ticket) appears, just as if the email had been
 received.
+
+To replay a real email instead of composing one:
+
+- Click **Replay Email File** (button on the form, or the *Action*
+  menu).
+- Upload the message file, then click **Process**.
+
+The file is sent to the gateway as if it was received through fetchmail.
+Malformed HTML and unusual headers are preserved.
+
+Both wizards reuse the **Create a New Record** model of the server they
+were opened from, exactly like a real fetch: when the email replies to
+nothing and matches no alias, the gateway creates a record of that model
+instead of refusing the email.
 
 Bug Tracker
 ===========

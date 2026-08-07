@@ -4,11 +4,12 @@
 from email.message import EmailMessage
 from email.utils import make_msgid
 
-from odoo import _, fields, models
+from odoo import fields, models
 
 
 class FetchmailIncomingTest(models.TransientModel):
     _name = "fetchmail.incoming.test"
+    _inherit = "fetchmail.incoming.test.mixin"
     _description = "Simulate an Incoming Email"
 
     email_from = fields.Char(
@@ -40,22 +41,3 @@ class FetchmailIncomingTest(models.TransientModel):
         message["Message-Id"] = make_msgid()
         message.set_content(self.body or "", subtype="html")
         return message.as_bytes()
-
-    def action_process(self):
-        """Feed the composed email to the mail gateway as a real inbound one."""
-        self.ensure_one()
-        thread_id = self.env["mail.thread"].message_process(
-            None, self._build_raw_message()
-        )
-        return {
-            "type": "ir.actions.client",
-            "tag": "display_notification",
-            "params": {
-                "type": "success",
-                "title": _("Email processed"),
-                "message": _("The gateway created record #%s.", thread_id),
-                "sticky": False,
-                # Close the wizard dialog once the notification is shown.
-                "next": {"type": "ir.actions.act_window_close"},
-            },
-        }

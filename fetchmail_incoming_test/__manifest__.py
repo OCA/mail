@@ -12,6 +12,7 @@
     "data": [
         "security/ir.model.access.csv",
         "wizards/fetchmail_incoming_test_views.xml",
+        "wizards/fetchmail_incoming_test_eml_views.xml",
         "views/fetchmail_server_views.xml",
     ],
     "installable": True,
