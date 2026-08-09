@@ -7,3 +7,5 @@
   - Andrea Stirpe
 - [Apik](https://www.aapik.cloud):
   - Frederic Grall
+- [PureKarting](https://www.purekarting.com):
+  - Cliff Kujala
