@@ -32,10 +32,14 @@
                     disabled="props.readonly"
                     onChange="(checked) => this.onChange(attachment.id, checked)"
                 >
-                    <span t-att-title="attachment.name" t-out="attachment.name" />
+                    <span
+                        class="o_attachment_checkbox_grid_name"
+                        t-att-title="attachment.name"
+                        t-out="attachment.name"
+                    />
                     <span
                         t-if="sizeLabel(attachment)"
-                        class="text-muted small ms-1"
+                        class="o_attachment_checkbox_grid_size text-muted small"
                         t-out="sizeLabel(attachment)"
                     />
                 </CheckBox>
