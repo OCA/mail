@@ -1,0 +1,41 @@
+// Copyright 2026 PureKarting
+// License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+.o_field_attachment_checkbox_grid {
+    // A field widget is inline-block by default, so the picker would be only as
+    // wide as its longest filename: the header's rules would have nothing to
+    // grow into and the grid below would never get past one column.
+    --fieldWidget-display: block;
+}
+
+.o_attachment_checkbox_grid_items {
+    // auto-fill against a min column width makes the number of columns follow
+    // the composer's own width, without a media query: the composer is a
+    // dialog, so the viewport says nothing useful about how wide it is. The
+    // min() keeps a narrow composer down to one column instead of overflowing,
+    // and is interpolated because libsass would otherwise try to evaluate it
+    // as its own function and choke on comparing rem with %.
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(#{"min(15rem, 100%)"}, 1fr)
+    );
+    column-gap: 1rem;
+
+    > .o-checkbox {
+        min-width: 0;
+
+        .form-check-label {
+            display: flex;
+            align-items: baseline;
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .form-check-label > :first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}

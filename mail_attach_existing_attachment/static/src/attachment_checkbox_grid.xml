@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Copyright 2026 PureKarting
+    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<templates xml:space="preserve">
+
+    <t t-name="mail_attach_existing_attachment.AttachmentCheckboxGrid">
+        <div t-if="items.length" class="o_attachment_checkbox_grid">
+            <div class="d-flex pt-2 cursor-pointer fw-bolder" t-on-click="toggleFolded">
+                <hr class="flex-grow-1 fs-3" />
+                <div class="d-flex align-items-center px-3">
+                    <i
+                        class="fa fa-fw"
+                        t-att-class="state.folded ? 'fa-caret-right' : 'fa-caret-down'"
+                    />
+                    <span>Available Attachments</span>
+                    <span
+                        class="badge rounded-pill ms-2"
+                        t-att-class="state.folded and selectedCount ? 'text-bg-primary' : 'text-bg-secondary'"
+                        t-out="state.folded and selectedCount ? selectedCount : items.length"
+                    />
+                </div>
+                <hr class="flex-grow-1 fs-3" />
+            </div>
+            <div t-if="!state.folded" class="o_attachment_checkbox_grid_items pb-2">
+                <CheckBox
+                    t-foreach="items"
+                    t-as="attachment"
+                    t-key="attachment.id"
+                    value="isSelected(attachment)"
+                    disabled="props.readonly"
+                    onChange="(checked) => this.onChange(attachment.id, checked)"
+                >
+                    <span t-att-title="attachment.name" t-out="attachment.name" />
+                    <span
+                        t-if="sizeLabel(attachment)"
+                        class="text-muted small ms-1"
+                        t-out="sizeLabel(attachment)"
+                    />
+                </CheckBox>
+            </div>
+        </div>
+    </t>
+
+</templates>
