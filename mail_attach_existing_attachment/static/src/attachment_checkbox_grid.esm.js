@@ -8,6 +8,7 @@ import {_t} from "@web/core/l10n/translation";
 import {debounce} from "@web/core/utils/timing";
 import {getFieldDomain} from "@web/model/relational_model/utils";
 import {humanSize} from "@web/core/utils/binary";
+import {imageUrl} from "@web/core/utils/urls";
 import {registry} from "@web/core/registry";
 import {useBus} from "@web/core/utils/hooks";
 import {useSpecialData} from "@web/views/fields/relational_utils";
@@ -37,7 +38,7 @@ export class AttachmentCheckboxGrid extends Many2ManyCheckboxesField {
             return orm.call(relation, "search_read", [], {
                 context: props.context || {},
                 domain,
-                fields: ["name", "file_size"],
+                fields: ["checksum", "file_size", "has_thumbnail", "mimetype", "name"],
                 order: "id desc",
             });
         });
@@ -83,6 +84,37 @@ export class AttachmentCheckboxGrid extends Many2ManyCheckboxesField {
      */
     sizeLabel(attachment) {
         return attachment.file_size ? humanSize(attachment.file_size) : "";
+    }
+
+    /**
+     * @param {Object} attachment
+     * @returns {String|false} a picture to preview in the tooltip: the image
+     *  itself, or the thumbnail Odoo generated for a PDF. Other file types
+     *  have nothing worth showing, and asking for one would only serve back a
+     *  generic mimetype placeholder.
+     */
+    previewUrl(attachment) {
+        const params = {height: 200, unique: attachment.checksum, width: 300};
+        if (attachment.mimetype && attachment.mimetype.startsWith("image/")) {
+            return imageUrl("ir.attachment", attachment.id, "datas", params);
+        }
+        if (attachment.has_thumbnail) {
+            return imageUrl("ir.attachment", attachment.id, "thumbnail", params);
+        }
+        return false;
+    }
+
+    /**
+     * @param {Object} attachment
+     * @returns {String} the tooltip payload, which the tooltip service reads
+     *  back out of the DOM as JSON.
+     */
+    tooltipInfo(attachment) {
+        return JSON.stringify({
+            name: attachment.name,
+            size: this.sizeLabel(attachment),
+            src: this.previewUrl(attachment),
+        });
     }
 
     toggleFolded() {

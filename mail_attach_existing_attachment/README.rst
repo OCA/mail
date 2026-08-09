@@ -64,7 +64,9 @@ when its title is clicked:
   record. It starts folded, and its header shows how many files are on
   offer, or how many are ticked once you fold it back. Unfolded, it lays
   the checkboxes out in as many columns as the composer is wide enough
-  for.
+  for. Filenames are truncated to keep one file per line; hovering one
+  shows its full name, its size, and a preview of the file when there is
+  one to show.
 
 .. |image1| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_attach_existing_attachment/static/description/attachment.png
 .. |image2| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_attach_existing_attachment/static/description/ex_mail_compose_message.png

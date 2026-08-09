@@ -34,7 +34,8 @@
                 >
                     <span
                         class="o_attachment_checkbox_grid_name"
-                        t-att-title="attachment.name"
+                        data-tooltip-template="mail_attach_existing_attachment.AttachmentTooltip"
+                        t-att-data-tooltip-info="tooltipInfo(attachment)"
                         t-out="attachment.name"
                     />
                     <span
@@ -44,6 +45,23 @@
                     />
                 </CheckBox>
             </div>
+        </div>
+    </t>
+
+    <!--
+        Rendered by the tooltip service, which spreads the JSON in
+        data-tooltip-info into this template's context.
+    -->
+    <t t-name="mail_attach_existing_attachment.AttachmentTooltip">
+        <div class="o_attachment_checkbox_grid_tooltip p-2">
+            <div class="fw-bold text-break" t-out="name" />
+            <div t-if="size" class="opacity-75" t-out="size" />
+            <img
+                t-if="src"
+                class="o_attachment_checkbox_grid_thumb mt-2 rounded"
+                t-att-src="src"
+                alt=""
+            />
         </div>
     </t>
 
