@@ -7,10 +7,16 @@
                 <h2 t-out="o.subject" />
                 <hr />
                 <div class="row col-12">
-                    <strong>Date: </strong><span t-out="o.date" /><br />
-                    <strong t-out="o.email_from" /><br />
-                    <strong>Reply-To: </strong><span t-out="o.reply_to" /><br />
-                    <strong>To: </strong><span
+                    <strong>Date: </strong>
+                    <span t-out="o.date" />
+                    <br />
+                    <strong t-out="o.email_from" />
+                    <br />
+                    <strong>Reply-To: </strong>
+                    <span t-out="o.reply_to" />
+                    <br />
+                    <strong>To: </strong>
+                    <span
                         t-out="';'.join([notification.res_partner_id.email_formatted for notification in o.notification_ids if notification.res_partner_id.email_formatted])"
                     />
                 </div>
@@ -27,5 +33,4 @@
             </t>
         </t>
     </template>
-
 </odoo>

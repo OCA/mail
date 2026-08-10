@@ -5,7 +5,7 @@
     "version": "17.0.1.0.0",
     "summary": "Print messages from the chatter of any document. ",
     "author": "Tecnativa, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail", "contacts"],
     "data": [
         "data/report_paperformat_data.xml",

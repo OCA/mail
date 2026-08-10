@@ -9,5 +9,4 @@
         <field name="print_report_name">(object.display_name)</field>
         <field name="paperformat_id" ref="report_paperformat_mail_message" />
     </record>
-
 </odoo>
