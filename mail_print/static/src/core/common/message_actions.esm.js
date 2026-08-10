@@ -1,11 +1,17 @@
-/* @odoo-module */
+import {registerMessageAction} from "@mail/core/common/message_actions";
 
-import {PrintMessage} from "../../components/print_message/print_message.esm";
-import {messageActionsRegistry} from "@mail/core/common/message_actions";
-
-messageActionsRegistry.add("print", {
-    callComponent: PrintMessage,
-    props: (component) => ({message_id: component.props.message.id}),
-    condition: (component) => !component.props.message.is_note,
+registerMessageAction("mail_print", {
+    condition: ({message}) => !message.isNote,
+    icon: "fa fa-print",
+    name: "Print Message",
+    onSelected: ({message, owner}) => {
+        owner.env.services.action.doAction("mail_print.mail_message_report", {
+            additionalContext: {
+                active_id: message.id,
+                active_ids: [message.id],
+                active_model: "mail.message",
+            },
+        });
+    },
     sequence: 10,
 });

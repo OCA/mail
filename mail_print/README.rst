@@ -69,6 +69,14 @@ Authors
 
 * Tecnativa
 
+Contributors
+------------
+
+- `Tecnativa <https://www.tecnativa.com>`__:
+
+  - Carlos Lopez
+  - Eduardo Ezerouali
+
 Maintainers
 -----------
 
