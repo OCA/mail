@@ -21,24 +21,21 @@ Mail Forward Message
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/18.0/mail_forward
+    :target: https://github.com/OCA/mail/tree/19.0/mail_forward
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_forward
+    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_forward
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module allows users to forward messages from the chatter of any
-document to:
-
-- Other users in the same thread, adding them as followers of the
-  document without notifying the current followers.
-- Another thread, but not adding them as followers—only notifying the
-  current followers of the other thread.
+This module extends the core feature to allow users to forward messages
+from the chatter of any document to another thread, without adding the
+recipients as followers, only notifying the current followers of the
+other thread.
 
 **Table of contents**
 
@@ -62,8 +59,7 @@ Usage
 To use this module, follow these steps:
 
 - Navigate to the chatter of any document.
-- Hover the mouse over any message in the chatter (excluding internal
-  notes).
+- Hover the mouse over any message in the chatter
 - A Forward icon will appear next to the message.
 - Click the button to display a wizard with the message.
 - Select the forward type (current thread or another thread).
@@ -78,7 +74,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_forward%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_forward%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -118,6 +114,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-carlos-lopez-tecnativa| 
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/18.0/mail_forward>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_forward>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
