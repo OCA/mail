@@ -4,6 +4,8 @@
 # Copyright 2021 Tecnativa - João Marques
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from markupsafe import Markup
+
 from odoo.tests import common
 
 
@@ -21,7 +23,7 @@ class TestMailDebrand(common.TransactionCase):
         )
         lang_nl = cls.env.ref("base.lang_nl")
         if not lang_nl.active:
-            lang_nl.toggle_active()
+            lang_nl.action_unarchive()
 
     def test_debrand_binary_value(self):
         """
@@ -76,6 +78,34 @@ class TestMailDebrand(common.TransactionCase):
             self.env.ref("base.lang_nl"),
             "Aangeboden door",
         )
+
+    def test_debrand_markup_value(self):
+        """Regression test: Markup input should stay Markup after debranding"""
+        value = Markup(
+            '<p style="color: #555555;">Sent by '
+            '<a href="https://www.odoo.com">Odoo</a>.</p>'
+        )
+        result = self.env["mail.render.mixin"].remove_href_odoo(value)
+        self.assertIsInstance(result, Markup)
+        self.assertNotIn("odoo.com", result)
+
+    def test_debrand_no_previous_sibling(self):
+        """When the Odoo anchor has no previous element sibling, the
+        surrounding text held directly by the parent should be blanked."""
+        value = '<p>Sent by <a href="https://www.odoo.com">Odoo</a>.</p>'
+        result = self.env["mail.render.mixin"].remove_href_odoo(value)
+        self.assertNotIn("odoo.com", result)
+        self.assertNotIn("Sent by", result)
+
+    def test_render_template_removes_branding(self):
+        """The mail.render.mixin._render_template override should strip
+        Odoo branding regardless of the rendering engine used."""
+        rendered = self.env["mail.render.mixin"]._render_template(
+            'Contact us at <a href="https://www.odoo.com">Odoo</a>',
+            "mail.mail",
+            self.mail.ids,
+        )
+        self.assertNotIn("odoo.com", rendered[self.mail.id])
 
     def test_body_intact(self):
         """The message body should never be changed"""
