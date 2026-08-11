@@ -1,8 +1,7 @@
 To use this module, follow these steps:
 
 - Navigate to the chatter of any document.
-- Hover the mouse over any message in the chatter (excluding internal
-  notes).
+- Hover the mouse over any message in the chatter
 - A Forward icon will appear next to the message.
 - Click the button to display a wizard with the message.
 - Select the forward type (current thread or another thread).
