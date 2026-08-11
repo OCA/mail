@@ -8,10 +8,7 @@ from odoo import api, fields, models
 class IrActionsServer(models.Model):
     _inherit = "ir.actions.server"
 
-    activity_team_id = fields.Many2one(
-        "mail.activity.team",
-        string="Activity Team",
-    )
+    activity_team_id = fields.Many2one("mail.activity.team")
 
     def _run_action_next_activity(self, eval_context=None):
         # OVERRIDE to force the activity team on scheduled actions
