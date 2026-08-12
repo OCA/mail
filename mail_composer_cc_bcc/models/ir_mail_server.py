@@ -15,20 +15,22 @@ class IrMailServer(models.Model):
         """
         Define smtp_to based on context instead of To+Cc+Bcc
         """
-        x_odoo_bcc_value = next(
-            (value for key, value in message._headers if key == "X-Odoo-Bcc"), None
-        )
-        # Add Bcc field inside message to pass validation
-        if x_odoo_bcc_value:
-            message["Bcc"] = x_odoo_bcc_value
-
         smtp_from, smtp_to_list, message = super()._prepare_email_message(
             message, smtp_session
         )
 
+        # Each recipients gets its own email
+        # See method `_prepare_outgoing_list`
         is_from_composer = self.env.context.get("is_from_composer", False)
-        if is_from_composer and self.env.context.get("recipients", False):
-            smtp_to = self.env.context["recipients"].pop(0)
+        if is_from_composer:
+            # Empty recipients means there is a bug.
+            # => refuse to send, otherwise it would
+            # - send duplicate emails
+            # - leak Bcc
+            recipients = self.env.context.get("recipients")
+            if not recipients:
+                raise ValueError("Could not determine the recipient of this email")
+            smtp_to = recipients.pop(0)
             _logger.debug("smtp_to: %s", smtp_to)
             smtp_to_list = [smtp_to]
 
