@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="button_models_parameter" model="ir.config_parameter">
+        <field name="key">mail_message_view.button_models</field>
+        <field name="value" />
+    </record>
+
+</odoo>
