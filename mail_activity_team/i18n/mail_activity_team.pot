@@ -90,6 +90,7 @@ msgid "Assign to missing activities"
 msgstr ""
 
 #. module: mail_activity_team
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity__user_id
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_plan_template__responsible_id
 msgid "Assigned to"
 msgstr ""
@@ -251,7 +252,6 @@ msgstr ""
 
 #. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_res_users
-#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity__user_id
 msgid "User"
 msgstr ""
 
