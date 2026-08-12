@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="mail_message_view_tree" model="ir.ui.view">
+        <field name="name">mail.message.tree.message.history</field>
+        <field name="model">mail.message</field>
+        <!-- Variants of the standard views: their arch is not duplicated, and a
+             priority above the standard one keeps the standard views the default
+             ones for the other actions. -->
+        <field name="inherit_id" ref="mail.view_message_tree" />
+        <field name="mode">primary</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <field name="subject" position="before">
+                <field name="body_preview" />
+                <field name="tracking_summary" />
+            </field>
+            <!-- The subject is empty on most of the chatter messages. -->
+            <field name="subject" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="author_id" position="before">
+                <field name="document_name" />
+            </field>
+            <field name="author_id" position="after">
+                <field name="message_type" />
+                <field name="subtype_id" optional="hide" />
+                <field name="is_internal" optional="hide" />
+            </field>
+            <field name="model" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="res_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="mail_message_view_form" model="ir.ui.view">
+        <field name="name">mail.message.form.message.history</field>
+        <field name="model">mail.message</field>
+        <field name="inherit_id" ref="mail.mail_message_view_form" />
+        <field name="mode">primary</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <field name="record_name" position="after">
+                <field name="tracking_summary" />
+            </field>
+            <field name="body" position="after">
+                <field name="attachment_ids" widget="many2many_binary" readonly="1" />
+            </field>
+        </field>
+    </record>
+
+    <record id="mail_message_view_search" model="ir.ui.view">
+        <field name="name">mail.message.search.message.history</field>
+        <field name="model">mail.message</field>
+        <field name="inherit_id" ref="mail.view_message_search" />
+        <field name="mode">primary</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="subtype_id" />
+            </field>
+            <filter name="message_needaction" position="after">
+                <separator />
+                <filter
+                    name="filter_user_message"
+                    string="User Messages"
+                    domain="[('message_type', 'in', ['comment', 'email'])]"
+                />
+                <filter
+                    name="filter_system_log"
+                    string="System Logs"
+                    domain="[('message_type', 'not in', ['comment', 'email'])]"
+                />
+                <separator />
+                <filter
+                    name="filter_my_message"
+                    string="My Messages"
+                    domain="[('author_id.user_ids', 'in', [uid])]"
+                />
+                <filter
+                    name="filter_attachment"
+                    string="With Attachments"
+                    domain="[('attachment_ids', '!=', False)]"
+                />
+                <separator />
+                <filter
+                    name="filter_last_3_months"
+                    string="Last 3 Months"
+                    domain="[('date', '&gt;=', (context_today() - relativedelta(months=3)).strftime('%Y-%m-%d'))]"
+                />
+                <filter name="filter_date" string="Date" date="date" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_author"
+                        string="Author"
+                        context="{'group_by': 'author_id'}"
+                    />
+                    <filter
+                        name="group_by_model"
+                        string="Model"
+                        context="{'group_by': 'model'}"
+                    />
+                    <filter
+                        name="group_by_message_type"
+                        string="Type"
+                        context="{'group_by': 'message_type'}"
+                    />
+                    <filter
+                        name="group_by_subtype"
+                        string="Subtype"
+                        context="{'group_by': 'subtype_id'}"
+                    />
+                    <filter
+                        name="group_by_date"
+                        string="Date"
+                        context="{'group_by': 'date'}"
+                    />
+                </group>
+            </filter>
+        </field>
+    </record>
+
+    <record id="mail_message_action" model="ir.actions.act_window">
+        <field name="name">Message History</field>
+        <field name="res_model">mail.message</field>
+        <field name="view_mode">tree,form</field>
+        <!-- No private message and no user notification. -->
+        <field name="domain">[('model', '!=', False), ('res_id', '!=', 0)]</field>
+        <field
+            name="context"
+        >{'search_default_filter_user_message': 1, 'search_default_filter_last_3_months': 1}</field>
+        <field name="search_view_id" ref="mail_message_view_search" />
+        <field
+            name="view_ids"
+            eval="[
+                Command.clear(),
+                Command.create({
+                    'view_mode': 'tree',
+                    'sequence': 1,
+                    'view_id': ref('mail_message_view_tree'),
+                }),
+                Command.create({
+                    'view_mode': 'form',
+                    'sequence': 2,
+                    'view_id': ref('mail_message_view_form'),
+                }),
+            ]"
+        />
+    </record>
+
+    <menuitem
+        id="mail_message_menu"
+        parent="mail.menu_root_discuss"
+        action="mail_message_action"
+        sequence="20"
+    />
+
+</odoo>
