@@ -37,7 +37,7 @@ class MailActivity(models.Model):
             )
         return teams[:1]
 
-    user_id = fields.Many2one(string="User", required=False, default=False)
+    user_id = fields.Many2one(required=False, default=False)
     team_user_id = fields.Many2one(
         string="Team user", related="user_id", readonly=False
     )

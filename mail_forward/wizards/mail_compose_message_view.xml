@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="mail_compose_message_forward_form">
+        <field name="name">mail.compose.message.form.forward</field>
+        <field name="model">mail.compose.message</field>
+        <field name="mode">extension</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_ids'][last()]" position="attributes">
+                <attribute
+                    name="required"
+                >(composition_comment_option == 'forward' and forward_type == 'current_thread') or (composition_comment_option != 'reply_all' and not context.get('clicked_on_full_composer', False) and composition_mode == 'comment' and not notified_bcc_contains_share)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='email_from']" position="before">
+                <field
+                    name="forward_type"
+                    widget="radio"
+                    options="{'horizontal': true}"
+                    required="composition_comment_option == 'forward'"
+                    invisible="composition_comment_option != 'forward'"
+                />
+                <field
+                    name="forward_thread"
+                    options="{'no_create': True}"
+                    required="forward_type == 'another_thread'"
+                    invisible="forward_type != 'another_thread'"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

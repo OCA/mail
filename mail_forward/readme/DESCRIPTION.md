@@ -1,0 +1,1 @@
+This module extends the core feature to allow users to forward messages from the chatter of any document to another thread, without adding the recipients as followers, only notifying the current followers of the other thread.
