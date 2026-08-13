@@ -21,6 +21,12 @@ msgid "%(activity)s, assigned to team %(name)s, due on the %(deadline)s"
 msgstr ""
 
 #. module: mail_activity_team
+#. odoo-python
+#: code:addons/mail_activity_team/models/mail_activity.py:0
+msgid "%(activity_name)s: %(summary)s (Team Activity)"
+msgstr ""
+
+#. module: mail_activity_team
 #. odoo-javascript
 #: code:addons/mail_activity_team/static/src/core/web/activity.xml:0
 msgid "(Team"
@@ -81,6 +87,12 @@ msgid "Activity schedule plan Wizard"
 msgstr ""
 
 #. module: mail_activity_team
+#. odoo-python
+#: code:addons/mail_activity_team/models/mail_activity.py:0
+msgid "Activity: %s"
+msgstr ""
+
+#. module: mail_activity_team
 #: model_terms:ir.ui.view,arch_db:mail_activity_team.mail_activity_team_view_form
 msgid "Archived"
 msgstr ""
@@ -109,6 +121,12 @@ msgstr ""
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: mail_activity_team
+#. odoo-python
+#: code:addons/mail_activity_team/models/mail_activity.py:0
+msgid "Deadline: %s"
 msgstr ""
 
 #. module: mail_activity_team
@@ -187,6 +205,11 @@ msgid "Name"
 msgstr ""
 
 #. module: mail_activity_team
+#: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__notify_members
+msgid "Notify Members"
+msgstr ""
+
+#. module: mail_activity_team
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity_plan_template.py:0
 msgid "Please enter an activity team."
@@ -237,6 +260,12 @@ msgstr ""
 #. module: mail_activity_team
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity.py:0
+msgid "Team: %s"
+msgstr ""
+
+#. module: mail_activity_team
+#. odoo-python
+#: code:addons/mail_activity_team/models/mail_activity.py:0
 msgid ""
 "The assigned user %(user_name)s is not member of the team %(team_name)s."
 msgstr ""
@@ -254,6 +283,13 @@ msgstr ""
 #. module: mail_activity_team
 #: model:ir.model,name:mail_activity_team.model_res_users
 msgid "User"
+msgstr ""
+
+#. module: mail_activity_team
+#: model:ir.model.fields,help:mail_activity_team.field_mail_activity_team__notify_members
+msgid ""
+"When enabled, all team members will be notified when an activity is assigned "
+"to this team."
 msgstr ""
 
 #. module: mail_activity_team
