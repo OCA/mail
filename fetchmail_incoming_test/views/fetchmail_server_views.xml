@@ -11,6 +11,11 @@
                     type="action"
                     string="Simulate Incoming Email"
                 />
+                <button
+                    name="%(action_fetchmail_incoming_test_eml)d"
+                    type="action"
+                    string="Replay Email File"
+                />
             </xpath>
         </field>
     </record>

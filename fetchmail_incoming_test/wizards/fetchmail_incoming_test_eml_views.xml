@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="fetchmail_incoming_test_eml_view_form" model="ir.ui.view">
+        <field name="name">fetchmail.incoming.test.eml.form</field>
+        <field name="model">fetchmail.incoming.test.eml</field>
+        <field name="arch" type="xml">
+            <form string="Replay Email File">
+                <group>
+                    <field name="eml_filename" invisible="1" />
+                    <field name="eml_file" filename="eml_filename" />
+                </group>
+                <footer>
+                    <button
+                        name="action_process"
+                        type="object"
+                        string="Process"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fetchmail_incoming_test_eml" model="ir.actions.act_window">
+        <field name="name">Replay Email File</field>
+        <field name="res_model">fetchmail.incoming.test.eml</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!-- Show as an entry of the Incoming Mail Server 'Action' menu. A cog
+             action opens without force-saving the server record, unlike a header
+             button (which would fail on the required server/user fields when
+             those come from server_env). -->
+        <field name="binding_model_id" ref="mail.model_fetchmail_server" />
+        <field name="binding_view_types">list,form</field>
+    </record>
+</odoo>
