@@ -120,7 +120,7 @@ class MailActivity(models.Model):
             tz = timezone(user.sudo().tz or "UTC")
             local_now = utc_now.astimezone(tz)
 
-            subject = self.env._("Some activities you are assigned too expire soon.")
+            subject = self.env._("Some activities you are assigned to expire soon.")
 
             body = self.env["ir.qweb"]._render(
                 "mail_activity_reminder.message_activity_assigned",
