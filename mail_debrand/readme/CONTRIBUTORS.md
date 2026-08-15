@@ -4,3 +4,4 @@
     -   Pedro M. Baeza
     -   João Marques
 - Stefan Rijnhart <stefan@opener.amsterdam>
+- Jord Duineveld <jord.duineveld@codeforward.nl>

@@ -41,10 +41,14 @@ class MailRenderMixin(models.AbstractModel):
                 # Remove "Powered by", "using" etc.
                 previous = elem.getprevious()
                 if previous is not None:
-                    previous.tail = etree.CDATA("&nbsp;")
+                    previous.tail = None
                 elif parent.text:
-                    parent.text = etree.CDATA("&nbsp;")
+                    parent.text = None
                 parent.remove(elem)
+            # Clean up dangling pipe separator in unfollow span
+            for span in tree.xpath('//span[@id="mail_unfollow"]'):
+                if span.text and "|" in span.text:
+                    span.text = None
             value = etree.tostring(
                 tree, pretty_print=True, method="html", encoding="unicode"
             )
