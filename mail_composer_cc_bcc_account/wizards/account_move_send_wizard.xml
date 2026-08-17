@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="account_move_send_wizard_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.send.wizard.form.inherit</field>
+        <field name="model">account.move.send.wizard</field>
+        <field name="inherit_id" ref="account.account_move_send_wizard_form" />
+        <field name="arch" type="xml">
+            <field name="mail_partner_ids" position="after" />
+            <xpath expr="//field[@name='mail_partner_ids']/.." position="after">
+                <field
+                    name="partner_cc_ids"
+                    widget="many2many_tags_email"
+                    options="{'no_quick_create': True}"
+                    context="{'show_email': True, 'form_view_ref': 'base.view_partner_simple_form'}"
+                />
+                <field
+                    name="partner_bcc_ids"
+                    widget="many2many_tags_email"
+                    options="{'no_quick_create': True}"
+                    context="{'show_email': True, 'form_view_ref': 'base.view_partner_simple_form'}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
