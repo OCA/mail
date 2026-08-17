@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-04-03 09:45+0000\n"
+"PO-Revision-Date: 2026-08-17 12:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -26,7 +26,7 @@ msgstr "%(activity)s, assegnata al team %(name)s, con scadenza il %(deadline)s"
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity.py:0
 msgid "%(activity_name)s: %(summary)s (Team Activity)"
-msgstr ""
+msgstr "%(activity_name)s: %(summary)s (Attività team)"
 
 #. module: mail_activity_team
 #. odoo-javascript
@@ -92,7 +92,7 @@ msgstr "Procedura guidata piano schedulazione attività"
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity.py:0
 msgid "Activity: %s"
-msgstr ""
+msgstr "Attività: %s"
 
 #. module: mail_activity_team
 #: model_terms:ir.ui.view,arch_db:mail_activity_team.mail_activity_team_view_form
@@ -129,7 +129,7 @@ msgstr "Creato il"
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity.py:0
 msgid "Deadline: %s"
-msgstr ""
+msgstr "Scadenza: %s"
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_type__default_team_id
@@ -209,7 +209,7 @@ msgstr "Nome"
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_mail_activity_team__notify_members
 msgid "Notify Members"
-msgstr ""
+msgstr "Notifica membri"
 
 #. module: mail_activity_team
 #. odoo-python
@@ -263,7 +263,7 @@ msgstr "Utente del team"
 #. odoo-python
 #: code:addons/mail_activity_team/models/mail_activity.py:0
 msgid "Team: %s"
-msgstr ""
+msgstr "Team: %s"
 
 #. module: mail_activity_team
 #. odoo-python
@@ -294,6 +294,8 @@ msgid ""
 "When enabled, all team members will be notified when an activity is assigned "
 "to this team."
 msgstr ""
+"Quando abilitata, tutti i membri del team saranno avvisati quando una "
+"attività è assegnata a questo team."
 
 #. module: mail_activity_team
 #: model:ir.model.fields,field_description:mail_activity_team.field_account_account__activity_team_user_ids
