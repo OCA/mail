@@ -2,8 +2,7 @@
 # @author Iván Todorovich <ivan.todorovich@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo_test_helper import FakeModelLoader
-
+from odoo.orm.model_classes import add_to_registry
 from odoo.tests import Form, tagged
 from odoo.tests.common import TransactionCase
 
@@ -15,11 +14,12 @@ class TestMailAutosubscribe(TransactionCase):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         # Load fake order model
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
         from .models.fake_order import FakeOrder
 
-        cls.loader.update_registry((FakeOrder,))
+        add_to_registry(cls.registry, FakeOrder)
+        cls.registry._setup_models__(cls.env.cr, ["fake.order"])
+        cls.registry.init_models(cls.env.cr, ["fake.order"], {"models_to_check": True})
+        cls.addClassCleanup(cls.registry.__delitem__, "fake.order")
         cls.fake_order_model = cls.env["ir.model"].search(
             [("model", "=", "fake.order")]
         )
@@ -36,11 +36,19 @@ class TestMailAutosubscribe(TransactionCase):
                 "body_html": "Hello, this is a fake order",
             }
         )
-        # Partners
-        cls.commercial_partner = cls.env.ref("base.res_partner_4")
-        cls.partner_1 = cls.env.ref("base.res_partner_address_13")
-        cls.partner_2 = cls.env.ref("base.res_partner_address_14")
-        cls.partner_3 = cls.env.ref("base.res_partner_address_24")
+        # Partners - use test fixtures instead of demo data external IDs
+        cls.commercial_partner = cls.env["res.partner"].create(
+            {"name": "Commercial Partner"}
+        )
+        cls.partner_1 = cls.env["res.partner"].create(
+            {"name": "Partner 1", "parent_id": cls.commercial_partner.id}
+        )
+        cls.partner_2 = cls.env["res.partner"].create(
+            {"name": "Partner 2", "parent_id": cls.commercial_partner.id}
+        )
+        cls.partner_3 = cls.env["res.partner"].create(
+            {"name": "Partner 3", "parent_id": cls.commercial_partner.id}
+        )
         # Autosubscribe rules
         cls.autosubscribe_fake_order = cls.env["mail.autosubscribe"].create(
             {"model_id": cls.fake_order_model.id}
@@ -48,11 +56,6 @@ class TestMailAutosubscribe(TransactionCase):
         cls.partner_3.mail_autosubscribe_ids = [(4, cls.autosubscribe_fake_order.id)]
         # Empty fake.order
         cls.order = cls.env["fake.order"].create({"partner_id": cls.partner_2.id})
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.loader.restore_registry()
-        return super().tearDownClass()
 
     def test_message_subscribe(self):
         """Test autosubscribe on a basic workflow"""

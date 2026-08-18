@@ -21,10 +21,10 @@ class BaseModel(models.AbstractModel):
         domain = self._message_get_autosubscribe_followers_domain(partners)
         return self.env["res.partner"].sudo().search(domain)
 
-    def _message_get_default_recipients(self):
+    def _message_get_default_recipients(self, with_cc=False, all_tos=False):
         # Overload to include auto follow document partners in the composer
         # Note: This only works if the template is configured with 'Default recipients'
-        res = super()._message_get_default_recipients()
+        res = super()._message_get_default_recipients(with_cc=with_cc, all_tos=all_tos)
         test_condition = config["test_enable"] and not self.env.context.get(
             "test_mail_autosubscribe"
         )

@@ -9,13 +9,10 @@ class MailAutosubscribe(models.Model):
     _name = "mail.autosubscribe"
     _description = "Mail Autosubscribe"
 
-    _sql_constraints = [
-        (
-            "model_id_unique",
-            "UNIQUE(model_id)",
-            "There's already a rule for this model",
-        )
-    ]
+    _model_id_unique = models.Constraint(
+        "UNIQUE(model_id)",
+        "There's already a rule for this model",
+    )
 
     model_id = fields.Many2one(
         "ir.model",
