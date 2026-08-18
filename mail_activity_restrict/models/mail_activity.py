@@ -9,9 +9,23 @@ class MailActivity(models.Model):
 
     _inherit = "mail.activity"
 
+    def write(self, vals):
+        # user looses access to the record when changing the user_id,
+        # so we need to check access before changing it
+        res = True
+        allow_sudo_activity = self.env["mail.activity"]
+        if "user_id" in vals:
+            allow_sudo_activity = self.filtered(
+                lambda act: act._check_access("write") is None
+            )
+        if allow_sudo_activity:
+            res = super(MailActivity, allow_sudo_activity.sudo()).write(vals)
+        res = super(MailActivity, self - allow_sudo_activity).write(vals) and res
+        return res
+
     def _get_can_write_restrict_allowed_activities(self):
         """Return restricted activities the current user may modify."""
-        return self.sudo().filtered_domain([("user_id", "=", self.env.uid)])
+        return self.sudo().filtered_domain([("user_id", "in", (False, self.env.uid))])
 
     def _make_can_write_restrict_error(self, operation: str) -> AccessError:
         """Build the access error raised for restricted activity types."""
