@@ -76,12 +76,10 @@ Do not contact contributors directly about support or help with technical issues
 Credits
 =======
 
-Contributors
-------------
+Authors
+-------
 
--  `glueckkanja AG <https://www.glueckkanja.com>`__:
-
-   -  Christopher Rogos
+* glueckkanja AG
 
 Contributors
 ------------
@@ -102,6 +100,14 @@ This module is maintained by the OCA.
 OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
+
+.. |maintainer-CRogos| image:: https://github.com/CRogos.png?size=40px
+    :target: https://github.com/CRogos
+    :alt: CRogos
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-CRogos| 
 
 This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_activity_team_restrict>`_ project on GitHub.
 
