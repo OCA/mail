@@ -4,7 +4,7 @@
 {
     "name": "Mail Activity Dashboard",
     "summary": "Add Activity Dashboards",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "development_status": "Beta",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
