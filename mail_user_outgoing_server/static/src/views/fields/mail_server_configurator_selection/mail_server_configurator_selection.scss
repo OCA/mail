@@ -1,0 +1,11 @@
+// Copyright 2026 ForgeFlow S.L. (https://www.forgeflow.com)
+// License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+.o_mail_server_configurator_selection_test_connection {
+    // Change the text content when hovering
+    &:hover div:nth-child(1) {
+        display: none !important;
+    }
+    &:not(:hover) div:nth-child(2) {
+        display: none !important;
+    }
+}
