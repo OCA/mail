@@ -253,6 +253,39 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
         # no _assert_mails here: the mail.mail are gone, only the emails remain
         self._assert_headers(partners_to, partners_cc, partners_bcc)
 
+    def test_notification_message_type_with_cc_bcc_still_adds_them(self):
+        """message_post_with_source's default message_type='notification'
+        must not skip cc/bcc when the message actually carries cc/bcc
+        data (e.g. rendered through the composer from a template).
+        """
+        partners_to, cc_1, cc_2, partners_bcc = self.partners_same_lang
+        partners_cc = cc_1 + cc_2
+        composer = (
+            self.env["mail.compose.message"]
+            .with_context(
+                default_model=self.record._name,
+                default_res_ids=self.record.ids,
+                default_composition_mode="comment",
+                mail_notify_force_send=True,
+            )
+            .create(
+                {
+                    "subject": "notification-type-with-cc",
+                    "body": "<p>Hello</p>",
+                    "message_type": "notification",
+                    "partner_ids": [Command.set(partners_to.ids)],
+                    "partner_cc_ids": [Command.set(partners_cc.ids)],
+                    "partner_bcc_ids": [Command.set(partners_bcc.ids)],
+                }
+            )
+        )
+        with self.mock_mail_gateway():
+            composer._action_send_mail()
+
+        self._assert_one_email_per_recipient(partners_to + partners_cc + partners_bcc)
+        self._assert_same_to_cc_headers(partners_to, partners_cc)
+        self._assert_bcc_header_on_bcc_emails_only(partners_bcc)
+
     def test_no_recipient_left_refuses_to_send(self):
         """Running out of recipients must raise, never fall back to To+Cc+Bcc
 
