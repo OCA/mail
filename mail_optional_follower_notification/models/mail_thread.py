@@ -20,5 +20,7 @@ class MailThread(models.AbstractModel):
                 if msg_vals
                 else message.sudo().partner_ids.ids
             )
-            recipient_data = [d for d in recipient_data if d["id"] in pids]
+            recipient_data = [
+                d for d in recipient_data if d["id"] in pids or not d.get("is_follower")
+            ]
         return recipient_data
