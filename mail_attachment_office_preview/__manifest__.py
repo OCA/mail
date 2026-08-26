@@ -10,6 +10,7 @@
     "author": "Jarsa, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "depends": ["mail"],
+    "external_dependencies": {"deb": ["libreoffice"]},
     "assets": {
         "web.assets_backend": [
             "mail_attachment_office_preview/static/src/attachment_model_patch.esm.js",
