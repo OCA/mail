@@ -4,10 +4,18 @@
 
 from datetime import datetime, time
 
+from freezegun import freeze_time
+
 from odoo import fields
 from odoo.tests.common import TransactionCase
 
 
+# ``is_absent`` is only true while the current time is inside the leave, and
+# ``hr.leave`` narrows a full day leave to the working schedule of the employee
+# (08:00-17:00 in the timezone of the company calendar). Freeze the clock inside
+# that window, otherwise the result depends on the time of the day at which the
+# tests happen to run.
+@freeze_time("2023-05-15 10:00:00")
 class TestNotifyEmployeeLeave(TransactionCase):
     @classmethod
     def setUpClass(cls):
