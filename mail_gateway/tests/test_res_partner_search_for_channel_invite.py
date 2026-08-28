@@ -33,7 +33,7 @@ class TestResPartnerSearchForChannelInvite(BaseCommon):
         result = self.env["res.partner"].search_for_channel_invite(
             "Test", channel_id=self.gateway_channel.id
         )
-        suggested_ids = {p["id"] for p in result["data"].get("res.partner", [])}
+        suggested_ids = {p["id"] for p in result["store_data"].get("res.partner", [])}
         self.assertIn(self.gateway_user.partner_id.id, suggested_ids)
         self.assertNotIn(self.regular_user.partner_id.id, suggested_ids)
 
@@ -41,6 +41,6 @@ class TestResPartnerSearchForChannelInvite(BaseCommon):
         result = self.env["res.partner"].search_for_channel_invite(
             "Test", channel_id=self.regular_channel.id
         )
-        suggested_ids = {p["id"] for p in result["data"].get("res.partner", [])}
+        suggested_ids = {p["id"] for p in result["store_data"].get("res.partner", [])}
         self.assertIn(self.gateway_user.partner_id.id, suggested_ids)
         self.assertIn(self.regular_user.partner_id.id, suggested_ids)

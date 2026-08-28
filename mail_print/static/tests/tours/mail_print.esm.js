@@ -26,7 +26,7 @@ registry.category("web_tour.tours").add("mail_print.mail_print_tour", {
         },
         {
             content: "Open contact",
-            trigger: ".o_list_table td[name='display_name']:contains('Mail Print')",
+            trigger: ".o_list_table td.o_data_cell:contains('Mail Print')",
             run: "click",
         },
         {
