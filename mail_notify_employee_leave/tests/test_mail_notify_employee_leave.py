@@ -9,13 +9,14 @@ from freezegun import freeze_time
 from odoo import fields
 from odoo.tests.common import TransactionCase
 
-
 # ``is_absent`` is only true while the current time is inside the leave, and
 # ``hr.leave`` narrows a full day leave to the working schedule of the employee
-# (08:00-17:00 in the timezone of the company calendar). Freeze the clock inside
-# that window, otherwise the result depends on the time of the day at which the
-# tests happen to run.
-@freeze_time("2023-05-15 10:00:00")
+# (08:00-17:00 in the timezone of the company calendar). The tests that need an
+# absent employee freeze the clock inside that window, otherwise the result
+# depends on the time of the day at which they happen to run.
+WORKING_HOUR = "2023-05-15 10:00:00"
+
+
 class TestNotifyEmployeeLeave(TransactionCase):
     @classmethod
     def setUpClass(cls):
@@ -58,16 +59,15 @@ class TestNotifyEmployeeLeave(TransactionCase):
 
         cls.record = cls.env["res.partner"].create({"name": "Test Record"})
 
-    @classmethod
-    def _create_validated_leave(cls):
+    def _create_validated_leave(self):
         today = fields.Date.today()
         leave = (
-            cls.env["hr.leave"]
+            self.env["hr.leave"]
             .with_context(skip_absence_notification=True)
             .create(
                 {
-                    "holiday_status_id": cls.leave_type.id,
-                    "employee_id": cls.employee.id,
+                    "holiday_status_id": self.leave_type.id,
+                    "employee_id": self.employee.id,
                     "date_from": datetime.combine(today, time(0, 0, 0)),
                     "date_to": datetime.combine(today, time(23, 59, 59)),
                 }
@@ -83,6 +83,7 @@ class TestNotifyEmployeeLeave(TransactionCase):
 
         self.assertNotIn(self.user, self.employee.absence_notified_user_ids)
 
+    @freeze_time(WORKING_HOUR)
     def test_notify_when_user_absent(self):
         self._create_validated_leave()
 
@@ -93,6 +94,7 @@ class TestNotifyEmployeeLeave(TransactionCase):
         self.assertIn(self.user, self.employee.absence_notified_user_ids)
         self.assertEqual(self.employee.absence_notified_date, fields.Date.today())
 
+    @freeze_time(WORKING_HOUR)
     def test_only_one_notification_per_day(self):
         self._create_validated_leave()
 
