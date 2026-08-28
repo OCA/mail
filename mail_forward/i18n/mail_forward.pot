@@ -14,11 +14,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: mail_forward
+#: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_gateway_message__forward_type__another_thread
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__another_thread
 msgid "Another thread"
 msgstr ""
 
 #. module: mail_forward
+#: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_gateway_message__forward_type__current_thread
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__current_thread
 msgid "Current thread"
 msgstr ""
@@ -45,6 +47,7 @@ msgid "Enable forwarding messages to records of this model."
 msgstr ""
 
 #. module: mail_forward
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_type
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_type
 msgid "Forward Type"
 msgstr ""
@@ -61,6 +64,7 @@ msgid "Models"
 msgstr ""
 
 #. module: mail_forward
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_thread
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_thread
 msgid "Thread to forward"
 msgstr ""
