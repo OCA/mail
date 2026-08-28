@@ -33,14 +33,14 @@ class MailGateway(models.Model):
         "res.company", default=lambda self: self.env.company.id
     )
 
-    _sql_constraints = [
-        ("mail_gateway_token", "unique(token)", "Token must be unique"),
-        (
-            "mail_gateway_webhook_key",
-            "unique(webhook_key)",
-            "Webhook Key must be unique",
-        ),
-    ]
+    _mail_gateway_token = models.Constraint(
+        "unique(token)",
+        "Token must be unique",
+    )
+    _mail_gateway_webhook_key = models.Constraint(
+        "unique(webhook_key)",
+        "Webhook Key must be unique",
+    )
 
     @api.depends("webhook_key")
     def _compute_webhook_url(self):
@@ -63,7 +63,7 @@ class MailGateway(models.Model):
     def _get_webhook_url(self):
         return "{}/gateway/{}/{}/update".format(
             self.webhook_url
-            or self.env["ir.config_parameter"].get_param("web.base.url"),
+            or self.env["ir.config_parameter"].sudo().get_param("web.base.url"),
             self.gateway_type,
             self.webhook_key,
         )
@@ -108,7 +108,7 @@ class MailGateway(models.Model):
         return res
 
     @api.model
-    @tools.ormcache()
+    @tools.ormcache("state", "gateway_type")
     def _get_gateway_map(self, state="integrated", gateway_type=False):
         result = {}
         for record in self.sudo().search(
