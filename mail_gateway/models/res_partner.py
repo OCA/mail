@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
-from odoo.osv import expression
+from odoo.fields import Domain
 from odoo.tools import SQL
 
 from odoo.addons.mail.tools.discuss import Store
@@ -19,30 +19,35 @@ class ResPartner(models.Model):
 
     @api.readonly
     @api.model
-    def search_for_channel_invite(self, search_term, channel_id=None, limit=30):
+    def _search_for_channel_invite(self, store, search_term, channel_id=None, limit=30):
+        """Only allow inviting members of the gateway users group.
+
+        Core restricts the invitable users through the ``group_public_id`` field,
+        but it is only allowed on channels of type ``channel``, so the restriction
+        needs to be done here for gateway channels.
+        """
         channel = (
-            self.env["discuss.channel"].browse(int(channel_id)) if channel_id else None
+            self.env["discuss.channel"].search([("id", "=", int(channel_id))])
+            if channel_id
+            else self.env["discuss.channel"]
         )
-        if not channel or channel.channel_type != "gateway":
-            return super().search_for_channel_invite(
-                search_term, channel_id=channel_id, limit=limit
+        if channel.channel_type != "gateway":
+            return super()._search_for_channel_invite(
+                store, search_term, channel_id=channel_id, limit=limit
             )
         gateway_group = self.env.ref("mail_gateway.gateway_user")
-        domain = expression.AND(
+        domain = Domain.AND(
             [
-                expression.OR(
-                    [
-                        [("name", "ilike", search_term)],
-                        [("email", "ilike", search_term)],
-                    ]
-                ),
+                Domain("name", "ilike", search_term)
+                | Domain("email", "ilike", search_term),
+                [("id", "!=", self.env.user.partner_id.id)],
                 [("active", "=", True)],
                 [("user_ids", "!=", False)],
                 [("user_ids.active", "=", True)],
                 [("user_ids.share", "=", False)],
                 [("channel_ids", "not in", channel.id)],
-                # only users allowed to access gateway channels can be invited to them
-                [("user_ids.groups_id", "in", gateway_group.id)],
+                # only users allowed to access gateway channels can be invited
+                [("user_ids.all_group_ids", "in", gateway_group.id)],
             ]
         )
         query = self._search(domain, limit=limit)
@@ -50,51 +55,28 @@ class ResPartner(models.Model):
         query.order = SQL(
             'LOWER(%s), "res_partner"."id"', self._field_to_sql(self._table, "name")
         )
-        store = Store()
-        self.env["res.partner"].browse(query)._search_for_channel_invite_to_store(
-            store, channel
-        )
+        selectable_partners = self.env["res.partner"].browse(query)
+        selectable_partners._search_for_channel_invite_to_store(store, channel)
         return {
             "count": self.env["res.partner"].search_count(domain),
-            "data": store.get_result(),
+            "partner_ids": selectable_partners.ids,
         }
 
-    def _get_channels_as_member(self):
-        channels = super()._get_channels_as_member()
-        if self.env.user.has_group("mail_gateway.gateway_user"):
-            channels |= self.env["discuss.channel"].search(
-                [
-                    ("channel_type", "=", "gateway"),
-                    (
-                        "channel_member_ids",
-                        "in",
-                        self.env["discuss.channel.member"]
-                        .sudo()
-                        ._search(
-                            [
-                                ("partner_id", "=", self.id),
-                                ("is_pinned", "=", True),
-                            ]
-                        ),
-                    ),
-                ]
-            )
-        return channels
+    def _field_store_repr(self, field_name):
+        if field_name == "gateway_channels":
+            # sudo: res.partner.gateway.channel - technical data needed by the web
+            # client, not meant to be restricted by the reader's access rights
+            return [
+                Store.Attr(
+                    "gateway_channels",
+                    lambda partner: partner.sudo().gateway_channel_ids.mail_format(),
+                )
+            ]
+        return super()._field_store_repr(field_name)
 
-    def _to_store(self, store: Store, /, *, fields=None, **kwargs):
-        """Override to add the gateway channels the partner can be reached on."""
-        super()._to_store(store, fields=fields, **kwargs)
-        if fields is None:
-            fields = ["gateway_channels"]
-        if "gateway_channels" not in fields:
-            return
-        # sudo: res.partner.gateway.channel - technical data needed by the web
-        # client, not meant to be restricted by the reader's access rights
-        for partner in self.sudo():
-            store.add(
-                partner,
-                {"gateway_channels": partner.gateway_channel_ids.mail_format()},
-            )
+    def _to_store_defaults(self, target):
+        """Add the gateway channels the partner can be reached on."""
+        return super()._to_store_defaults(target) + ["gateway_channels"]
 
 
 class ResPartnerGatewayChannel(models.Model):
@@ -124,13 +106,10 @@ class ResPartnerGatewayChannel(models.Model):
                 f"{gateway_channel.partner_id.display_name} ({gateway_channel.name})"
             )
 
-    _sql_constraints = [
-        (
-            "unique_partner_gateway",
-            "UNIQUE(partner_id, gateway_id)",
-            "Partner can only have one configuration for each gateway.",
-        ),
-    ]
+    _unique_partner_gateway = models.Constraint(
+        "UNIQUE(partner_id, gateway_id)",
+        "Partner can only have one configuration for each gateway.",
+    )
 
     def mail_format(self):
         return [r._mail_format() for r in self]

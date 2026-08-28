@@ -1,5 +1,7 @@
 # Copyright 2024 Dixmit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import json
+
 from odoo import Command, models
 
 
@@ -12,6 +14,11 @@ class MailGatewayAbstract(models.AbstractModel):
 
     def _receive_update(self, gateway, kwargs):
         pass
+
+    def _receive_get_update(self, bot_data, request, **kwargs):
+        return request.make_response(
+            json.dumps({}), [("Content-Type", "application/json")]
+        )
 
     def _post_process_message(self, message, channel):
         self.env["mail.notification"].search(
@@ -61,6 +68,7 @@ class MailGatewayAbstract(models.AbstractModel):
                 )
             )
         return {
+            "name": (author.name if author else None) or token,
             "gateway_channel_token": token,
             "gateway_id": gateway.id,
             "channel_type": "gateway",
