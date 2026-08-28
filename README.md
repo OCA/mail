@@ -29,7 +29,7 @@ addon | version | maintainers | summary
 [mail_message_search](mail_message_search/) | 17.0.1.0.0 | <a href='https://github.com/yostashiro'><img src='https://github.com/yostashiro.png' width='32' height='32' style='border-radius:50%;' alt='yostashiro'/></a> <a href='https://github.com/aungkokolin1997'><img src='https://github.com/aungkokolin1997.png' width='32' height='32' style='border-radius:50%;' alt='aungkokolin1997'/></a> | Mail Message Search
 [mail_notification_link](mail_notification_link/) | 17.0.1.0.0 |  | Navigate to document by clicking on notification name
 [mail_notification_sound_volume](mail_notification_sound_volume/) | 17.0.1.0.0 |  | Allow users to configure notification sound volume
-[mail_notify_employee_leave](mail_notify_employee_leave/) | 17.0.1.0.0 |  | Notifies users when they mention or assign someone who is out of office.
+[mail_notify_employee_leave](mail_notify_employee_leave/) | 17.0.1.0.1 |  | Notifies users when they mention or assign someone who is out of office.
 [mail_sent_history](mail_sent_history/) | 17.0.1.0.0 |  | View and browse messages and notes you have sent
 [mail_template_domain](mail_template_domain/) | 17.0.1.0.0 |  | Filter mail templates by domain on the active record
 

@@ -6,7 +6,7 @@
     "summary": """
         Notifies users when they mention or assign someone who is out of office.
     """,
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "license": "AGPL-3",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
