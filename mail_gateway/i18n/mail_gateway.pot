@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -76,6 +76,11 @@ msgid "Body content is the same as the template"
 msgstr ""
 
 #. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__can_attach_attachment
+msgid "Can Attach Attachment"
+msgstr ""
+
+#. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__can_edit_body
 msgid "Can Edit Body"
 msgstr ""
@@ -110,14 +115,14 @@ msgid ""
 msgstr ""
 
 #. module: mail_gateway
-#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__use_exclusion_list
-msgid "Check Exclusion List"
-msgstr ""
-
-#. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_mail__gateway_message_ids
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message__gateway_message_ids
 msgid "Child gateway messages"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__composition_comment_option
+msgid "Comment Options"
 msgstr ""
 
 #. module: mail_gateway
@@ -184,13 +189,28 @@ msgid "Discussion Channel"
 msgstr ""
 
 #. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_discuss_channel__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_ir_websocket__display_name
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__display_name
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_gateway__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_gateway_abstract__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_guest__display_name
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_guest_manage__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_message__display_name
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message_gateway_link__display_name
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message_gateway_send__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_notification__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_res_partner__display_name
 #: model:ir.model.fields,field_description:mail_gateway.field_res_partner_gateway_channel__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_res_users__display_name
+#: model:ir.model.fields,field_description:mail_gateway.field_res_users_settings__display_name
 msgid "Display Name"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__display_object_attachment_ids
+msgid "Display Object Attachment"
 msgstr ""
 
 #. module: mail_gateway
@@ -208,11 +228,6 @@ msgstr ""
 msgid ""
 "Email address of the sender. This field is set when no matching partner is "
 "found and replaces the author_id field in the chatter."
-msgstr ""
-
-#. module: mail_gateway
-#: model:ir.model,name:mail_gateway.model_mail_resend_message
-msgid "Email resend wizard"
 msgstr ""
 
 #. module: mail_gateway
@@ -240,6 +255,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:mail_gateway.selection__mail_notification__notification_type__gateway
 #: model:ir.module.category,name:mail_gateway.module_category_gateway
 #: model:ir.ui.menu,name:mail_gateway.mail_gateway_menu
+#: model:res.groups.privilege,name:mail_gateway.gateway_privilege
 msgid "Gateway"
 msgstr ""
 
@@ -284,11 +300,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_mail__gateway_notification_ids
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message__gateway_notification_ids
 msgid "Gateway Notification"
-msgstr ""
-
-#. module: mail_gateway
-#: model:ir.model.fields,field_description:mail_gateway.field_mail_resend_message__gateway_notification_ids
-msgid "Gateway Notifications"
 msgstr ""
 
 #. module: mail_gateway
@@ -350,13 +361,30 @@ msgid "Has New Channel Security"
 msgstr ""
 
 #. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_discuss_channel__id
+#: model:ir.model.fields,field_description:mail_gateway.field_ir_websocket__id
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__id
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_gateway__id
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_gateway_abstract__id
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_guest__id
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_guest_manage__id
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_message__id
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message_gateway_link__id
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message_gateway_send__id
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_notification__id
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_thread__id
+#: model:ir.model.fields,field_description:mail_gateway.field_res_partner__id
 #: model:ir.model.fields,field_description:mail_gateway.field_res_partner_gateway_channel__id
+#: model:ir.model.fields,field_description:mail_gateway.field_res_users__id
+#: model:ir.model.fields,field_description:mail_gateway.field_res_users_settings__id
 msgid "ID"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__mass_mailing_name
+msgid ""
+"If set, a mass mailing will be created so that you can track its results in "
+"the Email Marketing app."
 msgstr ""
 
 #. module: mail_gateway
@@ -390,6 +418,11 @@ msgstr ""
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__subtype_is_log
 msgid "Is a log"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notified_bcc_contains_share
+msgid "Is an external partner follower of the document?"
 msgstr ""
 
 #. module: mail_gateway
@@ -494,10 +527,30 @@ msgid "Mail Message Gateway Send"
 msgstr ""
 
 #. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__mailing_list_ids
+msgid "Mailing List"
+msgstr ""
+
+#. module: mail_gateway
 #: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__reply_to_force_new
 msgid ""
 "Manage answers as new incoming emails instead of replies going to the same "
 "thread."
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__mass_mailing_id
+msgid "Mass Mailing"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__campaign_id
+msgid "Mass Mailing Campaign"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__mass_mailing_name
+msgid "Mass Mailing Name"
 msgstr ""
 
 #. module: mail_gateway
@@ -558,6 +611,21 @@ msgid "Notification Type"
 msgstr ""
 
 #. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notify_author
+msgid "Notify Author"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notify_author_mention
+msgid "Notify Author Mention"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notify_skip_followers
+msgid "Notify Skip Followers"
+msgstr ""
+
+#. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__object_attachment_ids
 msgid "Object Attachments"
 msgstr ""
@@ -572,9 +640,9 @@ msgstr ""
 #: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__lang
 msgid ""
 "Optional translation language (ISO code) to select when sending out an "
-"email. If not set, the english version will be used. This should usually be "
-"a placeholder expression that provides the appropriate language, e.g. {{ "
-"object.partner_id.lang }}."
+"email. If not set, the main partner's language will be used. This should "
+"usually be a placeholder expression that provides the appropriate language, "
+"e.g. {{ object.partner_id.lang }}."
 msgstr ""
 
 #. module: mail_gateway
@@ -609,6 +677,11 @@ msgid "Partner"
 msgstr ""
 
 #. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__partner_ids_all_have_email
+msgid "Partner Ids All Have Email"
+msgstr ""
+
+#. module: mail_gateway
 #: model:ir.model.constraint,message:mail_gateway.constraint_res_partner_gateway_channel_unique_partner_gateway
 msgid "Partner can only have one configuration for each gateway."
 msgstr ""
@@ -619,8 +692,10 @@ msgid "Pending"
 msgstr ""
 
 #. module: mail_gateway
-#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__record_name
-msgid "Record Name"
+#: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__use_exclusion_list
+msgid ""
+"Prevent sending messages to blacklisted contacts. Disable only when "
+"absolutely necessary."
 msgstr ""
 
 #. module: mail_gateway
@@ -777,6 +852,11 @@ msgstr ""
 #. module: mail_gateway
 #: model_terms:ir.ui.view,arch_db:mail_gateway.mail_gateway_form_view
 msgid "Update Webhook"
+msgstr ""
+
+#. module: mail_gateway
+#: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__use_exclusion_list
+msgid "Use Exclusion List"
 msgstr ""
 
 #. module: mail_gateway
