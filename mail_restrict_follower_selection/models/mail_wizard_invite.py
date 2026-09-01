@@ -5,7 +5,7 @@
 
 from lxml import etree
 
-from odoo import api, models
+from odoo import api, fields, models
 from odoo.osv import expression
 from odoo.tools.safe_eval import safe_eval
 
@@ -14,6 +14,22 @@ from ..utils import _id_get
 
 class MailWizardInvite(models.TransientModel):
     _inherit = "mail.wizard.invite"
+
+    partner_ids_domain = fields.Binary(compute="_compute_partner_ids_domain")
+
+    @api.depends("res_model")
+    @api.depends_context("default_res_model")
+    def _compute_partner_ids_domain(self):
+        for wizard in self:
+            domain = wizard._mail_restrict_follower_selection_get_domain(
+                res_model=wizard.res_model
+            )
+            wizard.partner_ids_domain = safe_eval(
+                str(domain),
+                locals_dict={
+                    "ref": lambda str_id, env=wizard.env: _id_get(env, str_id)
+                },
+            )
 
     @api.model
     def _mail_restrict_follower_selection_get_domain(self, res_model=None):
@@ -38,12 +54,16 @@ class MailWizardInvite(models.TransientModel):
     @api.model
     def get_view(self, view_id=None, view_type="form", **options):
         result = super().get_view(view_id=view_id, view_type=view_type, **options)
+        if view_type != "form":
+            return result
         arch = etree.fromstring(result["arch"])
-        domain = self._mail_restrict_follower_selection_get_domain()
-        eval_domain = safe_eval(
-            str(domain), locals_dict={"ref": lambda str_id: _id_get(self.env, str_id)}
-        )
-        for field in arch.xpath('//field[@name="partner_ids"]'):
-            field.attrib["domain"] = str(eval_domain)
+        partner_ids_fields = arch.xpath('//field[@name="partner_ids"]')
+        if partner_ids_fields and not arch.xpath('//field[@name="partner_ids_domain"]'):
+            domain_field = etree.Element("field")
+            domain_field.attrib["name"] = "partner_ids_domain"
+            domain_field.attrib["invisible"] = "1"
+            partner_ids_fields[0].addprevious(domain_field)
+        for field in partner_ids_fields:
+            field.attrib["domain"] = "partner_ids_domain"
         result["arch"] = etree.tostring(arch)
         return result
