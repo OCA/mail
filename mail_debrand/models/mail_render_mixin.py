@@ -10,9 +10,92 @@ from markupsafe import Markup
 
 from odoo import api, models
 
+BODY_PLACEHOLDER = "<body_msg></body_msg>"
+# Match the brand as a standalone word only. The look-behind and the
+# look-ahead keep domain names (``odoo.com``, ``www.odoo.sh``), e-mail
+# addresses, paths and longer identifiers (``OdooBot``) untouched, so only
+# the branding written as prose is replaced.
+BRAND_MENTION_RE = re.compile(
+    r"(?<![\w./@-])odoo(?![\w@/]|[.-]\w)", flags=re.IGNORECASE
+)
+# ``re.split`` on this keeps the HTML tags in the resulting list, so the
+# replacement can be applied to the text nodes only, never to an attribute.
+HTML_TAG_RE = re.compile(r"(<[^>]*>)")
+
 
 class MailRenderMixin(models.AbstractModel):
     _inherit = "mail.render.mixin"
+
+    @api.model
+    def _get_debrand_replacement(self):
+        """Text that replaces the standalone brand mentions.
+
+        It defaults to the name of the current company, which reads naturally
+        in the sentences shipped by Odoo ("Welcome to Odoo", "Enjoy Odoo!",
+        "A password reset was requested for the Odoo account..."). It can be
+        overridden with the ``mail_debrand.brand_replacement`` configuration
+        parameter, and setting that parameter to ``False`` disables the
+        replacement altogether.
+
+        :return: the replacement string, or ``None`` when disabled.
+        """
+        param = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("mail_debrand.brand_replacement", default=None)
+        )
+        if param is None:
+            return self.env.company.name or ""
+        # ``value`` is a required field on ir.config_parameter, so the way to
+        # disable the feature is the "False" string.
+        if param.strip().lower() in ("false", "none"):
+            return None
+        return param
+
+    def remove_odoo_mentions(self, value):
+        """Replace the brand mentions left in the text once the links are gone.
+
+        Removing the ``odoo.com`` anchors is not enough for the templates that
+        talk about the brand in plain words, such as the ones from
+        ``auth_signup``. Only text nodes are processed, so URLs, e-mail
+        addresses and any other attribute keep their value.
+        """
+        replacement = self._get_debrand_replacement()
+        if replacement is None or not BRAND_MENTION_RE.search(value):
+            return value
+        chunks = HTML_TAG_RE.split(value)
+        # Even indexes are text nodes, odd ones are the HTML tags themselves.
+        chunks[::2] = [
+            BRAND_MENTION_RE.sub(replacement, chunk) for chunk in chunks[::2]
+        ]
+        value = "".join(chunks)
+        if not replacement:
+            # Avoid the double spaces left behind by an empty replacement.
+            value = re.sub(r"[ \t]{2,}", " ", value)
+        return value
+
+    def _remove_odoo_anchor(self, elem):
+        """Drop an ``odoo.com`` anchor and the promotional text around it."""
+        parent = elem.getparent()
+        # Remove "Powered by", "using" etc.
+        previous = elem.getprevious()
+        if previous is not None:
+            previous.tail = etree.CDATA("&nbsp;")
+            # The link is usually the last line of a longer promotional block
+            # (auth_signup's invitation mail). Drop the preceding text runs
+            # that talk about the brand too, stopping at the first one that
+            # belongs to the actual message.
+            sibling = previous.getprevious()
+            while sibling is not None:
+                tail = sibling.tail or ""
+                if tail.strip():
+                    if not BRAND_MENTION_RE.search(tail):
+                        break
+                    sibling.tail = None
+                sibling = sibling.getprevious()
+        elif parent.text:
+            parent.text = etree.CDATA("&nbsp;")
+        parent.remove(elem)
 
     def remove_href_odoo(self, value, to_keep=None):
         if len(value) < 20:
@@ -29,27 +112,21 @@ class MailRenderMixin(models.AbstractModel):
             r"<a\s(.*)dev\.odoo\.com", value, flags=re.IGNORECASE
         )
         has_odoo_link = re.search(r"<a\s(.*)odoo\.com", value, flags=re.IGNORECASE)
+        # We don't want to change what was explicitly added in the message body,
+        # so we will only change what is before and after it.
+        if to_keep:
+            value = value.replace(to_keep, BODY_PLACEHOLDER)
         if has_odoo_link and not has_dev_odoo_link:
-            # We don't want to change what was explicitly added in the message body,
-            # so we will only change what is before and after it.
-            if to_keep:
-                value = value.replace(to_keep, "<body_msg></body_msg>")
             tree = html.fromstring(value)
             odoo_anchors = tree.xpath('//a[contains(@href,"odoo.com")]')
             for elem in odoo_anchors:
-                parent = elem.getparent()
-                # Remove "Powered by", "using" etc.
-                previous = elem.getprevious()
-                if previous is not None:
-                    previous.tail = etree.CDATA("&nbsp;")
-                elif parent.text:
-                    parent.text = etree.CDATA("&nbsp;")
-                parent.remove(elem)
+                self._remove_odoo_anchor(elem)
             value = etree.tostring(
                 tree, pretty_print=True, method="html", encoding="unicode"
             )
-            if to_keep:
-                value = value.replace("<body_msg></body_msg>", to_keep)
+        value = self.remove_odoo_mentions(value)
+        if to_keep:
+            value = value.replace(BODY_PLACEHOLDER, to_keep)
         if back_to_bytes:
             value = value.encode()
         elif back_to_markup:

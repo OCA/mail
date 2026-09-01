@@ -77,6 +77,46 @@ class TestMailDebrand(common.TransactionCase):
             "Aangeboden door",
         )
 
+    def test_remove_odoo_mentions(self):
+        """Standalone brand mentions are replaced by the company name"""
+        mixin = self.env["mail.render.mixin"]
+        company = self.env.company.name
+        self.assertEqual(
+            mixin.remove_odoo_mentions("<p>Welcome to Odoo. Enjoy Odoo!</p>"),
+            f"<p>Welcome to {company}. Enjoy {company}!</p>",
+        )
+
+    def test_remove_odoo_mentions_keeps_technical_values(self):
+        """URLs, e-mail addresses and identifiers are never touched"""
+        mixin = self.env["mail.render.mixin"]
+        for value in (
+            '<a href="https://www.odoo.com?utm_source=db">Link</a>',
+            "<p>Contact odoobot@example.com or odoo-support@example.com</p>",
+            "<p>OdooBot created this record</p>",
+            '<img src="/web/static/img/odoo-logo.png"/>',
+            # A database named "odoo" ends up in the sign-in links
+            '<a href="http://localhost:8069/web/login?db=odoo">Log in</a>',
+        ):
+            self.assertEqual(mixin.remove_odoo_mentions(value), value)
+
+    def test_remove_odoo_mentions_custom_replacement(self):
+        self.env["ir.config_parameter"].sudo().set_param(
+            "mail_debrand.brand_replacement", "Acme"
+        )
+        self.assertEqual(
+            self.env["mail.render.mixin"].remove_odoo_mentions("<p>Enjoy Odoo!</p>"),
+            "<p>Enjoy Acme!</p>",
+        )
+
+    def test_remove_odoo_mentions_disabled(self):
+        self.env["ir.config_parameter"].sudo().set_param(
+            "mail_debrand.brand_replacement", "False"
+        )
+        value = "<p>Enjoy Odoo!</p>"
+        self.assertEqual(
+            self.env["mail.render.mixin"].remove_odoo_mentions(value), value
+        )
+
     def test_body_intact(self):
         """The message body should never be changed"""
         MailMessage = self.env["mail.mail"]
