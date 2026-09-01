@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- FORM VIEW -->
+    <record id="mail_activity_view_form" model="ir.ui.view">
+        <field name="name">mail.activity.view.form</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup" />
+        <field name="arch" type="xml">
+            <field name="activity_type_id" position="before">
+                <field name="partner_id" readonly="True" />
+                <field
+                    name="commercial_partner_id"
+                    invisible="commercial_partner_id == partner_id"
+                />
+            </field>
+        </field>
+    </record>
+
+    <!-- LIST VIEW -->
+    <record id="mail_activity_view_tree" model="ir.ui.view">
+        <field name="name">mail.activity.view.list</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_tree" />
+        <field name="arch" type="xml">
+            <field name="activity_type_id" position="before">
+                <field name="partner_id" readonly="True" optional="hide" />
+                <field name="commercial_partner_id" optional="hide" />
+            </field>
+        </field>
+    </record>
+
+    <!-- KANBAN VIEW -->
+    <record id="mail_activity_view_kanban" model="ir.ui.view">
+        <field name="name">mail.activity.boards.view.kanban</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_kanban_open_target" />
+        <field name="arch" type="xml">
+            <field name="summary" position="after">
+                <div name="partner" class="small">
+                    <span class="fw-bold">Partner:&amp;nbsp;</span>
+                    <field name="partner_id" />
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="mail_activity_view_search" model="ir.ui.view">
+        <field name="name">mail.activity.boards.view.search</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_search" />
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="res_model"]' position='before'>
+                <field name="partner_id" />
+                <field name="commercial_partner_id" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
