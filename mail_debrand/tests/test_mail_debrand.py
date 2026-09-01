@@ -99,6 +99,16 @@ class TestMailDebrand(common.TransactionCase):
         ):
             self.assertEqual(mixin.remove_odoo_mentions(value), value)
 
+    def test_dev_odoo_link_disables_debranding(self):
+        """A dev.odoo.com link marks the mail as one to leave alone"""
+        value = (
+            '<p>Ticket on <a href="https://dev.odoo.com/1">dev</a>, '
+            'released by <a href="https://www.odoo.com">Odoo</a></p>'
+        )
+        result = self.env["mail.render.mixin"].remove_href_odoo(value)
+        self.assertIn('href="https://www.odoo.com"', result)
+        self.assertIn('href="https://dev.odoo.com/1"', result)
+
     def test_remove_odoo_mentions_custom_replacement(self):
         self.env["ir.config_parameter"].sudo().set_param(
             "mail_debrand.brand_replacement", "Acme"

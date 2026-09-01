@@ -68,11 +68,7 @@ class MailRenderMixin(models.AbstractModel):
         chunks[::2] = [
             BRAND_MENTION_RE.sub(replacement, chunk) for chunk in chunks[::2]
         ]
-        value = "".join(chunks)
-        if not replacement:
-            # Avoid the double spaces left behind by an empty replacement.
-            value = re.sub(r"[ \t]{2,}", " ", value)
-        return value
+        return "".join(chunks)
 
     def _remove_odoo_anchor(self, elem):
         """Drop an ``odoo.com`` anchor and the promotional text around it."""
