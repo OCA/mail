@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-inherit="mail.Thread" t-inherit-mode="extension">
+        <xpath
+            expr="//t[@t-if='props.thread.isLoaded and props.showEmptyMessage']"
+            position="after"
+        >
+            <t
+                t-if="props.thread.isLoaded and props.showEmptyMessage and props.thread.id === 'sent_history'"
+            >
+                <div class="d-flex flex-column align-items-center">
+                    <h4 class="mb-3 fw-bolder">
+                        You have not sent any messages or added any notes yet
+                    </h4>
+                    <span
+                    >This mailbox will display messages or notes you have sent.</span>
+                </div>
+            </t>
+        </xpath>
+        <xpath
+            expr="//t[@t-if='props.thread.isLoaded and props.showEmptyMessage']"
+            position="attributes"
+        >
+            <attribute
+                name="t-if"
+            >props.thread.isLoaded and props.showEmptyMessage and props.thread.id !== 'sent_history'</attribute>
+        </xpath>
+    </t>
+
+</templates>
