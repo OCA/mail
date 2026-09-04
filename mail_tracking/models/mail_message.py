@@ -5,6 +5,7 @@
 from email.utils import getaddresses
 
 from odoo import api, fields, models
+from odoo.exceptions import AccessError
 from odoo.osv import expression
 from odoo.tools import email_split
 
@@ -305,15 +306,84 @@ class MailMessage(models.Model):
         ]
         return res
 
+    def _tracking_status_vals(self):
+        """Tracking data consumed by the chatter and the failed messages widget.
+
+        Beware that ``is_failed_message`` is computed for ``self.env.user``, so
+        these values must be built once per recipient.
+        """
+        self.ensure_one()
+        return {
+            "partner_trackings": self.tracking_status(),
+            "mail_tracking_needs_action": self.mail_tracking_needs_action,
+            "is_failed_message": self.is_failed_message,
+        }
+
+    def _tracking_status_recipients(self):
+        """Users whose web client is showing the tracking status of a message."""
+        self.ensure_one()
+        partners = self.author_id | self.notification_ids.res_partner_id
+        users = partners.with_context(active_test=False).user_ids
+        return users.filtered(lambda one: not one._is_public())
+
+    def _notify_tracking_status_update(self):
+        """Queue a refresh of the tracking status in the involved web clients.
+
+        Tracking states change outside of any user session (Mailgun webhooks,
+        the open pixel, the SMTP layer) and they don't touch ``mail.notification``,
+        so core's ``_notify_message_notification_update()`` is never triggered for
+        them and the chatter would keep the stale status until a page reload.
+
+        Emails are sent one at a time, so a message with several recipients would
+        emit one notification per recipient. The refresh is aggregated here and
+        sent once per message at the end of the transaction instead.
+        """
+        messages = self.sudo().exists().filtered("mail_tracking_ids")
+        if not messages:
+            return
+        precommit = self.env.cr.precommit
+        if "mail_tracking.status_update" not in precommit.data:
+            precommit.data["mail_tracking.status_update"] = set()
+            env = self.env
+
+            @precommit.add
+            def send_tracking_status_update():
+                message_ids = env.cr.precommit.data.pop(
+                    "mail_tracking.status_update", ()
+                )
+                env["mail.message"].browse(message_ids)._send_tracking_status_update()
+
+        precommit.data["mail_tracking.status_update"].update(messages.ids)
+
+    def _send_tracking_status_update(self):
+        """Push the current tracking status to the web clients showing the messages."""
+        for message in self.sudo().exists():
+            for user in message._tracking_status_recipients():
+                # 'is_failed_message' depends on the reader, so the store has to
+                # be built within each recipient's own environment.
+                message_as_user = message.with_user(user)
+                try:
+                    vals = message_as_user._tracking_status_vals()
+                except AccessError:  # pragma: no cover
+                    continue
+                store = Store()
+                store.add(message_as_user, vals)
+                user.partner_id._bus_send_store(store)
+
+    def _message_notifications_to_store(self, store: Store):
+        """Refresh the tracking data along with the notification statuses.
+
+        Core pushes this to the web client whenever the notifications of a
+        message change (a delivery failure, a resend...), so it's the right
+        place to keep the failed messages widget up to date.
+        """
+        res = super()._message_notifications_to_store(store)
+        for message in self.filtered("mail_tracking_ids"):
+            store.add(message, message._tracking_status_vals())
+        return res
+
     def _extras_to_store(self, store: Store, format_reply):
         res = super()._extras_to_store(store, format_reply=format_reply)
         for message in self:
-            store.add(
-                message,
-                {
-                    "partner_trackings": message.tracking_status(),
-                    "mail_tracking_needs_action": message.mail_tracking_needs_action,
-                    "is_failed_message": message.is_failed_message,
-                },
-            )
+            store.add(message, message._tracking_status_vals())
         return res
