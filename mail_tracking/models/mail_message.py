@@ -305,6 +305,25 @@ class MailMessage(models.Model):
         ]
         return res
 
+    def _message_notifications_to_store(self, store: Store):
+        """Refresh the tracking data along with the notification statuses.
+
+        Core pushes this to the web client whenever the notifications of a
+        message change (a delivery failure, a resend...), so it's the right
+        place to keep the failed messages widget up to date.
+        """
+        res = super()._message_notifications_to_store(store)
+        for message in self.filtered("mail_tracking_ids"):
+            store.add(
+                message,
+                {
+                    "partner_trackings": message.tracking_status(),
+                    "mail_tracking_needs_action": message.mail_tracking_needs_action,
+                    "is_failed_message": message.is_failed_message,
+                },
+            )
+        return res
+
     def _extras_to_store(self, store: Store, format_reply):
         res = super()._extras_to_store(store, format_reply=format_reply)
         for message in self:
