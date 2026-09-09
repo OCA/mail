@@ -78,6 +78,8 @@ class MailComposeMessage(models.TransientModel):
             elif not composer.template_id:
                 composer.partner_cc_ids = self.env.company.default_partner_cc_ids
                 composer.partner_bcc_ids = self.env.company.default_partner_bcc_ids
+            composer.partner_cc_ids -= composer.partner_ids
+            composer.partner_bcc_ids -= composer.partner_ids
 
     @api.depends(
         "composition_mode", "model", "parent_id", "res_domain", "res_ids", "template_id"
