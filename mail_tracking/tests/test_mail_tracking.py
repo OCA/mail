@@ -798,6 +798,75 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             self.assertEqual("Test error", tracking.error_description)
             self.assertTrue(self.recipient.email_bounced)
 
+    def _notify_thread_send(self, side_effect):
+        """Post a message to a partner and let the *real* notification pipeline
+        build and send its email, with a failing SMTP. Returns the recipient's
+        notification, the mail.mail core created for it and its tracking."""
+        message = self.env["mail.message"].create(
+            {
+                "author_id": self.sender.id,
+                "body": "<p>This is a test message</p>",
+                "email_from": self.sender.email,
+                "message_type": "comment",
+                "subtype_id": self.env.ref("mail.mt_comment").id,
+                "model": "res.partner",
+                "res_id": self.recipient.id,
+                "partner_ids": [Command.link(self.recipient.id)],
+                "subject": "Test subject",
+            }
+        )
+        with patch(mock_send_email) as mock_func:
+            mock_func.side_effect = side_effect
+            with self.mock_smtplib_connection():
+                self.env[message.model].browse(message.res_id).with_context(
+                    mail_notify_force_send=True
+                )._notify_thread(message)
+        notification = self.env["mail.notification"].search(
+            [
+                ("mail_message_id", "=", message.id),
+                ("res_partner_id", "=", self.recipient.id),
+            ]
+        )
+        tracking = self.env["mail.tracking.email"].search(
+            [
+                ("mail_message_id", "=", message.id),
+                ("partner_id", "=", self.recipient.id),
+            ]
+        )
+        return message, notification, notification.mail_mail_id, tracking
+
+    @mute_logger("odoo.addons.mail.models.mail_mail")
+    def test_smtp_error_is_not_reported_as_sent(self):
+        """A failed delivery must not be reported to core as a success.
+
+        ``MailMail._send()`` tells a successful send from a failed one by the
+        exception raised by ``send_email()``, not by its return value. When
+        that exception is swallowed, core appends the recipient to
+        ``success_pids`` and ``_postprocess_sent_message()`` marks its
+        notification as ``sent`` for a mail that was never delivered.
+        """
+        message, notification, mail, tracking = self._notify_thread_send(
+            Warning("Test error")
+        )
+        # The tracking record still gets the error (smtp_error is called first).
+        self.assertEqual("error", tracking.state)
+        # ... and core is told about the failure: the recipient's notification
+        # must not be reported as delivered.
+        self.assertTrue(notification)
+        self.assertNotEqual("sent", notification.notification_status)
+        self.assertEqual("exception", notification.notification_status)
+
+    @mute_logger("odoo.addons.mail.models.mail_mail")
+    def test_smtp_error_still_tracks_the_error(self):
+        """Re-raising must not stop the tracking record from being annotated,
+        and lets core classify the failure instead of ignoring it."""
+        error = AssertionError(self.env["ir.mail_server"].NO_VALID_RECIPIENT)
+        message, notification, mail, tracking = self._notify_thread_send(error)
+        self.assertEqual("error", tracking.state)
+        self.assertEqual("AssertionError", tracking.error_type)
+        self.assertNotEqual("sent", notification.notification_status)
+        self.assertEqual("mail_email_invalid", notification.failure_type)
+
     def test_partner_email_change(self):
         mail, tracking = self.mail_send(self.recipient.email)
         tracking.event_create("open", {})
