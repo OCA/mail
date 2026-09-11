@@ -23,6 +23,18 @@ patch(Thread.prototype, {
         this.gateway_notifications = [];
         this.gateway_followers = Record.many("Persona");
     },
+    get canLeave() {
+        // Allow leaving the thread if it is a gateway channel.
+        // Core only allows this if ["channel", "group"].includes(this.channel_type)
+        if (this.channel_type === "gateway") {
+            return (
+                !this.message_needaction_counter &&
+                !this.group_based_subscription &&
+                this.store.self?.type === "partner"
+            );
+        }
+        return super.canLeave;
+    },
     get isChatChannel() {
         return this.channel_type === "gateway" || super.isChatChannel;
     },
