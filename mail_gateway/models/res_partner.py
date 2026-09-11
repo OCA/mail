@@ -2,6 +2,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.osv import expression
+from odoo.tools import SQL
+
+from odoo.addons.mail.tools.discuss import Store
 
 
 class ResPartner(models.Model):
@@ -12,6 +16,48 @@ class ResPartner(models.Model):
     gateway_channel_ids = fields.One2many(
         "res.partner.gateway.channel", inverse_name="partner_id"
     )
+
+    @api.readonly
+    @api.model
+    def search_for_channel_invite(self, search_term, channel_id=None, limit=30):
+        channel = (
+            self.env["discuss.channel"].browse(int(channel_id)) if channel_id else None
+        )
+        if not channel or channel.channel_type != "gateway":
+            return super().search_for_channel_invite(
+                search_term, channel_id=channel_id, limit=limit
+            )
+        gateway_group = self.env.ref("mail_gateway.gateway_user")
+        domain = expression.AND(
+            [
+                expression.OR(
+                    [
+                        [("name", "ilike", search_term)],
+                        [("email", "ilike", search_term)],
+                    ]
+                ),
+                [("active", "=", True)],
+                [("user_ids", "!=", False)],
+                [("user_ids.active", "=", True)],
+                [("user_ids.share", "=", False)],
+                [("channel_ids", "not in", channel.id)],
+                # only users allowed to access gateway channels can be invited to them
+                [("user_ids.groups_id", "in", gateway_group.id)],
+            ]
+        )
+        query = self._search(domain, limit=limit)
+        # bypass lack of support for case insensitive order in search()
+        query.order = SQL(
+            'LOWER(%s), "res_partner"."id"', self._field_to_sql(self._table, "name")
+        )
+        store = Store()
+        self.env["res.partner"].browse(query)._search_for_channel_invite_to_store(
+            store, channel
+        )
+        return {
+            "count": self.env["res.partner"].search_count(domain),
+            "data": store.get_result(),
+        }
 
     def _get_channels_as_member(self):
         channels = super()._get_channels_as_member()
