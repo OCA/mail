@@ -40,17 +40,17 @@ jobs:
       matrix:
         include:
           - container: ghcr.io/oca/oca-ci/py3.10-odoo19.0:latest
-            include: "mail_send_confirmation"
+            include: "mail_send_confirmation,mail_activity_restrict"
             name: test with Odoo
           - container: ghcr.io/oca/oca-ci/py3.10-ocb19.0:latest
-            include: "mail_send_confirmation"
+            include: "mail_send_confirmation,mail_activity_restrict"
             name: test with OCB
             makepot: "true"
           - container: ghcr.io/oca/oca-ci/py3.10-odoo19.0:latest
-            exclude: "mail_send_confirmation"
+            exclude: "mail_send_confirmation,mail_activity_restrict"
             name: test with Odoo
           - container: ghcr.io/oca/oca-ci/py3.10-ocb19.0:latest
-            exclude: "mail_send_confirmation"
+            exclude: "mail_send_confirmation,mail_activity_restrict"
             name: test with OCB
             makepot: "true"
     services:
