@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record
+        id="mail_thread_disable_auto_followers_config_default"
+        model="mail.thread.disable.auto.followers.config"
+    >
+        <field name="name">Configuration</field>
+    </record>
+</odoo>
