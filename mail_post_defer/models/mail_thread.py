@@ -4,6 +4,7 @@
 from datetime import timedelta
 
 from odoo import fields, models
+from odoo.tools import config
 
 
 class MailThread(models.AbstractModel):
@@ -11,6 +12,9 @@ class MailThread(models.AbstractModel):
 
     def _notify_thread(self, message, msg_vals=False, **kwargs):
         """Defer emails by default."""
+        # During tests, don't defer unless a test explicitly opts in
+        if config["test_enable"] and not self.env.context.get("test_mail_post_defer"):
+            return super()._notify_thread(message, msg_vals=msg_vals, **kwargs)
         # Don't defer automatically if forcing send
         _self = self
         if "mail_defer_seconds" not in _self.env.context:

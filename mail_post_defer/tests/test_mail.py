@@ -17,6 +17,8 @@ class MailPostDeferCommon(MailCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.classPatch(cls.cr, "now", datetime.now)
+        # Opt in to deferring during tests
+        cls.env = cls.env(context=dict(cls.env.context, test_mail_post_defer=True))
         cls._create_portal_user()
         # Notify employee by email
         cls.user_employee.notification_type = "email"
