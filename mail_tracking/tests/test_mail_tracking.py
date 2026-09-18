@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import base64
 import time
+from datetime import datetime, timedelta
 from unittest.mock import Mock, patch
 
 from lxml import etree
@@ -1280,6 +1281,40 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         self.assertEqual(
             self.recipient.with_user(user_employee).tracking_emails_count,
             0,
+        )
+
+    def test_search_keeps_order_for_non_superuser(self):
+        """The ACL-filtering _search override must not reorder the result.
+
+        For a non-superuser, _search filtered the ids through a set (losing
+        order) and called ``_as_query(order)`` passing the order *string* where
+        the boolean ``ordered`` is expected (``_as_query(self, ordered=True)``);
+        on a normal list load (``order=None``) that meant ``ordered=False``, so
+        the query imposed no ORDER BY and the list came out in physical table
+        order for any non-superuser.
+        """
+        user = mail_new_test_user(
+            self.env,
+            login="tracking-order",
+            groups="base.group_user",
+            name="Tracking Order User",
+        )
+        Tracking = self.env["mail.tracking.email"]
+        base = datetime(2026, 1, 1, 12, 0, 0)
+        # Non-monotonic time so the default (time desc) order differs from the
+        # physical/insertion order; no message/mail/partner -> visible to anyone.
+        trackings = Tracking
+        for minutes in (3, 0, 5, 1, 4, 2):
+            trackings |= Tracking.create(
+                {"name": "order test", "time": base + timedelta(minutes=minutes)}
+            )
+        domain = [("id", "in", trackings.ids)]
+        as_superuser = Tracking.search(domain).ids
+        as_user = Tracking.with_user(user).search(domain).ids
+        self.assertEqual(
+            as_user,
+            as_superuser,
+            "the ACL filter must keep the requested order for a non-superuser",
         )
 
 
