@@ -3,7 +3,7 @@
 
 {
     "name": "Outgoing Email by Model",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Social",
     "website": "https://github.com/OCA/mail",
     "author": "Camptocamp, Odoo Community Association (OCA)",
@@ -11,9 +11,6 @@
     "license": "AGPL-3",
     "installable": True,
     "auto_install": False,
-    "external_dependencies": {
-        "python": ["odoo_test_helper"],
-    },
     "depends": [
         "mail",
     ],

@@ -3,20 +3,20 @@
 
 from odoo import fields, models
 
-OUTGOING_MAILSERVER_DESCRIPTION = """
-    Allows to force the usage of a given outgoing mail server if this setting is set.
-    However, this setting will be active only if the model extends `mail.thread`.
-"""
-OUTGOING_EMAIL_DESCRIPTION = """
-    Allows to force the usage of a given email address if this setting is set.
-    However, this setting will be active only if the model extends `mail.thread`.
-"""
-
 
 class IrModel(models.Model):
     _inherit = "ir.model"
 
     outgoing_mailserver_id = fields.Many2one(
-        "ir.mail_server", help=OUTGOING_MAILSERVER_DESCRIPTION
+        "ir.mail_server",
+        help="""
+    Allows to force the usage of a given outgoing mail server if this setting is set.
+    However, this setting will be active only if the model extends `mail.thread`.
+""",
     )
-    outgoing_email = fields.Char(help=OUTGOING_EMAIL_DESCRIPTION)
+    outgoing_email = fields.Char(
+        help="""
+    Allows to force the usage of a given email address if this setting is set.
+    However, this setting will be active only if the model extends `mail.thread`.
+"""
+    )
