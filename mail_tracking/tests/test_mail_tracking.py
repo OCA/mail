@@ -1141,14 +1141,19 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         )
 
         self.assertFalse(tracking_with_subtype._event_prepare("unknown_event", {}))
-        with patch.object(
-            type(message_with_subtype),
-            "write",
-            autospec=True,
-            return_value=True,
-        ) as mock_write:
-            tracking_with_subtype._message_partners_check({}, "message-id-1")
-        self.assertIn("notified_partner_ids", mock_write.call_args.args[1])
+        # For a subtyped message, _message_partners_check adds the tracked
+        # partner through a proper mail.notification (not a raw M2M write on
+        # notified_partner_ids, which skipped the NOT NULL notification_type).
+        tracking_with_subtype._message_partners_check({}, "message-id-1")
+        notification = self.env["mail.notification"].search(
+            [
+                ("mail_message_id", "=", message_with_subtype.id),
+                ("res_partner_id", "=", self.recipient.id),
+            ]
+        )
+        self.assertTrue(notification)
+        self.assertEqual(notification.notification_type, "email")
+        self.assertIn(self.recipient, message_with_subtype.notified_partner_ids)
 
         message_without_subtype = self.env["mail.message"].create(
             {
@@ -1281,6 +1286,56 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             self.recipient.with_user(user_employee).tracking_emails_count,
             0,
         )
+
+    def test_notified_partner_check_creates_notification(self):
+        """Tracking a partner absent from a subtyped message must not crash.
+
+        `mail.message.notified_partner_ids` is a Many2many over the
+        mail_notification table, so linking it with Command did a raw INSERT of
+        the two foreign keys only, skipping the NOT NULL `notification_type`
+        (NotNullViolation, which aborted the send). It fires on the success path
+        for a mail.mail linked to a subtyped message whose recipient is not yet
+        a notified partner -- resend flows, queues, hand-built mail.mail. The
+        notification must be created through the model, with a valid type.
+        """
+        message = self.env["mail.message"].create(
+            {
+                "subject": "Subtyped message",
+                "author_id": self.sender.id,
+                "email_from": self.sender.email,
+                "message_type": "comment",
+                "subtype_id": self.env.ref("mail.mt_comment").id,
+                "model": "res.partner",
+                "res_id": self.recipient.id,
+                "body": "<p>Body</p>",
+            }
+        )
+        self.assertNotIn(
+            self.recipient, message.notified_partner_ids | message.partner_ids
+        )
+        mail = self.env["mail.mail"].create(
+            {
+                "subject": "Test subject",
+                "email_from": "from@domain.com",
+                "email_to": self.recipient.email,
+                "recipient_ids": [Command.link(self.recipient.id)],
+                "mail_message_id": message.id,
+                "body_html": "<p>This is a test message</p>",
+            }
+        )
+        with self.mock_smtplib_connection():
+            mail.send()
+        notification = self.env["mail.notification"].search(
+            [
+                ("mail_message_id", "=", message.id),
+                ("res_partner_id", "=", self.recipient.id),
+            ]
+        )
+        self.assertTrue(
+            notification, "a mail.notification must be created for the tracked partner"
+        )
+        self.assertEqual(notification.notification_type, "email")
+        self.assertIn(self.recipient, message.notified_partner_ids)
 
 
 @tagged("-at_install", "post_install")
