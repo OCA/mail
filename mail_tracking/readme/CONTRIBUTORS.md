@@ -13,3 +13,5 @@
   - Tris Doan
 - [Komit](https://komit-consulting.com):
   - Quoc Pham Ngoc
+- [Onestein](https://onestein.nl):
+  - Dennis Sluijk
