@@ -61,8 +61,6 @@ class MailThread(models.AbstractModel):
         skip_adding_cc_bcc = context.get("skip_adding_cc_bcc", False)
         if not is_from_composer or skip_adding_cc_bcc:
             return rdata
-        for pdata in rdata:
-            pdata["type"] = "customer"
         partners_cc_bcc = context.get("partner_cc_ids", ResPartner)
         partners_cc_bcc += context.get("partner_bcc_ids", ResPartner)
         msg_sudo = message.sudo()
@@ -85,13 +83,14 @@ class MailThread(models.AbstractModel):
                     "notif"
                 ):  # notif is False, has no user, is therefore customer
                     notif = "email"
-                msg_type = "customer"
                 pdata = {
                     "id": data.get("id"),
                     "active": data.get("active"),
                     "share": data.get("share"),
                     "notif": data.get("notif") and data.get("notif") or notif,
-                    "type": msg_type,
+                    "type": data.get("type") or "customer",
+                    "groups": data.get("groups") or [],
+                    "ushare": data.get("ushare"),
                     "is_follower": data.get("is_follower"),
                     "lang": data.get("lang"),
                     "uid": False,
@@ -109,20 +108,28 @@ class MailThread(models.AbstractModel):
         skip_adding_cc_bcc = self.env.context.get("skip_adding_cc_bcc", False)
         if not is_from_composer or skip_adding_cc_bcc:
             return res
-        ids = []
-        customer_data = None
+        user_data = None
+        other_groups = []
         for rcpt_data in res:
-            if rcpt_data["notification_group_name"] == "customer":
-                customer_data = rcpt_data
+            if rcpt_data["notification_group_name"] == "user":
+                user_data = rcpt_data
             else:
-                ids += rcpt_data["recipients"]
-        if not customer_data:
-            customer_data = res[0]
-            customer_data["notification_group_name"] = "customer"
-            customer_data["recipients"] = ids
-        else:
-            customer_data["recipients"] += ids
-        return [customer_data]
+                other_groups.append(rcpt_data)
+        if not other_groups:
+            return [user_data] if user_data else []
+        customer_data = next(
+            (g for g in other_groups if g["notification_group_name"] == "customer"),
+            other_groups[0],
+        )
+        customer_data["notification_group_name"] = "customer"
+        customer_data["recipients"] = [
+            rid for group in other_groups for rid in group["recipients"]
+        ]
+        return [
+            group
+            for group in (user_data, customer_data)
+            if group and group["recipients"]
+        ]
 
     def _notify_thread_by_email(self, message, recipients_data, **kwargs):
         # Pass the whole audience to `_prepare_outgoing_list`
