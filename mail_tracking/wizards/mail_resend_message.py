@@ -3,9 +3,54 @@
 
 from odoo import Command, api, models
 
+# Map between the error types stored in mail.tracking.email and the failure
+# types understood by mail.notification
+TRACKING_FAILURE_TYPES = {
+    "no_recipient": "mail_email_missing",
+    "MailDeliveryException": "mail_smtp",
+    "SMTPServerDisconnected": "mail_smtp",
+    "SMTPSenderRefused": "mail_smtp",
+    "SMTPRecipientsRefused": "mail_email_invalid",
+}
+
 
 class MailResendMessage(models.TransientModel):
     _inherit = "mail.resend.message"
+
+    def _tracking_notification_get(self, mail_message, tracking):
+        """Return the notification of the tracking recipient, creating it if missing.
+
+        ``mail.resend.partner`` requires a ``mail.notification``, but plenty of
+        failed trackings have none: messages sent outside of the notification
+        system (``email_outgoing`` ones, like invoices sent by mail) never get
+        notifications, and extra recipients (Cc, raw ``email_to``...) aren't
+        notified either. Creating the missing notification is what allows those
+        recipients to be resent at all.
+        """
+        if not tracking.partner_id:
+            # An email notification can't exist without a partner
+            return self.env["mail.notification"]
+        notification = mail_message.notification_ids.filtered(
+            lambda x, tracking=tracking: x.res_partner_id == tracking.partner_id
+        )[:1]
+        if notification:
+            return notification
+        return (
+            self.env["mail.notification"]
+            .sudo()
+            .create(
+                {
+                    "mail_message_id": mail_message.id,
+                    "res_partner_id": tracking.partner_id.id,
+                    "notification_type": "email",
+                    "notification_status": "exception",
+                    "failure_type": TRACKING_FAILURE_TYPES.get(
+                        tracking.error_type, "unknown"
+                    ),
+                    "failure_reason": tracking.error_description,
+                }
+            )
+        )
 
     @api.model
     def default_get(self, fields):
@@ -19,17 +64,21 @@ class MailResendMessage(models.TransientModel):
             lambda x: x.state in failed_states
         )
         if tracking_ids:
+            # Recipients that mail.notification already prepared in super()
+            prepared_partners = mail_message.notification_ids.filtered(
+                lambda x: x.notification_type == "email"
+                and x.notification_status in ("exception", "bounce")
+            ).res_partner_id
             partner_values = []
             for tracking in tracking_ids:
-                notification = mail_message.notification_ids.filtered(
-                    lambda x, tracking=tracking: x.res_partner_id == tracking.partner_id
-                )
-                existing_resend_partner = self.env["mail.resend.partner"].search(
-                    [("notification_id", "=", notification.id)]
-                )
-                if existing_resend_partner:
+                if tracking.partner_id in prepared_partners:
+                    # Create only resends that mail.notification didn't prepare
                     continue
-                # Create only resends that mail.notification didn't prepare already
+                notification = self._tracking_notification_get(mail_message, tracking)
+                if not notification:
+                    # Nothing to resend to: recipient without partner
+                    continue
+                prepared_partners |= notification.res_partner_id
                 partner_values.append(
                     {
                         "notification_id": notification.id,
