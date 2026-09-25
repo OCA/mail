@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-09-25 10:21+0000\n"
+"PO-Revision-Date: 2026-09-25 10:33+0000\n"
 "Last-Translator: MJD <maximilian@si-gmbh.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -54,18 +54,20 @@ msgstr "E-Mail-Thread"
 #: code:addons/mail_drop_target/models/mail_thread.py:0
 msgid "Install the msg-extractor library to handle .msg files"
 msgstr ""
+"Installieren Sie die Bibliothek „msg-extractor“, um .msg-Dateien verarbeiten "
+"zu können"
 
 #. module: mail_drop_target
 #. odoo-python
 #: code:addons/mail_drop_target/models/mail_thread.py:0
 msgid "The already imported copy is attached to: %(locations)s"
-msgstr ""
+msgstr "Die bereits importierte Kopie ist angehängt an: %(locations)s"
 
 #. module: mail_drop_target
 #. odoo-python
 #: code:addons/mail_drop_target/models/mail_thread.py:0
 msgid "This message is already imported. "
-msgstr ""
+msgstr "Diese Nachricht wurde bereits importiert. "
 
 #. module: mail_drop_target
 #: model_terms:ir.ui.view,arch_db:mail_drop_target.res_config_settings_view_form
@@ -73,6 +75,9 @@ msgid ""
 "When a user drops an email into an existing thread\n"
 "                            the followers of the thread will not be notified."
 msgstr ""
+"Wenn ein Nutzer eine E-Mail in einen bestehenden Thread einfügt,\n"
+"                            werden die Abonnenten des Threads nicht "
+"benachrichtigt."
 
 #. module: mail_drop_target
 #: model:ir.model.fields,help:mail_drop_target.field_res_config_settings__disable_notify_mail_drop_target
@@ -81,21 +86,25 @@ msgid ""
 " the followers of the thread will not be notified. This sets an "
 "ir.config.parameter mail_drop_target.disable_notify"
 msgstr ""
+"Wenn diese Einstellung aktiviert ist, werden die Follower des Threads nicht "
+"benachrichtigt, wenn ein Benutzer eine E-Mail in einen bestehenden Thread "
+"einfügt. Dadurch wird der ir.config.Parameter „"
+"mail_drop_target.disable_notify“ gesetzt"
 
 #. module: mail_drop_target
 #. odoo-python
 #: code:addons/mail_drop_target/controllers/discuss.py:0
 msgid "You are not allowed to upload an attachment here."
-msgstr ""
+msgstr "Hier dürfen keine Anhänge hochgeladen werden."
 
 #. module: mail_drop_target
 #. odoo-python
 #: code:addons/mail_drop_target/models/mail_thread.py:0
 msgid "a record that no longer exists."
-msgstr ""
+msgstr "ein Datensatz, der nicht mehr existiert."
 
 #. module: mail_drop_target
 #. odoo-python
 #: code:addons/mail_drop_target/models/mail_thread.py:0
 msgid "a record you are not allowed to access."
-msgstr ""
+msgstr "ein Datensatz, auf den Sie keinen Zugriff haben."
