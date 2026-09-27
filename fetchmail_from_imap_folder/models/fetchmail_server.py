@@ -84,10 +84,20 @@ class FetchmailServer(models.Model):
         self.state = "draft"
         return result
 
-    def fetch_mail(self, **kwargs):
-        result = True
-        for this in self:
-            if not this.folders_only:  # pragma: no cover
-                result = result and super(FetchmailServer, this).fetch_mail(**kwargs)
-            this.folder_ids.fetch_mail()
+    def _fetch_mail(self, **kwargs):
+        """Fetch the configured folders, and the inbox only when wanted.
+
+        Since Odoo 19 both the cron (``_fetch_mails``) and the "Fetch Now" button
+        (``fetch_mail``) end up here, so this is the one place to extend.
+        """
+        inbox_servers = self.filtered(lambda server: not server.folders_only)
+        result = None
+        if inbox_servers:
+            result = super(FetchmailServer, inbox_servers)._fetch_mail(**kwargs)
+        folder_servers = self.filtered(
+            lambda server: server.state == "done" and server.folder_ids
+        )
+        folder_servers.folder_ids.fetch_mail()
+        # Core rotates the servers on date; it does not see the folders_only ones.
+        (folder_servers - inbox_servers).write({"date": fields.Datetime.now()})
         return result

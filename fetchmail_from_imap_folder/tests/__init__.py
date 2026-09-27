@@ -2,3 +2,4 @@
 
 from . import test_attach_mail_manually
 from . import test_match_algorithms
+from . import test_fetch_mail
