@@ -60,7 +60,7 @@
                                         <td class="right">
                                             <span
                                                 class="date_today"
-                                                t-esc="time.strftime('%%d %%B %%Y')"
+                                                t-out="time.strftime('%%d %%B %%Y')"
                                             />
                                         </td>
                                     </tr>

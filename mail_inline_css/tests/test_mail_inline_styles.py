@@ -4,13 +4,56 @@ from lxml import html
 
 from odoo.tests import TransactionCase
 
+BODY_HTML = """
+<html>
+    <body>
+        <style>
+        #main_wrapper {
+            max-width: 620px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            font-size: 18px;
+            font-family: verdana;
+            color: #6B6E71;
+        }
+        #main_header, footer, main div { padding: 30px 40px }
+        #main_logo { max-width: 300px }
+        footer { padding-top: 0; font-size: 120% }
+        </style>
+        <div id="main_wrapper">
+            <div id="main_header">
+                <img id="main_logo" src="/logo.png"/>
+            </div>
+            <main id="main_content">
+                <div class="greeting">
+                    <p>Hello <t t-out="object.name"/>.</p>
+                </div>
+            </main>
+            <footer id="main_footer">
+                <p>www.example.com</p>
+            </footer>
+        </div>
+    </body>
+</html>
+"""
+
 
 class TestMailInlineStyles(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.mail_template = cls.env.ref("mail_inline_css.email_template_demo")
-        cls.demo_user = cls.env.ref("base.user_demo")
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.mail_template = cls.env["mail.template"].create(
+            {
+                "name": "Inline styles test",
+                "model_id": cls.env.ref("base.model_res_users").id,
+                "subject": "Test email inline styles",
+                "body_html": BODY_HTML,
+            }
+        )
+        cls.user = cls.env["res.users"].create(
+            {"name": "Inline CSS User", "login": "inline_css_user"}
+        )
 
     def to_xml_node(self, html_):
         return html.fragments_fromstring(html_)
@@ -32,9 +75,11 @@ class TestMailInlineStyles(TransactionCase):
 
     def test_generate_mail(self):
         res = self.mail_template._generate_template(
-            [self.demo_user.id], render_fields=["body_html"]
+            [self.user.id], render_fields=["body_html"]
         )
-        body_html_string = res[self.demo_user.id].get("body_html")
+        body_html_string = res[self.user.id].get("body_html")
+        self.assertIn("Hello Inline CSS User.", body_html_string)
+        self.assertNotIn("<style>", body_html_string)
         html_node = self.to_xml_node(body_html_string)[0]
 
         expected = {
@@ -57,3 +102,6 @@ class TestMailInlineStyles(TransactionCase):
         for html_id, expected_style in expected.items():
             node = self.find_by_id(html_node, html_id)[0]
             self.assertNodeStyle(node, expected_style)
+
+    def test_empty_body(self):
+        self.assertEqual(self.mail_template._premailer_apply_transform("  "), "  ")
