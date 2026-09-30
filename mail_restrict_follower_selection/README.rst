@@ -38,8 +38,14 @@ only internally, it makes sense to filter possible followers for being
 employees. Otherwise, you'll get a quite crowded list of partners to
 choose from.
 
-Moreover, the module disables the option to automatically add followers
-that do not meet the domain.
+The restriction is applied to the **Add Followers** wizard: only
+contacts matching the configured domain can be selected, and any contact
+that does not match it is discarded when the wizard is confirmed.
+
+The restriction does not apply to followers added automatically by Odoo
+or by other modules (for example, the customer subscribed when a message
+is posted, or followers added from code), nor to the recipients
+suggested by the chatter composer.
 
 **Table of contents**
 
@@ -67,6 +73,19 @@ Some examples:
 - ``[("employee_ids","!=",False)]`` : Restrict to employees
 
 Note: This module won't change existing followers!
+
+Changelog
+=========
+
+19.0.1.0.0
+----------
+
+- Migration to 19.0.
+- The restriction is now enforced only in the *Add Followers* wizard
+  (``mail.followers.edit``). Followers added automatically by Odoo or by
+  other modules are no longer filtered.
+- Recipients suggested by the chatter composer are no longer filtered,
+  as the composer no longer subscribes message recipients as followers.
 
 Bug Tracker
 ===========
