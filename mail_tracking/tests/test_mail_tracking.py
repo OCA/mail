@@ -8,7 +8,7 @@ from lxml import etree
 from werkzeug.exceptions import BadRequest
 
 from odoo import SUPERUSER_ID, fields, http
-from odoo.exceptions import AccessError
+from odoo.exceptions import AccessError, UserError
 from odoo.fields import Command
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -586,6 +586,39 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         values = tracking.mail_message_id.get_failed_messages()[0]
         if values and values.get("author"):
             self.assertEqual(values["author"][0], -1)
+
+    def _failed_mail(self):
+        mail = self.env["mail.mail"].create(
+            {
+                "subject": "Test subject",
+                "email_from": "from@domain.com",
+                "email_to": self.recipient.email,
+                "body_html": "<p>This is a test message</p>",
+                "auto_delete": False,
+            }
+        )
+        with self.mock_smtplib_connection():
+            mail.send()
+        mail.write({"state": "exception", "failure_reason": "SMTP server down"})
+        tracking = self.env["mail.tracking.email"].search([("mail_id", "=", mail.id)])
+        tracking.state = "error"
+        return mail, mail.mail_message_id
+
+    def test_retry_failed_message(self):
+        mail, message = self._failed_mail()
+        self.assertTrue(message.mail_tracking_needs_action)
+        self.assertEqual(message._get_failed_mails_to_retry(), mail.sudo())
+        with self.mock_smtplib_connection():
+            self.assertTrue(message.retry_failed_message())
+        self.assertEqual(mail.state, "sent")
+        self.assertFalse(message.mail_tracking_needs_action)
+        self.assertFalse(message._get_failed_mails_to_retry())
+
+    def test_retry_failed_message_without_failed_email(self):
+        mail, message = self._failed_mail()
+        mail.state = "sent"
+        with self.assertRaises(UserError):
+            message.retry_failed_message()
 
     def test_init_messaging(self):
         _mail, tracking = self.mail_send(self.recipient.email)
