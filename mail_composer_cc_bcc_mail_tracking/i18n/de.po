@@ -6,58 +6,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-10-01 10:44+0000\n"
+"Last-Translator: MJD <maximilian@si-gmbh.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model.fields,field_description:mail_composer_cc_bcc_mail_tracking.field_res_company__chatter_recipients_allow_toggle
 #: model:ir.model.fields,field_description:mail_composer_cc_bcc_mail_tracking.field_res_config_settings__chatter_recipients_allow_toggle
 msgid "Allow toggling chatter recipients"
-msgstr ""
+msgstr "Umschalten der Chatter-Empfänger zulassen"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model_terms:ir.ui.view,arch_db:mail_composer_cc_bcc_mail_tracking.res_config_settings_view_form
 msgid "Allow toggling recipients"
-msgstr ""
+msgstr "Umschalten der Empfänger zulassen"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #. odoo-javascript
 #: code:addons/mail_composer_cc_bcc_mail_tracking/static/src/message.xml:0
 msgid "Bcc:"
-msgstr ""
+msgstr "Bcc:"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #. odoo-javascript
 #: code:addons/mail_composer_cc_bcc_mail_tracking/static/src/message.xml:0
 msgid "Cc:"
-msgstr ""
+msgstr "Cc:"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model_terms:ir.ui.view,arch_db:mail_composer_cc_bcc_mail_tracking.res_config_settings_view_form
 msgid "Chatter Recipients"
-msgstr ""
+msgstr "Chatter-Empfänger"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model,name:mail_composer_cc_bcc_mail_tracking.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Unternehmen"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model,name:mail_composer_cc_bcc_mail_tracking.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Konfigurationseinstellungen"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model.fields,field_description:mail_composer_cc_bcc_mail_tracking.field_res_company__chatter_recipients_default_display
 #: model:ir.model.fields,field_description:mail_composer_cc_bcc_mail_tracking.field_res_config_settings__chatter_recipients_default_display
 #: model_terms:ir.ui.view,arch_db:mail_composer_cc_bcc_mail_tracking.res_config_settings_view_form
 msgid "Default recipient display"
-msgstr ""
+msgstr "Standard-Empfängeranzeige"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model.fields,help:mail_composer_cc_bcc_mail_tracking.field_res_company__chatter_recipients_default_display
@@ -67,6 +69,9 @@ msgid ""
 "How chatter recipients are shown by default: a single collapsed 'To' line, "
 "or the full To/Cc/Bcc split."
 msgstr ""
+"Wie die Empfänger von Chatter-Nachrichten standardmäßig angezeigt werden: "
+"als einzelne, eingeklappte „An“-Zeile oder als vollständige Aufteilung in „An"
+"“, „Cc“ und „Bcc“."
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model_terms:ir.ui.view,arch_db:mail_composer_cc_bcc_mail_tracking.res_config_settings_view_form
@@ -74,6 +79,8 @@ msgid ""
 "Let users switch between the single 'To' line and the full To/Cc/Bcc "
 "display."
 msgstr ""
+"Benutzern die Möglichkeit geben, zwischen der einzelnen „An“-Zeile und der "
+"vollständigen Anzeige von „An“, „Cc“ und „Bcc“ zu wechseln."
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model.fields,help:mail_composer_cc_bcc_mail_tracking.field_res_company__chatter_recipients_allow_toggle
@@ -82,24 +89,27 @@ msgid ""
 "Let users switch between the single 'To' line and the full To/Cc/Bcc "
 "display. When disabled, only the default display is shown."
 msgstr ""
+"Benutzern die Möglichkeit geben, zwischen der einzelnen „An“-Zeile und der "
+"vollständigen Anzeige von „An“, „Cc“ und „Bcc“ zu wechseln. Wenn diese "
+"Option deaktiviert ist, wird nur die Standardanzeige angezeigt."
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model,name:mail_composer_cc_bcc_mail_tracking.model_mail_message
 msgid "Message"
-msgstr ""
+msgstr "Nachricht"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model.fields.selection,name:mail_composer_cc_bcc_mail_tracking.selection__res_company__chatter_recipients_default_display__collapsed
 msgid "Single 'To' line"
-msgstr ""
+msgstr "Einzelne „An“-Zeile"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #: model:ir.model.fields.selection,name:mail_composer_cc_bcc_mail_tracking.selection__res_company__chatter_recipients_default_display__expanded
 msgid "To / Cc / Bcc split"
-msgstr ""
+msgstr "An/Cc/Bcc-Aufteilung"
 
 #. module: mail_composer_cc_bcc_mail_tracking
 #. odoo-javascript
 #: code:addons/mail_composer_cc_bcc_mail_tracking/static/src/message.xml:0
 msgid "To:"
-msgstr ""
+msgstr "An:"
