@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
-<title>README.rst</title>
+<title>Mail suggested recipient unchecked</title>
 <style type="text/css">
 
 /*
@@ -374,9 +374,9 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:6e1ba01e150bad3746f4cb1190853a5d392dbd27a1a0764ba4ca24f10001944c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/18.0/mail_suggested_recipient_unchecked"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-18-0/mail-18-0-mail_suggested_recipient_unchecked"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
-<p>This module unchecks the extra suggested recipients by default when
-going to write a new message in a chatter thread.</p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/19.0/mail_suggested_recipient_unchecked"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_suggested_recipient_unchecked"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p>This module does not select the extra suggested recipients by default
+when going to write a new message in a chatter thread.</p>
 <p>Odoo suggests new recipients on several parts of the suite to
 accommodate business needs. Example: on CRM opportunities, it proposes
 the lead partner to be added to the thread (or to create a partner from
@@ -401,9 +401,10 @@ is not yet follower.</p>
 <ol class="arabic simple">
 <li>On a chatter where recipients can be suggested (e.g., any contact),
 click on ‘Send Message’.</li>
-<li>The suggested recipient will not be checked by default.</li>
-<li>If the box is checked the email will be sent to the suggested
-recipient.</li>
+<li>The suggested recipient will not be added to the recipients by
+default, it is displayed next to them with a ‘+’ sign.</li>
+<li>If the suggestion is clicked, it is added to the recipients and the
+email will be sent to the suggested recipient.</li>
 </ol>
 </div>
 <div class="section" id="bug-tracker">
@@ -411,7 +412,7 @@ recipient.</li>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/mail/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/mail/issues/new?body=module:%20mail_suggested_recipient_unchecked%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/mail/issues/new?body=module:%20mail_suggested_recipient_unchecked%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -431,6 +432,10 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <li>Carlos Roca</li>
 </ul>
 </li>
+<li><a class="reference external" href="https://acsone.eu">ACSONE</a>:<ul>
+<li>Camille Spiritus</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
@@ -444,7 +449,7 @@ mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
 <p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainer</a>:</p>
 <p><a class="reference external image-reference" href="https://github.com/victoralmau"><img alt="victoralmau" src="https://github.com/victoralmau.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/mail/tree/18.0/mail_suggested_recipient_unchecked">OCA/mail</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/mail/tree/19.0/mail_suggested_recipient_unchecked">OCA/mail</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>
