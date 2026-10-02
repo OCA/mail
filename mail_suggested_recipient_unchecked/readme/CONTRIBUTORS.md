@@ -2,3 +2,5 @@
   - Víctor Martínez
   - Pedro M. Baeza
   - Carlos Roca
+- [ACSONE](https://acsone.eu):
+  - Camille Spiritus

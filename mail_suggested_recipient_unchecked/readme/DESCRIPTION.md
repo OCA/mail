@@ -1,4 +1,4 @@
-This module unchecks the extra suggested recipients by default when
+This module does not select the extra suggested recipients by default when
 going to write a new message in a chatter thread.
 
 Odoo suggests new recipients on several parts of the suite to
