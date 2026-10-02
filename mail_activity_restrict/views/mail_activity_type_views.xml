@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mail_activity_type_view_form_inherit_restrict" model="ir.ui.view">
+        <field name="name">mail.activity.type.view.form.restrict</field>
+        <field name="model">mail.activity.type</field>
+        <field name="inherit_id" ref="mail.mail_activity_type_view_form" />
+        <field name="arch" type="xml">
+            <field name="keep_done" position="after">
+                <field name="can_write_restrict" />
+            </field>
+        </field>
+    </record>
+</odoo>
