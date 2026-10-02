@@ -17,13 +17,6 @@ msgstr ""
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "---------- Forwarded message ---------"
-msgstr "---------- Missatge reenviat ---------"
-
-#. module: mail_forward
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_gateway_message__forward_type__another_thread
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__another_thread
 msgid "Another thread"
@@ -36,16 +29,10 @@ msgid "Current thread"
 msgstr "Fil actual"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "Date"
-msgstr "Data"
-
-#. module: mail_forward
-#: model:ir.model,name:mail_forward.model_mail_thread
-msgid "Email Thread"
-msgstr "Fil de correus"
+#: model:ir.model.fields,field_description:mail_forward.field_ir_model__display_name
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__display_name
+msgid "Display Name"
+msgstr ""
 
 #. module: mail_forward
 #: model:ir.model,name:mail_forward.model_mail_compose_message
@@ -63,72 +50,16 @@ msgid "Enable forwarding messages to records of this model."
 msgstr "Habilita reenviament de missatges a registres d'aquest model."
 
 #. module: mail_forward
-#: model_terms:ir.ui.view,arch_db:mail_forward.mail_compose_message_forward_form
-msgid "Followers to notify"
-msgstr "Seguidors a notificar"
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#: code:addons/mail_forward/static/src/core/common/message_actions.esm.js:0
-#, python-format
-msgid "Forward"
-msgstr "Reenvia"
-
-#. module: mail_forward
-#. odoo-javascript
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message"
-msgstr "Reenvia missatge"
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message Center"
-msgstr ""
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message Left"
-msgstr ""
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message Right"
-msgstr ""
-
-#. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_type
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_type
 msgid "Forward Type"
 msgstr "Tipus de reenviament"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "From"
-msgstr "De"
-
-#. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/wizards/mail_compose_message.py:0
-#, python-format
-msgid "Fwd:"
-msgstr "Rv:"
-
-#. module: mail_forward
-#: model:ir.model,name:mail_forward.model_mail_message
-msgid "Message"
-msgstr "Missatge"
+#: model:ir.model.fields,field_description:mail_forward.field_ir_model__id
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__id
+msgid "ID"
+msgstr ""
 
 #. module: mail_forward
 #: model:ir.model,name:mail_forward.model_ir_model
@@ -136,28 +67,52 @@ msgid "Models"
 msgstr "Models"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/wizards/mail_compose_message.py:0
-#, python-format
-msgid "Re:"
-msgstr "Re:"
-
-#. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "Subject"
-msgstr "Assumpte"
-
-#. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_thread
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_thread
 msgid "Thread to forward"
 msgstr "Fil pel reenviament"
 
-#. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
-msgid "To"
-msgstr "A"
+#~ msgid "---------- Forwarded message ---------"
+#~ msgstr "---------- Missatge reenviat ---------"
+
+#, python-format
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Email Thread"
+#~ msgstr "Fil de correus"
+
+#~ msgid "Followers to notify"
+#~ msgstr "Seguidors a notificar"
+
+#, python-format
+#~ msgid "Forward"
+#~ msgstr "Reenvia"
+
+#, python-format
+#~ msgid "Forward Message"
+#~ msgstr "Reenvia missatge"
+
+#, python-format
+#~ msgid "From"
+#~ msgstr "De"
+
+#, python-format
+#~ msgid "Fwd:"
+#~ msgstr "Rv:"
+
+#~ msgid "Message"
+#~ msgstr "Missatge"
+
+#, python-format
+#~ msgid "Re:"
+#~ msgstr "Re:"
+
+#, python-format
+#~ msgid "Subject"
+#~ msgstr "Assumpte"
+
+#, python-format
+#~ msgid "To"
+#~ msgstr "A"

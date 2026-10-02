@@ -17,13 +17,6 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "---------- Forwarded message ---------"
-msgstr "---------- Messaggio inoltrato ---------"
-
-#. module: mail_forward
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_gateway_message__forward_type__another_thread
 #: model:ir.model.fields.selection,name:mail_forward.selection__mail_compose_message__forward_type__another_thread
 msgid "Another thread"
@@ -36,16 +29,10 @@ msgid "Current thread"
 msgstr "Discussione attuale"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "Date"
-msgstr "Data"
-
-#. module: mail_forward
-#: model:ir.model,name:mail_forward.model_mail_thread
-msgid "Email Thread"
-msgstr "Discussione e-mail"
+#: model:ir.model.fields,field_description:mail_forward.field_ir_model__display_name
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__display_name
+msgid "Display Name"
+msgstr ""
 
 #. module: mail_forward
 #: model:ir.model,name:mail_forward.model_mail_compose_message
@@ -63,72 +50,16 @@ msgid "Enable forwarding messages to records of this model."
 msgstr "Abilita messaggi inoltro ai record di questo modello."
 
 #. module: mail_forward
-#: model_terms:ir.ui.view,arch_db:mail_forward.mail_compose_message_forward_form
-msgid "Followers to notify"
-msgstr "Sottoscritti da avvisare"
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#: code:addons/mail_forward/static/src/core/common/message_actions.esm.js:0
-#, python-format
-msgid "Forward"
-msgstr "Inoltra"
-
-#. module: mail_forward
-#. odoo-javascript
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message"
-msgstr "Inoltra messaggio"
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message Center"
-msgstr "Centro inoltro messaggio"
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message Left"
-msgstr "Inoltra messaggio precedente"
-
-#. module: mail_forward
-#. odoo-javascript
-#: code:addons/mail_forward/static/src/components/forward_message/forward_message.xml:0
-#, python-format
-msgid "Forward Message Right"
-msgstr "Inoltra messaggio successivo"
-
-#. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_type
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_type
 msgid "Forward Type"
 msgstr "Tipo inoltro"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "From"
-msgstr "Da"
-
-#. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/wizards/mail_compose_message.py:0
-#, python-format
-msgid "Fwd:"
-msgstr "In.:"
-
-#. module: mail_forward
-#: model:ir.model,name:mail_forward.model_mail_message
-msgid "Message"
-msgstr "Messaggio"
+#: model:ir.model.fields,field_description:mail_forward.field_ir_model__id
+#: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__id
+msgid "ID"
+msgstr ""
 
 #. module: mail_forward
 #: model:ir.model,name:mail_forward.model_ir_model
@@ -136,28 +67,64 @@ msgid "Models"
 msgstr "Modelli"
 
 #. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/wizards/mail_compose_message.py:0
-#, python-format
-msgid "Re:"
-msgstr "Re:"
-
-#. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
-#, python-format
-msgid "Subject"
-msgstr "Oggetto"
-
-#. module: mail_forward
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_gateway_message__forward_thread
 #: model:ir.model.fields,field_description:mail_forward.field_mail_compose_message__forward_thread
 msgid "Thread to forward"
 msgstr "Discussione da inoltrare"
 
-#. module: mail_forward
-#. odoo-python
-#: code:addons/mail_forward/models/mail_message.py:0
 #, python-format
-msgid "To"
-msgstr "A"
+#~ msgid "---------- Forwarded message ---------"
+#~ msgstr "---------- Messaggio inoltrato ---------"
+
+#, python-format
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Email Thread"
+#~ msgstr "Discussione e-mail"
+
+#~ msgid "Followers to notify"
+#~ msgstr "Sottoscritti da avvisare"
+
+#, python-format
+#~ msgid "Forward"
+#~ msgstr "Inoltra"
+
+#, python-format
+#~ msgid "Forward Message"
+#~ msgstr "Inoltra messaggio"
+
+#, python-format
+#~ msgid "Forward Message Center"
+#~ msgstr "Centro inoltro messaggio"
+
+#, python-format
+#~ msgid "Forward Message Left"
+#~ msgstr "Inoltra messaggio precedente"
+
+#, python-format
+#~ msgid "Forward Message Right"
+#~ msgstr "Inoltra messaggio successivo"
+
+#, python-format
+#~ msgid "From"
+#~ msgstr "Da"
+
+#, python-format
+#~ msgid "Fwd:"
+#~ msgstr "In.:"
+
+#~ msgid "Message"
+#~ msgstr "Messaggio"
+
+#, python-format
+#~ msgid "Re:"
+#~ msgstr "Re:"
+
+#, python-format
+#~ msgid "Subject"
+#~ msgstr "Oggetto"
+
+#, python-format
+#~ msgid "To"
+#~ msgstr "A"
