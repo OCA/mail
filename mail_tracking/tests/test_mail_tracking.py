@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import base64
 import time
+from email.message import EmailMessage
 from unittest.mock import Mock, patch
 
 from lxml import etree
@@ -378,7 +379,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
 
     def test_message_route_process(self):
         partner_model = self.env["res.partner"]
-        message = Mock()
+        message = EmailMessage()
         routes = [("res.partner", False, {}, self.env.user.id, False)]
 
         message_dict = {
