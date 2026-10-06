@@ -39,4 +39,73 @@
             </t>
         </div>
     </template>
+
+    <template id="message_activity_reminder_report">
+        <div style="margin: 0px; padding: 0px; font-size: 13px;">
+            <p>
+                Here is your overview of overdue and upcoming activities as of
+                <t t-out="today" />.
+            </p>
+            <t t-foreach="sections" t-as="section">
+                <h3>
+                    <t t-out="section['title']" />
+                </h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="text-align: left;">
+                        <th
+                            style="padding: 4px; border-bottom: 1px solid #ccc;"
+                        >Activity</th>
+                        <th
+                            style="padding: 4px; border-bottom: 1px solid #ccc;"
+                        >Document</th>
+                        <th
+                            style="padding: 4px; border-bottom: 1px solid #ccc;"
+                        >Deadline</th>
+                        <th
+                            style="padding: 4px; border-bottom: 1px solid #ccc;"
+                        >Status</th>
+                        <th style="padding: 4px; border-bottom: 1px solid #ccc;" />
+                    </tr>
+                    <tr t-foreach="section['activities']" t-as="activity">
+                        <td style="padding: 4px; border-bottom: 1px solid #eee;">
+                            <span t-field="activity.activity_type_id.name" />
+                            <t t-if="activity.summary">
+                                (<span t-field="activity.summary" />)
+                            </t>
+                        </td>
+                        <td style="padding: 4px; border-bottom: 1px solid #eee;">
+                            <span t-field="activity.res_name" />
+                        </td>
+                        <td style="padding: 4px; border-bottom: 1px solid #eee;">
+                            <span t-field="activity.date_deadline" />
+                        </td>
+                        <td style="padding: 4px; border-bottom: 1px solid #eee;">
+                            <t t-if="section['overdue']">
+                                Overdue by
+                                <t t-out="(today - activity.date_deadline).days" />
+                                day(s)
+                            </t>
+                            <t t-else="">
+                                Reminder
+                                <t t-out="section['level']" />
+                                of
+                                <t
+                                t-out="len(activity.activity_type_id._get_reminder_offsets())"
+                            />
+                            </t>
+                        </td>
+                        <td style="padding: 4px; border-bottom: 1px solid #eee;">
+                            <a
+                                t-att-href="'/mail/view?model=%s&amp;res_id=%s' % (activity.res_model, activity.res_id)"
+                                style="background-color:#875A7B; padding: 4px 8px 4px 8px; text-decoration: none; color: #fff; border-radius: 5px;"
+                            >
+                                View
+                                <t t-esc="model_description or 'document'" />
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </t>
+        </div>
+    </template>
 </odoo>
