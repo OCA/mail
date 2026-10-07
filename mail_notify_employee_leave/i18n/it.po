@@ -1,0 +1,66 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_notify_employee_leave
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-05-11 17:45+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
+
+#. module: mail_notify_employee_leave
+#. odoo-python
+#: code:addons/mail_notify_employee_leave/models/mail_thread.py:0
+#, python-format
+msgid "%(name)s is out of office, expected back on %(date)s."
+msgstr "%(name)s è fuori dall'ufficio, previsto rientro il %(date)s."
+
+#. module: mail_notify_employee_leave
+#: model:ir.model.fields,field_description:mail_notify_employee_leave.field_hr_employee__absence_notified_date
+msgid "Date of Last Absence Notification"
+msgstr "Data ultima notifica assenza"
+
+#. module: mail_notify_employee_leave
+#: model:ir.model.fields,help:mail_notify_employee_leave.field_hr_employee__absence_notified_date
+msgid "Date of the last notification record"
+msgstr "Data dell'ultimo record di notifica"
+
+#. module: mail_notify_employee_leave
+#: model:ir.model,name:mail_notify_employee_leave.model_mail_thread
+msgid "Email Thread"
+msgstr "Discussione e-mail"
+
+#. module: mail_notify_employee_leave
+#: model:ir.model,name:mail_notify_employee_leave.model_hr_employee
+msgid "Employee"
+msgstr "Dipendente"
+
+#. module: mail_notify_employee_leave
+#: model:ir.model,name:mail_notify_employee_leave.model_hr_leave
+msgid "Time Off"
+msgstr "Ferie"
+
+#. module: mail_notify_employee_leave
+#. odoo-python
+#: code:addons/mail_notify_employee_leave/models/mail_thread.py:0
+#, python-format
+msgid "User out of office"
+msgstr "Utente fuori ufficio"
+
+#. module: mail_notify_employee_leave
+#: model:ir.model.fields,field_description:mail_notify_employee_leave.field_hr_employee__absence_notified_user_ids
+msgid "Users Notified Today"
+msgstr "Utente avvisato oggi"
+
+#. module: mail_notify_employee_leave
+#: model:ir.model.fields,help:mail_notify_employee_leave.field_hr_employee__absence_notified_user_ids
+msgid "Users who have already been notified today about this absence"
+msgstr "Utenti che sono già stati informati oggi di questa assenza"
