@@ -5,6 +5,7 @@
 from email.utils import getaddresses
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 from odoo.fields import Domain
 from odoo.tools import email_split
 
@@ -290,6 +291,37 @@ class MailMessage(models.Model):
             {"message_ids": [self.id]},
         )
 
+    def _get_failed_mails_to_retry(self):
+        """Emails of the messages that could not be sent and can be retried"""
+        return (
+            self.env["mail.mail"]
+            .sudo()
+            .search([("mail_message_id", "in", self.ids), ("state", "=", "exception")])
+        )
+
+    def retry_failed_message(self):
+        """Send again the emails of the messages that could not be sent.
+
+        Odoo 19 removed the resend wizard, so the failed emails are retried
+        through the standard mail.mail retry. Messages whose emails are sent
+        are marked as reviewed. Returns whether every email was sent.
+        """
+        self.check_access("read")
+        mails = self._get_failed_mails_to_retry()
+        if not mails:
+            raise UserError(
+                self.env._(
+                    "There is no email to retry for this message. "
+                    "Resend it manually or set it as reviewed."
+                )
+            )
+        mails.action_retry()
+        mails.send(raise_exception=False)
+        failed_again = mails.exists().filtered(lambda mail: mail.state == "exception")
+        for message in self - failed_again.mail_message_id:
+            message.set_need_action_done()
+        return not failed_again
+
     @api.model
     def get_failed_count(self):
         """Gets the number of failed messages used on discuss mailbox item"""
@@ -314,6 +346,10 @@ class MailMessage(models.Model):
                     "partner_trackings": message.tracking_status(),
                     "mail_tracking_needs_action": message.mail_tracking_needs_action,
                     "is_failed_message": message.is_failed_message,
+                    "mail_tracking_can_retry": bool(
+                        message.is_failed_message
+                        and message._get_failed_mails_to_retry()
+                    ),
                 },
             )
         return res

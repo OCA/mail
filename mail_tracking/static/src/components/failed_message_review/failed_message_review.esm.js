@@ -1,3 +1,4 @@
+import {_t} from "@web/core/l10n/translation";
 import {useService} from "@web/core/utils/hooks";
 
 const {Component, useState} = owl;
@@ -9,24 +10,23 @@ export class FailedMessageReview extends Component {
     setup() {
         this.message = useState(this.props.message);
         this.orm = useService("orm");
+        this.notification = useService("notification");
     }
     async setFailedMessageReviewed() {
         await this.orm.call("mail.message", "set_need_action_done", [
             [this.message.id],
         ]);
     }
-    retryFailedMessage() {
-        this.env.services.action.doAction("mail.mail_resend_message_action", {
-            additionalContext: {
-                mail_message_to_resend: this.message.id,
-            },
-            onClose: async () => {
-                // Check if message is still 'failed' after Retry
-                await this.orm.call("mail.message", "get_failed_messages", [
-                    [this.message.id],
-                ]);
-            },
-        });
+    async retryFailedMessage() {
+        const sent = await this.orm.call("mail.message", "retry_failed_message", [
+            [this.message.id],
+        ]);
+        this.notification.add(
+            sent
+                ? _t("The email has been sent again.")
+                : _t("The email could not be sent again."),
+            {type: sent ? "success" : "danger"}
+        );
     }
     get thread() {
         return this.props.message.thread;
