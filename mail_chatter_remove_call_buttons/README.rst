@@ -34,6 +34,61 @@ Mail - Remove call buttons from Chatter view
 
 Remove call buttons from the Chatter view
 
+Chatter Sidebar
+---------------
+
+By default
+~~~~~~~~~~
+
+|A screen capture with a "Discuss" menu indicated by a topbar, beneath
+which are placed a "Start a meeting" button and an "Inbox" list item|
+
+With module installed
+~~~~~~~~~~~~~~~~~~~~~
+
+|A screen capture with a "Discuss" menu indicated by a topbar, beneath
+which are placed several list items named "Inbox", "Starred" and
+"History"|
+
+Chatter thread topbar
+---------------------
+
+By default
+~~~~~~~~~~
+
+|A line of buttons, indicated by icons of a phone, a camera, a person
+aside a "plus" sign, three people close together and a cog wheel.|
+
+With module installed
+~~~~~~~~~~~~~~~~~~~~~
+
+|A line of buttons, indicated by icons of a person aside a "plus" sign
+and three people close together.|
+
+Minimized chat window
+---------------------
+
+By default
+~~~~~~~~~~
+
+|A chat window, with a "Hello Marc!" message sent. The top of the window
+contains the window's name "Marc Demo", followed by icons of a camera, a
+phone, a cogwheel, a maximize icon and a close icon.|
+
+With module installed
+~~~~~~~~~~~~~~~~~~~~~
+
+|A chat window, with a "Hello Marc!" message sent. The top of the window
+contains the window's name "Marc Demo", followed by icons of a maximize
+icon and a close icon.|
+
+.. |A screen capture with a "Discuss" menu indicated by a topbar, beneath which are placed a "Start a meeting" button and an "Inbox" list item| image:: https://raw.githubusercontent.com/OCA/mail/16.0/mail_chatter_remove_call_buttons/static/img/chatter_sidebar_default.png
+.. |A screen capture with a "Discuss" menu indicated by a topbar, beneath which are placed several list items named "Inbox", "Starred" and "History"| image:: https://raw.githubusercontent.com/OCA/mail/16.0/mail_chatter_remove_call_buttons/static/img/chatter_sidebar_with_module.png
+.. |A line of buttons, indicated by icons of a phone, a camera, a person aside a "plus" sign, three people close together and a cog wheel.| image:: https://raw.githubusercontent.com/OCA/mail/16.0/mail_chatter_remove_call_buttons/static/img/thread_topbar_default.png
+.. |A line of buttons, indicated by icons of a person aside a "plus" sign and three people close together.| image:: https://raw.githubusercontent.com/OCA/mail/16.0/mail_chatter_remove_call_buttons/static/img/thread_topbar_with_module.png
+.. |A chat window, with a "Hello Marc!" message sent. The top of the window contains the window's name "Marc Demo", followed by icons of a camera, a phone, a cogwheel, a maximize icon and a close icon.| image:: https://raw.githubusercontent.com/OCA/mail/16.0/mail_chatter_remove_call_buttons/static/img/minimized_chatter_default.png
+.. |A chat window, with a "Hello Marc!" message sent. The top of the window contains the window's name "Marc Demo", followed by icons of a maximize icon and a close icon.| image:: https://raw.githubusercontent.com/OCA/mail/16.0/mail_chatter_remove_call_buttons/static/img/minimized_chatter_with_module.png
+
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
    Only for development or testing purpose, do not use in production.
