@@ -270,3 +270,21 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
         server = mail_server.with_context(is_from_composer=True, recipients=[])
         with self.assertRaises(ValueError):
             server._prepare_email_message(message, None)
+
+    def test_recipient_without_email_does_not_block_the_others(self):
+        """A recipient without email is skipped like Odoo does
+
+        e.g. a delivery address with no email: the others still get theirs.
+        """
+        no_email = self.env["res.partner"].create({"name": "No Email"})
+        partners_to = self.us1 + no_email
+        message = self._send("no-email", partners_to, self.us2, self.us3)
+
+        self._assert_one_email_per_recipient(self.us1 + self.us2 + self.us3)
+        self._assert_same_to_cc_headers(self.us1, self.us2)
+        self._assert_bcc_header_on_bcc_emails_only(self.us3)
+        notifs = message.notification_ids
+        failed = notifs.filtered(lambda n: n.res_partner_id == no_email)
+        self.assertEqual(failed.notification_status, "exception")
+        self.assertEqual(failed.failure_type, "mail_email_invalid")
+        self.assertEqual(set((notifs - failed).mapped("notification_status")), {"sent"})

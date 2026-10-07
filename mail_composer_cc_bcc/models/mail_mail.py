@@ -73,7 +73,14 @@ class MailMail(models.Model):
         recipients = []
         for m in res:
             m_email_to = m["email_to"][0]
-            rcpt_to = extract_rfc2822_addresses(m_email_to)[0]
+            addresses = extract_rfc2822_addresses(m_email_to)
+            if not addresses:
+                # No valid address, e.g. a partner without email.
+                # Keep its place in recipients so that `_prepare_email_message`
+                # skips this email like Odoo does, and the others still go.
+                recipients.append(False)
+                continue
+            rcpt_to = addresses[0]
             recipients.append(rcpt_to)
 
             # If the recipient is a Bcc, set a real Bcc header.
