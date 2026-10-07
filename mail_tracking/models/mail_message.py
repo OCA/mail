@@ -237,6 +237,30 @@ class MailMessage(models.Model):
                 )
                 partner_trackings.append(tracking_status)
                 tracking_delta += 1
+        # Source of truth PER RECIPIENT: the core mail.notification.
+        # mail.tracking.email tracks per SMTP SEND, so a bounce is propagated to
+        # the co-recipients (they show error) and recipients without tracking
+        # show 'unknown'. The core mail.notification is per recipient and
+        # reliable, so reconcile the status against it.
+        notif_status = {
+            n.res_partner_id.id: n.notification_status
+            for n in self.sudo().notification_ids
+            if n.res_partner_id
+        }
+        for entry in partner_trackings:
+            ns = notif_status.get(entry.get("partner_id"))
+            if not ns:
+                continue
+            if ns == "sent" and entry["status"] in ("error", "unknown"):
+                entry["status"] = "sent"
+                entry["status_human"] = self._partner_tracking_status_human_get("sent")
+            elif ns in ("bounce", "exception") and entry["status"] in (
+                "sent",
+                "unknown",
+                "waiting",
+            ):
+                entry["status"] = "error"
+                entry["status_human"] = self._partner_tracking_status_human_get("error")
         return partner_trackings
 
     @api.model
