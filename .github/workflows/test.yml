@@ -47,10 +47,17 @@ jobs:
             name: test with OCB
             makepot: "true"
           - container: ghcr.io/oca/oca-ci/py3.10-odoo19.0:latest
-            exclude: "mail_send_confirmation"
+            include: "mail_restrict_send_button"
             name: test with Odoo
           - container: ghcr.io/oca/oca-ci/py3.10-ocb19.0:latest
-            exclude: "mail_send_confirmation"
+            include: "mail_restrict_send_button"
+            name: test with OCB
+            makepot: "true"
+          - container: ghcr.io/oca/oca-ci/py3.10-odoo19.0:latest
+            exclude: "mail_send_confirmation,mail_restrict_send_button"
+            name: test with Odoo
+          - container: ghcr.io/oca/oca-ci/py3.10-ocb19.0:latest
+            exclude: "mail_send_confirmation,mail_restrict_send_button"
             name: test with OCB
             makepot: "true"
     services:
