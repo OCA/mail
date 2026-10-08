@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<templates>
+    <t t-inherit="mail.RecipientsInput" t-inherit-mode="extension">
+        <xpath expr="//RecipientsInputTagsList" position="after">
+            <button
+                t-foreach="getUncheckedSuggestedRecipients()"
+                t-as="recipient"
+                t-key="recipient_index"
+                type="button"
+                class="o-mail-RecipientsInput-uncheckedSuggestion btn btn-sm btn-link p-0"
+                t-att-title="recipient.email"
+                t-on-click="() => this.onClickUncheckedSuggestedRecipient(recipient)"
+            >
+                <i class="fa fa-plus me-1" />
+                <t
+                    t-esc="recipient.name or recipient.display_name or recipient.email"
+                />
+            </button>
+        </xpath>
+    </t>
+</templates>
