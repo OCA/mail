@@ -17,7 +17,9 @@ class IrMailServer(models.Model):
         """
         # Each recipients gets its own email
         # See method `_prepare_outgoing_list`
-        is_from_composer = self.env.context.get("is_from_composer", False)
+        is_from_composer = self.env.context.get(
+            "is_from_composer", False
+        ) and not self.env.context.get("skip_adding_cc_bcc", False)
         if is_from_composer:
             # Empty recipients means there is a bug.
             # => refuse to send, otherwise it would
