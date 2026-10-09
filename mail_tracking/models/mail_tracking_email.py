@@ -423,8 +423,20 @@ class MailTrackingEmail(models.Model):
             # If mail_message haven't tracking partner, then
             # add it in order to see his tracking status in chatter
             if mail_message.subtype_id:
-                mail_message.sudo().write(
-                    {"notified_partner_ids": [Command.link(self.partner_id.id)]}
+                # `notified_partner_ids` is a Many2many declared over the
+                # mail_notification table, so writing it with Command.link does
+                # a raw INSERT of the two foreign keys only, bypassing the ORM
+                # and the NOT NULL `notification_type` -> NotNullViolation that
+                # aborts the whole transaction (the mail is not even sent).
+                # Create the notification through the model instead, which also
+                # gives the chatter a correct status for this recipient.
+                self.env["mail.notification"].sudo().create(
+                    {
+                        "mail_message_id": mail_message.id,
+                        "res_partner_id": self.partner_id.id,
+                        "notification_type": "email",
+                        "notification_status": "sent",
+                    }
                 )
             else:
                 mail_message.sudo().write(
