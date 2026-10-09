@@ -135,8 +135,14 @@ class MailTrackingEmail(models.Model):
     def write(self, vals):
         res = super().write(vals)
         state = vals.get("state")
-        if state and state in self.env["mail.message"].get_failed_states():
-            self.mapped("mail_message_id").write({"mail_tracking_needs_action": True})
+        if state:
+            messages = self.mapped("mail_message_id")
+            if state in self.env["mail.message"].get_failed_states():
+                messages.write({"mail_tracking_needs_action": True})
+            # The state is usually written from a webhook, the open pixel or the
+            # SMTP layer, none of which triggers the core notification update, so
+            # the chatter has to be refreshed explicitly.
+            messages._notify_tracking_status_update()
         return res
 
     @api.model
