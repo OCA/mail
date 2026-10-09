@@ -3,3 +3,5 @@
   - Víctor Martínez
   - Ernesto Tejeda
   - Carlos Lopez
+- [PureKarting](https://www.purekarting.com):
+  - Cliff Kujala
