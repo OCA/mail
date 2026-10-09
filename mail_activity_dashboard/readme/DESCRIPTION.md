@@ -1,0 +1,1 @@
+This module adds a link to the activity board in the Dashbard menu.

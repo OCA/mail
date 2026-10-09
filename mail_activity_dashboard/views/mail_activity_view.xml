@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.actions.act_window" id="open_boards_activities">
+        <field name="name">Activitiy Dashboard</field>
+        <field name="res_model">mail.activity</field>
+        <field name="view_mode">kanban,list,form,calendar,pivot,graph</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field
+            name="search_view_id"
+            ref="mail_activity_board.mail_activity_view_search"
+        />
+    </record>
+
+    <!--
+        Menus
+    -->
+    <menuitem
+        id="board_menu_activities"
+        name="Activities"
+        parent="spreadsheet_dashboard.spreadsheet_dashboard_menu_root"
+        action="open_boards_activities"
+        groups="group_show_mail_activity_board"
+        sequence="1"
+    />
+</odoo>
