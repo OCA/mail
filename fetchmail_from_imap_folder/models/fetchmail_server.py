@@ -1,0 +1,103 @@
+# Copyright - 2013-2026 Therp BV <https://therp.nl>.
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+import logging
+import re
+
+from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
+
+# connection.list() returns an array of strings with each string containing
+# information about an available folder. The string contains three parts:
+# - Flags about the folder;
+# - The delimiter used in the folder path;
+# - The actual folder path (or name).
+# Examples:
+#  (\HasNoChildren) "/" "INBOX"
+#  (\HasNoChildren) "/" "Sent"
+#  (\HasChildren) "/" "Customers"
+#  (\HasNoChildren) "/" "Customers/Acme"
+list_response_pattern = re.compile(
+    r'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)'
+)
+
+
+class FetchmailServer(models.Model):
+    _inherit = "fetchmail.server"
+
+    def _compute_folders_available(self):
+        """Retrieve available folders from IMAP server."""
+
+        def parse_list_response(line):
+            string_line = line.decode("utf-8")
+            flags, delimiter, mailbox_name = list_response_pattern.match(
+                string_line
+            ).groups()
+            mailbox_name = mailbox_name.strip('"')
+            return (flags, delimiter, mailbox_name)
+
+        for this in self:
+            if this.state != "done":
+                this.folders_available = self.env._("Confirm connection first.")
+                continue
+            connection = this._connect__()
+            list_result = connection.list()
+            if list_result[0] != "OK":
+                this.folders_available = self.env._("Unable to retrieve folders.")
+                continue
+            folders_available = []
+            for folder_entry in list_result[1]:
+                folders_available.append(parse_list_response(folder_entry)[2])
+            this.folders_available = "\n".join(folders_available)
+            connection.logout()
+
+    folders_available = fields.Text(
+        string="Available folders",
+        compute="_compute_folders_available",
+    )
+    folder_ids = fields.One2many(
+        comodel_name="fetchmail.server.folder",
+        inverse_name="server_id",
+        string="Folders",
+        context={"active_test": False},
+    )
+    folders_only = fields.Boolean(
+        string="Process Only Specified Folders",
+        help="Enable this option to ignore the default IMAP inbox processing and "
+        "retrieve emails only from the specified folders.",
+    )
+    # Below existing fields, that are modified by this module.
+    object_id = fields.Many2one(required=False)  # comodel_name='ir.model'
+    server_type = fields.Selection(default="imap")
+
+    def write(self, vals):
+        """Should reset to draft if server type changes and state not specified."""
+        if "state" not in vals and (
+            "server_type" in vals or "is_ssl" in vals or "object_id" in vals
+        ):
+            vals["state"] = "draft"
+        return super().write(vals)
+
+    @api.onchange("server_type", "is_ssl", "object_id")
+    def onchange_server_type(self):
+        result = super().onchange_server_type()
+        self.state = "draft"
+        return result
+
+    def _fetch_mail(self, **kwargs):
+        """Fetch the configured folders, and the inbox only when wanted.
+
+        Since Odoo 19 both the cron (``_fetch_mails``) and the "Fetch Now" button
+        (``fetch_mail``) end up here, so this is the one place to extend.
+        """
+        inbox_servers = self.filtered(lambda server: not server.folders_only)
+        result = None
+        if inbox_servers:
+            result = super(FetchmailServer, inbox_servers)._fetch_mail(**kwargs)
+        folder_servers = self.filtered(
+            lambda server: server.state == "done" and server.folder_ids
+        )
+        folder_servers.folder_ids.fetch_mail()
+        # Core rotates the servers on date; it does not see the folders_only ones.
+        (folder_servers - inbox_servers).write({"date": fields.Datetime.now()})
+        return result
