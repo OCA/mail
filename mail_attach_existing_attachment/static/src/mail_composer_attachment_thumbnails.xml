@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Copyright 2026 PureKarting
+    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<templates xml:space="preserve">
+
+    <t t-name="mail_attach_existing_attachment.MailComposerAttachmentThumbnails">
+        <div t-if="files.length" class="o_mail_composer_attachment_thumbnails">
+            <div class="d-flex pt-2 cursor-pointer fw-bolder" t-on-click="toggleFolded">
+                <hr class="flex-grow-1 fs-3" />
+                <div class="d-flex align-items-center px-3">
+                    <i
+                        class="fa fa-fw"
+                        t-att-class="state.folded ? 'fa-caret-right' : 'fa-caret-down'"
+                    />
+                    <span>New Attachments</span>
+                    <span
+                        class="badge rounded-pill ms-2 text-bg-secondary"
+                        t-out="files.length"
+                    />
+                </div>
+                <hr class="flex-grow-1 fs-3" />
+            </div>
+            <AttachmentList
+                t-if="!state.folded"
+                attachments="attachments"
+                unlinkAttachment.bind="unlinkAttachment"
+            />
+        </div>
+    </t>
+
+</templates>

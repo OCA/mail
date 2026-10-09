@@ -1,0 +1,8 @@
+// Copyright 2026 PureKarting
+// License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+.o_field_mail_composer_attachment_thumbnails {
+    // Same override core applies to the link list it replaces: the field has
+    // to span the composer rather than sit in an inline field cell.
+    --fieldWidget-display: block;
+}

@@ -4,12 +4,22 @@
         <field name="model">mail.compose.message</field>
         <field name="inherit_id" ref="mail.email_compose_message_wizard_form" />
         <field name="arch" type="xml">
+            <!--
+                Only the first match is patched, which is the comment-mode
+                composer. The mass-mail page keeps the stock widget: attaching
+                the record's own files makes no sense when sending to many
+                records, which is also why ``can_attach_attachment`` stays
+                False there.
+            -->
+            <xpath expr="//field[@name='attachment_ids']" position="attributes">
+                <attribute name="widget">mail_composer_attachment_thumbnails</attribute>
+            </xpath>
             <xpath expr="//field[@name='attachment_ids']" position="after">
                 <field name="can_attach_attachment" invisible="1" />
                 <field name="display_object_attachment_ids" invisible="1" />
                 <field
                     name="object_attachment_ids"
-                    widget="many2many_checkboxes"
+                    widget="attachment_checkbox_grid"
                     domain="[('id', 'in', display_object_attachment_ids)]"
                     invisible="not can_attach_attachment"
                 />
