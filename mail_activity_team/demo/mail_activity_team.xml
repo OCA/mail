@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo noupdate="0">
     <!-- Mail Activity Teams -->
     <record id="mail_activity_team_administrator" model="mail.activity.team">
         <field name="name">Administrator Team</field>
-        <field name="active">True</field>
+        <field name="active" eval="True" />
         <field name="user_id" ref="base.user_admin" />
         <field name="member_ids" eval="[Command.set([ref('base.user_admin')])]" />
         <field
@@ -14,7 +14,7 @@
 
     <record id="mail_activity_team_support" model="mail.activity.team">
         <field name="name">Support Team</field>
-        <field name="active">True</field>
+        <field name="active" eval="True" />
         <field name="user_id" ref="base.user_demo" />
         <field name="member_ids" eval="[Command.set([ref('base.user_demo')])]" />
         <field

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <!--
     VIEWS
@@ -80,7 +80,7 @@
     <!--
     ACTION
 -->
-    <record model="ir.actions.act_window" id="mail_activity_team_action">
+    <record id="mail_activity_team_action" model="ir.actions.act_window">
         <field name="name">Activity Teams</field>
         <field name="res_model">mail.activity.team</field>
         <field name="view_mode">list,form</field>
