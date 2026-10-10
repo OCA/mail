@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_mail_activity_team_user,mail.activity.team.user,mail.activity.team,base.group_user,ru,
+access_mail_activity_team_system_user,mail.activity.team.system.user,mail.activity.team,base.group_system,crud,
+mail_activity_rule_my_team,mail.activity: user: my team,mail.activity,base.group_user,ud,"[('team_id', 'in', user.activity_team_ids.ids)]"

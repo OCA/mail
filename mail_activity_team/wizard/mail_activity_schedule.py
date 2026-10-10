@@ -65,12 +65,12 @@ class MailActivitySchedule(models.TransientModel):
     def _action_schedule_activities(self):
         # Insert default team data which is picked up for activities that are
         # created without a team already.
-        self = self.with_context(
+        wizard = self.with_context(
             schedule_default_team_id=self.activity_team_id.id,
             schedule_default_team_user_id=self.activity_team_user_id.id,
             schedule_default_user_id=self.activity_team_user_id.id,
         )
-        return super()._action_schedule_activities()
+        return super(MailActivitySchedule, wizard)._action_schedule_activities()
 
     def action_schedule_plan(self):
         # Triggering scheduled team activities in
@@ -79,8 +79,8 @@ class MailActivitySchedule(models.TransientModel):
         # This is because activity parameters are determined inline in the
         # super method, and the activity team cannot be inserted there in a
         # clean override.
-        self = self.with_context(fire_team_activities=True)
-        return super().action_schedule_plan()
+        wizard = self.with_context(fire_team_activities=True)
+        return super(MailActivitySchedule, wizard).action_schedule_plan()
 
     @staticmethod
     def _get_activity_schedule_plan_data():
@@ -112,12 +112,14 @@ class MailActivitySchedule(models.TransientModel):
                 date_deadline = template._get_date_deadline(self.plan_date)
                 record.activity_schedule(
                     activity_type_id=template.activity_type_id.id,
+                    activity_plan_id=template.plan_id.id,
                     automated=False,
                     summary=template.summary,
                     note=template.note,
                     user_id=template.activity_team_user_id.id,
                     team_id=template.activity_team_id.id,
                     date_deadline=date_deadline,
+                    activity_template_id=template.id,
                 )
                 activity_descriptions.append(
                     self.env._(

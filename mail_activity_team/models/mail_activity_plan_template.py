@@ -87,7 +87,13 @@ class MailActivityPlanTemplate(models.Model):
             if template.activity_team_required and not template.activity_team_id:
                 raise ValidationError(self.env._("Please enter an activity team."))
 
-    def _determine_responsible(self, on_demand_responsible, applied_on_record):
+    def _determine_responsible(
+        self,
+        on_demand_responsible,
+        on_demand_responsible_fname,
+        applied_on_record,
+        on_demand_role=False,
+    ):
         # Avoid signalling an error for a 'team' template without a user.
         self.ensure_one()
         if self.activity_team_required:
@@ -96,4 +102,9 @@ class MailActivityPlanTemplate(models.Model):
                 "error": False,
                 "warning": False,
             }
-        return super()._determine_responsible(on_demand_responsible, applied_on_record)
+        return super()._determine_responsible(
+            on_demand_responsible,
+            on_demand_responsible_fname,
+            applied_on_record,
+            on_demand_role=on_demand_role,
+        )

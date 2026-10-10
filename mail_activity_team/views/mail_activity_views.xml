@@ -1,33 +1,47 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="mail_activity_view_form_popup" model="ir.ui.view">
         <field name="name">mail.activity.view.form.popup</field>
         <field name="model">mail.activity</field>
         <field name="inherit_id" ref="mail.mail_activity_view_form_popup" />
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']/.." position="attributes">
+                <attribute name="invisible">team_id</attribute>
+            </xpath>
             <field name="user_id" position="attributes">
                 <attribute name="invisible">team_id</attribute>
             </field>
-            <xpath expr="//field[@name='date_deadline']/../.." position="after">
-                <group>
-                    <group>
-                        <field
-                            name="team_user_id"
-                            invisible="not team_id"
-                            widget="many2one_avatar_user"
-                            domain="[('activity_team_ids', '=', team_id)]"
-                        />
-                        <field
-                            name="team_id"
-                            options="{'no_create': True, 'no_open': True}"
-                            domain="['|', ('res_model_ids', '=', False), ('res_model_ids', '=', res_model_id)]"
-                        />
-                    </group>
-                </group>
-            </xpath>
-            <field name="team_user_id" position="before">
-                <field name="user_id" position="move" />
+            <field name="role_id" position="attributes">
+                <attribute name="required">not user_id and not team_id</attribute>
             </field>
+            <xpath expr="//field[@name='user_id']/.." position="after">
+                <div
+                    class="o_outlined d-flex align-items-center mb-2 gap-2"
+                    invisible="not team_id"
+                >
+                    <i class="oi oi-filled mb-2" data-icon="person" title="Team user" />
+                    <field
+                        name="team_user_id"
+                        widget="many2one_avatar_user"
+                        domain="[('activity_team_ids', '=', team_id)]"
+                        options="{'no_create': True}"
+                        nolabel="1"
+                        class="w-100"
+                        placeholder="Team user"
+                    />
+                </div>
+                <div class="o_outlined d-flex align-items-center mb-2 gap-2">
+                    <i class="oi oi-filled mb-2" data-icon="groups" title="Team" />
+                    <field
+                        name="team_id"
+                        options="{'no_create': True, 'no_open': True}"
+                        domain="['|', ('res_model_ids', '=', False), ('res_model_ids', '=', res_model_id)]"
+                        nolabel="1"
+                        class="w-100"
+                        placeholder="Team"
+                    />
+                </div>
+            </xpath>
         </field>
     </record>
     <record id="mail_activity_view_tree" model="ir.ui.view">
@@ -65,7 +79,7 @@
             <xpath expr='//field[@name="activity_type_id"]' position='after'>
                 <field name="team_id" />
             </xpath>
-            <xpath expr='//filter[@name="filter_user_id_uid"]' position='after'>
+            <xpath expr='//filter[@name="filter_activities_my"]' position='after'>
                 <filter
                     name="my_team_activities"
                     string="My Team Activities"

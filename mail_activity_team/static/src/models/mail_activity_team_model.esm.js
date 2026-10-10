@@ -1,7 +1,6 @@
-import {Record} from "@mail/model/record";
+import {Record} from "@mail/model/export";
 
 export class MailActivityTeam extends Record {
-    static id = "id";
     static _name = "mail.activity.team";
 
     /** @type {Number} */

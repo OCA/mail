@@ -1,11 +1,15 @@
 from odoo import Command
-from odoo.tests import Form, users
+from odoo.tests import Form
 
 from odoo.addons.base.tests.common import BaseCommon
 from odoo.addons.mail.tools.discuss import Store
 
 
 class TestMailActivity(BaseCommon):
+    # Run as the superuser like in previous versions: teams can only be
+    # created by system users, the tests switch to a regular user explicitly.
+    _test_user_groups = ()
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -49,23 +53,20 @@ class TestMailActivity(BaseCommon):
             }
         )
 
-    @users("csu")
     def test_get_default_team_id_one_team_with_model(self):
         """Test _get_default_team_id correctly finds team with specified model_id"""
         # Create a team specific to res.partner model
-        team_partner = (
-            self.env["mail.activity.team"]
-            .sudo()
-            .create(
-                {
-                    "name": "Partner Team",
-                    "res_model_ids": [Command.set([self.partner_ir_model.id])],
-                    "member_ids": [Command.set([self.user.id])],
-                }
-            )
+        team_partner = self.env["mail.activity.team"].create(
+            {
+                "name": "Partner Team",
+                "res_model_ids": [Command.set([self.partner_ir_model.id])],
+                "member_ids": [Command.set([self.user.id])],
+            }
         )
         form_team_from_user = Form(
-            self.env["mail.activity"].with_context(
+            self.env["mail.activity"]
+            .with_user(self.user)
+            .with_context(
                 default_res_model="res.partner",
                 default_res_id=self.partner_client.id,
             )
@@ -82,23 +83,18 @@ class TestMailActivity(BaseCommon):
             "Should return the team matching the model_id",
         )
 
-    @users("csu")
     def test_get_default_team_id_one_team_without_model_restriction(self):
         """Test _get_default_team_id finds team without model restrictions"""
         # Create a team without model restrictions
-        team_generic = (
-            self.env["mail.activity.team"]
-            .sudo()
-            .create(
-                {
-                    "name": "Generic Team",
-                    "res_model_ids": [Command.clear()],  # No model restrictions
-                    "member_ids": [Command.set([self.user.id])],
-                }
-            )
+        team_generic = self.env["mail.activity.team"].create(
+            {
+                "name": "Generic Team",
+                "res_model_ids": [Command.clear()],  # No model restrictions
+                "member_ids": [Command.set([self.user.id])],
+            }
         )
         # Test without a model - should find the generic team
-        form_result_team = Form(self.env["mail.activity"])
+        form_result_team = Form(self.env["mail.activity"].with_user(self.user))
         self.assertEqual(
             form_result_team.team_id,
             team_generic,
@@ -106,7 +102,9 @@ class TestMailActivity(BaseCommon):
         )
         # Test with a model - still finds the generic team
         form_result_team_from_model = Form(
-            self.env["mail.activity"].with_context(
+            self.env["mail.activity"]
+            .with_user(self.user)
+            .with_context(
                 default_res_model="res.partner",
                 default_res_id=self.partner_client.id,
             ),
@@ -289,7 +287,7 @@ class TestMailActivity(BaseCommon):
         self.assertFalse(activity.team_id)
         self.assertEqual(activity.user_id, self.user2)
 
-    def test_activity_format_includes_team_id(self):
+    def test_activity_store_includes_team_id(self):
         """Store payload should include team_id relation and team name data."""
         team = self.env["mail.activity.team"].create(
             {
@@ -309,7 +307,7 @@ class TestMailActivity(BaseCommon):
             }
         )
 
-        payload = activity.activity_format()
+        payload = Store().add(activity, "_store_activity_fields")._build_result()
         self.assertIn("mail.activity", payload)
         self.assertTrue(payload["mail.activity"])
         activity_data = next(
@@ -328,7 +326,7 @@ class TestMailActivity(BaseCommon):
         )
         self.assertEqual(team_data["name"], team.name)
 
-    def test_activity_format_with_no_team(self):
+    def test_activity_store_with_no_team(self):
         """Store payload should expose an empty team_id when no team is assigned."""
         activity = self.env["mail.activity"].create(
             {
@@ -341,22 +339,9 @@ class TestMailActivity(BaseCommon):
             }
         )
 
-        payload = activity.activity_format()
+        payload = Store().add(activity, "_store_activity_fields")._build_result()
         activity_data = next(
             rec for rec in payload["mail.activity"] if rec["id"] == activity.id
         )
         self.assertIn("team_id", activity_data)
         self.assertFalse(activity_data["team_id"])
-
-    def test_to_store_defaults_contains_team_id_name(self):
-        defaults = self.env["mail.activity"]._to_store_defaults(target=self.env.user)
-        team_entry = next(
-            (
-                item
-                for item in defaults
-                if isinstance(item, Store.One) and item.field_name == "team_id"
-            ),
-            None,
-        )
-        self.assertTrue(team_entry, "team_id should be part of store defaults")
-        self.assertEqual(team_entry.fields, "name")

@@ -1,6 +1,7 @@
 # Copyright 2021 Tecnativa - David Vidal
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
+from odoo.fields import Domain
 
 
 class MailActivityMixin(models.AbstractModel):
@@ -8,7 +9,7 @@ class MailActivityMixin(models.AbstractModel):
 
     activity_team_user_ids = fields.Many2many(
         comodel_name="res.users",
-        string="test field",
+        string="Activity Team Members",
         compute="_compute_activity_team_user_ids",
         search="_search_activity_team_user_ids",
     )
@@ -21,23 +22,36 @@ class MailActivityMixin(models.AbstractModel):
     def _search_my_activity_date_deadline(self, operator, operand):
         if not self.env.context.get("team_activities", False):
             return super()._search_my_activity_date_deadline(operator, operand)
-        activity_ids = self.env["mail.activity"]._search(
+        if operator in Domain.NEGATIVE_OPERATORS:
+            return NotImplemented
+        domain = Domain(
+            "activity_ids",
+            "any",
             [
+                ("active", "=", True),  # never overdue if "done"
                 ("date_deadline", operator, operand),
                 ("res_model", "=", self._name),
                 "|",
                 ("user_id", "=", self.env.user.id),
                 ("team_id", "in", self.env.user.activity_team_ids.ids),
-            ]
+            ],
         )
-        return [("activity_ids", "in", activity_ids)]
+        if operator == "in" and False in operand:  # relation may be falsy
+            domain |= Domain("activity_ids", "=", False)
+        return domain
 
     @api.model
     def _search_activity_team_user_ids(self, operator, operand):
         return [("activity_ids.team_id.member_ids", operator, operand)]
 
     def activity_schedule(
-        self, act_type_xmlid="", date_deadline=None, summary="", note="", **act_values
+        self,
+        act_type_xmlid="",
+        date_deadline=None,
+        summary="",
+        note="",
+        activity_user_id_fname="",
+        **act_values,
     ):
         """With automatic activities, the user onchange won't act so we must
         ensure the right group is set and no exceptions are raised due to
@@ -76,6 +90,7 @@ class MailActivityMixin(models.AbstractModel):
             date_deadline=date_deadline,
             summary=summary,
             note=note,
+            activity_user_id_fname=activity_user_id_fname,
             **act_values,
         )
 

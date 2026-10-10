@@ -30,14 +30,14 @@ class MailActivity(models.Model):
             # Prefer teams with a matching model
             teams = (
                 teams.filtered(
-                    lambda mat, model_id=model_id: model_id
-                    in mat.sudo().res_model_ids.ids
+                    lambda mat, model_id=model_id: (
+                        model_id in mat.sudo().res_model_ids.ids
+                    )
                 )
                 or teams
             )
         return teams[:1]
 
-    user_id = fields.Many2one(string="User", required=False, default=False)
     team_user_id = fields.Many2one(
         string="Team user", related="user_id", readonly=False
     )
@@ -49,6 +49,20 @@ class MailActivity(models.Model):
         store=True,
         readonly=False,
     )
+
+    @api.depends("activity_type_id")
+    def _compute_user_id(self):
+        # Team activities may stay unassigned (the whole team is responsible):
+        # skip the core fallback to the current user for them.
+        team_activities = self.filtered(
+            lambda act: act.team_id and not act.user_id and not act.role_id
+        )
+        res = super(MailActivity, self - team_activities)._compute_user_id()
+        for activity in team_activities:
+            activity_type = activity.activity_type_id
+            if activity_type.default_user_id or activity_type.default_role_id:
+                activity.user_id = activity_type.default_user_id
+        return res
 
     @api.depends("res_model_id", "user_id")
     def _compute_team_id(self):
@@ -79,11 +93,14 @@ class MailActivity(models.Model):
         for vals in vals_list:
             # we need to be sure that we are in a context where the team_id is set,
             # and we don't want to use user_id
-            if vals.get("team_id"):
-                # using team, we have user_id = team_user_id,
-                # so if we don't have a user_team_id we don't want user_id too
-                if "user_id" in vals and not vals.get("team_user_id"):
-                    del vals["user_id"]
+            # using team, we have user_id = team_user_id,
+            # so if we don't have a user_team_id we don't want user_id too
+            if (
+                vals.get("team_id")
+                and "user_id" in vals
+                and not vals.get("team_user_id")
+            ):
+                del vals["user_id"]
         return super().create(vals_list)
 
     @api.onchange("team_id")
@@ -123,18 +140,14 @@ class MailActivity(models.Model):
                     )
                 )
 
-    def _to_store_defaults(self, target):
-        return [
-            *super()._to_store_defaults(target),
-            Store.One("team_id", "name"),
-        ]
+    def _store_activity_fields(self, res: Store.FieldList):
+        res.one("team_id", ["name"])
+        return super()._store_activity_fields(res)
 
     @api.onchange("activity_type_id")
     def _onchange_activity_type_id(self):
-        res = super()._onchange_activity_type_id()
         if self.activity_type_id.default_team_id:
             self.team_id = self.activity_type_id.default_team_id
             members = self.activity_type_id.default_team_id.member_ids
             if self.user_id not in members and members:
                 self.user_id = members[:1]
-        return res
