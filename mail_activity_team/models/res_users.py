@@ -1,6 +1,6 @@
 # Copyright 2018-22 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from odoo import api, fields, models, modules
+from odoo import api, fields, models
 
 
 class ResUsers(models.Model):
@@ -16,62 +16,31 @@ class ResUsers(models.Model):
     def _get_activity_groups(self):
         if not self.env.context.get("team_activities"):
             return super()._get_activity_groups()
-        query = """SELECT m.id, count(*), act.res_model as model,
-                    CASE
-                        WHEN %(today)s::date -
-                        act.date_deadline::date = 0 Then 'today'
-                        WHEN %(today)s::date -
-                        act.date_deadline::date > 0 Then 'overdue'
-                        WHEN %(today)s::date -
-                        act.date_deadline::date < 0 Then 'planned'
-                    END AS states, act.user_id as user_id
-                    FROM mail_activity AS act
-                    JOIN ir_model AS m ON act.res_model_id = m.id
-                    WHERE team_id in (
-                        SELECT mail_activity_team_id
-                        FROM mail_activity_team_users_rel
-                        WHERE res_users_id = %(user_id)s
-                    )
-                    GROUP BY m.id, states, act.res_model, act.user_id;"""
-        user = self.env.uid
-        self.env.cr.execute(
-            query,
-            {
-                "today": fields.Date.context_today(self),
-                "user_id": user,
-            },
-        )
-        activity_data = self.env.cr.dictfetchall()
-        model_ids = [a["id"] for a in activity_data]
-        model_names = {
-            n["id"]: n["display_name"]
-            for n in self.env["ir.model"]
+        search_limit = (
+            self.env["ir.config_parameter"]
             .sudo()
-            .browse(model_ids)
-            .read(["id", "display_name"])
-        }
-        user_activities = {}
-        for activity in activity_data:
-            if not user_activities.get(activity["model"]):
-                module = self.env[activity["model"]]._original_module
-                icon = module and modules.module.get_module_icon(module)
-                user_activities[activity["model"]] = {
-                    "id": activity["id"],
-                    "name": model_names[activity["id"]],
-                    "model": activity["model"],
-                    "type": "activity",
-                    "icon": icon,
-                    "total_count": 0,
-                    "today_count": 0,
-                    "overdue_count": 0,
-                    "planned_count": 0,
-                }
-            user_activities[activity["model"]][f"{activity['states']}_count"] += (
-                activity["count"]
+            .get_int("mail.activity.systray.limit")
+            or 1000
+        )
+        activities = self.env["mail.activity"].search(
+            [("team_id", "in", self.env.user.activity_team_ids.ids)],
+            order="id desc",
+            limit=search_limit,
+        )
+        return self._divide_activities_in_groups(activities)
+
+    def _format_activity_group(self, model_name, activities):
+        res = super()._format_activity_group(model_name, activities)
+        if self.env.context.get("team_activities"):
+            # Team activities assigned to the current user are already counted
+            # in "My Activities": only count the ones assigned to other members
+            # (or to nobody) in the systray badge.
+            res["total_count"] = len(
+                activities.filtered(
+                    lambda act: (
+                        act.state in ("today", "overdue")
+                        and act.user_id.id != self.env.uid
+                    )
+                )
             )
-            if (
-                activity["states"] in ("today", "overdue")
-                and activity["user_id"] != user
-            ):
-                user_activities[activity["model"]]["total_count"] += activity["count"]
-        return list(user_activities.values())
+        return res

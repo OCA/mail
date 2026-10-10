@@ -5,7 +5,7 @@
 {
     "name": "Mail Activity Team",
     "summary": "Add Teams to Activities",
-    "version": "19.0.1.1.0",
+    "version": "20.0.1.0.0",
     "development_status": "Beta",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
@@ -14,8 +14,7 @@
     "installable": True,
     "depends": ["mail", "web"],
     "data": [
-        "security/ir.model.access.csv",
-        "security/mail_activity_team_security.xml",
+        "security/ir.access.csv",
         "wizard/mail_activity_schedule.xml",
         "views/ir_actions_server_views.xml",
         "views/mail_activity_plan_template_views.xml",

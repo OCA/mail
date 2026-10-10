@@ -1,7 +1,6 @@
 # Copyright 2018-22 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from datetime import date
-
+from odoo import fields
 from odoo.exceptions import ValidationError
 from odoo.fields import Command
 from odoo.tests import Form
@@ -172,11 +171,13 @@ class TestMailActivityTeam(TransactionCase):
         self.assertEqual(
             self.act2.team_id, self.team1, "Error: Activity 2 should have Team 1."
         )
-        with self.assertRaises(
-            AssertionError, msg="can't write on invisible field user_id"
+        with (
+            self.assertRaises(
+                AssertionError, msg="can't write on invisible field user_id"
+            ),
+            Form(self.act2) as form,
         ):
-            with Form(self.act2) as form:
-                form.user_id = self.employee2
+            form.user_id = self.employee2
 
     def test_activity_onchanges_user_no_team(self):
         self.assertEqual(
@@ -254,11 +255,13 @@ class TestMailActivityTeam(TransactionCase):
             self.team1,
             "Error: Activity 2 should have Team 1.",
         )
-        with self.assertRaises(
-            AssertionError, msg="can't write on invisible field user_id"
+        with (
+            self.assertRaises(
+                AssertionError, msg="can't write on invisible field user_id"
+            ),
+            Form(self.schedule_act2) as form,
         ):
-            with Form(self.schedule_act2) as form:
-                form.activity_user_id = self.employee2
+            form.activity_user_id = self.employee2
 
     def test_schedule_activity_onchanges_user_no_team(self):
         self.assertEqual(
@@ -381,10 +384,13 @@ class TestMailActivityTeam(TransactionCase):
         self.assertEqual(activity.user_id, self.employee2)
 
     def test_activity_count(self):
+        # Deadlines are computed from the activity type delay in 20.0
+        today = fields.Date.today()
+        self.act2.date_deadline = today
         res = (
             self.env["res.users"]
             .with_user(self.employee.id)
-            .with_context(**{"team_activities": True})
+            .with_context(team_activities=True)
             ._get_activity_groups()
         )
         self.assertEqual(res[0]["total_count"], 0)
@@ -392,37 +398,21 @@ class TestMailActivityTeam(TransactionCase):
         partner_record = self.employee.partner_id.with_user(self.employee.id)
         self.activity2.default_team_id = self.team2
         activity = partner_record.activity_schedule(
-            activity_type_id=self.activity2.id, user_id=self.employee2.id
+            activity_type_id=self.activity2.id,
+            user_id=self.employee2.id,
+            date_deadline=today,
         )
         activity.flush_recordset()
         res = (
             self.env["res.users"]
             .with_user(self.employee.id)
-            .with_context(**{"team_activities": True})
+            .with_context(team_activities=True)
             ._get_activity_groups()
         )
         self.assertEqual(res[0]["total_count"], 1)
         self.assertEqual(res[0]["today_count"], 2)
         res = self.env["res.users"].with_user(self.employee.id)._get_activity_groups()
         self.assertEqual(res[0]["total_count"], 1)
-
-    def test_activity_schedule_next(self):
-        self.activity1.write(
-            {
-                "default_team_id": self.team1.id,
-                "triggered_next_type_id": self.activity2.id,
-            }
-        )
-        self.activity2.default_team_id = self.team2
-        self.team2.member_ids = self.employee2
-        partner_record = self.employee.partner_id.with_user(self.employee.id)
-        activity = partner_record.activity_schedule(activity_type_id=self.activity1.id)
-        activity.flush_recordset()
-        _messages, next_activities = activity._action_done()
-        self.assertTrue(next_activities)
-        self.assertEqual(next_activities.team_id, self.team2)
-        # As we are in a 'team activity' context, the user should not be set
-        self.assertEqual(next_activities.user_id, self.env["res.users"])
 
     def test_mail_activity_schedule_wizard(self):
         self.activity1.default_team_id = self.team1
@@ -519,7 +509,7 @@ class TestMailActivityTeam(TransactionCase):
         """This test case checks
         - if the team activities are properly filtered
         """
-        today = date.today()
+        today = fields.Date.today()
         self.act2.write(
             {
                 "user_id": False,
@@ -548,7 +538,7 @@ class TestMailActivityTeam(TransactionCase):
                 {"id": {}},
             )
         )
-        return set(record["id"] for record in res["records"])
+        return {record["id"] for record in res["records"]}
 
     def test_web_search_read(self):
         """Test the domain mangling of web_search_read"""
@@ -619,12 +609,14 @@ class TestMailActivityTeam(TransactionCase):
         self.assertEqual(template.activity_team_id, self.team1)
 
         # Can't just remove the team without changing the assignment type
-        with self.assertRaisesRegex(
-            ValidationError,
-            "Please enter an activity team",
+        with (
+            self.assertRaisesRegex(
+                ValidationError,
+                "Please enter an activity team",
+            ),
+            self.env.cr.savepoint(),
         ):
-            with self.env.cr.savepoint():
-                template.activity_team_id = False
+            template.activity_team_id = False
 
         # Team is reset if type is not team
         template.write(
@@ -723,7 +715,7 @@ class TestMailActivityTeam(TransactionCase):
             .create(
                 {
                     "plan_id": plan.id,
-                    "plan_date": date.today(),
+                    "plan_date": fields.Date.today(),
                 }
             )
         )

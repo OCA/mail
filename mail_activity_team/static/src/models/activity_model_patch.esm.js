@@ -1,5 +1,5 @@
 import {Activity} from "@mail/core/common/activity_model";
-import {fields} from "@mail/model/misc";
+import {fields} from "@mail/model/export";
 import {patch} from "@web/core/utils/patch";
 
 patch(Activity.prototype, {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="mail_activity_schedule_view_form" model="ir.ui.view">
         <field name="model">mail.activity.schedule</field>
@@ -12,19 +12,44 @@
                     separator=" and "
                 />
             </field>
-            <field name="activity_user_id" position="after">
-                <field
-                    name="activity_team_user_id"
-                    widget="many2one_avatar_user"
-                    invisible="not activity_team_id"
-                    domain="[('activity_team_ids', '=', activity_team_id)]"
-                />
-                <field
-                    name="activity_team_id"
-                    options="{'no_create': True, 'no_open': True}"
-                    domain="['|', ('res_model_ids', '=', False), ('res_model_ids', '=', res_model_id)]"
+            <field name="activity_role_id" position="attributes">
+                <attribute
+                    name="required"
+                    add="not activity_team_id"
+                    separator=" and "
                 />
             </field>
+            <xpath expr="//field[@name='activity_user_id']/.." position="attributes">
+                <attribute name="invisible">activity_team_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='activity_user_id']/.." position="after">
+                <div
+                    class="o_outlined d-flex align-items-center mb-2 gap-2"
+                    invisible="not activity_team_id"
+                >
+                    <i class="oi oi-filled mb-2" data-icon="person" title="Team user" />
+                    <field
+                        name="activity_team_user_id"
+                        widget="many2one_avatar_user"
+                        domain="[('activity_team_ids', '=', activity_team_id)]"
+                        options="{'no_create': True}"
+                        nolabel="1"
+                        class="w-100"
+                        placeholder="Team user"
+                    />
+                </div>
+                <div class="o_outlined d-flex align-items-center mb-2 gap-2">
+                    <i class="oi oi-filled mb-2" data-icon="groups" title="Team" />
+                    <field
+                        name="activity_team_id"
+                        options="{'no_create': True, 'no_open': True}"
+                        domain="['|', ('res_model_ids', '=', False), ('res_model_ids.model', '=', res_model)]"
+                        nolabel="1"
+                        class="w-100"
+                        placeholder="Team"
+                    />
+                </div>
+            </xpath>
         </field>
     </record>
 </odoo>

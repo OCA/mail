@@ -8,16 +8,16 @@ from odoo import api, fields, models
 class IrActionsServer(models.Model):
     _inherit = "ir.actions.server"
 
-    activity_team_id = fields.Many2one(
-        "mail.activity.team",
-        string="Activity Team",
-    )
+    activity_team_id = fields.Many2one("mail.activity.team")
 
-    def _run_action_next_activity(self, eval_context=None):
+    def _run_action_next_activity_multi(self, eval_context=None):
         # OVERRIDE to force the activity team on scheduled actions
+        action = self
         if self.activity_user_type == "specific" and self.activity_team_id:
-            self = self.with_context(force_activity_team=self.activity_team_id)
-        return super()._run_action_next_activity(eval_context=eval_context)
+            action = self.with_context(force_activity_team=self.activity_team_id)
+        return super(IrActionsServer, action)._run_action_next_activity_multi(
+            eval_context=eval_context
+        )
 
     @api.onchange("activity_team_id")
     def onchange_activity_team_id(self):

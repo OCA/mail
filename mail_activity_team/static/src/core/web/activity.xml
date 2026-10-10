@@ -7,24 +7,25 @@
         t-inherit-mode="extension"
     >
         <!-- Show team in the condensed view -->
-        <xpath
-            expr="//div[hasclass('o-mail-Activity-info')]/button[hasclass('btn-primary')]"
-            position="before"
-        >
+        <xpath expr="//span[hasclass('o-mail-Activity-role')]" position="after">
             <span
-                class="o-mail-Activity-user px-1"
-                t-if="props.activity.team_id?.name"
-            >(Team <t t-esc="props.activity.team_id.name" />)
-            </span>
+                t-if="this.activity().team_id?.name"
+                class="o-mail-Activity-team pe-1"
+            >(Team <t t-out="this.activity().team_id.name" />)</span>
         </xpath>
-        <!-- Show team in the expanded view -->
-        <xpath expr="//t[@t-esc='props.activity.user_id.name']/../.." position="after">
-            <tr t-if="props.activity.team_id?.name">
-                <td class="text-end fw-bolder">Team</td>
-                <td>
-                    <t t-esc="props.activity.team_id.name" />
-                </td>
-            </tr>
+    </t>
+
+    <t
+        t-name="mail_activity_team.ActivityTooltip"
+        t-inherit="mail.ActivityTooltip"
+        t-inherit-mode="extension"
+    >
+        <!-- Show team in the activity tooltip -->
+        <xpath expr="//t[@t-elif='activity.role_id_name']" position="after">
+            <t t-if="activity.team_id_name">
+                <span>Team: <t t-out="activity.team_id_name" /></span>
+                <br />
+            </t>
         </xpath>
     </t>
 
