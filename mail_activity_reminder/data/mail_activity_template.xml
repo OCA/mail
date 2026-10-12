@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
     Copyright ACSONE SA/NV
     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
@@ -32,7 +32,7 @@
                         style="background-color:#875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;"
                     >
                             View
-                            <t t-esc="model_description or 'document'" />
+                            <t t-out="model_description or 'document'" />
                         </a>
                 </p>
                 </t>
