@@ -1,10 +1,10 @@
 # Copyright 2020 Brainbean Apps (https://brainbeanapps.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime, time
+from datetime import UTC, datetime, time
+from zoneinfo import ZoneInfo
 
 from dateutil.relativedelta import relativedelta
-from pytz import UTC, timezone
 
 from odoo import api, fields, models
 
@@ -62,17 +62,16 @@ class MailActivity(models.Model):
                 activity.next_reminder = None
                 continue
             reminders.sort(reverse=True)
-            tz = timezone(activity.user_id.sudo().tz or "UTC")
+            tz = ZoneInfo(activity.user_id.sudo().tz or "UTC")
             last_reminder_local = (
-                tz.localize(activity.last_reminder_local)
+                activity.last_reminder_local.replace(tzinfo=tz)
                 if activity.last_reminder_local
                 else None
             )
-            local_deadline = tz.localize(
-                datetime.combine(
-                    activity.date_deadline,
-                    time.min,  # Schedule reminder based of beginning of day
-                )
+            local_deadline = datetime.combine(
+                activity.date_deadline,
+                time.min,  # Schedule reminder based of beginning of day
+                tzinfo=tz,
             )
             for reminder in reminders:
                 next_reminder_local = local_deadline - relativedelta(
@@ -90,9 +89,9 @@ class MailActivity(models.Model):
     @api.depends("user_id.tz", "date_deadline")
     def _compute_deadline(self):
         for activity in self:
-            tz = timezone(activity.user_id.sudo().tz or "UTC")
+            tz = ZoneInfo(activity.user_id.sudo().tz or "UTC")
             activity.deadline = (
-                tz.localize(datetime.combine(activity.date_deadline, time.max))
+                datetime.combine(activity.date_deadline, time.max, tzinfo=tz)
                 .astimezone(UTC)
                 .replace(tzinfo=None)
             )
@@ -103,7 +102,7 @@ class MailActivity(models.Model):
         for activity in self:
             if activity.last_reminder_local:
                 continue
-            tz = timezone(activity.user_id.sudo().tz or "UTC")
+            tz = ZoneInfo(activity.user_id.sudo().tz or "UTC")
             activity.last_reminder_local = utc_now.astimezone(tz).replace(tzinfo=None)
         return res
 
@@ -117,14 +116,14 @@ class MailActivity(models.Model):
             activities = self.filtered(
                 lambda activity, user=user: activity.user_id == user
             )
-            tz = timezone(user.sudo().tz or "UTC")
+            tz = ZoneInfo(user.sudo().tz or "UTC")
             local_now = utc_now.astimezone(tz)
 
             subject = self.env._("Some activities you are assigned to expire soon.")
 
             body = self.env["ir.qweb"]._render(
                 "mail_activity_reminder.message_activity_assigned",
-                dict(activities=activities, model_description="Activities"),
+                {"activities": activities, "model_description": "Activities"},
                 minimal_qcontext=True,
             )
             MailThread.message_notify(
@@ -132,6 +131,5 @@ class MailActivity(models.Model):
                 body=body,
                 subject=subject,
                 model_description="Activity",
-                notif_layout="mail.mail_notification_light",
             )
             activities.update({"last_reminder_local": local_now.replace(tzinfo=None)})

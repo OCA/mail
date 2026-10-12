@@ -1,7 +1,7 @@
 # Copyright 2020 Brainbean Apps (https://brainbeanapps.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from dateutil.relativedelta import relativedelta
 from freezegun import freeze_time
@@ -26,7 +26,7 @@ class TestMailActivityReminder(common.TransactionCase):
         cls.MailActivityType = cls.env["mail.activity.type"]
         cls.MailActivity = cls.env["mail.activity"]
         cls.company_id = cls.env.company
-        cls.now = datetime(2020, 4, 19, 15, 00)
+        cls.now = datetime(2020, 4, 19, 15, 00, tzinfo=UTC).replace(tzinfo=None)
         cls.today = cls.now.date()
         cls.model_res_partner = cls.env["ir.model"].search(
             [("model", "=", "res.partner")], limit=1
