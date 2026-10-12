@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 
 from odoo import api, fields, models, tools
 from odoo.exceptions import AccessError
-from odoo.fields import Command
+from odoo.fields import Command, Domain
 from odoo.tools import SQL, email_split
 
 _logger = logging.getLogger(__name__)
@@ -139,19 +139,71 @@ class MailTrackingEmail(models.Model):
 
     @api.model
     def _search(self, domain, offset=0, limit=None, order=None, **kwargs):
-        """Override that adds specific access rights of mail.tracking.email, to remove
-        ids uid could not see according to our custom rules. Please refer to
-        _check_access() for more details about those rules.
-        """
-        query = super()._search(
-            domain, offset=offset, limit=limit, order=order, **kwargs
-        )
-        if not self.env.is_superuser():
-            records = self.browse(query)
-            allowed_ids = self._get_allowed_ids(records.ids)
-            return self.browse(allowed_ids)._as_query(order)
+        """Optimised ``_search`` that pushes access-rule logic into SQL.
 
-        return query
+        The original implementation materialised **all** matching IDs from
+        ``super()._search`` and then filtered them one-by-one in Python via
+        ``_get_allowed_ids``, producing enormous ``IN (…)`` clauses.
+
+        This version instead **extends the domain** so that the ORM generates
+        the access checks as SQL sub-queries (``EXISTS`` / ``IN (SELECT …)``),
+        keeping the query compact regardless of the data volume.
+
+        The four access cases mirror ``_get_allowed_ids`` exactly:
+
+        1. ``mail_message_id`` points to a ``mail.message`` the user can read.
+        2. ``mail_id`` points to a ``mail.mail`` the user can read (system
+           users only – non-system users never match this branch).
+        3. No message/mail link, but ``partner_id`` points to a readable
+           ``res.partner``.
+        4. No link at all (``mail_message_id``, ``mail_id`` and ``partner_id``
+           are all ``False``) → always visible.
+        """
+        if self.env.is_superuser():
+            return super()._search(
+                domain, offset=offset, limit=limit, order=order, **kwargs
+            )
+
+        # --- Case 1: tracking linked to a readable mail.message -----------
+        has_readable_message = Domain([
+            ('mail_message_id', 'in', self.env['mail.message']._search([])),
+        ])
+
+        # --- Case 2: tracking linked to a readable mail.mail --------------
+        # mail.mail is only readable by system users; for everyone else this
+        # branch is intentionally empty so it never matches.
+        if self.env.user.has_group('base.group_system'):
+            has_readable_mail = Domain([
+                ('mail_id', 'in', self.env['mail.mail']._search([])),
+            ])
+        else:
+            has_readable_mail = Domain.FALSE
+
+        # --- Case 3: no message/mail, but readable partner ----------------
+        has_readable_partner = (
+            Domain([('mail_message_id', '=', False)])
+            & Domain([('mail_id', '=', False)])
+            & Domain([('partner_id', 'in', self.env['res.partner']._search([]))])
+        )
+
+        # --- Case 4: no links at all → always visible --------------------
+        has_no_links = (
+            Domain([('mail_message_id', '=', False)])
+            & Domain([('mail_id', '=', False)])
+            & Domain([('partner_id', '=', False)])
+        )
+
+        access_domain = (
+            has_readable_message
+            | has_readable_mail
+            | has_readable_partner
+            | has_no_links
+        )
+
+        return super()._search(
+            Domain(domain) & access_domain,
+            offset=offset, limit=limit, order=order, **kwargs
+        )
 
     def _make_access_error(self, operation: str) -> AccessError:
         return AccessError(
