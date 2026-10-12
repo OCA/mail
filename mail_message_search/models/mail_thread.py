@@ -27,14 +27,13 @@ class MailThread(models.AbstractModel):
                 word_domain_list.append(Domain.OR(field_domain_list))
         word_domain = Domain.AND(word_domain_list)
         domain = Domain.AND([[("model", "=", self._name)], word_domain])
-        limit_value = (
+        limit = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mail_message_search.message_limit")
-        )
-        limit = int(limit_value) if limit_value else None
+            .get_int("mail_message_search.message_limit")
+        ) or None
         messages = self.env["mail.message"]._search(domain, limit=limit)
-        return [("id", "in", messages.subselect("res_id"))]
+        return [("id", "in", messages.subselect(messages.table.res_id))]
 
     message_search = fields.Text(
         help="Message search, to be used only in searches",
@@ -52,7 +51,7 @@ class MailThread(models.AbstractModel):
         Override to add message_search field in all the objects
         that inherits mail.thread
         """
-        res = super().get_view(view_id=view_id, view_type=view_type, options=options)
+        res = super().get_view(view_id=view_id, view_type=view_type, **options)
         if (
             view_type == "search"
             and self._fields.get("message_search")
