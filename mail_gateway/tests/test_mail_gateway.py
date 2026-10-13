@@ -203,6 +203,27 @@ class TestMailGateway(MailGatewayTestCase):
         impl._post_process_message(msg, channel)
         self.assertTrue(notif.is_read)
 
+    def test_notify_cancel_by_type_gateway(self):
+        """Dismissing a failure in the messaging menu cancels own gateway failures."""
+        impl = self.env["mail.gateway.abstract"]
+        channel = impl._get_channel(self.gateway, "cancel-tok", {}, force_create=True)
+        own_msg = channel.message_post(body="Mine", message_type="comment")
+        other_msg = channel.message_post(
+            body="Not mine", message_type="comment", author_id=self.partner.id
+        )
+        own_notif, other_notif = (
+            msg.notification_ids.filtered(lambda n: n.notification_type == "gateway")
+            for msg in (own_msg, other_msg)
+        )
+        (own_notif | other_notif).write(
+            {"notification_status": "exception", "failure_type": "unknown"}
+        )
+        self.env["discuss.channel"].notify_cancel_by_type("email")
+        self.assertEqual(own_notif.notification_status, "exception")
+        self.env["discuss.channel"].notify_cancel_by_type("gateway")
+        self.assertEqual(own_notif.notification_status, "canceled")
+        self.assertEqual(other_notif.notification_status, "exception")
+
     # ── res.partner.gateway.channel ───────────────────────────────────────────
 
     def test_partner_gateway_channel_mail_format(self):
