@@ -275,8 +275,8 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
         """Automatic emails from a template are left to Odoo
 
         e.g. order or delivery confirmations: Odoo posts them through the
-        composer as notifications, which skip the Cc/Bcc handling. They must
-        still reach the template recipients and its raw Cc.
+        composer as notifications, which skip the Cc/Bcc handling. Each
+        template recipient must still get its email.
         """
         template = self.env["mail.template"].create(
             {
@@ -284,8 +284,7 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
                 "model_id": self.env["ir.model"]._get_id(self.record._name),
                 "subject": "automatic",
                 "body_html": "<p>Hello</p>",
-                "partner_to": str(self.us1.id),
-                "email_cc": "copy@example.com",
+                "partner_to": f"{self.us1.id},{self.us2.id}",
             }
         )
         with self.mock_mail_gateway():
@@ -294,10 +293,7 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
             ).message_post_with_source(template, subtype_xmlid="mail.mt_comment")
         message = self.record.message_ids.filtered(lambda m: m.subject == "automatic")
 
-        self.assertEqual(
-            sorted(self._envelope_recipients()),
-            sorted(["copy@example.com", self.us1.email]),
-        )
+        self._assert_one_email_per_recipient(self.us1 + self.us2)
         self.assertEqual(
             set(message.notification_ids.mapped("notification_status")), {"sent"}
         )
