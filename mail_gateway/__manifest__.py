@@ -29,5 +29,6 @@
             "mail_gateway/static/src/core/**/*",
             "mail_gateway/static/src/models/**/*",
         ],
+        "web.assets_unit_tests": ["mail_gateway/static/tests/**/*.test.js"],
     },
 }
