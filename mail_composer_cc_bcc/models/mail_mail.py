@@ -47,8 +47,11 @@ class MailMail(models.Model):
             recipients_follower_status=recipients_follower_status,
         )
         is_from_composer = self.env.context.get("is_from_composer", False)
+        # Notifications skip the Cc/Bcc handling (see `_notify_thread`), so
+        # `composer_recipient_ids` is never set: leave them to Odoo.
+        skip_adding_cc_bcc = self.env.context.get("skip_adding_cc_bcc", False)
 
-        if not is_from_composer:
+        if not is_from_composer or skip_adding_cc_bcc:
             return res
 
         # Every Cc partner is also a recipient and gets its own email,
@@ -73,7 +76,14 @@ class MailMail(models.Model):
         recipients = []
         for m in res:
             m_email_to = m["email_to"][0]
-            rcpt_to = extract_rfc2822_addresses(m_email_to)[0]
+            addresses = extract_rfc2822_addresses(m_email_to)
+            if not addresses:
+                # No valid address, e.g. a partner without email.
+                # Keep its place in recipients so that `_prepare_email_message`
+                # skips this email like Odoo does, and the others still go.
+                recipients.append(False)
+                continue
+            rcpt_to = addresses[0]
             recipients.append(rcpt_to)
 
             # If the recipient is a Bcc, set a real Bcc header.
