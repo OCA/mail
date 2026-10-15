@@ -2,7 +2,6 @@ import {Component} from "@odoo/owl";
 import {_t} from "@web/core/l10n/translation";
 import {registry} from "@web/core/registry";
 import {standardFieldProps} from "@web/views/fields/standard_field_props";
-import {url} from "@web/core/utils/urls";
 import {useService} from "@web/core/utils/hooks";
 
 export class VolumeSliderField extends Component {
@@ -12,8 +11,8 @@ export class VolumeSliderField extends Component {
     };
 
     setup() {
-        this.testAudio = null;
         this.store = useService("mail.store");
+        this.soundEffects = useService("mail.sound_effects");
     }
 
     get value() {
@@ -33,17 +32,7 @@ export class VolumeSliderField extends Component {
     }
 
     onTestSound() {
-        if (!this.testAudio) {
-            this.testAudio = new Audio();
-            this.testAudio.src = this.testAudio.canPlayType("audio/ogg; codecs=vorbis")
-                ? url("/mail/static/src/audio/ting.ogg")
-                : url("/mail/static/src/audio/ting.mp3");
-        }
-        this.testAudio.volume = this.value;
-        this.testAudio.currentTime = 0;
-        this.testAudio.play().catch(() => {
-            // Ignore autoplay errors
-        });
+        this.soundEffects.play("new-message", {volume: this.value});
     }
 }
 
