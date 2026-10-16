@@ -270,3 +270,37 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
         server = mail_server.with_context(is_from_composer=True, recipients=[])
         with self.assertRaises(ValueError):
             server._prepare_email_message(message, None)
+
+    def test_uppercase_emails(self):
+        """Recipients whose address has uppercase letters get their email
+
+        Odoo only keeps in the envelope the addresses found in its normalized
+        (lowercase) list of recipients: the headers must use the same form.
+        """
+        cc_upper = self.env["res.partner"].create(
+            {"name": "CC UPPER", "email": "Cc.Upper@Example.com"}
+        )
+        bcc_upper = self.env["res.partner"].create(
+            {"name": "BCC UPPER", "email": "Bcc.Upper@Example.com"}
+        )
+        partners_to = self.us1
+        partners_cc = cc_upper + self.us2
+        message = self._send("uppercase", partners_to, partners_cc, bcc_upper)
+
+        everyone = partners_to + partners_cc + bcc_upper
+        self.assertEqual(
+            sorted(self._envelope_recipients()),
+            sorted(email_normalize(email) for email in everyone.mapped("email")),
+            "Each recipient must get exactly 1 email, at their own address",
+        )
+        self.assertEqual(
+            set(message.notification_ids.mapped("notification_status")),
+            {"sent"},
+            "No notification may end in exception",
+        )
+        bcc_headers = [(mail.get("headers") or {}).get("Bcc") for mail in self._mails]
+        self.assertEqual(
+            [email_normalize(value) for value in bcc_headers if value],
+            ["bcc.upper@example.com"],
+            "Only the Bcc recipient's email carries a Bcc header",
+        )
