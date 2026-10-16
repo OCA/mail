@@ -52,7 +52,7 @@ class MailThread(models.AbstractModel):
         Override to add message_search field in all the objects
         that inherits mail.thread
         """
-        res = super().get_view(view_id=view_id, view_type=view_type, options=options)
+        res = super().get_view(view_id=view_id, view_type=view_type, **options)
         if (
             view_type == "search"
             and self._fields.get("message_search")
