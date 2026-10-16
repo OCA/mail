@@ -1,0 +1,24 @@
+.o-mail-ChatterSplit-tabs {
+    background-color: $o-webclient-background-color;
+
+    .btn-group {
+        .btn {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.75rem;
+
+            &.btn-primary {
+                box-shadow: none;
+            }
+
+            &.btn-outline-secondary {
+                &:hover {
+                    background-color: var(--o-gray-200, #e9ecef);
+                }
+            }
+
+            i {
+                font-size: 0.8rem;
+            }
+        }
+    }
+}
