@@ -9,8 +9,8 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
         <field
             name="groups_id"
             eval="[
-                (3, ref('base.group_user')),
-                (4, ref('mail_discuss_security.group_discuss')),
+                Command.unlink(ref('base.group_user')),
+                Command.link(ref('mail_discuss_security.group_discuss')),
             ]"
         />
     </record>

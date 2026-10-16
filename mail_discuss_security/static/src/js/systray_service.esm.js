@@ -1,24 +1,22 @@
-/** @odoo-module **/
-
-import {MessagingMenuContainer} from "@mail/components/messaging_menu_container/messaging_menu_container";
 import {registry} from "@web/core/registry";
-import session from "web.session";
+import {user} from "@web/core/user";
 
-const systrayRegistry = registry.category("systray");
+const SYSTRAY_REGISTRY = registry.category("systray");
+const MESSAGING_MENU_KEY = "mail.messaging_menu";
+const DISCUSS_GROUP = "mail_discuss_security.group_discuss";
 
-export const systrayService = {
-    start() {
-        session
-            .user_has_group("mail_discuss_security.group_discuss")
-            .then(function (has_group) {
-                if (!has_group) {
-                    systrayRegistry.remove("mail.MessagingMenuContainer", {
-                        Component: MessagingMenuContainer,
-                    });
-                }
-            });
+export const mailDiscussSecuritySystrayService = {
+    async start() {
+        // Hide the messaging menu (systray) for users not in the group.
+        // Removing the entry triggers an UPDATE event on the systray
+        // registry, so the navbar re-renders without it.
+        const hasGroup = await user.hasGroup(DISCUSS_GROUP);
+        if (!hasGroup && SYSTRAY_REGISTRY.contains(MESSAGING_MENU_KEY)) {
+            SYSTRAY_REGISTRY.remove(MESSAGING_MENU_KEY);
+        }
     },
 };
 
-const serviceRegistry = registry.category("services");
-serviceRegistry.add("mail_discuss_security_systray_service", systrayService);
+registry
+    .category("services")
+    .add("mail_discuss_security.systray", mailDiscussSecuritySystrayService);
