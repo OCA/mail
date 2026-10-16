@@ -11,7 +11,7 @@
     "license": "AGPL-3",
     "author": "GRAP, Odoo Community Association (OCA)",
     "maintainers": ["legalsylvain"],
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail"],
     "data": [
         "security/res_groups.xml",
