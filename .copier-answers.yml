@@ -1,5 +1,5 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: v1.44
+_commit: v1.45
 _src_path: git+https://github.com/OCA/oca-addons-repo-template
 additional_ruff_rules: []
 convert_readme_fragments_to_markdown: true
@@ -19,6 +19,7 @@ org_slug: OCA
 postgres_image: ''
 rebel_module_groups:
 - mail_send_confirmation
+- mail_restrict_send_button
 repo_description: mail
 repo_name: mail
 repo_slug: mail
