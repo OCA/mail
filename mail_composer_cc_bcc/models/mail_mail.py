@@ -9,12 +9,21 @@ from odoo import fields, models, tools
 from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
 
 
+def _normalized_email(partner):
+    # Core compares the headers with the lowercased email_to_normalized
+    return tools.email_normalize(partner.email) or partner.email
+
+
 def format_emails(partners):
-    return [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
+    return [
+        tools.formataddr((p.name or "", _normalized_email(p)))
+        for p in partners
+        if p.email
+    ]
 
 
 def format_emails_raw(partners):
-    return [p.email for p in partners if p.email]
+    return [_normalized_email(p) for p in partners if p.email]
 
 
 def format_emails_str(partners):
@@ -66,7 +75,7 @@ class MailMail(models.Model):
         email_to = format_emails(partner_to)
         email_to_raw = format_emails_raw(partner_to)
         email_cc = format_emails_str(self.recipient_cc_ids)
-        email_bcc = [r.email for r in self.recipient_bcc_ids if r.email]
+        email_bcc = format_emails_raw(self.recipient_bcc_ids)
 
         # Collect recipients (RCPT TO) and update all emails
         # with the same To, Cc headers (to be shown by email client as users expect)
