@@ -226,6 +226,18 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
 
         self._assert_mails(message, partners_to, partners_cc, partners_bcc)
 
+    def test_uppercase_email(self):
+        """An email with uppercase letters must still be sent, in Cc and in Bcc"""
+        upper = self._create_partner("upper", "en_US")
+        upper.email = "Upper@Example.com"
+        for kwargs in ({"partners_cc": upper}, {"partners_bcc": upper}):
+            partners = {"partners_cc": self.us2[:0], "partners_bcc": self.us3[:0]}
+            partners.update(kwargs)
+            self._send("uppercase", self.us1, **partners)
+            self.assertCountEqual(
+                self._envelope_recipients(), ["us1@example.com", "upper@example.com"]
+            )
+
     def test_followers_are_to_recipients(self):
         """Followers get the email, though they never reach partner_ids"""
         partners_to = self.us1 + self.fr
