@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t
+        t-name="mail_recipient_tracking.Message"
+        t-inherit="mail.Message"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//div[@name='header']" position="after">
+            <t
+                t-if="this.props.messageSearch and this.message.is_failed_message and this.failedRecipients.length"
+            >
+                <p class="o_mail_tracking mb-0">
+                    <FailedMessageReview message="this.message" />
+                </p>
+                <div class="o-mail-Activity-info lh-1">
+                    <strong class="text-danger">Failed Recipients: </strong>
+                    <MessageTracking
+                        partner_trackings="this.failedRecipients"
+                        skip_track_links="true"
+                    />
+                </div>
+            </t>
+            <p
+                t-if="this.message.partner_trackings?.length and !this.props.messageSearch"
+                class="o_mail_tracking mb-0 smaller"
+            >
+                <strong>To: </strong>
+                <MessageTracking partner_trackings="this.message.partner_trackings" />
+            </p>
+        </xpath>
+    </t>
+</templates>

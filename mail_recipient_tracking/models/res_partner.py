@@ -16,7 +16,7 @@ class ResPartner(models.Model):
     # the line https://github.com/odoo/odoo/blob/97e90f14ea40e4dc8645f845ef78eb579bb3e8dc/odoo/addons/base/models/res_partner.py#L907
     # The inheritance order must be as below, or can be reverted after the Odoo PR
     # https://github.com/odoo/odoo/pull/246927 is merged.
-    _inherit = ["mail.bounced.mixin", "res.partner"]
+    _inherit = ["mail.bounced.mixin", "res.partner"]  # noqa: RUF012
 
     # tracking_emails_count and email_score are non-store fields in order
     # to improve performance

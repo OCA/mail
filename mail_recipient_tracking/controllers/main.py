@@ -19,7 +19,7 @@ BLANK = "R0lGODlhAQABAIAAANvf7wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 
 @contextmanager
 def db_env(dbname):
-    if not http.db_filter([dbname]):
+    if not http.router.db_filter([dbname]):
         raise werkzeug.exceptions.BadRequest()
     cr = None
     if dbname == http.request.db:
@@ -43,8 +43,10 @@ class MailTrackingController(MailController):
     @http.route(
         [
             "/mail/tracking/open/<string:db>/<int:tracking_email_id>/blank.gif",
-            "/mail/tracking/open/<string:db>"
-            "/<int:tracking_email_id>/<string:token>/blank.gif",
+            (
+                "/mail/tracking/open/<string:db>"
+                "/<int:tracking_email_id>/<string:token>/blank.gif"
+            ),
         ],
         type="http",
         auth="none",
@@ -66,7 +68,7 @@ class MailTrackingController(MailController):
                     )
                 elif tracking_email.state in ("sent", "delivered"):
                     tracking_email.event_create("open", metadata)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 _logger.warning(e)
 
         # Always return GIF blank image

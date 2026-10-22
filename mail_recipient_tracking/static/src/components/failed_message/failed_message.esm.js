@@ -1,17 +1,15 @@
-import {Component, toRaw, useState} from "@odoo/owl";
-import {AvatarCardPopover} from "@mail/discuss/web/avatar_card/avatar_card_popover";
-import {FailedMessageReview} from "@mail_tracking/components/failed_message_review/failed_message_review.esm";
-import {MessageTracking} from "@mail_tracking/components/message_tracking/message_tracking.esm";
+import {Component, proxy, t} from "@odoo/owl";
+import {AvatarCard} from "@mail/core/web/avatar_card/avatar_card";
+import {FailedMessageReview} from "@mail_recipient_tracking/components/failed_message_review/failed_message_review.esm";
+import {MessageTracking} from "@mail_recipient_tracking/components/message_tracking/message_tracking.esm";
 import {RelativeTime} from "@mail/core/common/relative_time";
-import {url} from "@web/core/utils/urls";
+import {getFailedRecipients} from "@mail_recipient_tracking/core/message/message_model_patch.esm";
+import {propComputed} from "@mail/utils/common/hooks";
 import {usePopover} from "@web/core/popover/popover_hook";
 import {useService} from "@web/core/utils/hooks";
 
 export class FailedMessage extends Component {
-    static props = ["message", "onUpdate?", "reloadParentView"];
-    // eslint-disable-next-line no-empty-function
-    static defaultProps = {onUpdate: () => {}};
-    static template = "mail_tracking.FailedMessage";
+    static template = "mail_recipient_tracking.FailedMessage";
     static components = {
         RelativeTime,
         MessageTracking,
@@ -19,73 +17,39 @@ export class FailedMessage extends Component {
     };
 
     setup() {
-        this.store = useState(useService("mail.store"));
-        this.avatarCard = usePopover(AvatarCardPopover);
-        this.state = useState({showDetails: false});
-        this.message = useState(this.props.message);
-        this.orm = useService("orm");
+        super.setup();
+        this.store = useService("mail.store");
+        this.message = propComputed(
+            "message",
+            t.instanceOf(this.store["mail.message"])
+        );
+        this.avatarCard = usePopover(AvatarCard);
+        this.state = proxy({showDetails: false});
     }
-    retryFailedMessage() {
-        const message = toRaw(this.message);
-        this.env.services.action.doAction("mail.mail_resend_message_action", {
-            additionalContext: {
-                mail_message_to_resend: message.id,
-            },
-            onClose: async () => {
-                // Check if message is still 'failed' after Retry
-                await this.orm.call("mail.message", "get_failed_messages", [
-                    [message.id],
-                ]);
-            },
+
+    get failedRecipients() {
+        return getFailedRecipients(this.message());
+    }
+
+    get hasAuthorClickable() {
+        return Boolean(this.message().author_id);
+    }
+
+    async onClickJump() {
+        await this.env.messageHighlight?.highlightMessage(this.message());
+    }
+
+    onClickAvatar(ev) {
+        if (!this.hasAuthorClickable || this.avatarCard.isOpen) {
+            return;
+        }
+        this.avatarCard.open(ev.currentTarget, {
+            id: this.message().author_id.id,
+            model: "res.partner",
         });
     }
-    async onClickJump() {
-        await this.env.messageHighlight?.highlightMessage(this.message, this.thread);
-    }
+
     toggleDetails() {
         this.state.showDetails = !this.state.showDetails;
-    }
-    hasAuthorClickable() {
-        return this.message.author?.user;
-    }
-    onClickAvatar(ev) {
-        if (this.hasAuthorClickable()) {
-            const target = ev.currentTarget;
-            if (!this.avatarCard.isOpen) {
-                this.avatarCard.open(target, {
-                    id: this.message.author.user.id,
-                });
-            }
-        }
-    }
-    get authorAvatarAttClass() {
-        return {
-            o_object_fit_contain: this.props.message.author?.is_company,
-            o_object_fit_cover: !this.props.message.author?.is_company,
-            "cursor-pointer": this.hasAuthorClickable() || "initial",
-        };
-    }
-    get authorAvatarUrl() {
-        if (
-            this.message.type &&
-            this.message.type.includes("email") &&
-            !["partner", "guest"].includes(this.message.author?.type)
-        ) {
-            return url("/mail/static/src/img/email_icon.png");
-        }
-        if (this.message.author) {
-            return this.message.author.avatarUrl;
-        }
-
-        return this.store.DEFAULT_AVATAR;
-    }
-    get thread() {
-        return this.props.message.thread;
-    }
-    get failed_recipients() {
-        const error_states = ["error", "rejected", "spam", "bounced", "soft-bounced"];
-        return this.message.partner_trackings.filter((message) => {
-            return error_states.includes(message.status);
-        });
     }
 }

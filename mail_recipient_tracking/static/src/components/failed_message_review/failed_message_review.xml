@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-
-<t t-name="mail_tracking.FailedMessageReview">
-        <span>
-            <a
-                href="#"
-                class="btn btn-link btn-success text-muted p-0 me-3"
-                role="button"
-                t-on-click="setFailedMessageReviewed"
-            >
-            <i class="fa fa-check" role="img" aria-label="Set As Reviewed" />
+    <t t-name="mail_recipient_tracking.FailedMessageReview">
+        <button
+            class="o_mail_tracking_set_reviewed btn btn-link btn-success text-muted p-0 me-3"
+            t-on-click="this.onClickSetReviewed"
+        >
+            <i class="oi" data-icon="check" role="img" aria-label="Set As Reviewed" />
             Set as Reviewed
-        </a>
-            <a
-                href="#"
-                class="btn btn-link btn-success text-muted p-0 me-3"
-                role="button"
-                t-on-click="retryFailedMessage"
-            >
-            <i class="fa fa-retweet" role="img" aria-label="Retry" />
+        </button>
+        <button
+            t-if="this.message().can_retry_failed_mails"
+            class="o_mail_tracking_retry btn btn-link btn-success text-muted p-0 me-3"
+            t-on-click="this.onClickRetry"
+        >
+            <i class="oi" data-icon="send" role="img" aria-label="Retry" />
             Retry
-        </a>
-        </span>
+        </button>
     </t>
-
 </templates>

@@ -46,6 +46,8 @@ class MailMessage(models.Model):
         "mail_tracking_ids",
         "mail_tracking_ids.state",
     )
+    # The value depends on the active user: do not share it between users
+    @api.depends_context("uid")
     def _compute_is_failed_message(self):
         """Compute 'is_failed_message' field for the active user"""
         failed_states = self.get_failed_states()
@@ -86,17 +88,14 @@ class MailMessage(models.Model):
         domain = Domain.AND(
             [
                 [
-                    (
-                        "mail_tracking_ids.state",
-                        "in" if operand else "not in",
-                        list(self.get_failed_states()),
-                    ),
+                    ("mail_tracking_ids.state", "in", list(self.get_failed_states())),
                     ("mail_tracking_needs_action", "=", True),
                 ],
                 is_involve,
             ]
         )
-        return domain
+        # The ORM always calls this method with ("in" | "not in", [True])
+        return domain if operator == "in" else ~domain
 
     def _tracking_status_map_get(self):
         """Map tracking states to be used in chatter"""
@@ -176,7 +175,7 @@ class MailMessage(models.Model):
                     "tracking_id": tracking.id,
                     "recipient": recipient,
                     "partner_id": tracking.partner_id.id,
-                    "isCc": False,
+                    "isCc": bool(tracking.partner_id & self.partner_cc_ids),
                     "tracking_delta": f"{self.id}-{tracking_delta}",
                 }
             )
@@ -191,6 +190,8 @@ class MailMessage(models.Model):
             partners |= self.partner_ids
         if self.notified_partner_ids:
             partners |= self.notified_partner_ids
+        # Partners in Cc (since 20.0 they get their own email)
+        partners |= self.partner_cc_ids
         # Discard partner recipients already included
         partners -= partners_already
         # Default tracking values
@@ -208,7 +209,7 @@ class MailMessage(models.Model):
                 email_to_list.discard(partner.email)
             # If there is partners not included, then status is 'unknown'
             # and perhaps a Cc recipient
-            isCc = False
+            isCc = partner in self.partner_cc_ids
             if partner.email in email_cc_list:
                 email_cc_list.discard(partner.email)
                 isCc = True
@@ -245,8 +246,8 @@ class MailMessage(models.Model):
         if self.env.company.mail_tracking_show_aliases:
             IrConfigParamObj = self.env["ir.config_parameter"].sudo()
             aliases = "{}@{}".format(
-                IrConfigParamObj.get_param("mail.catchall.alias"),
-                IrConfigParamObj.get_param("mail.catchall.domain"),
+                IrConfigParamObj.get_str("mail.catchall.alias"),
+                IrConfigParamObj.get_str("mail.catchall.domain"),
             )
 
         def _filter_alias(email):
@@ -285,10 +286,140 @@ class MailMessage(models.Model):
         """This will mark the messages to be ignored in the tracking issues filter"""
         self.check_access("read")
         self.mail_tracking_needs_action = False
-        self.env.user._bus_send(
-            "mail.tracking/set_need_action_done",
-            {"message_ids": [self.id]},
+        # Refresh the web client data of the current user: the message leaves the
+        # chatter "Failed messages" list and the messaging menu "Failed" tab.
+        Store(bus_channel=self.env.user).add(
+            self, ["mail_tracking_needs_action", "is_failed_message"]
         )
+
+    def _get_failed_trackings(self):
+        """Trackings of the messages in a failed state"""
+        failed_states = self.get_failed_states()
+        return self.sudo().mail_tracking_ids.filtered(
+            lambda tracking: tracking.state in failed_states
+        )
+
+    def _get_retryable_failed_mails(self):
+        """Outgoing emails of the failed trackings that can be queued again.
+
+        The core keeps the failed ``mail.mail`` records only for delivery errors
+        (e.g. SMTP errors); invalid or missing recipient emails are removed.
+        """
+        return self._get_failed_trackings().mail_id.filtered(
+            lambda mail: mail.state == "exception"
+        )
+
+    def _can_retry_failed_mails(self):
+        """Messages pending review with failed recipients can be sent again"""
+        self.ensure_one()
+        return bool(self.mail_tracking_needs_action and self._get_failed_trackings())
+
+    def action_retry_failed_mails(self):
+        """Send again the failed emails of the messages pending review.
+
+        The message leaves the failed lists. If the email fails again, the new
+        tracking flags it back as needing action.
+
+        :return: number of emails sent again
+        """
+        self.check_access("read")
+        # Only the author or a notified partner can retry, as in the web client
+        messages = self.filtered("is_failed_message")
+        count = sum(message._retry_failed_mails() for message in messages)
+        if not count:
+            return 0
+        messages.sudo().mail_tracking_needs_action = False
+        self.env.ref("mail.ir_cron_mail_scheduler_action")._trigger()
+        Store(bus_channel=self.env.user).add(
+            messages,
+            {
+                "mail_tracking_needs_action": False,
+                "is_failed_message": False,
+                "can_retry_failed_mails": False,
+            },
+        )
+        return count
+
+    def _retry_failed_mails(self):
+        """Send again the failed emails of the message.
+
+        The emails still kept with a delivery error are queued again. For the
+        other failed recipients the email is generated again, as the former
+        ``mail.resend.message`` wizard did (removed in 20.0).
+
+        :return: number of emails sent again
+        """
+        self.ensure_one()
+        trackings = self._get_failed_trackings()
+        # sudo: mail.mail - the user can read the message the emails come from
+        mails = self._get_retryable_failed_mails()
+        mails.action_retry()
+        to_resend = trackings.filtered(lambda tracking: not tracking.mail_id & mails)
+        partners = to_resend.partner_id - mails.recipient_ids
+        emails = set(
+            to_resend.filtered(lambda tracking: not tracking.partner_id).mapped(
+                "recipient_address"
+            )
+        ) - {False, ""}
+        return len(mails) + self._resend_failed_recipients(partners, emails)
+
+    def _resend_failed_recipients(self, partners, emails):
+        """Generate again the email of the message for the given recipients
+
+        :param partners: <res.partner> recipients to send the email again
+        :param emails: set of email addresses of the recipients without partner
+        :return: number of recipients the email is sent again
+        """
+        self.ensure_one()
+        message = self.sudo()
+        Model = self.env.get(message.model) if message.model else None
+        if Model is not None and message.res_id and "message_ids" in Model._fields:
+            record = Model.sudo().browse(message.res_id).exists()
+        else:
+            record = self.env["mail.thread"].sudo()
+        recipients_data = []
+        if partners:
+            partners_data = self.env["mail.followers"]._get_recipient_data(
+                self.env["mail.thread"], "user_notification", False, partners.ids
+            )[0]
+            for pdata in partners_data.values():
+                if pdata["id"] not in partners.ids or not pdata["active"]:
+                    continue
+                # The failed recipients were notified by email
+                recipients_data.append(dict(pdata, notif="email", is_cc=False))
+        recipients_data += [
+            {
+                "active": True,
+                "email_normalized": email,
+                "id": False,
+                "is_cc": False,
+                "is_follower": False,
+                "name": email,
+                "lang": False,
+                "groups": [],
+                "notif": "email",
+                "share": True,
+                "type": "customer",
+                "uid": False,
+                "ushare": False,
+            }
+            for email in emails
+        ]
+        if not recipients_data:
+            return 0
+        # The core allows a single notification per message and partner
+        resent_pids = {pdata["id"] for pdata in recipients_data if pdata["id"]}
+        message.notification_ids.filtered(
+            lambda notif: (
+                notif.notification_type == "email"
+                and (
+                    notif.res_partner_id.id in resent_pids
+                    or (not notif.res_partner_id and notif.mail_email_address in emails)
+                )
+            )
+        ).unlink()
+        record._notify_thread_by_email(message, recipients_data, force_send=False)
+        return len(recipients_data)
 
     @api.model
     def get_failed_count(self):
@@ -305,15 +436,26 @@ class MailMessage(models.Model):
         ]
         return res
 
-    def _extras_to_store(self, store: Store, format_reply):
-        res = super()._extras_to_store(store, format_reply=format_reply)
-        for message in self:
-            store.add(
-                message,
-                {
-                    "partner_trackings": message.tracking_status(),
-                    "mail_tracking_needs_action": message.mail_tracking_needs_action,
-                    "is_failed_message": message.is_failed_message,
-                },
-            )
-        return res
+    def _store_notification_fields(self, res: Store.FieldList):
+        """Also send the tracking status in the notification status updates
+        (see `_notify_message_notification_update`)"""
+        result = super()._store_notification_fields(res)
+        res.attr("partner_trackings", lambda message: message.tracking_status())
+        res.extend(["mail_tracking_needs_action", "is_failed_message"])
+        res.attr(
+            "can_retry_failed_mails",
+            lambda message: message._can_retry_failed_mails(),
+        )
+        return result
+
+    def _store_extra_fields(self, res: Store.FieldList, *, format_reply):
+        result = super()._store_extra_fields(res, format_reply=format_reply)
+        res.attr("partner_trackings", lambda message: message.tracking_status())
+        res.extend(["mail_tracking_needs_action", "is_failed_message"])
+        res.attr(
+            "can_retry_failed_mails",
+            lambda message: message._can_retry_failed_mails(),
+            # Only messages pending review can show the "Retry" button
+            predicate=lambda message: message.mail_tracking_needs_action,
+        )
+        return result
