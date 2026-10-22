@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_form_brevo" model="ir.ui.view">
+        <field name="name">Partner Brevo button</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="mail_tracking.view_partner_form" />
+        <field name="arch" type="xml">
+            <field name="email_bounced" position="after">
+                <label
+                    for="brevo_check_email_bounced"
+                    string="Brevo"
+                    invisible="not email"
+                />
+                <div name="brevo_buttons" invisible="not email">
+                    <button
+                        name="brevo_check_email_bounced"
+                        type="object"
+                        string="Check Brevo"
+                        class="oe_link"
+                    />
+                    <button
+                        name="force_set_bounced"
+                        type="object"
+                        string="Set Bounced"
+                        class="oe_link"
+                        invisible="email_bounced"
+                    />
+                    <button
+                        name="force_unset_bounced"
+                        type="object"
+                        string="Unset Bounced"
+                        class="oe_link"
+                        invisible="not email_bounced"
+                    />
+                </div>
+            </field>
+        </field>
+    </record>
+</odoo>
