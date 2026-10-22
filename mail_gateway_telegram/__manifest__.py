@@ -8,7 +8,7 @@
     "version": "18.0.1.0.1",
     "license": "AGPL-3",
     "author": "Creu Blanca,Dixmit,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/social",
+    "website": "https://github.com/OCA/mail",
     "depends": ["mail_gateway"],
     "data": ["views/mail_gateway.xml"],
     "external_dependencies": {"python": ["python-telegram-bot", "lottie", "cairosvg"]},
