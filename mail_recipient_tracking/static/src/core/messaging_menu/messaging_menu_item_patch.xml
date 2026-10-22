@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t
+        t-name="mail_recipient_tracking.MessagingMenuItem"
+        t-inherit="mail.MessagingMenuItem"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//t[@t-set-slot='footer']" position="inside">
+            <!-- The item is a <button>, so a nested <button> is not allowed.
+                 The parent clips overflow, so the padding leaves room for the focus ring. -->
+            <div
+                t-if="this.isMailTrackingFailedTab"
+                class="d-flex gap-3 mt-1 ps-1 pb-1"
+            >
+                <span
+                    t-if="this.message.can_retry_failed_mails"
+                    class="o_mail_tracking_retry btn btn-link btn-sm text-muted p-0"
+                    role="button"
+                    tabindex="0"
+                    t-on-click.stop="this.onClickMailTrackingRetry"
+                    t-on-keydown="(ev) => this.onKeydownMailTracking(ev, this.onClickMailTrackingRetry)"
+                >
+                    <i class="oi" data-icon="send" role="img" aria-label="Retry" />
+                    Retry
+                </span>
+                <span
+                    class="o_mail_tracking_set_reviewed btn btn-link btn-sm text-muted p-0"
+                    role="button"
+                    tabindex="0"
+                    t-on-click.stop="this.onClickMailTrackingSetReviewed"
+                    t-on-keydown="(ev) => this.onKeydownMailTracking(ev, this.onClickMailTrackingSetReviewed)"
+                >
+                    <i
+                    class="oi"
+                    data-icon="check"
+                    role="img"
+                    aria-label="Set As Reviewed"
+                />
+                    Set as Reviewed
+                </span>
+            </div>
+        </xpath>
+    </t>
+</templates>

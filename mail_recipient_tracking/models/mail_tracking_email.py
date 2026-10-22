@@ -9,9 +9,8 @@ import uuid
 from datetime import datetime, timezone
 
 from odoo import api, fields, models, tools
-from odoo.exceptions import AccessError
-from odoo.fields import Command
-from odoo.tools import SQL, email_split
+from odoo.fields import Command, Domain
+from odoo.tools import email_split
 
 _logger = logging.getLogger(__name__)
 
@@ -30,7 +29,6 @@ class MailTrackingEmail(models.Model):
     # - time: default order fields
     # - recipient_address: Used for email_store calculation (non-store)
     # - state: Search and group_by in tree view
-    # - mail_id: deleting a mail.mail must not scan this table (FK ON DELETE SET NULL)
     name = fields.Char(string="Subject", readonly=True, index=True)
     display_name = fields.Char(
         readonly=True,
@@ -46,9 +44,7 @@ class MailTrackingEmail(models.Model):
         comodel_name="mail.message", readonly=True, index=True
     )
     message_id = fields.Char(compute="_compute_message_id")
-    mail_id = fields.Many2one(
-        string="Email", comodel_name="mail.mail", readonly=True, index="btree_not_null"
-    )
+    mail_id = fields.Many2one(string="Email", comodel_name="mail.mail", readonly=True)
     partner_id = fields.Many2one(comodel_name="res.partner", readonly=True)
     recipient = fields.Char(string="Recipient email", readonly=True)
     recipient_address = fields.Char(
@@ -138,137 +134,43 @@ class MailTrackingEmail(models.Model):
         state = vals.get("state")
         if state and state in self.env["mail.message"].get_failed_states():
             self.mapped("mail_message_id").write({"mail_tracking_needs_action": True})
+        if state:
+            self._notify_tracking_status_update()
         return res
 
-    @api.model
-    def _search(
-        self, domain, offset=0, limit=None, order=None, *, bypass_access=False, **kwargs
-    ):
-        """Override that adds specific access rights of mail.tracking.email, to remove
-        ids uid could not see according to our custom rules. Please refer to
-        _check_access() for more details about those rules.
+    def _notify_tracking_status_update(self):
+        """Push the new tracking status to the web client, so the chatter icons
+        change without reloading the page. Uses the same core mechanism that
+        updates the email notification status of the messages."""
+        messages = self.mail_message_id.filtered(lambda m: m._is_thread_message())
+        # sudo: the state may change from public routes (e.g. tracking image)
+        messages.sudo()._notify_message_notification_update()
 
-        Skipped with ``bypass_access``, as set by ``mail.message.mail_tracking_ids``.
+    def _access_domain(self, operation):
+        """Restrict read access of mail.tracking.email to:
+        - Those with a linked mail.message that the user can read
+        - Those with a linked mail.mail that the user can read
+        - Those with no message/mail link but a linked partner that the user can
+          read
+        - Those with no linked records
         """
-        query = super()._search(
-            domain,
-            offset=offset,
-            limit=limit,
-            order=order,
-            bypass_access=bypass_access,
-            **kwargs,
+        domain = super()._access_domain(operation)
+        if operation != "read" or domain.is_false():
+            return domain
+        no_message_or_mail = Domain("mail_message_id", "=", False) & Domain(
+            "mail_id", "=", False
         )
-        if not (self.env.is_superuser() or bypass_access):
-            records = self.browse(query)
-            allowed_ids = self._get_allowed_ids(records.ids)
-            return self.browse(allowed_ids)._as_query(order)
-
-        return query
-
-    def _make_access_error(self, operation: str) -> AccessError:
-        return AccessError(
-            self.env._(
-                "The requested operation cannot be completed due to security restrictions. "  # noqa: E501
-                "Please contact your system administrator.\n\n"
-                "(Document type: %(type)s, Operation: %(operation)s)\n\n"
-                "Records: %(records)s, User: %(user)s",
-                type=self._description,
-                operation=operation,
-                records=self.ids[:6],
-                user=self.env.uid,
-            )
+        return domain & Domain.OR(
+            [
+                Domain("mail_message_id", "access", "read"),
+                Domain("mail_id", "access", "read"),
+                no_message_or_mail
+                & (
+                    Domain("partner_id", "=", False)
+                    | Domain("partner_id", "access", "read")
+                ),
+            ]
         )
-
-    def _get_forbidden_access(self) -> api.Self:
-        """Return the subset of ``self`` that does not satisfy the specific
-        conditions for messages.
-        """
-
-        forbidden = self.browse()
-        allowed_ids = self._get_allowed_ids(self.ids)
-
-        trackings_to_check = [
-            tracking_id for tracking_id in self.ids if tracking_id not in allowed_ids
-        ]
-
-        if not trackings_to_check:
-            return forbidden
-        forbidden += self.browse(trackings_to_check)
-        return forbidden
-
-    def _check_access(self, operation):
-        """Access rules of mail.tracking.email:
-        - read: if
-            - Those with a linked mail.message that the user can read
-            - Those with a linked mail.mail that the user can read
-            - Those with no message/mail link but a linked partner that the user can
-              read.
-            - Those with no linked records.
-        """
-        result = super()._check_access(operation)
-        if not self:
-            return result
-
-        # discard forbidden records, and check remaining ones
-        trackings = self - result[0] if result else self
-        if trackings and (forbidden := trackings._get_forbidden_access()):
-            if result:
-                result = (result[0] + forbidden, result[1])
-            else:
-                result = (forbidden, lambda: forbidden._make_access_error(operation))
-        return result
-
-    def read(self, fields=None, load="_classic_read"):
-        """Override to explicitly call check_access, that is not called
-        by the ORM. It instead directly fetches ir.rules and apply them.
-        """
-        self.check_access("read")
-        return super().read(fields=fields, load=load)
-
-    def _get_allowed_ids(self, ids):
-        allowed_ids = set()
-        self.env.cr.execute(
-            SQL(
-                """ SELECT id, mail_message_id, mail_id, partner_id
-                    FROM "mail_tracking_email"
-                    WHERE id = ANY (%s)
-                """,
-                (ids,),
-            )
-        )
-        result = self.env.cr.fetchall()
-        msg_ids, mail_ids, partner_ids = [], [], []
-        if result:
-            _, msg_ids, mail_ids, partner_ids = zip(*result, strict=True)
-        msg_ids = (
-            self.env["mail.message"]
-            .search([("id", "in", [x for x in msg_ids if x])])
-            .ids
-        )
-        # Only users from group_system can read mail.mail
-        if self.env.user.has_group("base.group_system"):
-            mail_ids = (
-                self.env["mail.mail"]
-                .search([("id", "in", [x for x in mail_ids if x])])
-                .ids
-            )
-        else:
-            mail_ids = []
-        partner_ids = (
-            self.env["res.partner"]
-            .search([("id", "in", [x for x in partner_ids if x])])
-            .ids
-        )
-
-        for id_, mail_msg_id, mail_id, partner_id in result:
-            if (
-                (mail_msg_id in msg_ids)
-                or (mail_id in mail_ids)
-                or (not any({mail_msg_id, mail_id}) and partner_id in partner_ids)
-                or (not any({mail_msg_id, mail_id, partner_id}))
-            ):
-                allowed_ids.add(id_)
-        return allowed_ids
 
     @api.model
     def email_is_bounced(self, email):
@@ -329,7 +231,7 @@ class MailTrackingEmail(models.Model):
         score = 50.0
         states = self.env.context.get("mt_states", False)
         if states:
-            for state in states.keys():
+            for state in states:
                 score += weights.get(state, 0.0) * states[state]
         else:
             for tracking in self:
@@ -362,8 +264,8 @@ class MailTrackingEmail(models.Model):
             email.date = fields.Date.to_string(fields.Date.from_string(email.time))
 
     def _get_mail_tracking_img(self):
-        m_config = self.env["ir.config_parameter"]
-        base_url = m_config.get_param("mail_tracking.base.url") or m_config.get_param(
+        m_config = self.env["ir.config_parameter"].sudo()
+        base_url = m_config.get_str("mail_tracking.base.url") or m_config.get_str(
             "web.base.url"
         )
         if self.token:
@@ -451,7 +353,8 @@ class MailTrackingEmail(models.Model):
         self._message_partners_check(message, message_id)
         self.sudo().write({"state": "sent"})
         return {
-            "recipient": message["To"],
+            # Partners notified in Cc get their own email with an empty "To"
+            "recipient": message["To"] or message["Cc"],
             "timestamp": f"{ts:.6f}",
             "time": fields.Datetime.to_string(dt),
             "tracking_email_id": self.id,
@@ -513,16 +416,11 @@ class MailTrackingEmail(models.Model):
 
     @api.autovacuum
     def _gc_mail_tracking_email(self, limit=5000):
-        config_max_age_days = (
+        max_age_days = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mail_tracking.mail_tracking_email_max_age_days")
+            .get_int("mail_tracking.mail_tracking_email_max_age_days")
         )
-        try:
-            max_age_days = int(config_max_age_days)
-        except ValueError:
-            max_age_days = 0
-
         if not max_age_days > 0:
             return False
 

@@ -27,14 +27,11 @@ class IrMailServer(models.Model):
         # while tracking_email_id is not needed in this implementation, it can
         # be useful for other addons extending this function to make a more
         # fine-grained decision
-        value = (
+        return (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mail_tracking.tracking_img_disabled", False)
+            .get_bool("mail_tracking.tracking_img_disabled")
         )
-        if isinstance(value, str):
-            return tools.str2bool(value, bool(value))
-        return bool(value)
 
     def _tracking_img_remove(self, body):
         return re.sub(

@@ -21,13 +21,13 @@ Email tracking
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/19.0/mail_tracking
+    :target: https://github.com/OCA/mail/tree/20.0/mail_recipient_tracking
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_tracking
+    :target: https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_recipient_tracking
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -46,9 +46,13 @@ Installation
 
 If you're using a multi-database installation (with or without dbfilter
 option) where /web/databse/selector returns a list of more than one
-database, then you need to add ``mail_tracking`` addon to wide load
-addons list (by default, only ``web`` addon), setting ``--load`` option.
-For example, ``--load=web,mail,mail_tracking``
+database, then you need to add ``mail_recipient_tracking`` addon to wide
+load addons list (by default, only ``web`` addon), setting ``--load``
+option. For example, ``--load=web,mail,mail_recipient_tracking``
+
+Since Odoo 20.0 the core provides a ``mail_tracking`` module (technical
+tracking of field values), so this addon has been renamed to
+``mail_recipient_tracking``.
 
 Configuration
 =============
@@ -82,8 +86,10 @@ notified partner has 'Receive Inbox Notifications by Email' == 'Never'
 
 |opened| **Opened**: Opened by partner
 
-|cc| **Cc**: It's a Carbon-Copy recipient. Can't know the status so is
-'Unknown'
+|cc| **Cc**: It's a Carbon-Copy recipient. Partners added in Cc get
+their own email, so their status is shown next to the Cc icon. For Cc
+email addresses without their own email, the status can't be known, so
+only the Cc icon is shown.
 
 |noemail| **No Email**: The partner doesn't have a defined email
 
@@ -94,37 +100,32 @@ If you want to see all tracking emails and events you can go to
 - Settings > Technical > Email > Tracking emails
 - Settings > Technical > Email > Tracking events
 
-When the message generates an 'error' status, it will apear on discuss
-'Failed' channel. Any view with chatter can show the failed messages
-too.
-
-- Discuss
-
-  |image|
+When the message generates an 'error' status, it will appear on the
+'Failed' tab of the messaging menu. Any view with chatter can show the
+failed messages too.
 
 - Chatter
 
-  |image1|
+  |image|
 
 You can use "Failed sent messages" filter present in all views to show
 records with messages in failed status and that needs an user action.
 
 - Filter
 
-  |image2|
+  |image1|
 
-.. |unknown| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/unknown.png
-.. |waiting| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/waiting.png
-.. |error| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/error.png
-.. |sent| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/sent.png
-.. |delivered| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/delivered.png
-.. |opened| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/opened.png
-.. |cc| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/cc.png
-.. |noemail| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/no_email.png
-.. |anonuser| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/src/img/anon_user.png
-.. |image| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/img/failed_message_discuss.png
-.. |image1| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/img/failed_message_widget.png
-.. |image2| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_tracking/static/img/failed_message_filter.png
+.. |unknown| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/unknown.png
+.. |waiting| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/waiting.png
+.. |error| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/error.png
+.. |sent| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/sent.png
+.. |delivered| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/delivered.png
+.. |opened| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/opened.png
+.. |cc| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/cc.png
+.. |noemail| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/no_email.png
+.. |anonuser| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/src/img/anon_user.png
+.. |image| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/img/failed_message_widget.png
+.. |image1| image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_recipient_tracking/static/img/failed_message_filter.png
 
 Known issues / Roadmap
 ======================
@@ -139,7 +140,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_tracking%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_recipient_tracking%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -198,6 +199,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_tracking>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/20.0/mail_recipient_tracking>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
