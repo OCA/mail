@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * mail_tracking
+# * mail_recipient_tracking
 #
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2017
@@ -19,8 +19,8 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: mail_tracking
-#: model:ir.model.fields,help:mail_tracking.field_mail_tracking_email__state
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,help:mail_recipient_tracking.field_mail_tracking_email__state
 msgid ""
 " * The 'Error' status indicates that there was an error when trying to sent "
 "the email, for example, 'No valid recipient'\n"
@@ -43,667 +43,667 @@ msgid ""
 "recipient Mail Exchange (MX) server.\n"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,help:mail_tracking.field_mail_message__email_cc
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,help:mail_recipient_tracking.field_mail_message__email_cc
 msgid "Additional recipients that receive a \"Carbon Copy\" of the e-mail"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Anonymous Recipient"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Bounce"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__bounce_description
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__bounce_description
 msgid "Bounce Description"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__bounce_type
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__bounce_type
 msgid "Bounce Type"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__bounced
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__bounced
 msgid "Bounced"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__email_cc
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__email_cc
 msgid "Cc"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Click"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__click
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__click
 msgid "Clicked"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__url
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__url
 msgid "Clicked URL"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_res_company
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_res_company
 msgid "Companies"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_res_config_settings
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_res_config_settings
 msgid "Config Settings"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_res_partner
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_res_partner
 msgid "Contact"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_form
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_tree
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_form
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_tree
 msgid "Country"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__create_uid
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__create_uid
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__create_uid
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__create_uid
 msgid "Created by"
 msgstr "Criado por"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__create_date
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__create_date
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__create_date
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__create_date
 msgid "Created on"
 msgstr "Criado em"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__date
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__date
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__date
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__date
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Date"
 msgstr "Data"
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__deferral
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__deferral
 msgid "Deferral"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__deferred
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__deferred
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "Deferred"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__delivered
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__delivered
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__delivered
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__delivered
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Delivered"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Delivered Status Center Checkmark"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Delivered Status Left Checkmark"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Delivered Status Right Checkmark"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_ir_mail_server__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias_domain__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_bounced_mixin__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_res_company__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__display_name
-#: model:ir.model.fields,field_description:mail_tracking.field_res_users__display_name
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_ir_mail_server__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_alias__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_alias_domain__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_bounced_mixin__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_mail__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_company__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner__display_name
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_users__display_name
 msgid "Display Name"
 msgstr "Nome a Apresentar"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__mail_id
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__mail_id
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "Email"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_alias
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_alias
 msgid "Email Aliases"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_bounced_mixin__email_bounced
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__email_bounced
-#: model:ir.model.fields,field_description:mail_tracking.field_res_users__email_bounced
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_bounced_mixin__email_bounced
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner__email_bounced
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_users__email_bounced
 msgid "Email Bounced"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_alias_domain
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_alias_domain
 msgid "Email Domain"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__email_score
-#: model:ir.model.fields,field_description:mail_tracking.field_res_users__email_score
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner__email_score
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_users__email_score
 msgid "Email Score"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_thread
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_thread
 msgid "Email Thread"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_res_partner_filter
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_res_partner_filter
 msgid "Email bounced"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__error
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_form
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__error
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_form
 msgid "Error"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__error_description
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__error_description
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__error_description
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__error_description
 msgid "Error Description"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__error_details
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__error_details
 msgid "Error Details"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__error_smtp_server
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__error_smtp_server
 msgid "Error SMTP server"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Error Status"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__error_type
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__error_type
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__error_type
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__error_type
 msgid "Error Type"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__event_type
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__event_type
 msgid "Event Type"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/core/discuss/thread_icon.xml:0
-#: code:addons/mail_tracking/static/src/services/store_service_patch.esm.js:0
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#: code:addons/mail_recipient_tracking/static/src/core/discuss/thread_icon.xml:0
+#: code:addons/mail_recipient_tracking/static/src/services/store_service_patch.esm.js:0
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Failed"
 msgstr "Falhou"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_account_account__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_analytic_account__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_bank_statement_line__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_journal__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_move__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_payment__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_reconcile_model__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_setup_bank_manual_config__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_account_tax__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_calendar_event__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_discuss_channel__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_hr_department__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_hr_employee__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_hr_job__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_hr_leave__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_hr_leave_allocation__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_hr_version__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_ir_actions_server__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_ir_cron__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_blacklist__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_blacklist__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_cc__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_main_attachment__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread_phone__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_duration_mixin__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mailing_contact__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mailing_mailing__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_phone_blacklist__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_category__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_pricelist__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_product__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_product_template__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_res_company__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner_bank__failed_message_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_res_users__failed_message_ids
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_account__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_analytic_account__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_bank_statement_line__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_journal__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_move__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_payment__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_reconcile_model__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_setup_bank_manual_config__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_account_tax__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_calendar_event__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_discuss_channel__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_hr_department__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_hr_employee__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_hr_job__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_hr_leave__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_hr_leave_allocation__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_hr_version__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_ir_actions_server__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_ir_cron__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_blacklist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread_blacklist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread_cc__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread_main_attachment__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread_phone__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_duration_mixin__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mailing_contact__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mailing_mailing__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_phone_blacklist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_product_category__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_product_pricelist__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_product_product__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_product_template__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_company__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner_bank__failed_message_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_users__failed_message_ids
 msgid "Failed Messages"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
-#: code:addons/mail_tracking/static/src/core/message/message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message/failed_message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/core/message/message.xml:0
 msgid "Failed Recipients:"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/core/chatter/chatter.xml:0
+#: code:addons/mail_recipient_tracking/static/src/core/chatter/chatter.xml:0
 msgid "Failed messages"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_thread.py:0
-#: code:addons/mail_tracking/tests/test_mail_tracking.py:0
+#: code:addons/mail_recipient_tracking/models/mail_thread.py:0
+#: code:addons/mail_recipient_tracking/tests/test_mail_tracking.py:0
 msgid "Failed sent messages"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message/failed_message.xml:0
 msgid "Go"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message/failed_message.xml:0
 msgid "Go to message"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__hard_bounce
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__hard_bounce
 msgid "Hard bounce"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_ir_mail_server__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_alias_domain__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_bounced_mixin__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_thread__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__id
-#: model:ir.model.fields,field_description:mail_tracking.field_res_company__id
-#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__id
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__id
-#: model:ir.model.fields,field_description:mail_tracking.field_res_users__id
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_ir_mail_server__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_alias__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_alias_domain__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_bounced_mixin__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_mail__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_thread__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_company__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_config_settings__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner__id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_users__id
 msgid "ID"
 msgstr "ID"
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "IP"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,help:mail_tracking.field_res_config_settings__mail_tracking_email_max_age_days
-#: model_terms:ir.ui.view,arch_db:mail_tracking.res_config_settings_view_form
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,help:mail_recipient_tracking.field_res_config_settings__mail_tracking_email_max_age_days
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.res_config_settings_view_form
 msgid ""
 "If set as positive integer enables the deletion of old mail tracking records "
 "to reduce the database size."
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message/failed_message.xml:0
 msgid "Info"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__is_failed_message
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__is_failed_message
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_mail__is_failed_message
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__is_failed_message
 msgid "Is Failed Message"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__mobile
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__mobile
 msgid "Is mobile?"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__write_uid
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__write_uid
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__write_uid
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__write_uid
 msgid "Last Updated by"
 msgstr "Atualizado pela última vez por"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__write_date
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__write_date
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__write_date
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__write_date
 msgid "Last Updated on"
 msgstr "Atualizado pela última vez em"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__mail_message_id
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__mail_message_id
 msgid "Mail Message"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_ir_mail_server
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_ir_mail_server
 msgid "Mail Server"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__mail_tracking_needs_action
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__mail_tracking_needs_action
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_mail__mail_tracking_needs_action
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__mail_tracking_needs_action
 msgid "Mail Tracking Needs Action"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_mail__mail_tracking_ids
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__mail_tracking_ids
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_mail__mail_tracking_ids
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__mail_tracking_ids
 msgid "Mail Trackings"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_bounced_mixin
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_bounced_mixin
 msgid "Mail bounced mixin"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_tracking_email
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_tracking_email
 msgid "MailTracking email"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "MailTracking email search"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.actions.act_window,name:mail_tracking.action_view_mail_tracking_email
+#. module: mail_recipient_tracking
+#: model:ir.actions.act_window,name:mail_recipient_tracking.action_view_mail_tracking_email
 msgid "MailTracking emails"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_tracking_event
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_form
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_form
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_tracking_event
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_form
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_form
 msgid "MailTracking event"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "MailTracking event search"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.actions.act_window,name:mail_tracking.action_view_mail_tracking_event
+#. module: mail_recipient_tracking
+#: model:ir.actions.act_window,name:mail_recipient_tracking.action_view_mail_tracking_event
 msgid "MailTracking events"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__mail_tracking_email_max_age_days
-#: model_terms:ir.ui.view,arch_db:mail_tracking.res_config_settings_view_form
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_config_settings__mail_tracking_email_max_age_days
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.res_config_settings_view_form
 msgid "Max age in days of mail tracking email records"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_message
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__message_id
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__tracking_email_id
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_form
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_message
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__message_id
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__tracking_email_id
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_form
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Message"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Month"
 msgstr "Mês"
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_form
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_tree
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_form
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_tree
 msgid "OS"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__open
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__open
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Open"
 msgstr "Aberto"
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__opened
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__opened
 msgid "Opened"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Opened Status Center Checkmark"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Opened Status Left Checkmark"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Opened Status Right Checkmark"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__os_family
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__os_family
 msgid "Operating system family"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_mail_mail
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_mail_mail
 msgid "Outgoing Mails"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__partner_id
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__partner_id
 msgid "Partner"
 msgstr "Parceiro"
 
-#. module: mail_tracking
-#: model:ir.model.fields,help:mail_tracking.field_mail_message__email_to
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,help:mail_recipient_tracking.field_mail_message__email_to
 msgid "Raw TO recipients"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__recipient
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_tree
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__recipient
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_tree
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Recipient"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "Recipient Address"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__recipient
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__recipient
 msgid "Recipient email"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__recipient_address
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__recipient_address
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__recipient_address
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__recipient_address
 msgid "Recipient email address"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__rejected
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__reject
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__rejected
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__reject
 msgid "Rejected"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
 msgid "Retry"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__smtp_server
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__smtp_server
 msgid "SMTP server"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__token
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__token
 msgid "Security Token"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_tree
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_tree
 msgid "Sender"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__sender
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__sender
 msgid "Sender email"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__sent
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__sent
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__sent
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__sent
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Sent"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Sent Status"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
 msgid "Set As Reviewed"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message_review/failed_message_review.xml:0
 msgid "Set as Reviewed"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_res_company__mail_tracking_show_aliases
-#: model:ir.model.fields,field_description:mail_tracking.field_res_config_settings__mail_tracking_show_aliases
-#: model_terms:ir.ui.view,arch_db:mail_tracking.res_config_settings_view_form
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_company__mail_tracking_show_aliases
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_config_settings__mail_tracking_show_aliases
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.res_config_settings_view_form
 msgid "Show Aliases in Mail Tracking"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__soft_bounce
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__soft_bounce
 msgid "Soft bounce"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__soft-bounced
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__soft-bounced
 msgid "Soft bounced"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__spam
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__spam
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__spam
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__spam
 msgid "Spam"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__state
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__state
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "State"
 msgstr "Estado"
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
 msgid "Status: %s"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__name
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__name
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "Subject"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/failed_message/failed_message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/failed_message/failed_message.xml:0
 msgid "Subject:"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,help:mail_tracking.field_mail_mail__mail_tracking_needs_action
-#: model:ir.model.fields,help:mail_tracking.field_mail_message__mail_tracking_needs_action
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,help:mail_recipient_tracking.field_mail_mail__mail_tracking_needs_action
+#: model:ir.model.fields,help:mail_recipient_tracking.field_mail_message__mail_tracking_needs_action
 msgid "The message tracking will be considered to filter tracking issues"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
 msgid "The partner doesn't have a defined email"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_tracking_email.py:0
+#: code:addons/mail_recipient_tracking/models/mail_tracking_email.py:0
 msgid ""
 "The requested operation cannot be completed due to security restrictions. "
 "Please contact your system administrator.\n"
@@ -713,130 +713,130 @@ msgid ""
 "Records: %(records)s, User: %(user)s"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__time
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__time
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__time
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__time
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Time"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_message__email_to
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_message__email_to
 msgid "To"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/core/message/message.xml:0
+#: code:addons/mail_recipient_tracking/static/src/core/message/message.xml:0
 msgid "To:"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_res_partner__tracking_emails_count
-#: model:ir.model.fields,field_description:mail_tracking.field_res_users__tracking_emails_count
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_partner__tracking_emails_count
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_res_users__tracking_emails_count
 msgid "Tracking Emails Count"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.ui.menu,name:mail_tracking.menu_mail_tracking_email
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_partner_form
+#. module: mail_recipient_tracking
+#: model:ir.ui.menu,name:mail_recipient_tracking.menu_mail_tracking_email
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_partner_form
 msgid "Tracking emails"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__tracking_event_ids
-#: model:ir.ui.menu,name:mail_tracking.menu_mail_tracking_event
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__tracking_event_ids
+#: model:ir.ui.menu,name:mail_recipient_tracking.menu_mail_tracking_event
 msgid "Tracking events"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Type"
 msgstr "Tipo"
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "URL"
 msgstr "URL"
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_email__timestamp
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__timestamp
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_email__timestamp
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__timestamp
 msgid "UTC timestamp"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
 msgid "Unknown"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Unknown Status"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "Unsubscribe"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_email__state__unsub
-#: model:ir.model.fields.selection,name:mail_tracking.selection__mail_tracking_event__event_type__unsub
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_email__state__unsub
+#: model:ir.model.fields.selection,name:mail_recipient_tracking.selection__mail_tracking_event__event_type__unsub
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_search
 msgid "Unsubscribed"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model,name:mail_tracking.model_res_users
+#. module: mail_recipient_tracking
+#: model:ir.model,name:mail_recipient_tracking.model_res_users
 msgid "User"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__user_agent
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__user_agent
 msgid "User Agent"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__ip
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__ip
 msgid "User IP"
 msgstr ""
 
-#. module: mail_tracking
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_email_form
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_tree
+#. module: mail_recipient_tracking
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_email_form
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_tree
 msgid "User agent"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__ua_family
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__ua_family
 msgid "User agent family"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__ua_type
-#: model_terms:ir.ui.view,arch_db:mail_tracking.view_mail_tracking_event_search
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__ua_type
+#: model_terms:ir.ui.view,arch_db:mail_recipient_tracking.view_mail_tracking_event_search
 msgid "User agent type"
 msgstr ""
 
-#. module: mail_tracking
-#: model:ir.model.fields,field_description:mail_tracking.field_mail_tracking_event__user_country_id
+#. module: mail_recipient_tracking
+#: model:ir.model.fields,field_description:mail_recipient_tracking.field_mail_tracking_event__user_country_id
 msgid "User country"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-python
-#: code:addons/mail_tracking/models/mail_message.py:0
+#: code:addons/mail_recipient_tracking/models/mail_message.py:0
 msgid "Waiting"
 msgstr ""
 
-#. module: mail_tracking
+#. module: mail_recipient_tracking
 #. odoo-javascript
-#: code:addons/mail_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
+#: code:addons/mail_recipient_tracking/static/src/components/message_tracking/message_tracking_status.xml:0
 msgid "Waiting Status"
 msgstr ""
 

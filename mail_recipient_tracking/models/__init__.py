@@ -12,4 +12,3 @@ from . import res_partner
 from . import mail_thread
 from . import mail_alias
 from . import mail_alias_domain
-from . import res_users

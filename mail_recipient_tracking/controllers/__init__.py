@@ -1,2 +1,2 @@
 from . import main
-from . import mailbox
+from . import messaging_menu

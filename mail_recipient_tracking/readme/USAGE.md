@@ -23,7 +23,9 @@ to final MX server
 ![opened](../static/src/img/opened.png) **Opened**: Opened by partner
 
 ![cc](../static/src/img/cc.png) **Cc**: It's a Carbon-Copy recipient.
-Can't know the status so is 'Unknown'
+Partners added in Cc get their own email, so their status is shown next
+to the Cc icon. For Cc email addresses without their own email, the
+status can't be known, so only the Cc icon is shown.
 
 ![noemail](../static/src/img/no_email.png) **No Email**: The partner
 doesn't have a defined email
@@ -36,13 +38,9 @@ If you want to see all tracking emails and events you can go to
 - Settings \> Technical \> Email \> Tracking emails
 - Settings \> Technical \> Email \> Tracking events
 
-When the message generates an 'error' status, it will apear on discuss
-'Failed' channel. Any view with chatter can show the failed messages
-too.
-
-- Discuss
-
-  ![image](../static/img/failed_message_discuss.png)
+When the message generates an 'error' status, it will appear on the
+'Failed' tab of the messaging menu. Any view with chatter can show the
+failed messages too.
 
 - Chatter
 
