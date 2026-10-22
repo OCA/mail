@@ -16,8 +16,9 @@ class MailThread(models.AbstractModel):
         "mail.message",
         "res_id",
         string="Failed Messages",
-        domain=lambda self: [("model", "=", self._name)]
-        + self._get_failed_message_domain(),
+        domain=lambda self: (
+            [("model", "=", self._name)] + self._get_failed_message_domain()
+        ),
     )
 
     def _get_message_create_valid_field_names(self):
@@ -51,10 +52,12 @@ class MailThread(models.AbstractModel):
     def _routing_handle_bounce(self, email_message, message_dict):
         bounced_message = message_dict["bounced_message"]
         mail_trackings = bounced_message.mail_tracking_ids.filtered(
-            lambda x: x.recipient_address == message_dict["bounced_email"]
-            or (
-                message_dict["bounced_partner"]
-                and message_dict["bounced_partner"] == x.partner_id
+            lambda x: (
+                x.recipient_address == message_dict["bounced_email"]
+                or (
+                    message_dict["bounced_partner"]
+                    and message_dict["bounced_partner"] == x.partner_id
+                )
             )
         )
         if mail_trackings:

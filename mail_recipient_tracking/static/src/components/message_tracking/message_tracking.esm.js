@@ -1,23 +1,29 @@
-const {Component, useState} = owl;
+import {Component, t, useProps} from "@odoo/owl";
+import {useService} from "@web/core/utils/hooks";
 
 export class MessageTracking extends Component {
-    static template = "mail_tracking.MessageTracking";
-    static props = ["message", "partner_trackings", "skip_track_links?"];
+    static template = "mail_recipient_tracking.MessageTracking";
+
     setup() {
-        this.message = useState(this.props.message);
-        this.partner_trackings = useState(this.props.partner_trackings);
+        super.setup();
+        this.action = useService("action");
+        this.props = useProps({
+            partner_trackings: t.array(),
+            skip_track_links: t.boolean().optional(false),
+        });
     }
-    _onTrackingStatusClick(event) {
-        const tracking_email_id = event.currentTarget.dataset.tracking;
-        event.preventDefault();
-        return this.env.services.action.doAction({
+
+    onTrackingStatusClick(tracking) {
+        if (!tracking.tracking_id) {
+            return;
+        }
+        return this.action.doAction({
             type: "ir.actions.act_window",
-            view_type: "form",
             view_mode: "form",
             res_model: "mail.tracking.email",
             views: [[false, "form"]],
             target: "new",
-            res_id: parseInt(tracking_email_id, 10),
+            res_id: tracking.tracking_id,
         });
     }
 }
