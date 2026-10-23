@@ -8,14 +8,14 @@
     >
         <xpath expr="//button[hasclass('o-mail-Chatter-logNote')]" position="after">
             <button
-                class="o-mail-Chatter-gateway btn text-nowrap me-1"
-                type="button"
                 t-if="hasGatewayGroup"
+                class="o-mail-Chatter-gateway btn text-nowrap me-1"
                 t-att-class="{
                     'btn-primary active': state.composerType === 'gateway',
                     'btn-secondary': state.composerType !== 'gateway',
                     'my-2': !props.compactHeight
                 }"
+                type="button"
                 t-on-click="() => this.toggleComposer('gateway')"
                 data-hotkey="shift+w"
             >

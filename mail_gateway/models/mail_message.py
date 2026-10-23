@@ -52,16 +52,18 @@ class MailMessage(models.Model):
                 partners = record.notification_ids.res_partner_id
                 channels = partners.gateway_channel_ids.filtered(
                     lambda r, messages=record.gateway_message_ids: (
-                        r.gateway_token,
-                        r.gateway_id.id,
-                    )
-                    not in [
                         (
-                            notification.gateway_channel_id.gateway_channel_token,
-                            notification.gateway_channel_id.gateway_id.id,
+                            r.gateway_token,
+                            r.gateway_id.id,
                         )
-                        for notification in messages.gateway_notification_ids
-                    ]
+                        not in [
+                            (
+                                notification.gateway_channel_id.gateway_channel_token,
+                                notification.gateway_channel_id.gateway_id.id,
+                            )
+                            for notification in messages.gateway_notification_ids
+                        ]
+                    )
                 )
             else:
                 channels = self.env["res.partner.gateway.channel"]
