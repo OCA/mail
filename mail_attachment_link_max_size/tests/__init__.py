@@ -1,0 +1,1 @@
+from . import test_mail_attachment_link_max_size
