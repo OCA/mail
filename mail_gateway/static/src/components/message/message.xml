@@ -3,19 +3,18 @@
 
     <t t-inherit="mail.Message" t-inherit-mode="extension">
         <xpath
-            expr="//small[@t-if='isPersistentMessageFromAnotherThread']"
+            expr="//div[@name='header']/small[hasclass('o-mail-Message-date')]"
             position="after"
         >
             <small
-                t-if="message.gateway_thread_data"
-                class="ms-1 text-500"
-                t-on-click.prevent="openGatewayThreadRecord"
+                t-if="this.message.hasGatewayThread and this.message.gateway_thread_data.model !== 'discuss.channel'"
+                class="o-mail-Message-gatewayThread ms-1 o-xsmaller text-500"
             >
-                <t t-if="message.gateway_thread_data.model !== 'discuss.channel'">
-                    on <a t-att-href="message.resUrl">
-                    <t t-esc="message.gateway_thread_data?.name" />
-                </a>
-                </t>
+                on <a
+                t-att-href="this.message.resUrl"
+                t-on-click="(ev) => this.openGatewayThreadRecord(ev)"
+                t-out="this.message.gateway_thread_data.name"
+            />
             </small>
         </xpath>
     </t>

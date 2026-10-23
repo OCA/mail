@@ -1,11 +1,14 @@
 # Copyright 2024 Dixmit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
-
 from odoo import fields, models
+from odoo.tools import BinaryBytes
 
 from odoo.addons.mail.tools.discuss import Store
+
+
+def is_gateway_channel(channel):
+    return channel.channel_type == "gateway"
 
 
 class DiscussChannel(models.Model):
@@ -28,20 +31,42 @@ class DiscussChannel(models.Model):
         required=False,
     )
 
-    def _to_store(self, store: Store, fields):
-        res = super()._to_store(store, fields)
-        for record in self.filtered("gateway_id"):
-            if not record:
-                continue
-            store.add_model_values(
-                self._name,
-                {
-                    "id": record.id,
-                    "gateway": record.gateway_id._gateway_info(),
-                    "gateway_id": record.id,
-                },
+    def _store_channel_fields(self, res: Store.FieldList):  # pylint: disable=missing-return
+        super()._store_channel_fields(res)
+        # sudo: mail.gateway - name and type of the gateway of an accessible channel
+        res.one(
+            "gateway_id",
+            "_store_gateway_fields",
+            predicate=is_gateway_channel,
+            sudo=True,
+        )
+        res.attr("anonymous_name", predicate=is_gateway_channel)
+        if res.is_for_internal_users():
+            # sudo: res.partner.gateway.channel - technical data to know which contact
+            # is behind the gateway channel
+            res.one(
+                "gateway_partner_id",
+                ["name"],
+                value=lambda channel: channel.sudo()._get_gateway_partner(),
+                predicate=is_gateway_channel,
             )
-        return res
+
+    def _get_gateway_partner(self):
+        """Return the contact linked to the gateway channel, if any."""
+        self.ensure_one()
+        if not self.gateway_id or not self.gateway_channel_token:
+            return self.env["res.partner"]
+        return (
+            self.env["res.partner.gateway.channel"]
+            .search(
+                [
+                    ("gateway_id", "=", self.gateway_id.id),
+                    ("gateway_token", "=", self.gateway_channel_token),
+                ],
+                limit=1,
+            )
+            .partner_id
+        )
 
     def _generate_avatar_gateway(self):
         # We will use this function to set a default avatar on each module
@@ -53,7 +78,7 @@ class DiscussChannel(models.Model):
         avatar = self._generate_avatar_gateway()
         if not avatar:
             return False
-        return base64.b64encode(avatar.encode())
+        return BinaryBytes(avatar.encode())
 
     def message_post(
         self, *, message_type="notification", gateway_type=False, **kwargs

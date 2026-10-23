@@ -1,24 +1,42 @@
 import {Store} from "@mail/core/common/store_service";
-import {Thread} from "@mail/core/common/thread_model";
+import {fields} from "@mail/model/export";
 import {patch} from "@web/core/utils/patch";
 
-patch(Thread.prototype, {
-    async fetchThreadData() {
-        const result = await super.fetchThreadData(...arguments);
-        if (result?.gateway_followers !== undefined) {
-            this.gateway_followers = result.gateway_followers;
-        }
-        return result;
-    },
-});
+/** Recipient keys added by the core from the suggested/additional recipients. */
+const EMAIL_RECIPIENT_KEYS = [
+    "partner_cc_emails",
+    "partner_cc_ids",
+    "partner_emails",
+    "partner_ids",
+];
 
 patch(Store.prototype, {
-    async getMessagePostParams(params) {
-        const post_params = await super.getMessagePostParams(...arguments);
-        if (params.thread.gateway_notifications) {
-            post_params.post_data.gateway_notifications =
-                params.thread.gateway_notifications;
+    setup() {
+        super.setup(...arguments);
+        /** Whether the current user belongs to the gateway users group. */
+        this.has_gateway_access = false;
+        /** Gateways the current user is a member of. */
+        this.gateways = fields.Many("mail.gateway");
+    },
+    async getMessagePostParams({postData, thread}) {
+        const params = await super.getMessagePostParams(...arguments);
+        if (postData.isGateway) {
+            // A gateway message is only sent to the selected gateway channels: drop
+            // the email recipients added by the core (they are not shown in the
+            // gateway composer), but keep the mentions.
+            for (const key of EMAIL_RECIPIENT_KEYS) {
+                delete params.post_data[key];
+            }
+            const mentionedPartnerIds = (postData.mentionedPartners || []).map(
+                (partner) => partner.id
+            );
+            if (mentionedPartnerIds.length) {
+                params.post_data.partner_ids = mentionedPartnerIds;
+            }
+            if (thread.gateway_notifications?.length) {
+                params.post_data.gateway_notifications = thread.gateway_notifications;
+            }
         }
-        return post_params;
+        return params;
     },
 });

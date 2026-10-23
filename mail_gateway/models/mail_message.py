@@ -4,6 +4,8 @@
 
 from odoo import api, fields, models
 
+from odoo.addons.mail.tools.discuss import Store
+
 
 class MailMessage(models.Model):
     _inherit = "mail.message"
@@ -73,20 +75,16 @@ class MailMessage(models.Model):
                 "partners": channels.partner_id.ids,
             }
 
-    def _to_store_defaults(self, target):
-        return super()._to_store_defaults(target) + [
-            "gateway_type",
-            "gateway_channel_data",
-            "gateway_thread_data",
-        ]
+    def _store_message_fields(self, res: Store.FieldList, **kwargs):  # pylint: disable=missing-return
+        super()._store_message_fields(res, **kwargs)
+        res.extend(["gateway_type", "gateway_thread_data"])
+        res.attr("gateway_channel_data", internal=True)
 
     def _send_to_gateway_thread(self, gateway_channel_id):
-        channel = self.env["mail.gateway.abstract"]._get_channel(
-            gateway_channel_id.gateway_id,
-            gateway_channel_id.gateway_token,
-            {},
-            force_create=True,
-        )
+        gateway = gateway_channel_id.gateway_id
+        channel = self.env[
+            f"mail.gateway.{gateway.gateway_type}"
+        ]._get_channel_from_partner_channel(gateway_channel_id)
         messages = channel.message_post(**self._get_gateway_thread_message_vals())
         notification = messages.notification_ids.filtered(
             lambda n: n.gateway_channel_id == channel
@@ -113,6 +111,8 @@ class MailMessage(models.Model):
                 notification_vals["notification_status"] = "exception"
                 notification_vals["failure_reason"] = notification.failure_reason
         self.env["mail.notification"].create(notification_vals)
+        # Show the new gateway notification on the original message right away
+        self._notify_message_notification_update()
         return {}
 
     def _get_gateway_thread_message_vals(self):

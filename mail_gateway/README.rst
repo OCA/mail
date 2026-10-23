@@ -21,13 +21,13 @@ Mail Gateway
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/19.0/mail_gateway
+    :target: https://github.com/OCA/mail/tree/20.0/mail_gateway
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_gateway
+    :target: https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_gateway
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -58,23 +58,65 @@ Configuration
 Usage
 =====
 
-When external messages are received, they will be directly sent to the
-discuss menu. Answering to these messages will send the answer to the
-external contact. We can assign this messages to any record using the
-message actions. Also, we can assign the sender to a partner using the
-followers menu and selecting the partner.
+Only the members of the *Gateway / User* group can use the features
+below.
 
-On a standard record associated to a partner with external chat, we can
-send messages to the external contact directly selecting the methods of
-the partner. To use this, we just need to use the
+**Receiving and answering messages**
 
-It is recomended to enable chatter notification to all users that will
-receive messages from gateways.
+When external messages are received, they are sent to the *Gateway* tab
+of the Discuss app and of the messaging menu. When the user is member of
+more than one gateway, the tab can be filtered by gateway. Answering
+these messages sends the answer to the external contact.
 
-Known issues / Roadmap
-======================
+From a gateway conversation we can also:
 
-1. Make possible to schedule gateway messages.
+- Link a received message to any record with the *Link to thread*
+  message action. The message is then also shown on the chatter of that
+  record.
+- Create a contact for the external sender, or link the sender to an
+  existing contact, with the *New Partner* conversation action or the
+  *Manage guest* action of the member list.
+- Open the contact linked to the conversation with the *Open Contact*
+  conversation action.
+
+**Sending messages from a record**
+
+On a record whose followers can be reached through a gateway, use the
+*Gateway* button of the chatter. For each of these followers, select the
+gateway channel to use and send the message. The full composer allows to
+use mail templates and to schedule the message.
+
+A message already posted on a record can also be sent later through a
+gateway with the *Send with gateway* message action.
+
+The delivery status of each gateway message is shown on the message. The
+reason of a failed delivery is shown when clicking on the status icon.
+
+It is recommended to enable the Odoo notifications in the chatter for
+all the users that will receive messages from gateways.
+
+Changelog
+=========
+
+20.0.1.0.0
+----------
+
+Migration to 20.0.
+
+**Changes required by Odoo 20.0**
+
+- The Discuss sidebar categories don't exist anymore: the gateway
+  channels are listed in a new *Gateway* tab of the Discuss app and of
+  the messaging menu, only shown to gateway users. As a consequence, the
+  user setting *Gateway Category Open* has been removed.
+- The ``ir.websocket`` override has been removed: Odoo already
+  subscribes the users to the bus of the channels they are member of,
+  gateway channels included.
+- The ``mail.resend.message`` extension has been removed, as this wizard
+  doesn't exist anymore. The failure reason of a gateway notification is
+  now shown in the notification popover of the message.
+- The pre-init hook has been removed: the column it created has not been
+  used since 16.0.
 
 Bug Tracker
 ===========
@@ -82,7 +124,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_gateway%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_gateway%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -126,6 +168,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_gateway>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/20.0/mail_gateway>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

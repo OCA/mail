@@ -10,6 +10,13 @@ class TestResPartnerSearchForChannelInvite(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # The inviting user must be able to access gateway channels
+        cls.inviter = new_test_user(
+            cls.env,
+            login="test_gateway_inviter",
+            groups="base.group_user,mail_gateway.gateway_user",
+            name="Gateway Inviter",
+        )
         cls.gateway_user = new_test_user(
             cls.env,
             login="test_gateway_user",
@@ -30,17 +37,19 @@ class TestResPartnerSearchForChannelInvite(BaseCommon):
         )
 
     def test_only_gateway_users_are_suggested_on_gateway_channels(self):
-        result = self.env["res.partner"].search_for_channel_invite(
+        partners = self.env["res.partner"].with_user(self.inviter)
+        result = partners.search_for_channel_invite(
             "Test", channel_id=self.gateway_channel.id
         )
-        suggested_ids = {p["id"] for p in result["store_data"].get("res.partner", [])}
+        suggested_ids = set(result["partner_ids"])
         self.assertIn(self.gateway_user.partner_id.id, suggested_ids)
         self.assertNotIn(self.regular_user.partner_id.id, suggested_ids)
 
     def test_regular_channels_are_not_restricted(self):
-        result = self.env["res.partner"].search_for_channel_invite(
+        partners = self.env["res.partner"].with_user(self.inviter)
+        result = partners.search_for_channel_invite(
             "Test", channel_id=self.regular_channel.id
         )
-        suggested_ids = {p["id"] for p in result["store_data"].get("res.partner", [])}
+        suggested_ids = set(result["partner_ids"])
         self.assertIn(self.gateway_user.partner_id.id, suggested_ids)
         self.assertIn(self.regular_user.partner_id.id, suggested_ids)

@@ -1,5 +1,7 @@
 # Copyright 2024 Dixmit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from collections import defaultdict
+
 from odoo import models
 
 from odoo.addons.mail.tools.discuss import Store
@@ -38,7 +40,7 @@ class MailThread(models.AbstractModel):
                 )
             )
 
-    def _notify_get_recipients(self, message, msg_vals, **kwargs):
+    def _notify_get_recipients(self, message, **kwargs):
         if self.env.context.get("link_gateway_message"):
             # When we have the context link_gateway_message we want to avoid
             # notify the followers thread.
@@ -52,8 +54,11 @@ class MailThread(models.AbstractModel):
                 user = partner.user_ids
                 follower_data = {
                     "active": partner.active,
+                    "email_normalized": partner.email_normalized,
                     "id": partner.id,
+                    "is_cc": False,
                     "is_follower": True,
+                    "name": partner.name,
                     "lang": partner.lang,
                     "groups": set(user.group_ids.ids),
                     "notif": notification.get("channel_type"),
@@ -72,33 +77,35 @@ class MailThread(models.AbstractModel):
                     follower_data["type"] = "user"
                 result.append(follower_data)
             return result
-        return super()._notify_get_recipients(message, msg_vals, **kwargs)
+        return super()._notify_get_recipients(message, **kwargs)
 
-    def _thread_to_store(self, store: Store, fields, *, request_list=None):
-        res = super()._thread_to_store(store, fields=fields, request_list=request_list)
-        # request_list=None means this is a recursive internal call (from
-        # store.add as_thread=True), not a direct client request — skip to avoid
-        # infinite recursion.
-        if request_list is None:
-            return res
-        for record in self:
-            follower_partners = (
-                self.env["mail.followers"]
-                .sudo()
-                .search_fetch(
-                    [("res_id", "=", record.id), ("res_model", "=", record._name)],
-                    field_names=["partner_id"],
-                )
-                .partner_id.filtered(lambda p: p.gateway_channel_ids)
+    def _store_thread_fields(self, res: Store.FieldList, *, request_list, **kwargs):
+        super()._store_thread_fields(res, request_list=request_list, **kwargs)
+        if "followers" not in request_list or not self.env.user.has_group(
+            "mail_gateway.gateway_user"
+        ):
+            return
+        # sudo: mail.followers - technical data used to know which followers can
+        # be reached through a gateway
+        followers = (
+            self.env["mail.followers"]
+            .sudo()
+            .search_fetch(
+                [("res_id", "in", self.ids), ("res_model", "=", self._name)],
+                ["res_id", "partner_id"],
             )
-            if not follower_partners:
-                continue
-            store.add(
-                record,
-                {"gateway_followers": Store.Many(follower_partners)},
-                as_thread=True,
-            )
-        return res
+        )
+        partners_by_res_id = defaultdict(lambda: self.env["res.partner"])
+        for follower in followers:
+            partners_by_res_id[follower.res_id] |= follower.partner_id
+        res.many(
+            "gateway_followers",
+            "_store_gateway_channels_fields",
+            value=lambda thread: partners_by_res_id[thread.id].filtered(
+                "gateway_channel_ids"
+            ),
+            sudo=True,
+        )
 
     def _check_can_update_message_content(self, messages):
         # We can delete the messages comming from a gateway on not channels
@@ -130,11 +137,13 @@ class MailThread(models.AbstractModel):
         if body == "":
             # Unlink the message
             for gateway_msg in message.gateway_message_ids:
-                gateway_msg.gateway_message_id = False
-                Store(bus_channel=gateway_msg._bus_channel()).add(
+                # sudo: mail.message - the user may not be the author of the
+                # gateway message, they only remove the link to the record
+                gateway_msg.sudo().gateway_message_id = False
+                Store(bus_channel=gateway_msg).add(
                     gateway_msg,
                     {"gateway_thread_data": gateway_msg.sudo().gateway_thread_data},
-                ).bus_send()
+                )
         return result
 
     def _get_allowed_message_params(self):
