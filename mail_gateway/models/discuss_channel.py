@@ -1,11 +1,14 @@
 # Copyright 2024 Dixmit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
-
 from odoo import fields, models
+from odoo.tools import BinaryBytes
 
 from odoo.addons.mail.tools.discuss import Store
+
+
+def is_gateway_channel(channel):
+    return channel.channel_type == "gateway"
 
 
 class DiscussChannel(models.Model):
@@ -28,60 +31,80 @@ class DiscussChannel(models.Model):
         required=False,
     )
 
-    def _to_store(self, store: Store, fields):
-        res = super()._to_store(store, fields)
-        gw_channels = self.filtered("gateway_id")
-        if not gw_channels:
-            return res
-        # sudo: res.partner.gateway.channel - technical lookup by token, done
-        # once for the whole recordset (this runs for every channel on load)
-        partner_by_key = {}
-        for gw_channel in (
-            self.env["res.partner.gateway.channel"]
-            .sudo()
-            .search(
-                [
-                    ("gateway_id", "in", gw_channels.gateway_id.ids),
-                    (
-                        "gateway_token",
-                        "in",
-                        [t for t in gw_channels.mapped("gateway_channel_token") if t],
-                    ),
-                ]
+    def _store_channel_fields(self, res: Store.FieldList):  # pylint: disable=missing-return
+        super()._store_channel_fields(res)
+        # sudo: mail.gateway - name and type of the gateway of an accessible channel
+        res.one(
+            "gateway_id",
+            "_store_gateway_fields",
+            predicate=is_gateway_channel,
+            sudo=True,
+        )
+        res.attr("anonymous_name", predicate=is_gateway_channel)
+        if res.is_for_internal_users():
+            gateway_channels = self.filtered(is_gateway_channel)
+            sudo_gateway_channels = gateway_channels.sudo()
+            partner_by_key = {}
+            if sudo_gateway_channels:
+                for gateway_channel in (
+                    self.env["res.partner.gateway.channel"]
+                    .sudo()
+                    .search(
+                        [
+                            (
+                                "gateway_id",
+                                "in",
+                                sudo_gateway_channels.gateway_id.ids,
+                            ),
+                            (
+                                "gateway_token",
+                                "in",
+                                [
+                                    token
+                                    for token in sudo_gateway_channels.mapped(
+                                        "gateway_channel_token"
+                                    )
+                                    if token
+                                ],
+                            ),
+                        ]
+                    )
+                ):
+                    partner_by_key.setdefault(
+                        (gateway_channel.gateway_id.id, gateway_channel.gateway_token),
+                        gateway_channel.partner_id,
+                    )
+
+            # sudo: res.partner.gateway.channel - technical data to know which contact
+            # is behind gateway channels. The lookup is batched because Discuss loads
+            # every channel at once.
+            res.one(
+                "gateway_partner_id",
+                ["name"],
+                value=lambda channel: partner_by_key.get(
+                    (channel.sudo().gateway_id.id, channel.gateway_channel_token),
+                    self.env["res.partner"],
+                ),
+                predicate=is_gateway_channel,
             )
-        ):
-            partner_by_key.setdefault(
-                (gw_channel.gateway_id.id, gw_channel.gateway_token),
-                gw_channel.partner_id,
+            res.one(
+                "gateway_guest_id",
+                [],
+                value=lambda channel: (
+                    channel.channel_member_ids.guest_id
+                    if len(channel.channel_member_ids.guest_id) == 1
+                    else self.env["mail.guest"]
+                ),
+                predicate=is_gateway_channel,
             )
-        for record in gw_channels:
-            guests = record.channel_member_ids.guest_id
-            partner = partner_by_key.get(
-                (record.gateway_id.id, record.gateway_channel_token),
-                self.env["res.partner"],
-            )
-            store.add_model_values(
-                self._name,
-                {
-                    "id": record.id,
-                    # sudo: mail.gateway is readable only by administrators
-                    "gateway": record.sudo().gateway_id._gateway_info(),
-                    "gateway_id": record.id,
-                    "gateway_partner_id": partner.id,
-                    "gateway_guest_id": guests.id if len(guests) == 1 else False,
-                },
-            )
-        return res
 
     def _get_gateway_partner(self):
-        """Partner linked to the gateway token of the channel, if any."""
+        """Return the contact linked to the gateway channel, if any."""
         self.ensure_one()
         if not self.gateway_id or not self.gateway_channel_token:
             return self.env["res.partner"]
-        # sudo: res.partner.gateway.channel - technical lookup by token
         return (
             self.env["res.partner.gateway.channel"]
-            .sudo()
             .search(
                 [
                     ("gateway_id", "=", self.gateway_id.id),
@@ -91,13 +114,6 @@ class DiscussChannel(models.Model):
             )
             .partner_id
         )
-
-    def _get_gateway_guest(self):
-        """Guest of the channel when there is exactly one (sender not yet
-        linked to a partner), used by the "New Partner" action."""
-        self.ensure_one()
-        guests = self.channel_member_ids.guest_id
-        return guests if len(guests) == 1 else self.env["mail.guest"]
 
     def _generate_avatar_gateway(self):
         # We will use this function to set a default avatar on each module
@@ -109,12 +125,15 @@ class DiscussChannel(models.Model):
         avatar = self._generate_avatar_gateway()
         if not avatar:
             return False
-        return base64.b64encode(avatar.encode())
+        return BinaryBytes(avatar.encode())
+
+    def _types_allowing_unfollow(self):
+        return [*super()._types_allowing_unfollow(), "gateway"]
 
     def message_post(
         self, *, message_type="notification", gateway_type=False, **kwargs
     ):
-        # sudo: mail.gateway is readable only by administrators
+        # sudo: mail.gateway is readable only by administrators.
         gateway = self.sudo().gateway_id
         message = super().message_post(
             message_type=message_type,

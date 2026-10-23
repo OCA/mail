@@ -14,7 +14,7 @@ class MailGuestManage(models.TransientModel):
     def create_partner(self):
         partner = self.env["res.partner"].create(self._get_partner_vals())
         self._merge_partner(partner)
-        return partner.get_formview_action()
+        return partner.get_record_default_action()
 
     def _get_partner_vals(self):
         return {
@@ -38,7 +38,9 @@ class MailGuestManage(models.TransientModel):
             )
             member.channel_id.name = partner.complete_name
             member.unlink()
-        self.env["mail.message"].search(
+        # sudo: mail.message - the guest's messages are not written by the
+        # current user, who cannot edit them, but their author must be updated.
+        self.env["mail.message"].sudo().search(
             [("author_guest_id", "=", self.guest_id.id)]
         ).write(
             {
@@ -55,4 +57,4 @@ class MailGuestManage(models.TransientModel):
 
     def merge_partner(self):
         self._merge_partner(self.partner_id)
-        return self.partner_id.get_formview_action()
+        return self.partner_id.get_record_default_action()

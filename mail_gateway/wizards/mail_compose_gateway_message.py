@@ -1,7 +1,7 @@
 # Copyright 2024 Dixmit
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class MailComposeGatewayMessage(models.TransientModel):
@@ -34,7 +34,6 @@ class MailComposeGatewayMessage(models.TransientModel):
         "wizard_id",
         "partner_id",
         "Additional Contacts",
-        domain=lambda r: r._partner_ids_domain(),
     )
     # Dummy compatibility with other OCA modules
     # OCA/mail_attach_existing_attachment
@@ -61,8 +60,19 @@ class MailComposeGatewayMessage(models.TransientModel):
         string="Bcc",
     )
 
-    def _partner_ids_domain(self):
-        return [("id", "in", self.env.context.get("default_partner_ids", []))]
+    @api.depends("wizard_partner_ids")
+    def _compute_recipient_partners(self):
+        # Messages are delivered through the selected gateway channels, so the
+        # recipients are the gateway partners, never the ones suggested by a
+        # mail template. partner_ids shares its relation with wizard_partner_ids.
+        for composer in self:
+            composer.partner_ids = composer.wizard_partner_ids
+            composer.partner_cc_ids = False
+
+    @api.depends("wizard_channel_ids")
+    def _compute_partner_ids_all_have_email(self):
+        # Gateway recipients do not need an email address
+        self.partner_ids_all_have_email = True
 
     def _prepare_mail_values_dynamic(self, res_ids):
         self.ensure_one()

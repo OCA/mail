@@ -1,6 +1,8 @@
 # Copyright 2024 Dixmit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import api, fields, models, tools
+from odoo import api, fields, models
+
+from odoo.addons.mail.tools.discuss import Store
 
 
 class MailGateway(models.Model):
@@ -63,7 +65,7 @@ class MailGateway(models.Model):
     def _get_webhook_url(self):
         return "{}/gateway/{}/{}/update".format(
             self.webhook_url
-            or self.env["ir.config_parameter"].sudo().get_param("web.base.url"),
+            or self.env["ir.config_parameter"].sudo().get_str("web.base.url"),
             self.gateway_type,
             self.webhook_key,
         )
@@ -98,17 +100,17 @@ class MailGateway(models.Model):
             or "webhook_secret" in vals
             or "webhook_user_id" in vals
         ):
-            self.env.registry.clear_cache()
+            self.env.transaction.invalidate_ormcache()
         return res
 
     @api.model_create_multi
     def create(self, mvals):
         res = super().create(mvals)
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return res
 
     @api.model
-    @tools.ormcache("state", "gateway_type")
+    @api.ormcache("state", "gateway_type")
     def _get_gateway_map(self, state="integrated", gateway_type=False):
         result = {}
         for record in self.sudo().search(
@@ -146,3 +148,6 @@ class MailGateway(models.Model):
             "name": self.name,
             "type": self.gateway_type,
         }
+
+    def _store_gateway_fields(self, res: Store.FieldList):
+        res.extend(["name", "gateway_type"])

@@ -32,8 +32,20 @@ class MailMessageGatewayLink(models.TransientModel):
             message_type="comment",
             attachment_ids=self.message_id.attachment_ids.ids,
         )
-        self.message_id.gateway_message_id = new_message
-        Store(bus_channel=self.message_id._bus_channel()).add(
+        # sudo: mail.message - the user may not be the author of the gateway
+        # message, they only store the record it has been linked to
+        self.message_id.sudo().gateway_message_id = new_message
+        Store(bus_channel=self.message_id).add(
             self.message_id,
             {"gateway_thread_data": self.message_id.sudo().gateway_thread_data},
-        ).bus_send()
+        )
+        # Let the web client refresh the chatter of the record, if it is shown
+        return {
+            "type": "ir.actions.act_window_close",
+            "infos": {
+                "gateway_linked_thread": {
+                    "model": self.resource_ref._name,
+                    "id": self.resource_ref.id,
+                }
+            },
+        }

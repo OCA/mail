@@ -13,7 +13,7 @@
                         <button
                             type="object"
                             string="Integrate Webhook"
-                            icon="fa-plug"
+                            icon="power"
                             name="set_webhook"
                             invisible="not can_set_webhook or integrated_webhook_state"
                         />
@@ -21,14 +21,14 @@
                             type="object"
                             string="Update Webhook"
                             name="update_webhook"
-                            icon="fa-refresh"
+                            icon="refresh"
                             invisible="not can_set_webhook or integrated_webhook_state != 'integrated'"
                         />
                         <button
                             type="object"
                             string="Remove Webhook"
                             name="remove_webhook"
-                            icon="fa-remove"
+                            icon="close"
                             invisible="not integrated_webhook_state"
                         />
                     </div>

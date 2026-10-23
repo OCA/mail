@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="mail_gateway.GatewayFollowerView">
-        <div class="o_gateway_composer_selector">
+    <t t-name="mail_gateway.GatewayFollower">
+        <div class="o_gateway_composer_selector d-flex align-items-center gap-2 mt-1">
             <span
-                class="o_gateway_composer_selector_partner"
-                t-esc="composerGatewayFollower.name"
+                class="o_gateway_composer_selector_partner text-truncate"
+                t-out="this.props.follower.name"
             />
             <select
                 name="gatewayChannel"
                 class="o_input o_gateway_composer_selector_channel"
-                t-on-change="onChangeGatewayChannel"
+                t-on-change="this.onChangeGatewayChannel"
             >
                 <option value="">Not selected</option>
                 <t
-                    t-foreach="composerGatewayFollower.gateway_channels"
+                    t-foreach="this.props.follower.gateway_channel_ids"
                     t-as="gateway_channel"
                     t-key="gateway_channel.id"
                 >
                     <option
                         t-att-value="gateway_channel.id"
-                        t-esc="gateway_channel.name"
+                        t-att-selected="gateway_channel.id === this.selectedChannelId"
+                        t-out="gateway_channel.name"
                     />
                 </t>
             </select>

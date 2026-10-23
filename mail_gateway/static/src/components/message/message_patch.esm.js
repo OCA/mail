@@ -4,7 +4,7 @@ import {patch} from "@web/core/utils/patch";
 
 patch(Message.prototype, {
     onClickLinkGatewayToThread() {
-        this.env.services.action.doAction({
+        return this.env.services.action.doAction({
             name: _t("Link Message to thread"),
             type: "ir.actions.act_window",
             res_model: "mail.message.gateway.link",
@@ -14,20 +14,21 @@ patch(Message.prototype, {
         });
     },
     onClickSendWithGateway() {
-        this.env.services.action.doAction({
+        return this.env.services.action.doAction({
             name: _t("Send with gateway"),
             type: "ir.actions.act_window",
             res_model: "mail.message.gateway.send",
             context: {
-                ...this.props.message.gateway_channel_data,
-                default_message_id: this.props.message.id,
+                ...this.message.gateway_channel_data,
+                default_message_id: this.message.id,
             },
             views: [[false, "form"]],
             target: "new",
         });
     },
-    openGatewayThreadRecord() {
-        this.store.env.services.action.doAction({
+    openGatewayThreadRecord(ev) {
+        ev?.preventDefault();
+        return this.env.services.action.doAction({
             type: "ir.actions.act_window",
             res_id: this.message.gateway_thread_data.id,
             res_model: this.message.gateway_thread_data.model,

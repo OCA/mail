@@ -26,24 +26,44 @@ class MailNotification(models.Model):
     def _set_read_gateway(self):
         self.sudo().write({"is_read": True, "read_date": fields.Datetime.now()})
 
-    def _to_store_defaults(self, target):
-        return super()._to_store_defaults(target) + [
-            "gateway_type",
-            Store.One(
-                "gateway_channel_id",
-                [
-                    "name",
-                    Store.Attr("display_name", predicate=lambda p: not p.name),
-                ],
+    def _filtered_for_web_client(self):
+        """Always show gateway notifications, they hold the delivery status."""
+        gateway_notifications = self.filtered(
+            lambda n: n.notification_type == "gateway"
+        )
+        return (
+            gateway_notifications
+            | super(
+                MailNotification, self - gateway_notifications
+            )._filtered_for_web_client()
+        )
+
+    def _store_notification_fields(self, res: Store.FieldList):  # pylint: disable=missing-return
+        super()._store_notification_fields(res)
+        res.attr("gateway_type")
+        res.attr(
+            "failure_reason",
+            predicate=lambda n: (
+                n.notification_type == "gateway"
+                and n.notification_status in ("exception", "bounce")
             ),
-            # Shown in the message notification popover instead of the generic
-            # "Exception" (19.0 has no mail.resend.message wizard any more).
-            Store.Attr(
-                "gateway_failure_summary",
-                lambda n: n._get_gateway_failure_summary(),
-                predicate=lambda n: n.notification_type == "gateway",
+        )
+        res.attr(
+            "gateway_failure_summary",
+            value=lambda notification: notification._get_gateway_failure_summary(),
+            predicate=lambda notification: notification.notification_type == "gateway",
+        )
+        # sudo: discuss.channel - name of the gateway channel of an accessible
+        # notification
+        res.one(
+            "gateway_channel_id",
+            lambda res: (
+                res.attr("name"),
+                res.attr("display_name", predicate=lambda c: not c.name),
             ),
-        ]
+            predicate=lambda n: n.notification_type == "gateway",
+            sudo=True,
+        )
 
     def _get_gateway_failure_summary(self, max_length=300):
         self.ensure_one()
@@ -52,15 +72,18 @@ class MailNotification(models.Model):
             "bounce",
         ):
             return False
-        lines = [line.strip() for line in self.failure_reason.splitlines()]
-        summary = " · ".join(line for line in lines if line)
+        summary = " · ".join(
+            line
+            for line in (line.strip() for line in self.failure_reason.splitlines())
+            if line
+        )
         if len(summary) > max_length:
-            summary = summary[: max_length - 1] + "…"
+            return summary[: max_length - 1] + "…"
         return summary
 
     def send_gateway(self, auto_commit=False, raise_exception=False, parse_mode="HTML"):
         for record in self:
-            # sudo: mail.gateway is readable only by administrators
+            # sudo: mail.gateway is readable only by administrators.
             gateway = record.sudo().gateway_channel_id.gateway_id
             self.env[f"mail.gateway.{gateway.gateway_type}"]._send(
                 gateway,

@@ -1,0 +1,11 @@
+id,name,model_id,group_id/id,operation,domain
+manage_res_partner_gateway_channel_user,res.partner.gateway.channel,res.partner.gateway.channel,mail_gateway.gateway_user,crud,
+res_partner_gateway_channel_rule,res.partner.gateway.channel: multicompany rule,res.partner.gateway.channel,,crud,"[('company_id', 'in', company_ids + [False])]"
+access_mail_message_gateway_send_user,mail.message.gateway.send,mail.message.gateway.send,base.group_user,cru,
+access_mail_gateway_system,mail_gateway,mail.gateway,base.group_system,crud,
+mail_gateway_rule,Mail.gateway: multicompany rule,mail.gateway,,crud,"[('company_id', 'in', company_ids + [False])]"
+access_mail_guest_manage,mail.gateway.internal,mail.guest.manage,base.group_user,crud,
+access_mail_message_gateway_link,mail.message.link.all,mail.message.gateway.link,base.group_user,crud,
+access_mail_compose_gateway_message,access.mail.compose.gateway.message,mail.compose.gateway.message,base.group_user,cru,
+discuss_channel_gateway_rule,discuss.channel: access gateway,discuss.channel,mail_gateway.gateway_user,ru,"[('channel_type', '=', 'gateway'), ('company_id', 'in', company_ids + [False])]"
+ir_rule_discuss_channel_partner_group_user,discuss.channel.member: write its own entries on gateway channels members,discuss.channel.member,mail_gateway.gateway_user,ud,"[('channel_id.channel_type', '=', 'gateway')]"
