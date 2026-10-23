@@ -46,8 +46,38 @@ class MailGatewayAbstract(models.AbstractModel):
         channel = gateway.env["discuss.channel"].create(
             self._get_channel_vals(gateway, token, update)
         )
-        channel._broadcast(channel.channel_member_ids.mapped("partner_id").ids)
+        channel._broadcast(channel.channel_member_ids.partner_id.user_ids)
         return channel
+
+    def _get_channel_from_partner_channel(self, partner_channel):
+        """Return the discuss channel linked to a partner gateway channel.
+
+        It is created when it does not exist yet (e.g. the conversation was
+        started from Odoo), with the partner as member.
+        """
+        gateway = partner_channel.gateway_id
+        chat_id = gateway._get_channel_id(partner_channel.gateway_token)
+        if chat_id:
+            return gateway.env["discuss.channel"].browse(chat_id)
+        channel = gateway.env["discuss.channel"].create(
+            self._get_channel_vals_from_partner_channel(partner_channel)
+        )
+        channel._broadcast(channel.channel_member_ids.partner_id.user_ids)
+        return channel
+
+    def _get_channel_vals_from_partner_channel(self, partner_channel):
+        # Generic values: gateway implementations usually read the author from
+        # the incoming update, which does not exist here.
+        vals = self.env["mail.gateway.abstract"]._get_channel_vals(
+            partner_channel.gateway_id, partner_channel.gateway_token, {}
+        )
+        partner = partner_channel.partner_id
+        vals["name"] = partner.name or vals["name"]
+        if partner not in partner_channel.gateway_id.member_ids.partner_id:
+            vals["channel_member_ids"].append(
+                Command.create({"partner_id": partner.id})
+            )
+        return vals
 
     def _get_author(self, gateway, update):
         return False

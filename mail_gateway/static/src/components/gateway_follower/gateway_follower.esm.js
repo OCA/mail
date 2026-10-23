@@ -1,43 +1,55 @@
-import {Component} from "@odoo/owl";
+import {Component, types, useProps} from "@odoo/owl";
+import {useService} from "@web/core/utils/hooks";
 
+/**
+ * Selector of the gateway channel used to reach a follower from the chatter.
+ * The selection is stored in `thread.gateway_notifications`, which is sent
+ * along with the message.
+ */
 export class GatewayFollower extends Component {
-    static template = "mail_gateway.GatewayFollowerView";
-    static props = ["follower", "composer"];
+    static template = "mail_gateway.GatewayFollower";
+
     setup() {
-        this.channel = false;
-        this.follower_channel_ids = this.props.follower.gateway_channels.map(
-            (channel) => channel.id
-        );
-        this._clearGatewayNotifications();
+        this.store = useService("mail.store");
+        this.props = useProps({
+            follower: types.instanceOf(this.store["res.partner"]),
+            thread: types.instanceOf(this.store["mail.thread"]),
+        });
+        this.clearSelection();
     }
-    get composerGatewayFollower() {
-        return this.props.follower;
+
+    get followerChannelIds() {
+        return this.props.follower.gateway_channel_ids.map((channel) => channel.id);
     }
-    _getMessageData() {
-        return {
-            partner_id: this.props.follower.id,
-            channel_type: "gateway",
-            gateway_channel_id: this.channel,
-        };
+
+    get selectedChannelId() {
+        return this.props.thread.gateway_notifications.find((notification) =>
+            this.followerChannelIds.includes(notification.gateway_channel_id)
+        )?.gateway_channel_id;
     }
-    _clearGatewayNotifications() {
-        this.props.composer.thread.gateway_notifications =
-            this.props.composer.thread.gateway_notifications.filter(
-                (gateway_notification) => {
-                    return !this.follower_channel_ids.includes(
-                        gateway_notification.gateway_channel_id
-                    );
-                }
+
+    clearSelection() {
+        const followerChannelIds = this.followerChannelIds;
+        this.props.thread.gateway_notifications =
+            this.props.thread.gateway_notifications.filter(
+                (notification) =>
+                    !followerChannelIds.includes(notification.gateway_channel_id)
             );
     }
+
+    /** @param {Event} ev */
     onChangeGatewayChannel(ev) {
-        this.channel = parseInt(ev.target.options[ev.target.selectedIndex].value, 10);
-        if (this.channel) {
-            this.props.composer.thread.gateway_notifications.push(
-                this._getMessageData()
-            );
-        } else {
-            this._clearGatewayNotifications();
+        const channelId = parseInt(ev.target.value, 10);
+        this.clearSelection();
+        if (channelId) {
+            this.props.thread.gateway_notifications = [
+                ...this.props.thread.gateway_notifications,
+                {
+                    partner_id: this.props.follower.id,
+                    channel_type: "gateway",
+                    gateway_channel_id: channelId,
+                },
+            ];
         }
     }
 }

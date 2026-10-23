@@ -5,8 +5,8 @@ import json
 import logging
 from unittest.mock import MagicMock, patch
 
-from odoo.http import _request_stack
-from odoo.tests import tagged
+from odoo.http import request_var
+from odoo.tests import new_test_user, tagged
 
 from odoo.addons.mail.tools.discuss import Store
 from odoo.addons.mail_gateway.controllers.gateway import GatewayController
@@ -52,7 +52,7 @@ class TestMailGateway(MailGatewayTestCase):
         self.assertEqual(info[0]["name"], "Test Gateway")
 
     def test_webhook_url(self):
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        base_url = self.env["ir.config_parameter"].sudo().get_str("web.base.url")
         self.assertEqual(
             self.gateway.webhook_url,
             f"{base_url}/gateway/{self.GATEWAY_TYPE}/test-wh-key-001/update",
@@ -342,6 +342,36 @@ class TestMailGateway(MailGatewayTestCase):
         child_msgs = channel.message_ids.filtered(lambda m: m.gateway_message_id == msg)
         self.assertTrue(child_msgs)
 
+    def test_send_to_gateway_thread_creates_missing_channel(self):
+        gw_channel = self.env["res.partner.gateway.channel"].create(
+            {
+                "partner_id": self.partner.id,
+                "gateway_id": self.gateway.id,
+                "gateway_token": "send-new-tok",
+            }
+        )
+        self.assertFalse(self.gateway._get_channel_id("send-new-tok"))
+        msg = self.partner.message_post(body="Hello gateway", message_type="comment")
+        with patch.object(
+            type(self.env["mail.message"]), "_notify_message_notification_update"
+        ) as notify_update:
+            msg._send_to_gateway_thread(gw_channel)
+        notify_update.assert_called_once()
+        channel = self.env["discuss.channel"].browse(
+            self.gateway._get_channel_id("send-new-tok")
+        )
+        self.assertTrue(channel)
+        self.assertEqual(channel.name, self.partner.name)
+        self.assertIn(self.partner, channel.channel_member_ids.partner_id)
+        self.assertTrue(
+            channel.message_ids.filtered(lambda m: m.gateway_message_id == msg)
+        )
+        notification = msg.notification_ids.filtered(
+            lambda n: n.notification_type == "gateway"
+        )
+        self.assertEqual(notification.gateway_channel_id, channel)
+        self.assertEqual(msg.gateway_type, self.GATEWAY_TYPE)
+
     # ── mail.compose.gateway.message wizard ───────────────────────────────────
 
     def test_compose_gateway_message_static_values(self):
@@ -390,20 +420,92 @@ class TestMailGateway(MailGatewayTestCase):
         values = wizard._prepare_mail_values_dynamic([self.partner.id])
         self.assertIn("gateway_notifications", values[self.partner.id])
 
+    def _create_compose_gateway_channel(self, token):
+        channel = self.env["mail.gateway.abstract"]._get_channel(
+            self.gateway, token, {}, force_create=True
+        )
+        gw_channel = self.env["res.partner.gateway.channel"].create(
+            {
+                "partner_id": self.partner.id,
+                "gateway_id": self.gateway.id,
+                "gateway_token": token,
+            }
+        )
+        return channel, gw_channel
+
+    def test_compose_gateway_message_send_with_template(self):
+        channel, gw_channel = self._create_compose_gateway_channel("compose-tpl-tok")
+        template = self.env["mail.template"].create(
+            {
+                "name": "Gateway template",
+                "model_id": self.env.ref("base.model_res_partner").id,
+                "body_html": '<p>Hello <t t-out="object.name"/></p>',
+            }
+        )
+        wizard = self.env["mail.compose.gateway.message"].create(
+            {
+                "model": "res.partner",
+                "res_ids": [self.partner.id],
+                "template_id": template.id,
+                "wizard_channel_ids": [gw_channel.id],
+            }
+        )
+        wizard.action_send_mail()
+        message = self.partner.message_ids[0]
+        self.assertIn(self.partner.name, message.body)
+        notification = message.notification_ids.filtered(
+            lambda n: n.notification_type == "gateway"
+        )
+        self.assertEqual(notification.gateway_channel_id, channel)
+        self.assertTrue(
+            channel.message_ids.filtered(lambda m: m.gateway_message_id == message)
+        )
+
+    def test_compose_gateway_message_schedule(self):
+        channel, gw_channel = self._create_compose_gateway_channel("compose-sch-tok")
+        wizard = self.env["mail.compose.gateway.message"].create(
+            {
+                "model": "res.partner",
+                "res_ids": [self.partner.id],
+                "body": "<p>Scheduled</p>",
+                "wizard_channel_ids": [gw_channel.id],
+                "scheduled_date": "2100-01-01 00:00:00",
+            }
+        )
+        wizard.action_schedule_message()
+        scheduled = self.env["mail.scheduled.message"].search(
+            [("model", "=", "res.partner"), ("res_id", "=", self.partner.id)]
+        )
+        self.assertEqual(len(scheduled), 1)
+        scheduled._post_message()
+        message = self.partner.message_ids[0]
+        self.assertIn("Scheduled", message.body)
+        self.assertTrue(
+            message.notification_ids.filtered(
+                lambda n: (
+                    n.notification_type == "gateway" and n.gateway_channel_id == channel
+                )
+            )
+        )
+
+    # ── security ──────────────────────────────────────────────────────────────
+
+    def test_gateway_channel_access_rights(self):
+        channel = self.env["mail.gateway.abstract"]._get_channel(
+            self.gateway, "access-tok", {}, force_create=True
+        )
+        self.assertFalse(channel.with_user(self.basic_user).has_access("read"))
+        self.basic_user.group_ids |= self.env.ref("mail_gateway.gateway_user")
+        self.assertTrue(channel.with_user(self.basic_user).has_access("read"))
+        self.assertTrue(channel.with_user(self.basic_user).has_access("write"))
+        self.assertFalse(channel.with_user(self.basic_user).has_access("unlink"))
+
     # ── res.users / res.users.settings ────────────────────────────────────────
 
     def test_user_gateway_ids(self):
         user = self.env["res.users"].browse(self.env.uid)
         user.gateway_ids = [self.gateway.id]
         self.assertIn(self.gateway, user.gateway_ids)
-
-    def test_users_settings_gateway_category_field(self):
-        settings = self.env["res.users.settings"]._find_or_create_for_user(
-            self.env.user
-        )
-        self.assertTrue(settings.is_discuss_sidebar_category_gateway_open)
-        settings.is_discuss_sidebar_category_gateway_open = False
-        self.assertFalse(settings.is_discuss_sidebar_category_gateway_open)
 
     # ── mail.thread extensions ─────────────────────────────────────────────────
 
@@ -435,7 +537,7 @@ class TestMailGateway(MailGatewayTestCase):
             }
         ]
         recipients = self.env["mail.thread"]._notify_get_recipients(
-            msg, {}, gateway_notifications=gateway_notifications
+            msg, gateway_notifications=gateway_notifications
         )
         self.assertEqual(len(recipients), 1)
         self.assertEqual(recipients[0]["notif"], "gateway")
@@ -448,16 +550,9 @@ class TestMailGateway(MailGatewayTestCase):
         recipients = (
             self.env["mail.thread"]
             .with_context(link_gateway_message=True)
-            ._notify_get_recipients(msg, {})
+            ._notify_get_recipients(msg)
         )
         self.assertEqual(recipients, [])
-
-    # ── hooks ─────────────────────────────────────────────────────────────────
-
-    def test_pre_init_hook_is_idempotent(self):
-        from ..hooks import pre_init_hook
-
-        pre_init_hook(self.env)
 
     # ── discuss.channel additional coverage ───────────────────────────────────
 
@@ -471,14 +566,28 @@ class TestMailGateway(MailGatewayTestCase):
         channel = self.env["discuss.channel"].create({"name": "Regular"})
         channel._generate_avatar()  # delegates to super()
 
-    def test_discuss_channel_to_store(self):
+    def test_discuss_channel_store_fields(self):
         impl = self.env["mail.gateway.abstract"]
         channel = impl._get_channel(self.gateway, "ch-store-tok", {}, force_create=True)
-        store = Store()
-        channel._to_store(
-            store,
-            ["gateway_id", "gateway_token", "gateway_message_ids", "channel_type"],
+        self.env["res.partner.gateway.channel"].create(
+            {
+                "partner_id": self.partner.id,
+                "gateway_id": self.gateway.id,
+                "gateway_token": "ch-store-tok",
+            }
         )
+        channel.anonymous_name = "Anonymous"
+        result = Store().add(channel, "_store_channel_fields")._build_result()
+        channel_data = next(
+            data for data in result["discuss.channel"] if data["id"] == channel.id
+        )
+        self.assertEqual(channel_data["gateway_id"], self.gateway.id)
+        self.assertEqual(channel_data["anonymous_name"], "Anonymous")
+        gateway_data = next(
+            data for data in result["mail.gateway"] if data["id"] == self.gateway.id
+        )
+        self.assertEqual(gateway_data["gateway_type"], self.GATEWAY_TYPE)
+        self.assertEqual(channel._get_gateway_partner(), self.partner)
 
     # ── mail.thread additional coverage ───────────────────────────────────────
 
@@ -513,12 +622,26 @@ class TestMailGateway(MailGatewayTestCase):
             msg, [{"notif": "email", "gateway_channel_id": gw_channel.id}]
         )
 
-    def test_thread_to_store_no_followers(self):
+    def test_thread_store_fields_no_followers(self):
         target = self.env["res.partner"].create({"name": "No-Follower"})
-        store = Store()
-        target._thread_to_store(store, [], request_list=["x"])
+        result = (
+            Store()
+            .add(
+                target,
+                "_store_thread_fields",
+                as_thread=True,
+                fields_params={"request_list": ["followers"]},
+            )
+            ._build_result()
+        )
+        thread_data = next(
+            data
+            for data in result["mail.thread"]
+            if data["model"] == "res.partner" and data["id"] == target.id
+        )
+        self.assertEqual(thread_data.get("gateway_followers", []), [])
 
-    def test_thread_to_store_with_gateway_followers(self):
+    def test_thread_store_fields_with_gateway_followers(self):
         gw_channel = self.env["res.partner.gateway.channel"].create(
             {
                 "partner_id": self.partner.id,
@@ -528,9 +651,16 @@ class TestMailGateway(MailGatewayTestCase):
         )
         target = self.env["res.partner"].create({"name": "Thread Target"})
         target.message_subscribe(self.partner.ids)
-        store = Store()
-        target._thread_to_store(store, [], request_list=["x"])
-        result = store.get_result()
+        result = (
+            Store()
+            .add(
+                target,
+                "_store_thread_fields",
+                as_thread=True,
+                fields_params={"request_list": ["followers"]},
+            )
+            ._build_result()
+        )
         thread_data = next(
             data
             for data in result["mail.thread"]
@@ -540,18 +670,63 @@ class TestMailGateway(MailGatewayTestCase):
         partner_data = next(
             data for data in result["res.partner"] if data["id"] == self.partner.id
         )
-        self.assertEqual(
-            [channel["id"] for channel in partner_data["gateway_channels"]],
-            gw_channel.ids,
+        self.assertEqual(partner_data["gateway_channel_ids"], gw_channel.ids)
+
+    def _post_guest_message(self, token, body):
+        """Post on a new gateway channel a message written by a guest."""
+        guest = self.env["mail.guest"].create(
+            {
+                "name": "Link Guest",
+                "gateway_id": self.gateway.id,
+                "gateway_token": token,
+            }
         )
+        channel = self.env["mail.gateway.abstract"]._get_channel(
+            self.gateway, token, {}, force_create=True
+        )
+        channel._add_members(guests=guest)
+        return (
+            channel.with_user(self.env.ref("base.public_user"))
+            .sudo()
+            .with_context(guest=guest, no_gateway_notification=True)
+            .message_post(body=body, message_type="comment")
+            .sudo(False)
+            .with_env(self.env)
+        )
+
+    def test_gateway_link_and_unlink_guest_message_as_user(self):
+        """A gateway user (not superuser) can link a message they did not write
+        to a record, and unlink it again by deleting the linked message."""
+        admin_env = self.env(user=self.env.ref("base.user_admin"))
+        msg = self._post_guest_message("link-guest-tok", "Link me")
+        target = self.env["res.partner"].create({"name": "Link Guest Target"})
+        action = (
+            admin_env["mail.message.gateway.link"]
+            .create(
+                {
+                    "message_id": msg.id,
+                    "resource_ref": f"res.partner,{target.id}",
+                }
+            )
+            .link_message()
+        )
+        # The web client is told which chatter to refresh
+        self.assertEqual(
+            action["infos"]["gateway_linked_thread"],
+            {"model": "res.partner", "id": target.id},
+        )
+        linked_msg = msg.gateway_message_id
+        self.assertEqual(linked_msg.model, "res.partner")
+        self.assertEqual(linked_msg.res_id, target.id)
+        target.with_env(admin_env)._message_update_content(
+            linked_msg.with_env(admin_env), body=""
+        )
+        self.assertFalse(msg.gateway_message_id)
 
     def test_check_can_update_message_content_non_channel(self):
         msg = self.partner.message_post(body="Non-channel msg", message_type="comment")
         # On a non-discuss.channel thread, messages without gateway_message_ids pass
-        try:
-            self.partner._check_can_update_message_content(msg)
-        except Exception as err:
-            _logger.info("Expected access-right error: %s", err)
+        self.partner._check_can_update_message_content(msg)
 
     def test_message_update_content_empty_body_unlinks_gateway(self):
         impl = self.env["mail.gateway.abstract"]
@@ -567,7 +742,7 @@ class TestMailGateway(MailGatewayTestCase):
 
     # ── res.partner._to_store ─────────────────────────────────────────────────
 
-    def test_partner_to_store_adds_gateway_channels(self):
+    def test_partner_store_gateway_channels(self):
         gw_channel = self.env["res.partner.gateway.channel"].create(
             {
                 "partner_id": self.partner.id,
@@ -575,31 +750,28 @@ class TestMailGateway(MailGatewayTestCase):
                 "gateway_token": "to-store-tok",
             }
         )
-        result = Store().add(self.partner).get_result()
+        result = (
+            Store().add(self.partner, "_store_gateway_channels_fields")._build_result()
+        )
         partner_data = next(
             data for data in result["res.partner"] if data["id"] == self.partner.id
         )
-        self.assertEqual(partner_data["gateway_channels"], gw_channel.mail_format())
+        self.assertEqual(partner_data["gateway_channel_ids"], gw_channel.ids)
+        channel_data = result["res.partner.gateway.channel"][0]
+        self.assertEqual(channel_data["id"], gw_channel.id)
+        self.assertEqual(channel_data["gateway_id"], self.gateway.id)
 
-    def test_partner_to_store_gateway_channels_only_when_requested(self):
-        self.env["res.partner.gateway.channel"].create(
-            {
-                "partner_id": self.partner.id,
-                "gateway_id": self.gateway.id,
-                "gateway_token": "to-store-fields-tok",
-            }
-        )
-        result = Store().add(self.partner, ["name"]).get_result()
-        self.assertNotIn("gateway_channels", result["res.partner"][0])
-        result = Store().add(self.partner, ["gateway_channels"]).get_result()
-        self.assertIn("gateway_channels", result["res.partner"][0])
+    # ── res.users init data ───────────────────────────────────────────────────
 
-    # ── res.users._init_messaging ─────────────────────────────────────────────
-
-    def test_init_messaging(self):
+    def test_store_init_global_fields(self):
         self.env.user.gateway_ids = [self.gateway.id]
-        store = Store()
-        self.env.user._init_messaging(store)
+        result = (
+            Store()
+            .add_global_values(self.env.user._store_init_global_fields)
+            ._build_result()
+        )
+        self.assertEqual(result["Store"]["gateways"], [self.gateway.id])
+        self.assertIn("has_gateway_access", result["Store"])
 
     # ── gateway_user group-gated paths ────────────────────────────────────────
 
@@ -625,16 +797,16 @@ class TestMailGateway(MailGatewayTestCase):
         mock_req = MagicMock()
         mock_req.session.uid = self.env.uid
         mock_req.env = self.env
-        # Bind the request on the stack so the `request` proxy resolves in
+        # Bind the request so the `request` proxy resolves in
         # every `_build_bus_channel_list` override (bus reads it too).
-        _request_stack.push(mock_req)
+        token = request_var.set(mock_req)
         try:
             result = self.env["ir.websocket"]._build_bus_channel_list([])
             self.assertTrue(
                 any(getattr(c, "channel_type", None) == "gateway" for c in result)
             )
         finally:
-            _request_stack.pop()
+            request_var.reset(token)
             gateway_group.user_ids -= self.env.user
 
     # ── mail.notification.send_gateway failure path ───────────────────────────
@@ -752,7 +924,7 @@ class TestMailGateway(MailGatewayTestCase):
 
     # ── mail.guest._to_store_defaults ─────────────────────────────────────────
 
-    def test_guest_to_store_defaults(self):
+    def test_guest_store_gateway(self):
         guest = self.env["mail.guest"].create(
             {
                 "name": "Store Guest",
@@ -760,9 +932,17 @@ class TestMailGateway(MailGatewayTestCase):
                 "gateway_token": "guest-store-tok",
             }
         )
-        store = Store()
-        store.add(guest)
-        self.assertTrue(store.get_result())
+        impl = self.env["mail.gateway.abstract"]
+        channel = impl._get_channel(
+            self.gateway, "guest-store-tok", {}, force_create=True
+        )
+        channel._add_members(guests=guest)
+        member = channel.channel_member_ids.filtered(lambda m: m.guest_id == guest)
+        result = Store().add(member, "_store_member_fields")._build_result()
+        guest_data = next(
+            data for data in result["mail.guest"] if data["id"] == guest.id
+        )
+        self.assertEqual(guest_data["gateway_id"], self.gateway.id)
 
     # ── discuss.channel additional branches ───────────────────────────────────
 
@@ -789,14 +969,14 @@ class TestMailGateway(MailGatewayTestCase):
         mock_req = MagicMock()
         mock_req.session.uid = False
         mock_req.env = self.env
-        _request_stack.push(mock_req)
+        token = request_var.set(mock_req)
         try:
             result = self.env["ir.websocket"]._build_bus_channel_list([])
             self.assertFalse(
                 any(getattr(c, "channel_type", None) == "gateway" for c in result)
             )
         finally:
-            _request_stack.pop()
+            request_var.reset(token)
 
     def test_build_bus_channel_list_non_gateway_user(self):
         # Session present but user is not in the gateway group → no gateway channels.
@@ -806,14 +986,14 @@ class TestMailGateway(MailGatewayTestCase):
         mock_req = MagicMock()
         mock_req.session.uid = self.basic_user.id
         mock_req.env = basic_env
-        _request_stack.push(mock_req)
+        token = request_var.set(mock_req)
         try:
             result = basic_env["ir.websocket"]._build_bus_channel_list([])
             self.assertFalse(
                 any(getattr(c, "channel_type", None) == "gateway" for c in result)
             )
         finally:
-            _request_stack.pop()
+            request_var.reset(token)
 
     # ── res.partner.gateway.channel display name without context ──────────────
 
@@ -889,7 +1069,6 @@ class TestMailGateway(MailGatewayTestCase):
         msg = self.partner.message_post(body="No channel type", message_type="comment")
         recipients = self.env["mail.thread"]._notify_get_recipients(
             msg,
-            {},
             gateway_notifications=[{"partner_id": self.partner.id}],
         )
         self.assertEqual(recipients, [])
@@ -909,7 +1088,6 @@ class TestMailGateway(MailGatewayTestCase):
         msg = self.partner.message_post(body="Types", message_type="comment")
         recipients = self.env["mail.thread"]._notify_get_recipients(
             msg,
-            {},
             gateway_notifications=[
                 {"partner_id": internal_partner.id, "channel_type": "gateway"},
                 {"partner_id": portal_user.partner_id.id, "channel_type": "gateway"},
@@ -950,6 +1128,44 @@ class TestMailGateway(MailGatewayTestCase):
             [("channel_id", "=", channel.id), ("partner_id", "=", target.id)]
         )
         self.assertTrue(partner_member)
+
+    def test_guest_manage_create_partner_as_gateway_user(self):
+        """A gateway user (not superuser) can turn the guest into a partner,
+        even if the guest's messages were not written by them."""
+        gateway_user = new_test_user(
+            self.env,
+            login="gw_manage_user",
+            groups="base.group_user,base.group_partner_manager,"
+            "mail_gateway.gateway_user",
+        )
+        self.gateway.member_ids = gateway_user
+        guest = self.env["mail.guest"].create(
+            {
+                "name": "Writing Guest",
+                "gateway_id": self.gateway.id,
+                "gateway_token": "guest-writer-tok",
+            }
+        )
+        channel = self.env["mail.gateway.abstract"]._get_channel(
+            self.gateway, "guest-writer-tok", {}, force_create=True
+        )
+        channel._add_members(guests=guest)
+        message = (
+            channel.with_user(self.env.ref("base.public_user"))
+            .sudo()
+            .with_context(guest=guest, no_gateway_notification=True)
+            .message_post(body="Hello", message_type="comment")
+        )
+        self.assertEqual(message.author_guest_id, guest)
+        self.env["mail.guest.manage"].with_user(gateway_user).create(
+            {"guest_id": guest.id}
+        ).create_partner()
+        partner = (
+            self.env["res.partner.gateway.channel"]
+            .search([("gateway_token", "=", "guest-writer-tok")])
+            .partner_id
+        )
+        self.assertEqual(message.author_id, partner)
 
 
 @tagged("post_install", "-at_install")
@@ -1000,7 +1216,7 @@ class TestMailGatewayController(MailGatewayTestCase):
         self.assertEqual(json.loads(mock_req.make_response.call_args[0][0]), {})
 
     def test_post_integrated_gateway(self):
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         mock_req = self._call("ctrl-wh-key", data=json.dumps({"msg": "hello"}).encode())
         self.assertEqual(json.loads(mock_req.make_response.call_args[0][0]), {})
 
@@ -1012,14 +1228,14 @@ class TestMailGatewayController(MailGatewayTestCase):
     def test_post_unverified_returns_empty(self):
         # _verify_update returns False → controller logs a WARNING and returns {}.
         impl_cls = type(self.env["mail.gateway.abstract"])
-        self.env.registry.clear_cache()
-        with patch.object(impl_cls, "_verify_update", return_value=False):
-            with self.assertLogs(
-                "odoo.addons.mail_gateway.controllers.gateway", "WARNING"
-            ):
-                mock_req = self._call(
-                    "ctrl-wh-key", data=json.dumps({"msg": "hi"}).encode()
-                )
+        self.env.transaction.invalidate_ormcache()
+        with (
+            patch.object(impl_cls, "_verify_update", return_value=False),
+            self.assertLogs("odoo.addons.mail_gateway.controllers.gateway", "WARNING"),
+        ):
+            mock_req = self._call(
+                "ctrl-wh-key", data=json.dumps({"msg": "hi"}).encode()
+            )
         self.assertEqual(json.loads(mock_req.make_response.call_args[0][0]), {})
 
     def test_get_pending_calls_receive_get_update(self):
@@ -1032,7 +1248,7 @@ class TestMailGatewayController(MailGatewayTestCase):
                 "integrated_webhook_state": "pending",
             }
         )
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         mock_req = self._call("pending-wh-key", method="GET")
         # _receive_get_update returns make_response({}) → called once
         mock_req.make_response.assert_called_once()
