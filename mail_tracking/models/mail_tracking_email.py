@@ -148,8 +148,18 @@ class MailTrackingEmail(models.Model):
         )
         if not self.env.is_superuser():
             records = self.browse(query)
+            # `records.ids` is already in the requested order: it comes from the
+            # ordered query built by super() above. Keep that order while
+            # filtering out the ids the user may not see, then build a query
+            # that enforces it. `_get_allowed_ids` returns a set (no order), and
+            # `_as_query(order)` passed the order *string* where the signature
+            # expects the boolean `ordered` (`_as_query(self, ordered=True)`):
+            # on a normal list load `order` is None -> `ordered=False` -> the
+            # resulting query imposed no ORDER BY at all, so the list came out
+            # in physical table order for any non-superuser.
             allowed_ids = self._get_allowed_ids(records.ids)
-            return self.browse(allowed_ids)._as_query(order)
+            ordered_ids = [rid for rid in records.ids if rid in allowed_ids]
+            return self.browse(ordered_ids)._as_query(ordered=True)
 
         return query
 
