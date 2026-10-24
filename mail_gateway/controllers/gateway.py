@@ -32,9 +32,11 @@ class GatewayController(Controller):
                         ("Content-Type", "application/json"),
                     ],
                 )
+            # Use update_env and not with_user: the ORM checks some accesses
+            # with the transaction user (e.g. res.partner forbids sudo commands)
+            request.update_env(user=bot_data["webhook_user_id"])
             return (
                 request.env[f"mail.gateway.{usage}"]
-                .with_user(bot_data["webhook_user_id"])
                 .with_company(bot_data["company_id"])
                 ._receive_get_update(bot_data, request, **kwargs)
             )
@@ -57,10 +59,9 @@ class GatewayController(Controller):
             or "utf-8"
         )
         jsonrequest = json.loads(request.httprequest.get_data().decode(charset))
-        dispatcher = (
-            request.env[f"mail.gateway.{usage}"]
-            .with_user(bot_data["webhook_user_id"])
-            .with_context(no_gateway_notification=True)
+        request.update_env(user=bot_data["webhook_user_id"])
+        dispatcher = request.env[f"mail.gateway.{usage}"].with_context(
+            no_gateway_notification=True
         )
         if not dispatcher._verify_update(bot_data, jsonrequest):
             _logger.warning(
