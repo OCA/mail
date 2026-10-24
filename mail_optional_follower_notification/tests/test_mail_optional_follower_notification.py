@@ -32,7 +32,7 @@ class TestMailOptionalFollowernotifications(TransactionCase):
         cls.mail_compose_context = ctx
         cls.MailCompose = cls.env["mail.compose.message"]
 
-    def _send_mail(self, recipients, notify_followers):
+    def _send_mail(self, recipients, notify_followers, cc_recipients=None):
         old_messages = self.env["mail.message"].search([])
         values = {
             "subject": "Your subject here",
@@ -40,6 +40,8 @@ class TestMailOptionalFollowernotifications(TransactionCase):
             "partner_ids": [Command.set(recipients.ids)],
             "notify_followers": notify_followers,
         }
+        if cc_recipients:
+            values["partner_cc_ids"] = [Command.set(cc_recipients.ids)]
         composer = self.MailCompose.with_context(**self.mail_compose_context).create(
             values
         )
@@ -91,4 +93,15 @@ class TestMailOptionalFollowernotifications(TransactionCase):
         message = self._send_mail(self.partner_no_follower, notify_followers=False)
         self.assertEqual(
             message.notification_ids.mapped("res_partner_id"), self.partner_no_follower
+        )
+
+    def test_explicit_cc_follower_is_notified_when_followers_disabled(self):
+        message = self._send_mail(
+            self.partner_no_follower,
+            notify_followers=False,
+            cc_recipients=self.partner_follower,
+        )
+        self.assertEqual(
+            set(message.notification_ids.mapped("res_partner_id").ids),
+            {self.partner_no_follower.id, self.partner_follower.id},
         )
