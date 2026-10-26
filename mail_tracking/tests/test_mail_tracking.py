@@ -571,6 +571,27 @@ class TestMailTracking(TransactionCase):
             self.assertEqual("Test error", tracking.error_description)
             self.assertTrue(self.recipient.email_bounced)
 
+    def test_message_partners_check_old_message(self):
+        """Old message with subtype whose notifications were already purged."""
+        message = self.env["mail.message"].create(
+            {
+                "model": "res.partner",
+                "res_id": self.sender.id,
+                "subtype_id": self.env.ref("mail.mt_note").id,
+                "message_type": "comment",
+            }
+        )
+        message.notification_ids.unlink()
+        mail, tracking = self.mail_send(self.recipient.email)
+        tracking.write({"mail_message_id": message.id, "partner_id": self.recipient.id})
+        tracking._message_partners_check(False, False)
+        notification = message.notification_ids.filtered(
+            lambda n: n.res_partner_id == self.recipient
+        )
+        self.assertEqual(notification.notification_type, "email")
+        self.assertEqual(notification.notification_status, "sent")
+        self.assertIn(self.recipient, message.notified_partner_ids)
+
     def test_partner_email_change(self):
         mail, tracking = self.mail_send(self.recipient.email)
         tracking.event_create("open", {})
