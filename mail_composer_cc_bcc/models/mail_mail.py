@@ -10,6 +10,7 @@ from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
 
 
 def format_emails(partners):
+    """List form, for the outgoing-dict slots (e.g. email_cc, email_to)."""
     return [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
 
 
@@ -18,6 +19,7 @@ def format_emails_raw(partners):
 
 
 def format_emails_str(partners):
+    """Comma-joined string form, for the mail.mail Char fields (e.g. email_cc)."""
     emails = format_emails(partners)
     return ", ".join(emails)
 
@@ -65,7 +67,7 @@ class MailMail(models.Model):
         partner_to = all_recipients - partners_cc_bcc
         email_to = format_emails(partner_to)
         email_to_raw = format_emails_raw(partner_to)
-        email_cc = format_emails_str(self.recipient_cc_ids)
+        email_cc = format_emails(self.recipient_cc_ids)
         email_bcc = [r.email for r in self.recipient_bcc_ids if r.email]
 
         # Collect recipients (RCPT TO) and update all emails
