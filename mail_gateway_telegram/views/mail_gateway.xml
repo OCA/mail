@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2021 Creu Blanca
      Copyright 2024 Dixmit
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-    <record model="ir.ui.view" id="mail_gateway_form_view">
+    <record id="mail_gateway_form_view" model="ir.ui.view">
         <field name="name">mail.gateway.form (in mail_gateway_telegram)</field>
         <field name="model">mail.gateway</field>
         <field name="inherit_id" ref="mail_gateway.mail_gateway_form_view" />
