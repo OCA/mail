@@ -69,7 +69,9 @@ class MailMessage(models.Model):
                 )
             else:
                 channels = self.env["res.partner.gateway.channel"]
-            record.gateway_channel_ids = channels
+            # Non-gateway users have no read access on the comodel, and Odoo
+            # checks it even when assigning an empty recordset.
+            record.sudo().gateway_channel_ids = channels
             record.gateway_channel_data = {
                 "channels": channels.ids,
                 "partners": channels.partner_id.ids,

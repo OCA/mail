@@ -1,12 +1,7 @@
 id,name,model_id,group_id/id,operation,domain
-access_res_partner_gateway_channel_portal,res.partner.gateway.channel.portal,res.partner.gateway.channel,base.group_portal,r,
-access_res_partner_gateway_channel_user,res.partner.gateway.channel,res.partner.gateway.channel,base.group_user,r,
 manage_res_partner_gateway_channel_user,res.partner.gateway.channel,res.partner.gateway.channel,mail_gateway.gateway_user,crud,
 res_partner_gateway_channel_rule,res.partner.gateway.channel: multicompany rule,res.partner.gateway.channel,,crud,"[('company_id', 'in', company_ids + [False])]"
 access_mail_message_gateway_send_user,mail.message.gateway.send,mail.message.gateway.send,base.group_user,cru,
-access_mail_gateway_portal,mail.gateway.portal,mail.gateway,base.group_portal,r,
-access_mail_gateway_public,mail.gateway.public,mail.gateway,base.group_public,r,
-access_mail_gateway_user,mail.gateway.user,mail.gateway,base.group_user,r,
 access_mail_gateway_system,mail_gateway,mail.gateway,base.group_system,crud,
 mail_gateway_rule,Mail.gateway: multicompany rule,mail.gateway,,crud,"[('company_id', 'in', company_ids + [False])]"
 access_mail_guest_manage,mail.gateway.internal,mail.guest.manage,base.group_user,crud,
