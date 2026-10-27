@@ -6,6 +6,8 @@ import mimetypes
 import traceback
 from io import BytesIO, StringIO
 
+from markupsafe import Markup
+
 from odoo import models
 from odoo.http import request
 from odoo.tools import html2plaintext
@@ -78,9 +80,9 @@ class MailGatewayTelegramService(models.AbstractModel):
 
     def _preprocess_update(self, gateway, update):
         for entity in update.message.entities:
-            if not entity.offset == 0:
+            if entity.offset != 0:
                 continue
-            if not entity.type == "bot_command":
+            if entity.type != "bot_command":
                 continue
             command = update.message.parse_entity(entity).split("/")[1]
             if hasattr(self, f"_command_{command}"):
@@ -115,17 +117,37 @@ class MailGatewayTelegramService(models.AbstractModel):
         return {}
 
     def _get_telegram_attachment_name(self, attachment):
-        if hasattr(attachment, "title"):
-            if attachment.title:
-                return attachment.title
-        if hasattr(attachment, "file_name"):
-            if attachment.file_name:
-                return attachment.file_name
+        if getattr(attachment, "title", False):
+            return attachment.title
+        if getattr(attachment, "file_name", False):
+            return attachment.file_name
         if isinstance(attachment, telegram.Sticker):
             return attachment.set_name or attachment.emoji or "sticker"
         if isinstance(attachment, telegram.Contact):
             return attachment.first_name
         return attachment.file_id
+
+    def _get_telegram_contact_vcard(self, contact):
+        """Build a vCard 3.0 from the data of a shared Telegram contact."""
+
+        def escape(value):
+            value = value or ""
+            for char in ("\\", ";", ","):
+                value = value.replace(char, f"\\{char}")
+            return value.replace("\n", "\\n")
+
+        first_name = escape(contact.first_name)
+        last_name = escape(contact.last_name)
+        lines = [
+            "BEGIN:VCARD",
+            "VERSION:3.0",
+            f"N:{last_name};{first_name};;;",
+            f"FN:{' '.join(filter(None, [first_name, last_name]))}",
+        ]
+        if contact.phone_number:
+            lines.append(f"TEL;TYPE=CELL:{escape(contact.phone_number)}")
+        lines.append("END:VCARD")
+        return "\r\n".join(lines) + "\r\n"
 
     async def _process_telegram_attachment(self, attachment):
         if isinstance(attachment, tuple):
@@ -142,10 +164,15 @@ class MailGatewayTelegramService(models.AbstractModel):
         ):
             return
         if isinstance(attachment, telegram.Contact):
-            data = attachment.vcard.encode("utf-8")
-        else:
-            file = await attachment.get_file()
-            data = bytes(await file.download_as_bytearray())
+            # Telegram apps usually share contacts without a vCard
+            vcard = attachment.vcard or self._get_telegram_contact_vcard(attachment)
+            return (
+                f"{self._get_telegram_attachment_name(attachment)}.vcf",
+                vcard.encode("utf-8"),
+                {},
+            )
+        file = await attachment.get_file()
+        data = bytes(await file.download_as_bytearray())
         file_name = self._get_telegram_attachment_name(attachment)
         if isinstance(attachment, telegram.Sticker):
             _logger.debug("Processing sticker %s", attachment)
@@ -173,10 +200,11 @@ class MailGatewayTelegramService(models.AbstractModel):
 
     def _process_update(self, chat, update):
         chat.ensure_one()
-        body = ""
+        body = Markup()
         attachments = []
         if update.message.text_html:
-            body = update.message.text_html
+            # Telegram already escapes the text when building its HTML version
+            body = Markup(update.message.text_html)
         if update.message.effective_attachment:
             effective_attachment = update.message.effective_attachment
             if isinstance(effective_attachment, list):
@@ -188,10 +216,11 @@ class MailGatewayTelegramService(models.AbstractModel):
                         current_attachment = attachment
                 effective_attachment = current_attachment
             if isinstance(effective_attachment, telegram.Location):
-                body += (
-                    f'<a target="_blank" href="https://www.google.com/maps/search/?api=1&query='
-                    f'{effective_attachment.latitude},{effective_attachment.longitude}">Location</a>'
-                )
+                body += Markup(
+                    '<a target="_blank" rel="noopener noreferrer" '
+                    'href="https://www.google.com/maps/search/?api=1&amp;query={},{}">'
+                    "Location</a>"
+                ).format(effective_attachment.latitude, effective_attachment.longitude)
             attachment_data = asyncio.run(
                 self._process_telegram_attachment(effective_attachment)
             )
@@ -199,16 +228,16 @@ class MailGatewayTelegramService(models.AbstractModel):
                 attachments.append(attachment_data)
         if len(body) > 0 or attachments:
             author = self._get_author(chat.gateway_id, update)
-            new_message = chat.sudo().message_post(
-                body=body,
-                author_id=author._name == "res.partner" and author.id,
-                gateway_type="telegram",
-                date=update.message.date.replace(tzinfo=None),
-                # message_id=update.message.message_id,
-                subtype_xmlid="mail.mt_comment",
-                message_type="comment",
-                attachments=attachments,
-            )
+            post_vals = {
+                "body": body,
+                "author_id": author._name == "res.partner" and author.id,
+                "gateway_type": "telegram",
+                "date": update.message.date.replace(tzinfo=None),
+                "subtype_xmlid": "mail.mt_comment",
+                "message_type": "comment",
+                "attachments": attachments,
+            }
+            new_message = self._as_author(chat, author).message_post(**post_vals)
             self._post_process_message(new_message, chat)
             related_message_id = (
                 update.message.reply_to_message and update.message.reply_to_message.id
@@ -219,30 +248,32 @@ class MailGatewayTelegramService(models.AbstractModel):
                     .search(
                         [
                             ("gateway_channel_id", "=", chat.id),
-                            ("gateway_message_id", "=", related_message_id),
+                            ("gateway_message_id", "=", str(related_message_id)),
                         ]
                     )
                     .mail_message_id
                 )
-                if related_message and related_message.gateway_message_id:
-                    new_related_message = (
-                        self.env[related_message.gateway_message_id.model]
-                        .browse(related_message.gateway_message_id.res_id)
-                        .sudo()
-                        .message_post(
-                            body=body,
-                            author_id=author._name == "res.partner" and author.id,
-                            gateway_type="telegram",
-                            date=update.message.date.replace(tzinfo=None),
-                            # message_id=update.message.message_id,
-                            subtype_xmlid="mail.mt_comment",
-                            message_type="comment",
-                            attachments=attachments,
-                        )
+                original = related_message.gateway_message_id
+                if original and original.model and original.res_id:
+                    # The answer is also posted on the record the message came from
+                    record = self.env[original.model].browse(original.res_id)
+                    new_related_message = self._as_author(record, author).message_post(
+                        **post_vals
                     )
                     new_message.gateway_message_id = new_related_message
                     self._post_process_reply(related_message)
             return new_message
+
+    def _as_author(self, record, author):
+        """Odoo only sets a guest as author when posting as the public user
+        with the guest in the context."""
+        if author._name != "mail.guest":
+            return record.sudo()
+        return (
+            record.with_user(self.env.ref("base.public_user"))
+            .sudo()
+            .with_context(guest=author)
+        )
 
     async def _send_telegram(
         self,
@@ -294,7 +325,7 @@ class MailGatewayTelegramService(models.AbstractModel):
                     parse_mode=parse_mode,
                 )
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - any error is a failed delivery
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())
@@ -320,14 +351,7 @@ class MailGatewayTelegramService(models.AbstractModel):
                     "gateway_message_id": message.id,
                 }
             )
-        self.env["bus.bus"]._sendone(
-            record.gateway_channel_id,
-            "mail.message/insert",
-            {
-                "id": record.mail_message_id.id,
-                "gateway_type": record.mail_message_id.gateway_type,
-            },
-        )
+        record.mail_message_id._notify_message_notification_update()
         if auto_commit is True:
             # pylint: disable=invalid-commit
             self.env.cr.commit()
@@ -361,11 +385,15 @@ class MailGatewayTelegramService(models.AbstractModel):
             )
             if gateway_partner:
                 return gateway_partner.partner_id
-            guest = self.env["mail.guest"].search(
-                [
-                    ("gateway_id", "=", gateway.id),
-                    ("gateway_token", "=", str(author_id)),
-                ]
+            guest = (
+                self.env["mail.guest"]
+                .sudo()
+                .search(
+                    [
+                        ("gateway_id", "=", gateway.id),
+                        ("gateway_token", "=", str(author_id)),
+                    ]
+                )
             )
             if guest:
                 return guest
