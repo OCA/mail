@@ -3,9 +3,8 @@
 
 {
     "name": "Mail Telegram Gateway",
-    "summary": """
-        Set a gateway for telegram""",
-    "version": "19.0.1.0.0",
+    "summary": "Set a gateway for telegram",
+    "version": "20.0.1.0.0",
     "license": "AGPL-3",
     "author": "Creu Blanca,Dixmit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
@@ -13,9 +12,8 @@
     "data": ["views/mail_gateway.xml"],
     "external_dependencies": {"python": ["python-telegram-bot", "lottie", "cairosvg"]},
     "assets": {
-        "mail.assets_messaging": [
-            "mail_gateway_telegram/static/src/models/**/*.js",
-            "mail_gateway_telegram/static/src/components/**/*.xml",
+        "web.assets_backend": [
+            "mail_gateway_telegram/static/src/core/**/*",
         ],
     },
 }

@@ -21,13 +21,13 @@ Mail Telegram Gateway
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/19.0/mail_gateway_telegram
+    :target: https://github.com/OCA/mail/tree/20.0/mail_gateway_telegram
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_gateway_telegram
+    :target: https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_gateway_telegram
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -102,13 +102,30 @@ Usage
 2. Wait until someone starts a conversation with your bot.
 3. Now you will be able to respond and receive messages to this person.
 
+Changelog
+=========
+
+20.0.1.0.0
+----------
+
+Migration to 20.0.
+
+- The web client code has been rewritten: the former patches used the
+  legacy messaging models, which don't exist anymore. Now the module
+  only registers the Telegram icon of the gateway, used in the *Gateway*
+  tab of the Discuss app and in the notifications of the messages.
+- Incoming messages from people not linked to a contact are now posted
+  with their guest as author, instead of the webhook user.
+- The delivery status of sent messages is refreshed with the standard
+  notification update of the message.
+
 Bug Tracker
 ===========
 
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_gateway_telegram%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_gateway_telegram%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -146,6 +163,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_gateway_telegram>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/20.0/mail_gateway_telegram>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

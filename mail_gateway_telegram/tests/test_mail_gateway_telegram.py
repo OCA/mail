@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import json
 import time
-from datetime import datetime
 from unittest.mock import patch
 
 import telegram
@@ -62,7 +61,7 @@ def getMyBot(message_id=1234, file=False):
         async def _send_message(self, endpoint, data, *args, **kwargs):
             return telegram.Message.de_json(
                 {
-                    "date": time.mktime(datetime.now().timetuple()),
+                    "date": int(time.time()),
                     "message_id": message_id,
                     "chat": {
                         "id": data["chat_id"],
@@ -302,6 +301,11 @@ class TestMailGatewayTelegram(MailGatewayTestCase, HttpCase):
             },
         }
         cls.partner = cls.env["res.partner"].create({"name": "Demo"})
+
+    def setUp(self):
+        super().setUp()
+        # Public session, so the webhook requests are routed to the test database
+        self.authenticate(None, None)
 
     def test_webhook_management(self):
         self.gateway.webhook_key = self.webhook
@@ -784,16 +788,17 @@ class TestMailGatewayTelegram(MailGatewayTestCase, HttpCase):
             [("gateway_id", "=", self.gateway.id)]
         )
         self.assertTrue(channel)
-        store = Store()
-        store.add(channel)
-        result = store.get_result()
-        # Look up the discuss.channel entry that matches our channel's ID
-        channel_info_list = result.get("discuss.channel", [])
+        result = Store().add(channel, "_store_channel_fields")._build_result()
         channel_info = next(
-            (item for item in channel_info_list if item["id"] == channel.id), None
+            (item for item in result["discuss.channel"] if item["id"] == channel.id),
+            None,
         )
         self.assertIsNotNone(channel_info, "Channel info not found in Store result")
-        self.assertEqual(channel_info["gateway"]["id"], self.gateway.id)
+        self.assertEqual(channel_info["gateway_id"], self.gateway.id)
+        gateway_info = next(
+            item for item in result["mail.gateway"] if item["id"] == self.gateway.id
+        )
+        self.assertEqual(gateway_info["gateway_type"], "telegram")
         self.assertTrue(channel.avatar_128)
 
     def test_message_update(self):
@@ -826,12 +831,12 @@ class TestMailGatewayTelegram(MailGatewayTestCase, HttpCase):
         self.assertRegex(message.body, ".*New message.*")
 
     def _get_partner_store_info(self):
-        """Partner data as the web client receives it."""
-        result = Store().add(self.partner).get_result()
+        """Gateway channels of the partner as the web client receives them."""
+        result = (
+            Store().add(self.partner, "_store_gateway_channels_fields")._build_result()
+        )
         return next(
-            item
-            for item in result.get("res.partner", [])
-            if item["id"] == self.partner.id
+            item for item in result["res.partner"] if item["id"] == self.partner.id
         )
 
     def test_messaging(self):
@@ -845,34 +850,187 @@ class TestMailGatewayTelegram(MailGatewayTestCase, HttpCase):
         )
         with patch.object(telegram, "Bot", getMyBot()):
             self.set_message(self.message_02, self.webhook)
-        # Init messaging with new Store
-        store = Store()
-        self.user._init_messaging(store)
-        result = store.get_result()["Store"]
-        self.assertIn("gateways", result)
-        self.assertTrue(result["gateways"])
-        self.assertEqual(1, len(result["gateways"]))
-        self.assertEqual(self.gateway.id, result["gateways"][0]["id"])
-        # Validate that partner has no gateway_channels yet
-        partner_info = self._get_partner_store_info()
-        self.assertIn("gateway_channels", partner_info)
-        self.assertEqual(0, len(partner_info["gateway_channels"]))
+        result = (
+            Store()
+            .add_global_values(self.user._store_init_global_fields)
+            ._build_result()
+        )
+        self.assertEqual(result["Store"]["gateways"], [self.gateway.id])
+        self.assertTrue(result["Store"]["has_gateway_access"])
+        # The partner has no gateway channels yet
+        self.assertEqual(self._get_partner_store_info()["gateway_channel_ids"], [])
         # Assign the partner to the channel
         self.env["mail.guest.manage"].create(
             {
                 "partner_id": self.partner.id,
-                "guest_id": self.env["mail.guest"]
-                .search(
-                    [
-                        ("gateway_token", "=", self.gateway_token),
-                        ("gateway_id", "=", self.gateway.id),
-                    ]
-                )
-                .id,
+                "guest_id": self._get_guest().id,
             }
         ).merge_partner()
-        # Ensure gateway_channel_ids are now assigned
         self.assertTrue(self.partner.gateway_channel_ids)
-        partner_info = self._get_partner_store_info()
-        self.assertIn("gateway_channels", partner_info)
-        self.assertEqual(1, len(partner_info["gateway_channels"]))
+        self.assertEqual(
+            self._get_partner_store_info()["gateway_channel_ids"],
+            self.partner.gateway_channel_ids.ids,
+        )
+
+    def _get_guest(self):
+        return self.env["mail.guest"].search(
+            [
+                ("gateway_token", "=", self.gateway_token),
+                ("gateway_id", "=", self.gateway.id),
+            ]
+        )
+
+    def test_incoming_message_author_is_guest(self):
+        self.gateway.webhook_key = self.webhook
+        with patch.object(telegram, "Bot", getMyBot()):
+            self.gateway.set_webhook()
+            self.set_message(self.message_01, self.webhook)
+        channel = self.env["discuss.channel"].search(
+            [("gateway_id", "=", self.gateway.id)]
+        )
+        message = channel.message_ids
+        self.assertEqual(len(message), 1)
+        guest = self._get_guest()
+        self.assertTrue(guest)
+        self.assertEqual(message.author_guest_id, guest)
+        self.assertFalse(message.author_id)
+        self.assertEqual(message.gateway_type, "telegram")
+        # Incoming messages are not sent back to Telegram
+        self.assertFalse(message.notification_ids)
+
+    def test_incoming_message_author_is_partner(self):
+        self.gateway.webhook_key = self.webhook
+        with patch.object(telegram, "Bot", getMyBot()):
+            self.gateway.set_webhook()
+            self.set_message(self.message_02, self.webhook)
+        self.env["mail.guest.manage"].create(
+            {"partner_id": self.partner.id, "guest_id": self._get_guest().id}
+        ).merge_partner()
+        with patch.object(telegram, "Bot", getMyBot()):
+            self.set_message(self.message_01, self.webhook)
+        channel = self.env["discuss.channel"].search(
+            [("gateway_id", "=", self.gateway.id)]
+        )
+        self.assertEqual(channel.message_ids.author_id, self.partner)
+        self.assertFalse(channel.message_ids.author_guest_id)
+
+    def test_post_message_sent_status(self):
+        self.gateway.webhook_key = self.webhook
+        with patch.object(telegram, "Bot", getMyBot(message_id=4321)):
+            self.gateway.set_webhook()
+            self.set_message(self.message_02, self.webhook)
+            channel = self.env["discuss.channel"].search(
+                [("gateway_id", "=", self.gateway.id)]
+            )
+            channel.message_post(
+                body="HELLO",
+                subtype_xmlid="mail.mt_comment",
+                message_type="comment",
+            )
+        notification = self.env["mail.notification"].search(
+            [("gateway_channel_id", "=", channel.id)]
+        )
+        self.assertEqual(notification.notification_status, "sent")
+        self.assertEqual(notification.gateway_message_id, "4321")
+        self.assertFalse(notification.failure_reason)
+
+    def test_send_to_partner_without_channel(self):
+        """Sending to a partner gateway channel creates the discuss channel."""
+        partner_channel = self.env["res.partner.gateway.channel"].create(
+            {
+                "partner_id": self.partner.id,
+                "gateway_id": self.gateway.id,
+                "gateway_token": self.gateway_token,
+            }
+        )
+        self.assertFalse(
+            self.env["discuss.channel"].search([("gateway_id", "=", self.gateway.id)])
+        )
+        with patch.object(telegram, "Bot", getMyBot()):
+            message = self.partner.message_post(
+                body="HELLO",
+                subtype_xmlid="mail.mt_comment",
+                message_type="comment",
+                gateway_notifications=[
+                    {
+                        "channel_type": "gateway",
+                        "gateway_channel_id": partner_channel.id,
+                        "partner_id": self.partner.id,
+                    }
+                ],
+            )
+        channel = self.env["discuss.channel"].search(
+            [("gateway_id", "=", self.gateway.id)]
+        )
+        self.assertTrue(channel)
+        self.assertEqual(channel.gateway_channel_token, self.gateway_token)
+        self.assertEqual(channel.name, self.partner.name)
+        self.assertTrue(message.gateway_message_ids)
+
+    def _post_incoming(self, message_vals):
+        """Send an incoming update with the given message values and return
+        the message posted on the channel."""
+        message = dict(self.message_01["message"], **message_vals)
+        if "location" in message_vals or "contact" in message_vals:
+            message.pop("text")
+        self.gateway.webhook_key = self.webhook
+        with patch.object(telegram, "Bot", getMyBot()):
+            self.gateway.set_webhook()
+            self.set_message({"update_id": 1, "message": message}, self.webhook)
+        return (
+            self.env["discuss.channel"]
+            .search([("gateway_id", "=", self.gateway.id)])
+            .message_ids
+        )
+
+    def test_incoming_location(self):
+        message = self._post_incoming(
+            {"location": {"latitude": 40.357441, "longitude": 0.406973}}
+        )
+        self.assertIn(
+            '<a target="_blank" rel="noopener noreferrer" '
+            'href="https://www.google.com/maps/search/?api=1&amp;query='
+            '40.357441,0.406973">Location</a>',
+            message.body,
+        )
+        self.assertNotIn("&lt;a", message.body)
+
+    def test_incoming_formatted_text(self):
+        message = self._post_incoming(
+            {
+                "text": "Hi bold <friend>",
+                "entities": [{"type": "bold", "offset": 3, "length": 4}],
+            }
+        )
+        self.assertIn("<b>bold</b>", message.body)
+        # User text is still escaped
+        self.assertIn("&lt;friend&gt;", message.body)
+
+    def test_incoming_contact_without_vcard(self):
+        message = self._post_incoming(
+            {
+                "contact": {
+                    "phone_number": "+34600000000",
+                    "first_name": "Ana",
+                    "last_name": "García; Pérez",
+                }
+            }
+        )
+        attachment = message.attachment_ids
+        self.assertEqual(attachment.name, "Ana.vcf")
+        vcard = attachment.raw.decode()
+        self.assertIn(r"N:García\; Pérez;Ana;;;", vcard)
+        self.assertIn("TEL;TYPE=CELL:+34600000000", vcard)
+
+    def test_incoming_contact_with_vcard(self):
+        vcard = "BEGIN:VCARD\r\nVERSION:3.0\r\nFN:Ana\r\nEND:VCARD\r\n"
+        message = self._post_incoming(
+            {
+                "contact": {
+                    "phone_number": "+34600000000",
+                    "first_name": "Ana",
+                    "vcard": vcard,
+                }
+            }
+        )
+        self.assertEqual(message.attachment_ids.raw.decode(), vcard)
