@@ -4,7 +4,7 @@
         <xpath expr="//div" position="after">
             <i
                 class="fa fa-whatsapp text-info"
-                t-if="message.gateway_type === 'whatsapp' and message.notifications.length === 0"
+                t-if="message.gateway_type === 'whatsapp' and !message.notification_ids?.length"
             />
         </xpath>
     </t>
