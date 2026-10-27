@@ -30,6 +30,7 @@ class MailTrackingEmail(models.Model):
     # - time: default order fields
     # - recipient_address: Used for email_store calculation (non-store)
     # - state: Search and group_by in tree view
+    # - mail_id: deleting a mail.mail must not scan this table (FK ON DELETE SET NULL)
     name = fields.Char(string="Subject", readonly=True, index=True)
     display_name = fields.Char(
         readonly=True,
@@ -45,7 +46,9 @@ class MailTrackingEmail(models.Model):
         comodel_name="mail.message", readonly=True, index=True
     )
     message_id = fields.Char(compute="_compute_message_id")
-    mail_id = fields.Many2one(string="Email", comodel_name="mail.mail", readonly=True)
+    mail_id = fields.Many2one(
+        string="Email", comodel_name="mail.mail", readonly=True, index="btree_not_null"
+    )
     partner_id = fields.Many2one(comodel_name="res.partner", readonly=True)
     recipient = fields.Char(string="Recipient email", readonly=True)
     recipient_address = fields.Char(
