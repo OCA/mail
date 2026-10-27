@@ -1035,6 +1035,51 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             )
         )
 
+    def test_search_through_message_skips_tracking_access(self):
+        """Searching through ``mail_tracking_ids`` skips the tracking access rules"""
+        user_employee = mail_new_test_user(
+            self.env, groups="base.group_user", login="employee_bypass"
+        )
+        message = self.env["mail.message"].create(
+            {
+                "author_id": user_employee.partner_id.id,
+                "message_type": "comment",
+                "model": "res.partner",
+                "res_id": user_employee.partner_id.id,
+                "body": "<p>Failed message</p>",
+                "mail_tracking_needs_action": True,
+            }
+        )
+        tracking = self.env["mail.tracking.email"].create(
+            {"mail_message_id": message.id, "state": "error"}
+        )
+        MailTrackingEmail = type(self.env["mail.tracking.email"])
+        with patch.object(
+            MailTrackingEmail,
+            "_get_allowed_ids",
+            side_effect=AssertionError("tracking access rules evaluated"),
+        ):
+            failed_messages = (
+                self.env["mail.message"]
+                .with_user(user_employee)
+                .search([("is_failed_message", "=", True)])
+            )
+        self.assertEqual(failed_messages, message)
+        # A direct search of trackings still applies their access rules
+        with patch.object(
+            MailTrackingEmail,
+            "_get_allowed_ids",
+            autospec=True,
+            side_effect=MailTrackingEmail._get_allowed_ids,
+        ) as mock_allowed:
+            trackings = (
+                self.env["mail.tracking.email"]
+                .with_user(user_employee)
+                .search([("id", "=", tracking.id)])
+            )
+        self.assertEqual(trackings, tracking)
+        mock_allowed.assert_called_once()
+
     def test_ir_mail_server_internal_helpers(self):
         mail_server = self.env["ir.mail_server"].create(
             {
