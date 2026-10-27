@@ -141,15 +141,24 @@ class MailTrackingEmail(models.Model):
         return res
 
     @api.model
-    def _search(self, domain, offset=0, limit=None, order=None, **kwargs):
+    def _search(
+        self, domain, offset=0, limit=None, order=None, *, bypass_access=False, **kwargs
+    ):
         """Override that adds specific access rights of mail.tracking.email, to remove
         ids uid could not see according to our custom rules. Please refer to
         _check_access() for more details about those rules.
+
+        Skipped with ``bypass_access``, as set by ``mail.message.mail_tracking_ids``.
         """
         query = super()._search(
-            domain, offset=offset, limit=limit, order=order, **kwargs
+            domain,
+            offset=offset,
+            limit=limit,
+            order=order,
+            bypass_access=bypass_access,
+            **kwargs,
         )
-        if not self.env.is_superuser():
+        if not (self.env.is_superuser() or bypass_access):
             records = self.browse(query)
             allowed_ids = self._get_allowed_ids(records.ids)
             return self.browse(allowed_ids)._as_query(order)
