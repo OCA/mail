@@ -27,18 +27,38 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         )
         self.switzerland = self.env.ref("base.ch")
 
-    def _use_ref_in_domain(self):
-        """Change the general domain to test the safe_eval."""
-        param = self.env.ref("mail_restrict_follower_selection.parameter_domain")
+    def _use_ref_in_domain(self, param=None):
+        """Change a domain to test the safe_eval."""
+        if param is None:
+            param = self.env.ref("mail_restrict_follower_selection.parameter_domain")
         country_id = self.env.ref("base.ch").id
         param.value = f"[('country_id', '!=', {country_id})]"
 
+    def _use_restrictive_global_domain(self):
+        param = self.env.ref("mail_restrict_follower_selection.parameter_domain")
+        param.value = "[('category_id.name', '!=', 'Employees')]"
+        self.param.value = "[('category_id.name', '=', 'Employees')]"
+
     def test_fields_view_get(self):
         result = self.env["mail.wizard.invite"].get_view(view_type="form")
-        for field in etree.fromstring(result["arch"]).xpath(
-            '//field[@name="partner_ids"]'
-        ):
-            self.assertTrue(field.get("domain"))
+        arch = etree.fromstring(result["arch"])
+        self.assertTrue(arch.xpath('//field[@name="partner_ids_domain"]'))
+        for field in arch.xpath('//field[@name="partner_ids"]'):
+            self.assertEqual(field.get("domain"), "partner_ids_domain")
+
+    def test_get_view_non_form(self):
+        view = self.env["ir.ui.view"].create(
+            {
+                "name": "mail.wizard.invite.test.list",
+                "model": "mail.wizard.invite",
+                "type": "list",
+                "arch": "<list><field name='res_model'/></list>",
+            }
+        )
+        result = self.env["mail.wizard.invite"].get_view(
+            view_id=view.id, view_type="list"
+        )
+        self.assertNotIn("partner_ids_domain", result["arch"])
 
     def send_action(self):
         compose = (
@@ -87,20 +107,40 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         )._message_add_suggested_recipient([])
         self.assertFalse(new_res[0].get("partner_id"))
 
-    def test_get_view_eval(self):
-        """Check using safe_eval in field_view_get."""
+    def test_message_add_suggested_recipient_specific_domain(self):
+        self._use_restrictive_global_domain()
+        res = self.partner.with_context(
+            test_restrict_follower=True
+        )._message_add_suggested_recipient([], partner=self.partner)
+        self.assertEqual(res[0]["partner_id"], self.partner.id)
+
+    def test_partner_ids_domain_specific_domain(self):
+        self._use_restrictive_global_domain()
+        wizard = self.env["mail.wizard.invite"].new({"res_model": "res.partner"})
+        self.assertIn(("category_id.name", "=", "Employees"), wizard.partner_ids_domain)
+        self.assertNotIn(
+            ("category_id.name", "!=", "Employees"), wizard.partner_ids_domain
+        )
+
+    def test_partner_ids_domain_eval(self):
+        """Check using safe_eval in the dynamic partner domain."""
+        self._use_ref_in_domain(self.param)
+        wizard = self.env["mail.wizard.invite"].new({"res_model": "res.partner"})
+        domain = str(wizard.partner_ids_domain)
+        self.assertTrue(domain.find("country_id") > 0)
+        self.assertTrue(domain.find(str(self.switzerland.id)) > 0)
+
+    def test_partner_ids_domain_eval_global_domain(self):
+        """Check using safe_eval in the dynamic global domain."""
         self._use_ref_in_domain()
-        result = self.env["mail.wizard.invite"].get_view(view_type="form")
-        for field in etree.fromstring(result["arch"]).xpath(
-            '//field[@name="partner_ids"]'
-        ):
-            domain = field.get("domain")
-            self.assertTrue(domain.find("country_id") > 0)
-            self.assertTrue(domain.find(str(self.switzerland.id)) > 0)
+        wizard = self.env["mail.wizard.invite"].new({})
+        domain = str(wizard.partner_ids_domain)
+        self.assertTrue(domain.find("country_id") > 0)
+        self.assertTrue(domain.find(str(self.switzerland.id)) > 0)
 
     def test_message_add_suggested_recipient_eval(self):
         """Check using safe_eval when adding recipients."""
-        self._use_ref_in_domain()
+        self._use_ref_in_domain(self.param)
         partner = self.partner.with_context(test_restrict_follower=True)
         res = partner._message_add_suggested_recipient([], partner=self.partner)
         self.assertEqual(res[0]["partner_id"], self.partner.id)
