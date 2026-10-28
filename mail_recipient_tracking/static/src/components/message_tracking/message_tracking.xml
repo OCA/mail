@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="mail_recipient_tracking.MessageTracking">
+        <t
+            t-foreach="this.props.partner_trackings"
+            t-as="tracking"
+            t-key="tracking.tracking_delta"
+        >
+            <t t-if="!tracking_first"> - </t>
+            <a
+                t-if="tracking.partner_id"
+                t-attf-class="o_mail_action_tracking_partner {{ tracking.isCc ? 'o_mail_cc' : '' }}"
+                t-att-data-partner="tracking.partner_id"
+                href="#"
+                data-oe-model="res.partner"
+                t-att-data-oe-id="tracking.partner_id"
+                t-out="tracking.recipient"
+            />
+            <span
+                t-else=""
+                t-attf-class="{{ tracking.isCc ? 'o_mail_cc' : '' }}"
+                t-out="tracking.recipient"
+            />
+            <span
+                t-if="!this.props.skip_track_links"
+                class="o_mail_tracking ps-1 text-black-50"
+                t-att-data-tracking="tracking.tracking_id"
+                t-att-title="tracking.status === 'error' and tracking.error_type === 'no_recipient' ? tracking.error_description : tracking.status_human"
+                role="button"
+                t-on-click.prevent="() => this.onTrackingStatusClick(tracking)"
+            >
+                <t t-call="mail_recipient_tracking.TrackingStatus" />
+            </span>
+        </t>
+    </t>
+</templates>
