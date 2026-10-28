@@ -23,12 +23,9 @@ msgid ""
 "                            You should set some random value of your choice for this fields.\n"
 "                            Ensure that facebook will be able to comunicate with your server.</span>"
 msgstr ""
-"<span>Defina os valores dos campos <b>Chave do Webhook</b> e <b>Chave de "
-"Segurança do WhatsApp</b>.\n"
-"                            Você deve definir um valor aleatório de sua "
-"escolha para esses campos.\n"
-"                            Certifique-se de que o Facebook poderá se "
-"comunicar com o seu servidor.</span>"
+"<span>Defina os valores dos campos <b>Chave do Webhook</b> e <b>Chave de Segurança do WhatsApp</b>.\n"
+"                            Você deve definir um valor aleatório de sua escolha para esses campos.\n"
+"                            Certifique-se de que o Facebook poderá se comunicar com o seu servidor.</span>"
 
 #. module: mail_gateway_whatsapp
 #. odoo-python
@@ -145,11 +142,6 @@ msgid "Bengali"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
-#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__mobile_blacklisted
-msgid "Blacklisted Phone Is Mobile"
-msgstr "Telefone bloqueado é celular"
-
-#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_blacklisted
 msgid "Blacklisted Phone is Phone"
 msgstr "Telefone bloqueado é telefone"
@@ -172,8 +164,8 @@ msgstr "Corpo é requerido"
 #: code:addons/mail_gateway_whatsapp/models/mail_whatsapp_template.py:0
 msgid "Body variables should start at 1 and not skip any number, missing %d"
 msgstr ""
-"As variáveis do corpo devem começar em 1 e não pular nenhum número, faltando "
-"%d"
+"As variáveis do corpo devem começar em 1 e não pular nenhum número, faltando"
+" %d"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__bg
@@ -335,6 +327,13 @@ msgid "Deleted"
 msgstr "Apagado"
 
 #. module: mail_gateway_whatsapp
+#. odoo-javascript
+#: code:addons/mail_gateway_whatsapp/static/src/models/notification_model_patch.esm.js:0
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_notification__whatsapp_status__delivered
+msgid "Delivered"
+msgstr "Entregue"
+
+#. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__disabled
 msgid "Disabled"
 msgstr "Desabilitado"
@@ -345,9 +344,17 @@ msgid "Discussion Channel"
 msgstr "Canal de Discussão"
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_discuss_channel__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_compose_gateway_message__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway_whatsapp__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_notification__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_thread__display_name
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__display_name
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__display_name
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__display_name
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__display_name
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__display_name
 msgid "Display Name"
 msgstr "Nome Exibido"
@@ -428,7 +435,8 @@ msgstr "Campo"
 msgid ""
 "Field template variables %(variables)s must be associated with a field."
 msgstr ""
-"As variáveis de modelo de campo %(variáveis) devem ser associadas a um campo."
+"As variáveis de modelo de campo %(variáveis) devem ser associadas a um "
+"campo."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_sanitized
@@ -556,9 +564,17 @@ msgid "Hungarian"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_discuss_channel__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_compose_gateway_message__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_gateway_whatsapp__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_notification__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_thread__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__id
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_whatsapp_composer__id
 msgid "ID"
 msgstr ""
@@ -580,13 +596,9 @@ msgid ""
 "                                You should be able to receive and send messages.\n"
 "                                If an error is raised, check that the fields are filled properly and that facebook server is able to access your server."
 msgstr ""
-"Se nenhum erro for exibido, atualize os dados do gateway e você deverá ver "
-"que ele está integrado.\n"
-"                                Você deverá conseguir enviar e receber "
-"mensagens.\n"
-"                                Se ocorrer um erro, verifique se os campos "
-"foram preenchidos corretamente e se o servidor do Facebook consegue acessar "
-"o seu servidor."
+"Se nenhum erro for exibido, atualize os dados do gateway e você deverá ver que ele está integrado.\n"
+"                                Você deverá conseguir enviar e receber mensagens.\n"
+"                                Se ocorrer um erro, verifique se os campos foram preenchidos corretamente e se o servidor do Facebook consegue acessar o seu servidor."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_sanitized_blacklisted
@@ -601,17 +613,6 @@ msgstr ""
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__in_appeal
 msgid "In Appeal"
 msgstr "Em apelação"
-
-#. module: mail_gateway_whatsapp
-#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__mobile_blacklisted
-msgid ""
-"Indicates if a blacklisted sanitized phone number is a mobile number. Helps "
-"distinguish which number is blacklisted             when there is both a "
-"mobile and phone field in a model."
-msgstr ""
-"Indica se o número telefônico higienizado é um número móvel. Ajuda a "
-"distinguir qual número está na lista negra             quando tanto o fixo "
-"como o móvel estão em um modelo."
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__phone_blacklisted
@@ -716,6 +717,11 @@ msgid "Last Updated on"
 msgstr "Última Atualização Feita em"
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_mail_notification__whatsapp_status
+msgid "Last delivery status reported by WhatsApp for this message."
+msgstr "Último status de entrega informado pelo WhatsApp para esta mensagem."
+
+#. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__lv
 msgid "Latvian"
 msgstr ""
@@ -786,6 +792,11 @@ msgid "Message Delivery error"
 msgstr "Erro de entrega de Mensagem"
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model,name:mail_gateway_whatsapp.model_mail_notification
+msgid "Message Notifications"
+msgstr "Notificações de mensagens"
+
+#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_ids
 msgid "Messages"
 msgstr "Mensagens"
@@ -848,8 +859,8 @@ msgid ""
 "On Facebook Develpment, return to the app menu and go to <b>Whatsapp / "
 "Configuration</b>."
 msgstr ""
-"Em Desenvolvedor do Facebook, retorne para o menu de aplicações e vá para <b>"
-"Whatsapp / Configuration</b>."
+"Em Desenvolvedor do Facebook, retorne para o menu de aplicações e vá para "
+"<b>Whatsapp / Configuration</b>."
 
 #. module: mail_gateway_whatsapp
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
@@ -908,15 +919,15 @@ msgid "Phone Blacklisted"
 msgstr "Telefones Bloqueados"
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_mobile_search
+msgid "Phone Number"
+msgstr "Número de telefone"
+
+#. module: mail_gateway_whatsapp
 #. odoo-python
 #: code:addons/mail_gateway_whatsapp/models/mail_thread.py:0
 msgid "Phone cannot be sanitized"
 msgstr "Telefone não pode ser sanitizado"
-
-#. module: mail_gateway_whatsapp
-#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__phone_mobile_search
-msgid "Phone/Mobile"
-msgstr "Telefone/Celular"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__name
@@ -959,6 +970,13 @@ msgstr ""
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template_button__button_type__quick_reply
 msgid "Quick Reply"
 msgstr "Resposta Rápida"
+
+#. module: mail_gateway_whatsapp
+#. odoo-javascript
+#: code:addons/mail_gateway_whatsapp/static/src/models/notification_model_patch.esm.js:0
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_notification__whatsapp_status__read
+msgid "Read"
+msgstr "Lido"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__state__rejected
@@ -1036,8 +1054,15 @@ msgid ""
 "Sending WhatsApp message can only be done on a non transient mail.thread "
 "model"
 msgstr ""
-"O envio de mensagens do WhatsApp só pode ser feito em um modelo de thread de "
-"e-mail não transitório"
+"O envio de mensagens do WhatsApp só pode ser feito em um modelo de thread de"
+" e-mail não transitório"
+
+#. module: mail_gateway_whatsapp
+#. odoo-javascript
+#: code:addons/mail_gateway_whatsapp/static/src/models/notification_model_patch.esm.js:0
+#: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_notification__whatsapp_status__sent
+msgid "Sent"
+msgstr "Enviado"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__sequence
@@ -1221,22 +1246,8 @@ msgid ""
 "- 'Create Record': create a new record with new values\n"
 "- 'Execute Code': a block of Python code that will be executed\n"
 "- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
-"- 'Execute Existing Actions': define an action that triggers several other server actions\n"
+"- 'Multi Actions': define an action that triggers several other server actions\n"
 msgstr ""
-"Tipo de ação do servidor. Os seguintes valores estão disponíveis:\n"
-"- 'Atualizar um Registro': atualiza os valores de um registro\n"
-"- 'Criar Atividade': cria uma atividade (Discussão)\n"
-"- 'Enviar E-mail': publica uma mensagem, uma nota ou envia um e-mail "
-"(Discussão)\n"
-"- 'Enviar SMS': envia SMS e os registra em documentos (SMS)\n"
-"- 'Adicionar/Remover Seguidores': adiciona ou remove seguidores de um "
-"registro (Discussão)\n"
-"- 'Criar Registro': cria um novo registro com novos valores\n"
-"- 'Executar Código': um bloco de código Python que será executado\n"
-"- 'Enviar Notificação Webhook': envia uma solicitação POST para um sistema "
-"externo, também conhecido como Webhook\n"
-"- 'Executar Ações Existentes': define uma ação que aciona várias outras "
-"ações do servidor\n"
 
 #. module: mail_gateway_whatsapp
 #: model:ir.model.fields.selection,name:mail_gateway_whatsapp.selection__mail_whatsapp_template__language__uk
@@ -1347,6 +1358,8 @@ msgid "WhatsApp Template Variable"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
+#. odoo-python
+#: code:addons/mail_gateway_whatsapp/models/mail_gateway.py:0
 #: model:ir.actions.act_window,name:mail_gateway_whatsapp.action_mail_whatsapp_template_gateway
 msgid "WhatsApp Templates"
 msgstr ""
@@ -1405,6 +1418,11 @@ msgid "Whatsapp Security Key"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_notification__whatsapp_status
+msgid "Whatsapp Status"
+msgstr "Status do Whatsapp"
+
+#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_actions_server__whatsapp_template_id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_ir_cron__whatsapp_template_id
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_compose_gateway_message__whatsapp_template_id
@@ -1447,3 +1465,40 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mail_gateway_whatsapp.mail_gateway_form_view
 msgid "meta business site."
 msgstr ""
+
+#~ msgid "Blacklisted Phone Is Mobile"
+#~ msgstr "Telefone bloqueado é celular"
+
+#~ msgid ""
+#~ "Indicates if a blacklisted sanitized phone number is a mobile number. Helps "
+#~ "distinguish which number is blacklisted             when there is both a "
+#~ "mobile and phone field in a model."
+#~ msgstr ""
+#~ "Indica se o número telefônico higienizado é um número móvel. Ajuda a "
+#~ "distinguir qual número está na lista negra             quando tanto o fixo "
+#~ "como o móvel estão em um modelo."
+
+#~ msgid "Phone/Mobile"
+#~ msgstr "Telefone/Celular"
+
+#~ msgid ""
+#~ "Type of server action. The following values are available:\n"
+#~ "- 'Update a Record': update the values of a record\n"
+#~ "- 'Create Activity': create an activity (Discuss)\n"
+#~ "- 'Send Email': post a message, a note or send an email (Discuss)\n"
+#~ "- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': add or remove followers to a record (Discuss)\n"
+#~ "- 'Create Record': create a new record with new values\n"
+#~ "- 'Execute Code': a block of Python code that will be executed\n"
+#~ "- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
+#~ "- 'Execute Existing Actions': define an action that triggers several other server actions\n"
+#~ msgstr ""
+#~ "Tipo de ação do servidor. Os seguintes valores estão disponíveis:\n"
+#~ "- 'Atualizar um Registro': atualiza os valores de um registro\n"
+#~ "- 'Criar Atividade': cria uma atividade (Discussão)\n"
+#~ "- 'Enviar E-mail': publica uma mensagem, uma nota ou envia um e-mail (Discussão)\n"
+#~ "- 'Enviar SMS': envia SMS e os registra em documentos (SMS)\n"
+#~ "- 'Adicionar/Remover Seguidores': adiciona ou remove seguidores de um registro (Discussão)\n"
+#~ "- 'Criar Registro': cria um novo registro com novos valores\n"
+#~ "- 'Executar Código': um bloco de código Python que será executado\n"
+#~ "- 'Enviar Notificação Webhook': envia uma solicitação POST para um sistema externo, também conhecido como Webhook\n"
+#~ "- 'Executar Ações Existentes': define uma ação que aciona várias outras ações do servidor\n"

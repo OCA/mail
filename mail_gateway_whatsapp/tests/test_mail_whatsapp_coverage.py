@@ -489,7 +489,7 @@ class TestMailWhatsAppCoverage(MailGatewayTestCase):
                             "field": "messages",
                             "value": {
                                 "statuses": [
-                                    # non-failed status is ignored
+                                    # delivered status, overridden by the failure
                                     {
                                         "recipient_id": token,
                                         "id": "wamid.TEST",
@@ -529,6 +529,71 @@ class TestMailWhatsAppCoverage(MailGatewayTestCase):
         service._receive_update(self.gateway, update)
         self.assertEqual(notification.notification_status, "exception")
         self.assertIn("Boom", notification.failure_reason)
+
+    def test_receive_update_status_delivery(self):
+        service = self.env["mail.gateway.whatsapp"]
+        channel = self.partner._whatsapp_get_channel("phone", self.gateway)
+        token = channel.gateway_channel_token
+        channel_message = channel.with_context(
+            no_gateway_notification=True
+        ).message_post(
+            body="hi", message_type="comment", subtype_xmlid="mail.mt_comment"
+        )
+        document_message = self.partner.message_post(
+            body="hi", message_type="comment", subtype_xmlid="mail.mt_comment"
+        )
+        notifications = self.env["mail.notification"]
+        # The channel and the document notifications share the same wamid
+        for message in channel_message | document_message:
+            notifications |= self.env["mail.notification"].create(
+                {
+                    "mail_message_id": message.id,
+                    "notification_type": "gateway",
+                    "notification_status": "sent",
+                    "gateway_channel_id": channel.id,
+                    "gateway_message_id": "wamid.TEST",
+                    "res_partner_id": self.partner.id,
+                }
+            )
+
+        def receive(status):
+            service._receive_update(
+                self.gateway,
+                {
+                    "entry": [
+                        {
+                            "changes": [
+                                {
+                                    "field": "messages",
+                                    "value": {
+                                        "statuses": [
+                                            {
+                                                "recipient_id": token,
+                                                "id": "wamid.TEST",
+                                                "status": status,
+                                            }
+                                        ]
+                                    },
+                                }
+                            ]
+                        }
+                    ]
+                },
+            )
+
+        receive("sent")
+        self.assertEqual(set(notifications.mapped("whatsapp_status")), {"sent"})
+        receive("delivered")
+        self.assertEqual(set(notifications.mapped("whatsapp_status")), {"delivered"})
+        receive("read")
+        self.assertEqual(set(notifications.mapped("whatsapp_status")), {"read"})
+        # Webhooks may arrive out of order: a late status doesn't go back
+        receive("delivered")
+        self.assertEqual(set(notifications.mapped("whatsapp_status")), {"read"})
+        # Unknown statuses are ignored
+        receive("deleted")
+        self.assertEqual(set(notifications.mapped("whatsapp_status")), {"read"})
+        self.assertEqual(set(notifications.mapped("notification_status")), {"sent"})
 
     def test_receive_update_image_and_location(self):
         service = self.env["mail.gateway.whatsapp"]

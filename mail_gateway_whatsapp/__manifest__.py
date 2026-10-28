@@ -22,6 +22,7 @@
     "assets": {
         "web.assets_backend": [
             "mail_gateway_whatsapp/static/src/components/**/*",
+            "mail_gateway_whatsapp/static/src/models/**/*",
         ],
     },
 }

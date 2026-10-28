@@ -34,6 +34,8 @@ HTML_TAGS = {
     "del": "~",
     "code": "```",
 }
+# Statuses sent by the webhook that are reflected on the notifications.
+STATUSES_TO_PROCESS = {"sent", "delivered", "read", "failed"}
 MARKED_TEXT = r"(?<!\w){0}(\S(?:.*?\S)?){0}(?!\w)"
 HTML_TAG = re.compile(r"(<a\b[^>]*>.*?</a>|<[^>]+>)", re.DOTALL)
 
@@ -90,7 +92,10 @@ class MailGatewayWhatsappService(models.AbstractModel):
                         self._process_update(chat, message, change["value"])
                     for status_info in change["value"].get("statuses", []):
                         chat_id = gateway._get_channel_id(status_info["recipient_id"])
-                        if status_info.get("status", "") != "failed" or not chat_id:
+                        if (
+                            status_info.get("status") not in STATUSES_TO_PROCESS
+                            or not chat_id
+                        ):
                             continue
                         self._process_update_status(chat_id, status_info)
 
@@ -106,6 +111,10 @@ class MailGatewayWhatsappService(models.AbstractModel):
             )
         )
         if not notification:
+            return
+        if status_info["status"] != "failed":
+            if notification._set_whatsapp_status(status_info["status"]):
+                notification.mail_message_id._notify_message_notification_update()
             return
         errors = [
             f"[{error['code']}] {error['error_data']['details']}"
