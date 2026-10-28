@@ -22,11 +22,6 @@ class DiscussChannel(models.Model):
     channel_type = fields.Selection(
         selection_add=[("gateway", "Gateway")], ondelete={"gateway": "set default"}
     )
-    gateway_token = fields.Char(
-        related="gateway_id.token",
-        string="Gateway related Token",
-        required=False,
-    )
 
     def _to_store(self, store: Store, fields):
         res = super()._to_store(store, fields)

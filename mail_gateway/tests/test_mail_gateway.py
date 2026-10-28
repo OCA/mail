@@ -477,7 +477,7 @@ class TestMailGateway(MailGatewayTestCase):
         store = Store()
         channel._to_store(
             store,
-            ["gateway_id", "gateway_token", "gateway_message_ids", "channel_type"],
+            ["gateway_id", "gateway_message_ids", "channel_type"],
         )
 
     # ── mail.thread additional coverage ───────────────────────────────────────
