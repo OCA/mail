@@ -8,7 +8,12 @@ patch(Thread, {
     _insert(data) {
         const thread = super._insert(...arguments);
         if (thread.channel_type === "gateway") {
-            assignIn(thread, data, ["anonymous_name", "gateway"]);
+            assignIn(thread, data, [
+                "anonymous_name",
+                "gateway",
+                "gateway_partner_id",
+                "gateway_guest_id",
+            ]);
         }
         return thread;
     },

@@ -39,9 +39,37 @@ class DiscussChannel(models.Model):
                     "id": record.id,
                     "gateway": record.gateway_id._gateway_info(),
                     "gateway_id": record.id,
+                    "gateway_partner_id": record._get_gateway_partner().id,
+                    "gateway_guest_id": record._get_gateway_guest().id,
                 },
             )
         return res
+
+    def _get_gateway_partner(self):
+        """Partner linked to the gateway token of the channel, if any."""
+        self.ensure_one()
+        if not self.gateway_id or not self.gateway_channel_token:
+            return self.env["res.partner"]
+        # sudo: res.partner.gateway.channel - technical lookup by token
+        return (
+            self.env["res.partner.gateway.channel"]
+            .sudo()
+            .search(
+                [
+                    ("gateway_id", "=", self.gateway_id.id),
+                    ("gateway_token", "=", self.gateway_channel_token),
+                ],
+                limit=1,
+            )
+            .partner_id
+        )
+
+    def _get_gateway_guest(self):
+        """Guest of the channel when there is exactly one (sender not yet
+        linked to a partner), used by the "New Partner" action."""
+        self.ensure_one()
+        guests = self.channel_member_ids.guest_id
+        return guests if len(guests) == 1 else self.env["mail.guest"]
 
     def _generate_avatar_gateway(self):
         # We will use this function to set a default avatar on each module
