@@ -15,6 +15,8 @@ class MailComposeMessage(models.TransientModel):
             and res.get("model")
             and res.get("res_ids")
             and res.get("composition_mode", "") != "mass_mail"
+            # Editing a posted message only keeps its attachment_ids
+            and not self.env.context.get("default_message_id")
         ):
             res["can_attach_attachment"] = True  # pragma: no cover
         return res
@@ -35,8 +37,8 @@ class MailComposeMessage(models.TransientModel):
     @api.depends("res_ids", "model")
     def _compute_display_object_attachment_ids(self):
         for composer in self:
-            res_ids = self._evaluate_res_ids()
-            model = self.model
+            res_ids = composer._evaluate_res_ids()
+            model = composer.model
             if model and res_ids:
                 attachments = self.env["ir.attachment"].search(
                     [
