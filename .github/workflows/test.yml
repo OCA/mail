@@ -36,17 +36,17 @@ jobs:
       matrix:
         include:
           - container: ghcr.io/oca/oca-ci/py3.10-odoo18.0:latest
-            include: "mail_post_defer"
+            include: "mail_post_defer,mail_activity_done"
             name: test with Odoo
           - container: ghcr.io/oca/oca-ci/py3.10-ocb18.0:latest
-            include: "mail_post_defer"
+            include: "mail_post_defer,mail_activity_done"
             name: test with OCB
             makepot: "true"
           - container: ghcr.io/oca/oca-ci/py3.10-odoo18.0:latest
-            exclude: "mail_post_defer"
+            exclude: "mail_post_defer,mail_activity_done"
             name: test with Odoo
           - container: ghcr.io/oca/oca-ci/py3.10-ocb18.0:latest
-            exclude: "mail_post_defer"
+            exclude: "mail_post_defer,mail_activity_done"
             name: test with OCB
             makepot: "true"
     services:
