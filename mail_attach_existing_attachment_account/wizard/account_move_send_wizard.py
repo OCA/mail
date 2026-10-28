@@ -23,11 +23,11 @@ class AccountMoveSendWizard(models.TransientModel):
     @api.depends("move_id")
     def _compute_display_object_attachment_ids(self):
         for wizard in self:
-            if self.move_id:
+            if wizard.move_id:
                 attachments = self.env["ir.attachment"].search(
                     [
                         ("res_model", "=", "account.move"),
-                        ("res_id", "=", self.move_id.id),
+                        ("res_id", "=", wizard.move_id.id),
                     ]
                 )
                 wizard.display_object_attachment_ids = attachments
