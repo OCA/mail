@@ -3,7 +3,7 @@
 
 from ast import literal_eval
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -24,7 +24,7 @@ class IrMailServer(models.Model):
                 headers = literal_eval(rec.extra_headers)
             except SyntaxError as e:
                 raise ValidationError(
-                    _("The extra headers cannot be read (syntax error).")
+                    self.env._("The extra headers cannot be read (syntax error).")
                 ) from e
             if (
                 not isinstance(headers, dict)
@@ -32,7 +32,7 @@ class IrMailServer(models.Model):
                 or any(not isinstance(v, str) for v in headers.values())
             ):
                 raise ValidationError(
-                    _("The extra headers must be a dictionary of strings.")
+                    self.env._("The extra headers must be a dictionary of strings.")
                 )
 
     @api.model

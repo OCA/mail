@@ -59,6 +59,17 @@ class TestMailExtraHeader(BaseCommon):
                 "from_filter": "test3.com",
             }
         )
+        cls.mail_server_4 = cls.env["ir.mail_server"].create(
+            {
+                "name": "Test Server 3",
+                "smtp_host": "smtp.test3.com",
+                "smtp_port": 587,
+                "smtp_user": "user3@test3.com",
+                "smtp_pass": "password3",
+                "from_filter": "test3.com",
+                "extra_headers": False,
+            }
+        )
 
     def test_extra_headers_validation_invalid_syntax(self):
         """Test that invalid syntax raises ValidationError"""
@@ -96,7 +107,7 @@ class TestMailExtraHeader(BaseCommon):
 
     def test_sending_with_extra_headers_server_1(self):
         """Test that sending a mail with server 1 has the correct extra headers"""
-        message = self.env["ir.mail_server"].build_email(
+        message = self.env["ir.mail_server"]._build_email__(
             ["sender@test1.com"],
             ["recipient@example.com"],
             "Test Subject",
@@ -115,7 +126,7 @@ class TestMailExtraHeader(BaseCommon):
 
     def test_sending_with_extra_headers_server_2(self):
         """Test that sending a mail with server 2 has the correct extra headers"""
-        message = self.env["ir.mail_server"].build_email(
+        message = self.env["ir.mail_server"]._build_email__(
             ["sender@test2.com"],
             ["recipient@example.com"],
             "Test Subject",
@@ -134,7 +145,7 @@ class TestMailExtraHeader(BaseCommon):
 
     def test_sending_with_extra_headers_server_3(self):
         """Test that sending a mail with server 3 (empty headers) doesn't add any"""
-        message = self.env["ir.mail_server"].build_email(
+        message = self.env["ir.mail_server"]._build_email__(
             ["sender@test3.com"],
             ["recipient@example.com"],
             "Test Subject",
@@ -150,10 +161,28 @@ class TestMailExtraHeader(BaseCommon):
         self.assertNotIn("X-Priority", message)
         self.assertNotIn("X-Importance", message)
 
+    def test_sending_with_extra_headers_server_4(self):
+        """Test that sending a mail with server 4 (False headers) doesn't add any"""
+        message = self.env["ir.mail_server"]._build_email__(
+            ["sender@test4.com"],
+            ["recipient@example.com"],
+            "Test Subject",
+            "Test Body",
+        )
+        # Send email using server 3
+        self.env["ir.mail_server"].send_email(
+            message, mail_server_id=self.mail_server_4.id
+        )
+        # Check that no extra headers are added
+        self.assertNotIn("X-Custom-Header-1", message)
+        self.assertNotIn("X-Custom-Header-2", message)
+        self.assertNotIn("X-Priority", message)
+        self.assertNotIn("X-Importance", message)
+
     def test_sending_with_from_filter_detection(self):
         """Test that the correct server is selected based on From address"""
         # Test with server 1's from_filter
-        message = self.env["ir.mail_server"].build_email(
+        message = self.env["ir.mail_server"]._build_email__(
             ["sender@test1.com"],
             ["recipient@example.com"],
             "Test Subject",
@@ -168,7 +197,7 @@ class TestMailExtraHeader(BaseCommon):
     def test_sending_with_from_filter_detection_server_2(self):
         """Test that the correct server is selected based on From address"""
         # Test with server 2's from_filter
-        message = self.env["ir.mail_server"].build_email(
+        message = self.env["ir.mail_server"]._build_email__(
             ["sender@test2.com"],
             ["recipient@example.com"],
             "Test Subject",

@@ -1,3 +1,5 @@
 - [Camptocamp](https://www.camptocamp.com):
     - Matthieu Méquignon \<<matthieu.mequignon@camptocamp.com>\>
     - Iván Todorovich \<<ivan.todorovich@gmail.com>\>
+- [CIT-Services](https://cit-services.eu):
+  - Prayag <prayag.k@cit-services.eu>

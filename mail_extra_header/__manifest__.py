@@ -4,7 +4,7 @@
 {
     "name": "Mail Extra Header",
     "summary": "Adds extra headers per mail server to sent mails.",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Mail",
     "author": "Odoo Community Association (OCA), Camptocamp",
     "website": "https://github.com/OCA/mail",
