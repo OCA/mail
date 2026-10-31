@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2016 Antonio Espinosa - <antonio.espinosa@tecnativa.com>
      Copyright 2017 Vicent Cubells - <vicent.cubells@tecnativa.com>
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 <odoo>
-    <record model="ir.ui.view" id="mailing_contact_view_tree">
+    <record id="mailing_contact_view_tree" model="ir.ui.view">
         <field name="name">Add email score and stars</field>
         <field name="model">mailing.contact</field>
         <field name="inherit_id" ref="mass_mailing.mailing_contact_view_tree" />
@@ -15,7 +15,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="mailing_contact_view_search">
+    <record id="mailing_contact_view_search" model="ir.ui.view">
         <field name="name">Filter bounced contacts</field>
         <field name="model">mailing.contact</field>
         <field name="inherit_id" ref="mass_mailing.mailing_contact_view_search" />
