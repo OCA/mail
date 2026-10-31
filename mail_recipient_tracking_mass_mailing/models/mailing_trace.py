@@ -19,7 +19,8 @@ class MailTrace(models.Model):
 
     def write(self, values):
         """Ignore write from _postprocess_sent_message on selected ids"""
+        traces = self
         to_ignore_ids = self.env.context.get("_ignore_write_trace_postprocess_ids")
         if to_ignore_ids:
-            self = self.browse(set(self.ids) - set(to_ignore_ids))
-        return super().write(values)
+            traces = self.browse(set(self.ids) - set(to_ignore_ids))
+        return super(MailTrace, traces).write(values)

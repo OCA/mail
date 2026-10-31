@@ -7,7 +7,7 @@ from odoo import api, fields, models
 
 class MailMassMailingContact(models.Model):
     _name = "mailing.contact"
-    _inherit = ["mailing.contact", "mail.bounced.mixin"]
+    _inherit = ["mailing.contact", "mail.bounced.mixin"]  # noqa: RUF012
 
     email_score = fields.Float(
         string="Email score", store=False, compute="_compute_email_score"

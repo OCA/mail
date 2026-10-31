@@ -10,7 +10,7 @@ from odoo.fields import Command
 from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT, MockSmtplibCase
+from odoo.addons.base.tests.common import DISABLED_MAIL_CREATE_CONTEXT, MockSmtplibCase
 
 mock_send_email = "odoo.addons.base.models.ir_mail_server.IrMail_Server.send_email"
 
@@ -20,7 +20,14 @@ class TestMassMailing(TransactionCase, MockSmtplibCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                **DISABLED_MAIL_CREATE_CONTEXT,
+                tracking_disable=True,
+                mail_notrack=True,
+            )
+        )
         cls.list = cls.env["mailing.list"].create({"name": "Test mail tracking"})
         cls.list.name = f"{cls.list.name} #{cls.list.id}"
         cls.contact_a = cls.env["mailing.contact"].create(

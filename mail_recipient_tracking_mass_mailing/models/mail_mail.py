@@ -28,11 +28,12 @@ class MailMail(models.Model):
     ):
         """Set mailing traces in error according to mail tracking state
 
-        If an exception is caught by ir.mail_server.send_email in mail_tracking module,
-        the mail.tracking.email record will appear in error but the related mailing
-        trace would still appear as sent because this method is called without any
-        failure_type in mail.mail._send in the mail module (as Exception is not raised
-        after being caught in mail_tracking module).
+        If an exception is caught by ir.mail_server.send_email in
+        mail_recipient_tracking module, the mail.tracking.email record will appear in
+        error but the related mailing trace would still appear as sent because this
+        method is called without any failure_type in mail.mail._send in the mail
+        module (as Exception is not raised after being caught in
+        mail_recipient_tracking module).
 
         Since this method not only sets the mailing.trace state in mass_mailing module
         but can also delete the mail.mail records in mail module, we need to ensure
