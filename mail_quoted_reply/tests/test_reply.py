@@ -44,3 +44,18 @@ class TestMessageReply(TransactionCase):
         )
         self.assertTrue(new_message)
         self.assertEqual(1, len(new_message))
+
+    def test_reply_quotes_sender_address(self):
+        """The quoted sender keeps its e-mail address in the reply body"""
+        partner = self.env["res.partner"].create({"name": "demo partner"})
+        # pylint: disable=C8107
+        message = partner.message_post(
+            body="demo message",
+            message_type="email",
+            email_from='"Sender Name" <sender@example.com>',
+        )
+        action = message.reply_message()
+        wizard = (
+            self.env[action["res_model"]].with_context(**action["context"]).create({})
+        )
+        self.assertIn("&lt;sender@example.com&gt;", wizard.body)
