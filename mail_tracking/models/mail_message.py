@@ -34,6 +34,16 @@ class MailMessage(models.Model):
         search="_search_is_failed_message",
     )
 
+    # get_failed_count runs on every web client load (res.users._init_messaging)
+    # and filters on this flag, which only a handful of messages carry. Without a
+    # partial index the planner walks the failed trackings and probes mail_message
+    # by primary key once per tracking. Keep "IS TRUE": it is what the ORM generates
+    # for ("mail_tracking_needs_action", "=", True), and PostgreSQL does not use a
+    # plain "WHERE mail_tracking_needs_action" index for it.
+    _mail_tracking_needs_action_index = models.Index(
+        "(id) WHERE mail_tracking_needs_action IS TRUE"
+    )
+
     @api.model
     def get_failed_states(self):
         """The 'failed' states of the message"""
