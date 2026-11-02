@@ -30,18 +30,73 @@ class DiscussChannel(models.Model):
 
     def _to_store(self, store: Store, fields):
         res = super()._to_store(store, fields)
-        for record in self.filtered("gateway_id"):
-            if not record:
-                continue
+        gw_channels = self.filtered("gateway_id")
+        if not gw_channels:
+            return res
+        # sudo: res.partner.gateway.channel - technical lookup by token, done
+        # once for the whole recordset (this runs for every channel on load)
+        partner_by_key = {}
+        for gw_channel in (
+            self.env["res.partner.gateway.channel"]
+            .sudo()
+            .search(
+                [
+                    ("gateway_id", "in", gw_channels.gateway_id.ids),
+                    (
+                        "gateway_token",
+                        "in",
+                        [t for t in gw_channels.mapped("gateway_channel_token") if t],
+                    ),
+                ]
+            )
+        ):
+            partner_by_key.setdefault(
+                (gw_channel.gateway_id.id, gw_channel.gateway_token),
+                gw_channel.partner_id,
+            )
+        for record in gw_channels:
+            guests = record.channel_member_ids.guest_id
+            partner = partner_by_key.get(
+                (record.gateway_id.id, record.gateway_channel_token),
+                self.env["res.partner"],
+            )
             store.add_model_values(
                 self._name,
                 {
                     "id": record.id,
                     "gateway": record.gateway_id._gateway_info(),
                     "gateway_id": record.id,
+                    "gateway_partner_id": partner.id,
+                    "gateway_guest_id": guests.id if len(guests) == 1 else False,
                 },
             )
         return res
+
+    def _get_gateway_partner(self):
+        """Partner linked to the gateway token of the channel, if any."""
+        self.ensure_one()
+        if not self.gateway_id or not self.gateway_channel_token:
+            return self.env["res.partner"]
+        # sudo: res.partner.gateway.channel - technical lookup by token
+        return (
+            self.env["res.partner.gateway.channel"]
+            .sudo()
+            .search(
+                [
+                    ("gateway_id", "=", self.gateway_id.id),
+                    ("gateway_token", "=", self.gateway_channel_token),
+                ],
+                limit=1,
+            )
+            .partner_id
+        )
+
+    def _get_gateway_guest(self):
+        """Guest of the channel when there is exactly one (sender not yet
+        linked to a partner), used by the "New Partner" action."""
+        self.ensure_one()
+        guests = self.channel_member_ids.guest_id
+        return guests if len(guests) == 1 else self.env["mail.guest"]
 
     def _generate_avatar_gateway(self):
         # We will use this function to set a default avatar on each module

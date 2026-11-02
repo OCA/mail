@@ -480,6 +480,39 @@ class TestMailGateway(MailGatewayTestCase):
             ["gateway_id", "gateway_token", "gateway_message_ids", "channel_type"],
         )
 
+    def test_discuss_channel_to_store_gateway_partner(self):
+        impl = self.env["mail.gateway.abstract"]
+        channel = impl._get_channel(
+            self.gateway, "ch-partner-tok", {}, force_create=True
+        )
+        self.assertFalse(channel._get_gateway_partner())
+        self.env["res.partner.gateway.channel"].create(
+            {
+                "partner_id": self.partner.id,
+                "gateway_id": self.gateway.id,
+                "gateway_token": "ch-partner-tok",
+            }
+        )
+        self.assertEqual(channel._get_gateway_partner(), self.partner)
+        store = Store()
+        channel._to_store(store, ["channel_type"])
+        values = [
+            value
+            for value in store.get_result()["discuss.channel"]
+            if value["id"] == channel.id
+        ]
+        self.assertTrue(
+            any(value.get("gateway_partner_id") == self.partner.id for value in values)
+        )
+
+    def test_get_gateway_guest(self):
+        impl = self.env["mail.gateway.abstract"]
+        channel = impl._get_channel(self.gateway, "ch-guest-tok", {}, force_create=True)
+        self.assertFalse(channel._get_gateway_guest())
+        guest = self.env["mail.guest"].create({"name": "GW Guest"})
+        channel._add_members(guests=guest)
+        self.assertEqual(channel._get_gateway_guest(), guest)
+
     # ── mail.thread additional coverage ───────────────────────────────────────
 
     def test_get_notify_valid_parameters(self):
