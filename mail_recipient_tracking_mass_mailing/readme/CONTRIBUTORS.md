@@ -1,0 +1,15 @@
+- [Tecnativa](https://www.tecnativa.com):
+  - Pedro M. Baeza
+  - Antonio Espinosa
+  - Vicent Cubells
+  - David Vidal
+  - Ernesto Tejeda
+  - Carlos Roca
+  - Sergio Teruel
+
+- [Trobz](https://trobz.com):
+  - nguyenhk \<<nguyenhk@trobz.com>\>
+  - Tris Doan \<<tridm@trobz.com>\>
+
+- [Komit](https://komit-consulting.com):
+  - Quoc Pham Ngoc \<<quoc-pn@komit-consulting.com>\>
