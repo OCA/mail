@@ -91,3 +91,47 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         ):
             domain = field.get("domain")
             self.assertIn("category_id.name", domain)
+
+    def test_message_subscribe_meet(self):
+        self.partner.message_subscribe(partner_ids=self.partner.ids)
+        self.assertIn(
+            self.partner, self.partner.message_follower_ids.mapped("partner_id")
+        )
+
+    def test_message_subscribe_not_meet(self):
+        """Programmatic subscriptions (not going through the wizard) must
+        respect the domain too."""
+        outsider = self.env["res.partner"].create(
+            {"name": "Outsider", "email": "outsider@test.com"}
+        )
+        self.partner.message_subscribe(partner_ids=(self.partner | outsider).ids)
+        followers = self.partner.message_follower_ids.mapped("partner_id")
+        self.assertIn(self.partner, followers)
+        self.assertNotIn(outsider, followers)
+
+    def test_message_subscribe_current_user(self):
+        """The current user can always follow a record, whatever the domain."""
+        my_partner = self.env.user.partner_id
+        self.assertNotIn(self.category_employees, my_partner.category_id)
+        self.partner.message_subscribe(partner_ids=my_partner.ids)
+        self.assertIn(
+            my_partner, self.partner.message_follower_ids.mapped("partner_id")
+        )
+
+    def test_message_subscribe_no_restrict_context(self):
+        outsider = self.env["res.partner"].create(
+            {"name": "Outsider", "email": "outsider@test.com"}
+        )
+        self.partner.with_context(no_restrict_follower=True).message_subscribe(
+            partner_ids=outsider.ids
+        )
+        self.assertIn(outsider, self.partner.message_follower_ids.mapped("partner_id"))
+
+    def test_message_subscribe_other_model_unrestricted(self):
+        """Only the configured models are restricted."""
+        outsider = self.env["res.partner"].create(
+            {"name": "Outsider", "email": "outsider@test.com"}
+        )
+        record = self.env["mail.blacklist"].create({"email": "blocked@test.com"})
+        record.message_subscribe(partner_ids=outsider.ids)
+        self.assertIn(outsider, record.message_follower_ids.mapped("partner_id"))

@@ -38,8 +38,13 @@ only internally, it makes sense to filter possible followers for being
 employees. Otherwise, you'll get a quite crowded list of partners to
 choose from.
 
-Moreover, the module disables the option to automatically add followers
-that do not meet the domain.
+The domain is enforced on every follower addition, not only in the "Add
+Followers" wizard: partners subscribed programmatically (for example the
+customer of a ticket or lead, the sender of an incoming email or the
+recipients of a message) are silently skipped when they do not meet the
+domain. The partner of the current user is always allowed, so users can
+keep following the records they work on. Pass ``no_restrict_follower``
+in the context to bypass the restriction in custom code.
 
 **Table of contents**
 
@@ -58,13 +63,13 @@ mail_restrict_follower_selection.domain.$your_model.
 
 Some examples:
 
-- ``[("category_id.name", "=", "Employees")]`` : Only allow contacts
-  with 'Employees' tag
-- ``[("is_company", "=", False)]`` : Restrict company contacts to be
-  added as follower (to avoid emails to info@ email address)
-- ``[("user_ids","!=",False)]`` : Restrict to contacts with user
-  (internal and portal)
-- ``[("employee_ids","!=",False)]`` : Restrict to employees
+-  ``[("category_id.name", "=", "Employees")]`` : Only allow contacts
+   with 'Employees' tag
+-  ``[("is_company", "=", False)]`` : Restrict company contacts to be
+   added as follower (to avoid emails to info@ email address)
+-  ``[("user_ids","!=",False)]`` : Restrict to contacts with user
+   (internal and portal)
+-  ``[("employee_ids","!=",False)]`` : Restrict to employees
 
 Note: This module won't change existing followers!
 
@@ -90,14 +95,14 @@ Authors
 Contributors
 ------------
 
-- Holger Brunn <hbrunn@therp.nl>
-- Nguyen Tan Phuc <phuc.nt@komit-consulting.com>
-- Enric Tobella <etobella@creublanca.es>
-- `Quartile <https://www.quartile.co>`__:
+-  Holger Brunn <hbrunn@therp.nl>
+-  Nguyen Tan Phuc <phuc.nt@komit-consulting.com>
+-  Enric Tobella <etobella@creublanca.es>
+-  `Quartile <https://www.quartile.co>`__:
 
-  - Aung Ko Ko Lin
+   -  Aung Ko Ko Lin
 
-- Christopher Rogos <crogos@gmail.com>
+-  Christopher Rogos <crogos@gmail.com>
 
 Maintainers
 -----------
