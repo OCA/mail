@@ -197,6 +197,10 @@ Contributors
 
   - Quoc Pham Ngoc
 
+- `Onestein <https://onestein.nl>`__:
+
+  - Dennis Sluijk
+
 Other credits
 -------------
 

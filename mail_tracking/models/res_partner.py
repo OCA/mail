@@ -23,7 +23,37 @@ class ResPartner(models.Model):
     tracking_emails_count = fields.Integer(
         compute="_compute_email_score_and_count", readonly=True
     )
-    email_score = fields.Float(compute="_compute_email_score_and_count", readonly=True)
+    email_score = fields.Float(
+        compute="_compute_email_score_and_count",
+        search="_search_email_score",
+    )
+
+    def _search_email_score(self, operator, value):
+        supported_operators = ["<", ">", "<=", ">=", "=", "!="]
+        if operator not in supported_operators:
+            raise NotImplementedError()
+        weights = self.env["mail.tracking.email"]._email_score_weights()
+        case_expr = " ".join(
+            f"WHEN '{state}' THEN {score}" for state, score in weights.items()
+        )
+        state_expr = f"CASE state {case_expr} ELSE 0.0 END"
+        query = f"""
+            SELECT partner.id
+            FROM res_partner partner
+            LEFT JOIN (
+                SELECT recipient_address,
+                GREATEST(0.0, LEAST(100.0,
+                    50.0 + SUM({state_expr})
+                )) AS score
+                FROM mail_tracking_email
+                WHERE recipient_address IS NOT NULL
+                GROUP BY recipient_address
+            ) mte ON mte.recipient_address = LOWER(partner.email)
+            WHERE COALESCE(mte.score, 50.0) {operator} %s
+        """
+        self.env.cr.execute(query, (value,))
+        partner_ids = [row[0] for row in self.env.cr.fetchall()]
+        return [("id", "in", partner_ids)]
 
     @api.depends("email")
     def _compute_email_score_and_count(self):
