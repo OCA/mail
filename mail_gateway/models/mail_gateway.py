@@ -26,7 +26,10 @@ class MailGateway(models.Model):
     webhook_user_id = fields.Many2one(
         "res.users",
         default=lambda self: self.env.ref("base.user_root"),
-        help="User that will create the messages",
+        domain=lambda self: [
+            ("all_group_ids", "in", self.env.ref("mail_gateway.gateway_user").ids)
+        ],
+        help="User that will create the messages. It must be a gateway user.",
     )
     member_ids = fields.Many2many("res.users")
     company_id = fields.Many2one(
