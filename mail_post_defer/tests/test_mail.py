@@ -173,19 +173,6 @@ class MessagePostCase(MailPostDeferCommon):
                 partner_ids=self.partner_employee.ids,
                 subtype_xmlid="mail.mt_comment",
             )
-            # We add tracking value to raise the userError in _message_update_content
-            field = self.env["ir.model.fields"]._get("mail.message", "body")
-            msg.tracking_value_ids = [
-                (
-                    0,
-                    0,
-                    {
-                        "field_id": field.id,
-                        "old_value_char": "test body",
-                        "new_value_char": "test body edited",
-                    },
-                )
-            ]
             # One minute later, the cron sends the mail
             with freezegun.freeze_time("2023-01-02 10:01:00"):
                 self.env["mail.message.schedule"]._send_notifications_cron()
@@ -196,6 +183,9 @@ class MessagePostCase(MailPostDeferCommon):
                     author=self.env.user.partner_id,
                     content="test body",
                 )
+                # Turn it into a tracking message to raise the UserError in
+                # _message_update_content
+                msg.message_type = "tracking"
                 # Emulate user clicking on delete button and going through the
                 # `/mail/message/update_content` controller
                 with self.assertRaises(UserError):

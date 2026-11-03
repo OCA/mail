@@ -10,11 +10,11 @@ from odoo.tools import config
 class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
-    def _notify_thread(self, message, msg_vals=False, **kwargs):
+    def _notify_thread(self, message, **kwargs):
         """Defer emails by default."""
         # During tests, don't defer unless a test explicitly opts in
         if config["test_enable"] and not self.env.context.get("test_mail_post_defer"):
-            return super()._notify_thread(message, msg_vals=msg_vals, **kwargs)
+            return super()._notify_thread(message, **kwargs)
         # Don't defer automatically if forcing send
         _self = self
         if "mail_defer_seconds" not in _self.env.context:
@@ -32,9 +32,7 @@ class MailThread(models.AbstractModel):
                 "scheduled_date",
                 fields.Datetime.now() + timedelta(seconds=defer_seconds),
             )
-        return super(MailThread, _self)._notify_thread(
-            message, msg_vals=msg_vals, **kwargs
-        )
+        return super(MailThread, _self)._notify_thread(message, **kwargs)
 
     def _message_update_content(self, message, /, *, body, **kwargs):
         # If anything already went out, fall back to the standard behavior

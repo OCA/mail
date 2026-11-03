@@ -3,7 +3,7 @@
 {
     "name": "Deferred Message Posting",
     "summary": "Faster and cancellable outgoing messages",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "development_status": "Alpha",
     "category": "Productivity/Discuss",
     "website": "https://github.com/OCA/mail",
