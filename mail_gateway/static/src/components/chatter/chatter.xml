@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t
+        t-name="mail_gateway.Chatter"
+        t-inherit="mail.Chatter"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//button[hasclass('o-mail-Chatter-logNote')]" position="after">
+            <button
+                t-if="this.store.has_gateway_access"
+                class="o-mail-Chatter-gateway btn text-nowrap"
+                t-att-class="{
+                    'btn-primary active': this.state.composerType === 'gateway',
+                    'btn-secondary': this.state.composerType !== 'gateway',
+                }"
+                t-att-disabled="!this.state.thread.canPostMessage and this.thread().id"
+                type="button"
+                data-hotkey="shift+w"
+                t-on-click="() => this.toggleComposer('gateway')"
+            >
+                <i class="oi me-1" data-icon="send" role="img" aria-label="Gateway" />
+                <span>Gateway</span>
+            </button>
+        </xpath>
+        <xpath expr="//t[@t-if='this.state.composerType']/Composer" position="before">
+            <div
+                t-if="this.state.composerType === 'gateway'"
+                class="o-mail-Chatter-gatewayFollowers flex-shrink-0 py-1 small"
+            >
+                <t t-if="this.state.thread.gateway_followers.length">
+                    <span class="fw-bold">To:</span>
+                    <t
+                        t-foreach="this.state.thread.gateway_followers"
+                        t-as="gateway_follower"
+                        t-key="gateway_follower.id"
+                    >
+                        <GatewayFollower
+                            follower="gateway_follower"
+                            thread="this.state.thread"
+                        />
+                    </t>
+                </t>
+                <span t-else="" class="text-muted">
+                    No follower of this record can be reached through a gateway.
+                </span>
+            </div>
+        </xpath>
+        <xpath
+            expr="//t[@t-if='this.state.composerType']/Composer"
+            position="attributes"
+        >
+            <attribute
+                name="type"
+            >this.state.composerType === 'gateway' ? 'message' : this.state.composerType</attribute>
+            <attribute
+                name="isGateway"
+            >this.state.composerType === 'gateway'</attribute>
+            <attribute
+                name="withMessageFields"
+            >this.state.composerType !== 'gateway'</attribute>
+        </xpath>
+    </t>
+</templates>
