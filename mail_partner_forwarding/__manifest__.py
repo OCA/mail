@@ -4,7 +4,7 @@
 {
     "name": "Partner Mail Forwarding",
     "summary": "Forwarding notifications for partners",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Social Network",
     "website": "https://github.com/OCA/mail",
     "author": "ADHOC SA, Odoo Community Association (OCA)",

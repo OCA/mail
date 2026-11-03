@@ -9,7 +9,9 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='login']//.." position="after">
                 <label for="forwarding_partner_id" />
-                <field name="forwarding_partner_id" />
+                <div class="d-flex align-items-baseline w-md-50 gap-2">
+                    <field name="forwarding_partner_id" />
+                </div>
             </xpath>
         </field>
     </record>
