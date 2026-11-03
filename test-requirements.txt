@@ -1,0 +1,1 @@
+odoo-addon-mail_attach_existing_attachment @ git+https://github.com/OCA/mail.git@refs/pull/325/head#subdirectory=mail_attach_existing_attachment
