@@ -22,7 +22,7 @@ class MailThread(models.AbstractModel):
         ):
             if (
                 partner.forwarding_partner_id
-                and partner.forwarding_partner_id.id not in partner_dict.keys()
+                and partner.forwarding_partner_id.id not in partner_dict
                 and partner.forwarding_partner_id.id not in forwarded_partner_ids
             ):
                 forwarded_partner_ids.append(partner.forwarding_partner_id.id)
