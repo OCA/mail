@@ -52,8 +52,10 @@ class MailThread(models.AbstractModel):
                 lambda x: x.state in {"outgoing", "exception", "draft"}
             ).write({"state": "cancel"})
             message.notification_ids.filtered(
-                lambda x: x.notification_status
-                in {"ready", "exception", "canceled", "bounce"}
+                lambda x: (
+                    x.notification_status
+                    in {"ready", "exception", "canceled", "bounce"}
+                )
             ).unlink()
             Schedule.create(
                 {"mail_message_id": message.id, "scheduled_datetime": scheduled_date}
