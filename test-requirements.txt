@@ -1,0 +1,1 @@
+odoo-addon-mail_gateway @ git+https://github.com/OCA/mail@refs/pull/314/head#subdirectory=mail_gateway
