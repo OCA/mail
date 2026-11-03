@@ -13,6 +13,7 @@
             Set as Reviewed
         </a>
             <a
+                t-if="message.mail_tracking_can_retry"
                 href="#"
                 class="btn btn-link btn-success text-muted p-0 me-3"
                 role="button"
