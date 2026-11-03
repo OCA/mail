@@ -8,7 +8,8 @@
             <field name="email" position="before">
                 <button
                     name="mail_blacklist_add"
-                    class="fa fa-plus text-success"
+                    class="oi text-success"
+                    data-icon="add"
                     title="Click to add this email to the blacklist."
                     type="object"
                     groups="base.group_user"
