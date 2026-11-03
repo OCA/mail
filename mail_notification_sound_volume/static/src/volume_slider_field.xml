@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="mail_notification_sound_volume.VolumeSliderField">
+        <t t-if="props.readonly">
+            <span t-esc="percentage + '%'" />
+        </t>
+        <t t-else="">
+            <div class="d-flex align-items-center gap-2">
+                <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    t-att-value="value"
+                    t-on-input="onChange"
+                    t-on-change="onChange"
+                    class="form-range flex-grow-1"
+                    style="max-width: 200px;"
+                />
+                <span
+                    class="text-muted"
+                    style="min-width: 35px;"
+                    t-esc="percentage + '%'"
+                />
+                <button
+                    type="button"
+                    class="btn btn-secondary btn-sm fa fa-volume-up"
+                    t-on-click="onTestSound"
+                    title="Test sound"
+                />
+            </div>
+        </t>
+    </t>
+
+</templates>
