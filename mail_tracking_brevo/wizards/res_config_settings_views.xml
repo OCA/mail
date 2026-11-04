@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 CIT Services
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<data>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="mail.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <block id="emails" position="inside">
+                <setting id="mail_tracking_brevo" string="Brevo">
+                    <field name="mail_tracking_brevo_enabled" />
+                    <field
+                        name="mail_tracking_brevo_webhooks_registered"
+                        invisible="1"
+                    />
+                    <div class="content-group">
+                        <label for="mail_tracking_brevo_enabled" />
+                        <div class="text-muted">
+                            Connecting Odoo with <a
+                            href="https://www.brevo.com/"
+                            target="_blank"
+                        >Brevo</a> enhances Odoo's mail tracking features.
+                        </div>
+                        <div
+                            class="content-group"
+                            invisible="not mail_tracking_brevo_enabled"
+                        >
+                            <div class="mt16 text-warning">Obtain keys in <a
+                                href="https://app.brevo.com/settings/keys/api"
+                                target="_blank"
+                            >Brevo &gt; Settings &gt; API keys</a>:</div>
+                            <div class="row mt16">
+                                <label
+                                    for="mail_tracking_brevo_api_key"
+                                    class="col-lg-3 o_light_label"
+                                />
+                                <field
+                                    name="mail_tracking_brevo_api_key"
+                                    password="True"
+                                    placeholder="3Il5WbOabcde0123456789abcde0123456789ab"
+                                    required="mail_tracking_brevo_enabled"
+                                />
+                            </div>
+                            <div class="row mt16">
+                                <label
+                                    for="mail_tracking_brevo_webhook_token"
+                                    class="col-lg-3 o_light_label"
+                                />
+                                <field
+                                    name="mail_tracking_brevo_webhook_token"
+                                    password="True"
+                                    placeholder="abcde0123456789abcde0123456789ab"
+                                />
+                            </div>
+                            <div class="row mt16">
+                                <label
+                                    for="mail_tracking_brevo_webhooks_domain"
+                                    class="col-lg-3 o_light_label"
+                                />
+                                <field
+                                    name="mail_tracking_brevo_webhooks_domain"
+                                    placeholder="https://example.com"
+                                />
+                            </div>
+                            <div class="text-muted mt16 mb4">
+                                If you change Brevo settings, your Odoo URL or your sending domain, unregister webhooks and register them again to get automatic updates about sent emails:
+                            </div>
+                            <button
+                                type="object"
+                                name="mail_tracking_brevo_unregister_webhooks"
+                                string="Unregister Brevo webhooks"
+                                icon="fa-arrow-right"
+                                class="btn-link"
+                                invisible="not mail_tracking_brevo_webhooks_registered"
+                                confirm="This will unregister webhooks from Brevo for this database."
+                            />
+                            <button
+                                type="object"
+                                name="mail_tracking_brevo_register_webhooks"
+                                string="Register Brevo webhooks"
+                                icon="fa-arrow-right"
+                                class="btn-link"
+                                invisible="mail_tracking_brevo_webhooks_registered"
+                            />
+                        </div>
+                    </div>
+                </setting>
+            </block>
+        </field>
+    </record>
+</data>
