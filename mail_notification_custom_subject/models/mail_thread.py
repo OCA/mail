@@ -70,7 +70,7 @@ class MailThread(models.AbstractModel):
                                 rendered_subject_to_replace,
                                 rendered_subject_template,
                             )
-                except Exception:
+                except Exception:  # noqa: BLE001
                     _logger.warning(
                         f"There is an error with {self.display_name} in the mail "
                         f"message custom subject {template.name}"
