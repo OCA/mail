@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="mail_notification_custom_subject_form">
+    <record id="mail_notification_custom_subject_form" model="ir.ui.view">
         <field name="name">mail.message.custom.subject.form</field>
         <field name="model">mail.message.custom.subject</field>
         <field name="arch" type="xml">
@@ -30,7 +30,7 @@
             </form>
         </field>
     </record>
-    <record model="ir.ui.view" id="mail_notification_custom_subject_tree">
+    <record id="mail_notification_custom_subject_tree" model="ir.ui.view">
         <field name="name">mail.message.custom.subject.list</field>
         <field name="model">mail.message.custom.subject</field>
         <field name="arch" type="xml">
@@ -43,8 +43,8 @@
         </field>
     </record>
     <record
-        model="ir.actions.act_window"
         id="action_mail_notification_custom_subject_tree_all"
+        model="ir.actions.act_window"
     >
         <field name="name">Subject Replacement Templates</field>
         <field name="res_model">mail.message.custom.subject</field>
