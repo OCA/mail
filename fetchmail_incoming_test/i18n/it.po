@@ -6,86 +6,88 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-11-08 23:46+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_bcc
 msgid "Bcc"
-msgstr ""
+msgstr "Ccn"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__body
 msgid "Body"
-msgstr ""
+msgstr "Corpo"
 
 #. module: fetchmail_incoming_test
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_eml_view_form
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_view_form
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_cc
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__create_uid
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__create_date
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__display_name
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nome visualizzato"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__eml_file
 msgid "Email File"
-msgstr ""
+msgstr "File e-mail"
 
 #. module: fetchmail_incoming_test
 #. odoo-python
 #: code:addons/fetchmail_incoming_test/wizards/fetchmail_incoming_test_mixin.py:0
 msgid "Email processed"
-msgstr ""
+msgstr "E-mail elaborata"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__eml_filename
 msgid "Eml Filename"
-msgstr ""
+msgstr "Nome file EML"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_from
 msgid "From"
-msgstr ""
+msgstr "Da"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__id
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__server_id
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__server_id
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_mixin__server_id
 msgid "Incoming Mail Server"
-msgstr ""
+msgstr "Server posta in arrivo"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,help:fetchmail_incoming_test.field_fetchmail_incoming_test__server_id
@@ -93,76 +95,81 @@ msgstr ""
 #: model:ir.model.fields,help:fetchmail_incoming_test.field_fetchmail_incoming_test_mixin__server_id
 msgid "Incoming mail server this wizard was opened from."
 msgstr ""
+"Server di posta in arrivo da cui è stata aperta questa procedura guidata."
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__write_uid
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento di"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__write_date
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultimo aggiornamento il"
 
 #. module: fetchmail_incoming_test
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_eml_view_form
 msgid "Process"
-msgstr ""
+msgstr "Elabora"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,help:fetchmail_incoming_test.field_fetchmail_incoming_test_eml__eml_file
 msgid "Raw message, as exported by a mail client. Usually a .eml file."
 msgstr ""
+"Messaggio grezzo, così come esportato da un client di posta. Solitamente un "
+"file .eml."
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,help:fetchmail_incoming_test.field_fetchmail_incoming_test__email_to
 msgid "Recipient address, typically the alias routing to the target model."
 msgstr ""
+"Indirizzo del destinatario, tipicamente l'alias che instrada verso il "
+"modello di destinazione."
 
 #. module: fetchmail_incoming_test
 #: model:ir.actions.act_window,name:fetchmail_incoming_test.action_fetchmail_incoming_test_eml
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_eml_view_form
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.view_email_server_form
 msgid "Replay Email File"
-msgstr ""
+msgstr "Riproduci file e-mail"
 
 #. module: fetchmail_incoming_test
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_view_form
 msgid "Send"
-msgstr ""
+msgstr "Invia"
 
 #. module: fetchmail_incoming_test
 #: model:ir.actions.act_window,name:fetchmail_incoming_test.action_fetchmail_incoming_test
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.fetchmail_incoming_test_view_form
 #: model_terms:ir.ui.view,arch_db:fetchmail_incoming_test.view_email_server_form
 msgid "Simulate Incoming Email"
-msgstr ""
+msgstr "Simula e-mail in arrivo"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model,name:fetchmail_incoming_test.model_fetchmail_incoming_test
 #: model:ir.model,name:fetchmail_incoming_test.model_fetchmail_incoming_test_mixin
 msgid "Simulate an Incoming Email"
-msgstr ""
+msgstr "Simula un'e-mail in arrivo"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model,name:fetchmail_incoming_test.model_fetchmail_incoming_test_eml
 msgid "Simulate an Incoming Email from a File"
-msgstr ""
+msgstr "Simula un'e-mail in arrivo da un file"
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__subject
 msgid "Subject"
-msgstr ""
+msgstr "Oggetto"
 
 #. module: fetchmail_incoming_test
 #. odoo-python
 #: code:addons/fetchmail_incoming_test/wizards/fetchmail_incoming_test_mixin.py:0
 msgid "The gateway created record #%s."
-msgstr ""
+msgstr "Il gateway ha creato il record n. %s."
 
 #. module: fetchmail_incoming_test
 #: model:ir.model.fields,field_description:fetchmail_incoming_test.field_fetchmail_incoming_test__email_to
 msgid "To"
-msgstr ""
+msgstr "A"
