@@ -9,48 +9,48 @@
                     aria-label="Chatter view toggle"
                 >
                     <button
-                        type="button"
                         class="btn"
                         t-att-class="{
                                 'btn-primary': isViewAll,
                                 'btn-outline-secondary': !isViewAll
                             }"
+                        type="button"
                         t-on-click="() => this.setChatterView('all')"
                     >
                         <i class="fa fa-list-alt" />
                         <span class="d-none d-md-inline ms-1">All</span>
                     </button>
                     <button
-                        type="button"
                         class="btn"
                         t-att-class="{
                                 'btn-primary': isViewMessages,
                                 'btn-outline-secondary': !isViewMessages
                             }"
+                        type="button"
                         t-on-click="() => this.setChatterView('messages')"
                     >
                         <i class="fa fa-comments" />
                         <span class="d-none d-md-inline ms-1">Messages</span>
                     </button>
                     <button
-                        type="button"
                         class="btn"
                         t-att-class="{
                                 'btn-primary': isViewLogs,
                                 'btn-outline-secondary': !isViewLogs
                             }"
+                        type="button"
                         t-on-click="() => this.setChatterView('logs')"
                     >
                         <i class="fa fa-history" />
                         <span class="d-none d-md-inline ms-1">Logs</span>
                     </button>
                     <button
-                        type="button"
                         class="btn"
                         t-att-class="{
                                 'btn-primary': isViewActivities,
                                 'btn-outline-secondary': !isViewActivities
                             }"
+                        type="button"
                         t-on-click="() => this.setChatterView('activities')"
                     >
                         <i class="fa fa-clock-o" />
