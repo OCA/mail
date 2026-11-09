@@ -60,7 +60,10 @@ class MailThread(models.AbstractModel):
             doc = etree.XML(res["arch"])
             for node in doc.xpath("/search/field[last()]"):
                 # Add message_search in search view
-                elem = etree.Element("field", {"name": "message_search"})
+                elem = etree.Element(
+                    "field",
+                    {"name": "message_search", "string": self.env._("Message Search")},
+                )
                 node.addnext(elem)
                 res["arch"] = etree.tostring(doc, encoding="unicode")
         return res
