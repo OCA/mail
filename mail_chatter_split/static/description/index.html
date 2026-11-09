@@ -376,30 +376,40 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/20.0/mail_chatter_split"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_chatter_split"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=20.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>This module introduces filter buttons in the chatter to separate user
-messages, activities and system logs. It adds a small toggle toolbar
-above the chatter that allows switching between:</p>
+messages, notes, activities and tracked changes. It adds a small toggle
+toolbar above the chatter that allows switching between:</p>
 <ul class="simple">
 <li>All messages: default view showing all messages</li>
-<li>User messages: only user-generated messages</li>
-<li>System logs: only system-generated logs</li>
-<li>Planned activities: only activities</li>
+<li>Messages: only messages sent to or received from followers</li>
+<li>Notes: only internal notes</li>
+<li>Activities: planned activities and completed activities</li>
+<li>Changes: only tracked field changes</li>
 </ul>
+<p>The buttons use the chatter message filters of Odoo, so the filtering is
+done on the server and covers all messages of the record.</p>
 <p>Also, it keeps the chatter view selected when navigating between
 records/views, similar to how notebook tabs in form views remember the
 last selected tab.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a><ul>
-<li><a class="reference internal" href="#contributors" id="toc-entry-3">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-4">Maintainers</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-2">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-3">Credits</a><ul>
+<li><a class="reference internal" href="#contributors" id="toc-entry-4">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-5">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#toc-entry-1">Usage</a></h2>
+<p>Open a record with a chatter and click one of the filter buttons above
+the messages. A search term entered in the chatter search is combined
+with the selected filter.</p>
+</div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/mail/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -407,9 +417,9 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-2">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">Credits</a></h2>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-3">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-4">Contributors</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://www.forgeflow.com">ForgeFlow</a>:<ul>
 <li>Andreu Orensanz &lt;<a class="reference external" href="mailto:andreu.orensanz&#64;forgeflow.com">andreu.orensanz&#64;forgeflow.com</a>&gt;</li>
@@ -418,7 +428,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-4">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

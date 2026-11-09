@@ -1,63 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="mail.Chatter" t-inherit="mail.Chatter" t-inherit-mode="extension">
+    <t
+        t-name="mail_chatter_split.Chatter"
+        t-inherit="mail.Chatter"
+        t-inherit-mode="extension"
+    >
         <xpath expr="//div[hasclass('o-mail-Chatter-content')]" position="before">
-            <div t-if="state.thread" class="o-mail-ChatterSplit-tabs d-flex px-3 py-2">
+            <div
+                t-if="this.state.thread and this.thread().id"
+                class="o-mail-ChatterSplit-tabs d-flex px-3 py-2 d-print-none"
+            >
                 <div
                     class="btn-group btn-group-sm"
                     role="group"
                     aria-label="Chatter view toggle"
                 >
-                    <button
-                        class="btn"
-                        t-att-class="{
-                                'btn-primary': isViewAll,
-                                'btn-outline-secondary': !isViewAll
-                            }"
-                        type="button"
-                        t-on-click="() => this.setChatterView('all')"
+                    <t
+                        t-foreach="this.chatterSplitFilters"
+                        t-as="chatterFilter"
+                        t-key="chatterFilter.key"
                     >
-                        <i class="fa fa-list-alt" />
-                        <span class="d-none d-md-inline ms-1">All</span>
-                    </button>
-                    <button
-                        class="btn"
-                        t-att-class="{
-                                'btn-primary': isViewMessages,
-                                'btn-outline-secondary': !isViewMessages
-                            }"
-                        type="button"
-                        t-on-click="() => this.setChatterView('messages')"
-                    >
-                        <i class="fa fa-comments" />
-                        <span class="d-none d-md-inline ms-1">Messages</span>
-                    </button>
-                    <button
-                        class="btn"
-                        t-att-class="{
-                                'btn-primary': isViewLogs,
-                                'btn-outline-secondary': !isViewLogs
-                            }"
-                        type="button"
-                        t-on-click="() => this.setChatterView('logs')"
-                    >
-                        <i class="fa fa-history" />
-                        <span class="d-none d-md-inline ms-1">Logs</span>
-                    </button>
-                    <button
-                        class="btn"
-                        t-att-class="{
-                                'btn-primary': isViewActivities,
-                                'btn-outline-secondary': !isViewActivities
-                            }"
-                        type="button"
-                        t-on-click="() => this.setChatterView('activities')"
-                    >
-                        <i class="fa fa-clock-o" />
-                        <span class="d-none d-md-inline ms-1">Activities</span>
-                    </button>
+                        <button
+                            class="btn"
+                            t-att-class="this.chatterSplitButtonClass(chatterFilter)"
+                            t-att-data-filter="chatterFilter.key"
+                            t-att-title="chatterFilter.name"
+                            type="button"
+                            t-on-click="() => this.setChatterSplitFilter(chatterFilter.id)"
+                        >
+                            <i
+                                class="oi"
+                                t-att-data-icon="chatterFilter.icon"
+                                role="img"
+                            />
+                            <span
+                                class="d-none d-md-inline ms-1"
+                                t-out="chatterFilter.name"
+                            />
+                        </button>
+                    </t>
                 </div>
             </div>
+        </xpath>
+        <xpath expr="//t[@t-call='mail.ActivityList']/.." position="attributes">
+            <attribute
+                name="t-if"
+            >this.webChatterProps.has_activities and this.activities.length and (this.chatterSplitShowActivities or (!this.messageSearch.searching and !this.messageSearch.searched))</attribute>
         </xpath>
     </t>
 </templates>
