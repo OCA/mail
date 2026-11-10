@@ -139,3 +139,30 @@ class MailThread(models.AbstractModel):
 
     def _get_allowed_message_params(self):
         return super()._get_allowed_message_params() | {"gateway_notifications"}
+
+    def notify_cancel_by_type(self, notification_type):
+        super().notify_cancel_by_type(notification_type)
+        if notification_type == "gateway":
+            # Gateway notifications are created without author: the generic
+            # implementation would find none, so match on the message author.
+            notifications = (
+                self.env["mail.notification"]
+                .sudo()
+                .search(
+                    [
+                        ("notification_type", "=", "gateway"),
+                        ("notification_status", "in", ("bounce", "exception")),
+                        ("mail_message_id.model", "=", self._name),
+                        (
+                            "mail_message_id.author_id",
+                            "=",
+                            self.env.user.partner_id.id,
+                        ),
+                    ]
+                )
+            )
+            notifications.write({"notification_status": "canceled"})
+            self.env["mail.message"].browse(
+                notifications.mail_message_id.ids
+            )._notify_message_notification_update()
+        return True
