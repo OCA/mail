@@ -81,6 +81,8 @@ Contributors
 
   - Andreu Orensanz <andreu.orensanz@forgeflow.com>
 
+- Daan Boven <hoi@daanboven.com>
+
 Maintainers
 -----------
 
