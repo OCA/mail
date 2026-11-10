@@ -33,6 +33,8 @@ msgid "ID"
 msgstr "ID"
 
 #. module: mail_message_search
+#. odoo-python
+#: code:addons/mail_message_search/models/mail_thread.py:0
 #: model:ir.model.fields,field_description:mail_message_search.field_account_account__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_analytic_account__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_account_bank_statement_line__message_search
