@@ -1,4 +1,4 @@
-import {Chatter} from "@mail/chatter/web_portal/chatter";
+import {Chatter} from "@mail/chatter/web_portal_project/chatter";
 import {patch} from "@web/core/utils/patch";
 import {useService} from "@web/core/utils/hooks";
 
@@ -16,22 +16,19 @@ patch(Chatter.prototype, {
      */
     // eslint-disable-next-line no-unused-vars
     async _onListActivity(ev) {
-        if (this.state.thread) {
-            const thread = this.state.thread;
+        const thread = this.thread();
+        if (thread?.id) {
             const action = await this.orm.call(
                 thread.model,
                 "redirect_to_activities",
                 [[]],
                 {
-                    id: this.state.thread.id,
-                    model: this.state.thread.model,
+                    id: thread.id,
+                    model: thread.model,
                 }
             );
-            this.action.doAction(action, {
-                onClose: () => {
-                    thread.refreshActivities();
-                    thread.refresh();
-                },
+            return this.action.doAction(action, {
+                onClose: () => this.onActivityChanged(thread),
             });
         }
     },

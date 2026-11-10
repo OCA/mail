@@ -58,23 +58,10 @@
         <field name="mode">extension</field>
         <field name="arch" type="xml">
             <xpath expr='//field[@name="activity_type_id"]' position='after'>
-                <field name="user_id" />
                 <field name="res_name" string="Origin" />
             </xpath>
-
-            <xpath
-                expr='//filter[@name="filter_date_deadline_future"]'
-                position='after'
-            >
-                <filter
-                    string="Deadline"
-                    name="date_deadline"
-                    date="date_deadline"
-                    start_year="0"
-                    start_month="-1"
-                    end_year="2"
-                    end_month="2"
-                />
+            <xpath expr='//filter[@name="activities_upcoming_all"]' position='after'>
+                <filter string="Deadline" name="date_deadline" date="date_deadline" />
             </xpath>
         </field>
     </record>
@@ -110,12 +97,18 @@
         <field name="view_mode">calendar</field>
         <field name="act_window_id" ref="mail.mail_activity_action_my" />
     </record>
-    <record id="mail_activity_action_my_view_pivot" model="ir.actions.act_window.view">
+    <record
+        id="mail.mail_activity_action_my_view_pivot"
+        model="ir.actions.act_window.view"
+    >
         <field name="sequence" eval="5" />
         <field name="view_mode">pivot</field>
         <field name="act_window_id" ref="mail.mail_activity_action_my" />
     </record>
-    <record id="mail_activity_action_my_view_graph" model="ir.actions.act_window.view">
+    <record
+        id="mail.mail_activity_action_my_view_graph"
+        model="ir.actions.act_window.view"
+    >
         <field name="sequence" eval="6" />
         <field name="view_mode">graph</field>
         <field name="act_window_id" ref="mail.mail_activity_action_my" />

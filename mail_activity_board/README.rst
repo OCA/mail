@@ -21,19 +21,28 @@ Mail Activity Board
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/19.0/mail_activity_board
+    :target: https://github.com/OCA/mail/tree/20.0/mail_activity_board
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_activity_board
+    :target: https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_activity_board
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module adds an activity board with form, tree, kanban, calendar,
-pivot, graph and search views.
+This module extends the activity board to make it easier to browse
+activities and navigate to their related documents.
+
+It adds a **View Activities** button to the chatter, opening the board
+filtered to the current record, and a **Document** link in the activity
+form and list views.
+
+The board provides kanban, list, form, calendar, pivot and graph views,
+with additional search options for the origin and deadline. Activities
+in the list are color-coded according to whether they are overdue, due
+today or planned for a later date.
 
 **Table of contents**
 
@@ -43,16 +52,18 @@ pivot, graph and search views.
 Usage
 =====
 
-To use this module, you need to:
+To view the activities related to a record:
 
-1. Access to the views from menu Boards.
+1. Open a saved record that supports activities, such as a contact or an
+   opportunity.
+2. Click **View Activities** next to **Activity** in the chatter. This
+   button is available when you have write access to the record.
+3. The activity board opens with only the activities linked to that
+   record. Switch between the kanban, list, calendar, pivot and graph
+   views to browse or analyze them.
 
-A smartButton of activities is added in the mail thread from form view.
-From this smartButton is linked to the activity board, to the view tree,
-which shows the activities related to the opportunity.
-
-From the form view of the activity you can navigate to the origin of the
-activity.
+Open an activity to view its details. Use the **Document** field in the
+activity form or list to navigate to the related record.
 
 Bug Tracker
 ===========
@@ -60,7 +71,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_activity_board%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_activity_board%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -98,12 +109,6 @@ Contributors
 
   - Christopher Rogos <crogos@gmail.com>
 
-Other credits
--------------
-
-The migration of this module from 18.0 to 19.0 was financially supported
-by Agent ERP GmbH
-
 Maintainers
 -----------
 
@@ -117,6 +122,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_activity_board>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/20.0/mail_activity_board>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

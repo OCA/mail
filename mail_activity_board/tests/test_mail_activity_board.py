@@ -1,50 +1,38 @@
 # Copyright 2018 David Juaneda - <djuaneda@sdi.es>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+from odoo import Command
 from odoo.tests.common import TransactionCase
 
 
 class TestMailActivityBoardMethods(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        # Set up activities
-
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # Create a user as 'Crm Salesman' and added few groups
-        mail_activity_group = self.create_mail_activity_group()
-        self.employee = self.env["res.users"].create(
+        mail_activity_group = cls.create_mail_activity_group()
+        cls.employee = cls.env["res.users"].create(
             {
-                "company_id": self.env.ref("base.main_company").id,
+                "company_id": cls.env.ref("base.main_company").id,
                 "name": "Employee",
                 "login": "csu",
                 "email": "crmuser@yourcompany.com",
-                "group_ids": [
-                    (
-                        6,
-                        0,
-                        [
-                            self.env.ref("base.group_user").id,
-                        ],
-                    )
-                ],
+                "group_ids": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
-
         # Create a user who doesn't have access to anything except activities
-
-        self.employee2 = self.env["res.users"].create(
+        cls.employee2 = cls.env["res.users"].create(
             {
-                "company_id": self.env.ref("base.main_company").id,
+                "company_id": cls.env.ref("base.main_company").id,
                 "name": "Employee2",
                 "login": "alien",
                 "email": "alien@yourcompany.com",
-                "group_ids": [(6, 0, [mail_activity_group.id])],
+                "group_ids": [Command.set([mail_activity_group.id])],
             }
         )
-
         # lead_model_id = self.env['ir.model']._get('crm.lead').id
-        partner_model = self.env["ir.model"]._get("res.partner")
-
-        ActivityType = self.env["mail.activity.type"]
-        self.activity1 = ActivityType.create(
+        partner_model = cls.env["ir.model"]._get("res.partner")
+        ActivityType = cls.env["mail.activity.type"]
+        cls.activity1 = ActivityType.create(
             {
                 "name": "Initial Contact",
                 "delay_count": 5,
@@ -53,7 +41,7 @@ class TestMailActivityBoardMethods(TransactionCase):
                 "res_model": partner_model.model,
             }
         )
-        self.activity2 = ActivityType.create(
+        cls.activity2 = ActivityType.create(
             {
                 "name": "Call for Demo",
                 "delay_count": 6,
@@ -62,7 +50,7 @@ class TestMailActivityBoardMethods(TransactionCase):
                 "res_model": partner_model.model,
             }
         )
-        self.activity3 = ActivityType.create(
+        cls.activity3 = ActivityType.create(
             {
                 "name": "Celebrate the sale",
                 "delay_count": 3,
@@ -71,73 +59,68 @@ class TestMailActivityBoardMethods(TransactionCase):
                 "res_model": partner_model.model,
             }
         )
-
         # I create an opportunity, as employee
-        self.partner_client = self.env["res.partner"].create({"name": "Partner test"})
-
+        cls.partner_client = cls.env["res.partner"].create({"name": "Partner test"})
         # assure there isn't any mail activity yet
-        self.env["mail.activity"].sudo().search([]).unlink()
-
-        self.act1 = (
-            self.env["mail.activity"]
+        cls.env["mail.activity"].sudo().search([]).unlink()
+        cls.act1 = (
+            cls.env["mail.activity"]
             .sudo()
             .create(
                 {
-                    "activity_type_id": self.activity3.id,
+                    "activity_type_id": cls.activity3.id,
                     "note": "Partner activity 1.",
-                    "res_id": self.partner_client.id,
+                    "res_id": cls.partner_client.id,
                     "res_model_id": partner_model.id,
-                    "user_id": self.employee.id,
+                    "user_id": cls.employee.id,
                 }
             )
         )
-        self.act2 = (
-            self.env["mail.activity"]
+        cls.act2 = (
+            cls.env["mail.activity"]
             .sudo()
             .create(
                 {
-                    "activity_type_id": self.activity2.id,
+                    "activity_type_id": cls.activity2.id,
                     "note": "Partner activity 2.",
-                    "res_id": self.partner_client.id,
+                    "res_id": cls.partner_client.id,
                     "res_model_id": partner_model.id,
-                    "user_id": self.employee.id,
+                    "user_id": cls.employee.id,
                 }
             )
         )
-        self.act3 = (
-            self.env["mail.activity"]
+        cls.act3 = (
+            cls.env["mail.activity"]
             .sudo()
             .create(
                 {
-                    "activity_type_id": self.activity3.id,
+                    "activity_type_id": cls.activity3.id,
                     "note": "Partner activity 3.",
-                    "res_id": self.partner_client.id,
+                    "res_id": cls.partner_client.id,
                     "res_model_id": partner_model.id,
-                    "user_id": self.employee.id,
+                    "user_id": cls.employee.id,
                 }
             )
         )
 
-    def create_mail_activity_group(self):
-        manager_mail_activity_test_group = self.env["res.groups"].create(
+    @classmethod
+    def create_mail_activity_group(cls):
+        manager_mail_activity_test_group = cls.env["res.groups"].create(
             {"name": "group_manager_mail_activity_test"}
         )
         mail_activity_model_id = (
-            self.env["ir.model"]
+            cls.env["ir.model"]
             .sudo()
             .search([("model", "=", "mail.activity")], limit=1)
         )
-        access = self.env["ir.model.access"].create(
+        cls.env["ir.access"].create(
             {
                 "name": "full_access_mail_activity",
                 "model_id": mail_activity_model_id.id,
-                "perm_read": True,
-                "perm_write": True,
-                "perm_create": True,
-                "perm_unlink": True,
+                "group_id": manager_mail_activity_test_group.id,
+                "operation": "crud",
             }
         )
-        access.group_id = manager_mail_activity_test_group
         return manager_mail_activity_test_group
 
     def get_view(self, activity):

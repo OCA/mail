@@ -1,10 +1,12 @@
-To use this module, you need to:
+To view the activities related to a record:
 
-1.  Access to the views from menu Boards.
+1. Open a saved record that supports activities, such as a contact or an
+   opportunity.
+2. Click **View Activities** next to **Activity** in the chatter. This button
+   is available when you have write access to the record.
+3. The activity board opens with only the activities linked to that record.
+   Switch between the kanban, list, calendar, pivot and graph views to browse
+   or analyze them.
 
-A smartButton of activities is added in the mail thread from form view.
-From this smartButton is linked to the activity board, to the view tree,
-which shows the activities related to the opportunity.
-
-From the form view of the activity you can navigate to the origin of the
-activity.
+Open an activity to view its details. Use the **Document** field in the
+activity form or list to navigate to the related record.
