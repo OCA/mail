@@ -5,7 +5,18 @@ export class MessageTracking extends Component {
     static props = ["message", "partner_trackings", "skip_track_links?"];
     setup() {
         this.message = useState(this.props.message);
-        this.partner_trackings = useState(this.props.partner_trackings);
+    }
+    /**
+     * Read the trackings from the props on every render.
+     *
+     * `tracking_status()` builds a brand new list every time it's computed, so
+     * the message record gets a different array each time the server pushes an
+     * update. A reference stored in `setup()` (which isn't re-run when the props
+     * change) would keep rendering the trackings the message had when the
+     * component was created.
+     */
+    get partner_trackings() {
+        return this.props.partner_trackings;
     }
     _onTrackingStatusClick(event) {
         const tracking_email_id = event.currentTarget.dataset.tracking;
