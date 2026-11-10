@@ -6,7 +6,8 @@ from urllib.parse import urljoin
 
 import requests
 
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -83,6 +84,14 @@ class ResConfigSettings(models.TransientModel):
             .sudo()
             .get_param("mailgun.timeout", MAILGUN_TIMEOUT),
         )
+        if webhooks.status_code != 200:
+            raise UserError(
+                _("Error %(status)s: %(response)s.")
+                % {
+                    "status": webhooks.status_code,
+                    "response": webhooks.json(),
+                }
+            )
         webhooks.raise_for_status()
         for event, data in webhooks.json()["webhooks"].items():
             # Modern webhooks return a list of URLs; old ones just one
@@ -103,6 +112,14 @@ class ResConfigSettings(models.TransientModel):
                 .sudo()
                 .get_param("mailgun.timeout", MAILGUN_TIMEOUT),
             )
+            if response.status_code != 200:
+                raise UserError(
+                    _("Error %(status)s: %(response)s.")
+                    % {
+                        "status": response.status_code,
+                        "response": response.json(),
+                    }
+                )
             response.raise_for_status()
 
     def mail_tracking_mailgun_register_webhooks(self):
@@ -123,4 +140,12 @@ class ResConfigSettings(models.TransientModel):
                 .get_param("mailgun.timeout", MAILGUN_TIMEOUT),
             )
             # Assert correct registration
+            if response.status_code != 200:
+                raise UserError(
+                    _("Error %(status)s: %(response)s.")
+                    % {
+                        "status": response.status_code,
+                        "response": response.json(),
+                    }
+                )
             response.raise_for_status()
