@@ -179,10 +179,7 @@ class TestMailActivityBoardMethods(TransactionCase):
         """
         action_id = self.env.ref("mail.mail_activity_action_my").id
         action = self.partner_client.redirect_to_activities(
-            **{
-                "id": self.partner_client.id,
-                "model": self.partner_client._name,
-            }
+            id=self.partner_client.id, model=self.partner_client._name
         )
         self.assertEqual(action.get("id"), action_id)
 
