@@ -5,3 +5,4 @@
   - Kevin Khao
 - [CorporateHub](https://corporatehub.eu/)
   - Alexey Pelykh \<<alexey.pelykh@corphub.eu>\>
+- Daan Boven \<<hoi@daanboven.com>\>

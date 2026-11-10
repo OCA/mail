@@ -75,6 +75,8 @@ Contributors
 
   - Alexey Pelykh <alexey.pelykh@corphub.eu>
 
+- Daan Boven <hoi@daanboven.com>
+
 Maintainers
 -----------
 
