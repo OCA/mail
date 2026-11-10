@@ -21,9 +21,9 @@ class MailFollowersEdit(models.TransientModel):
             res_model = self.env.context.get("default_res_model")
         parameter_name = "mail_restrict_follower_selection.domain"
         IrConfigParameter = self.env["ir.config_parameter"].sudo()
-        parameter_domain = IrConfigParameter.get_param(
+        parameter_domain = IrConfigParameter.get_str(
             f"{parameter_name}.{res_model}",
-            IrConfigParameter.get_param(parameter_name, default="[]"),
+            IrConfigParameter.get_str(parameter_name, default="[]"),
         )
         domain = Domain.AND(
             [

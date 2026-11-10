@@ -8,29 +8,30 @@ from odoo.tests.common import Command, TransactionCase
 
 
 class TestMailRestrictFollowerSelection(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.category_employees = self.env["res.partner.category"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.category_employees = cls.env["res.partner.category"].create(
             {"name": "Employees"}
         )
-        self.env["ir.config_parameter"].sudo().set_param(
+        cls.env["ir.config_parameter"].sudo().set_str(
             "mail_restrict_follower_selection.domain.res.partner",
             "[('category_id.name', '=', 'Employees')]",
         )
 
-        self.partner = self.env["res.partner"].create(
+        cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Partner",
-                "category_id": self.category_employees,
+                "category_id": cls.category_employees,
                 "email": "test@test.com",
             }
         )
-        self.switzerland = self.env.ref("base.ch")
+        cls.switzerland = cls.env.ref("base.ch")
 
     def _use_ref_in_domain(self):
         """Change the general domain to test the safe_eval."""
         country_id = self.env.ref("base.ch").id
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "mail_restrict_follower_selection.domain",
             f"[('country_id', '!=', {country_id})]",
         )
