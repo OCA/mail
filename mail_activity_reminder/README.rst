@@ -34,6 +34,19 @@ Mail Activity Reminder
 
 This module allows setting reminders for various Activity Types.
 
+Two scheduled actions are provided:
+
+-  *Mail Activity: Reminders* runs hourly and notifies users about the
+   activities assigned to them when a configured reminder offset is
+   reached.
+-  *Mail Activity: Reminder Report* runs weekly and sends every user who
+   has at least one overdue activity or one activity in the reminder
+   timeframe a single report of those activities. The report is ordered
+   by criticality: overdue activities first, followed by the activities
+   grouped by reminder level, the highest level (closest to the
+   deadline) first. The report does not count as a reminder and does not
+   alter the regular reminder schedule.
+
 **Table of contents**
 
 .. contents::
@@ -49,6 +62,30 @@ To configure reminders for specific Activity Type:
 3. Fill *Reminders* field with a non-digit-separated list of offsets (in
    days) when reminders should be fired: e.g. 0 means "on the deadline
    day" while 5 means "5 calendar days before the deadline".
+
+Usage
+=====
+
+Reminders are sent automatically by the *Mail Activity: Reminders*
+scheduled action once a reminder offset of the activity type is reached.
+
+The *Mail Activity: Reminder Report* scheduled action sends one report
+per user listing:
+
+-  all overdue activities assigned to the user, oldest deadline first;
+-  all activities whose deadline lies within the reminder timeframe of
+   their activity type, grouped by reminder level starting with the
+   highest one. With reminders ``5/2/0``, an activity due in 4 days is
+   at reminder level 1 and an activity due tomorrow is at reminder level
+   2.
+
+Users without overdue or upcoming reminded activities receive no report.
+The schedule of both actions can be adjusted under *Settings > Technical
+> Scheduled Actions*.
+
+In the activity list views, the *To Remind* filter shows the activities
+that are not overdue but within the reminder timeframe of their activity
+type.
 
 Bug Tracker
 ===========
@@ -71,12 +108,13 @@ Authors
 Contributors
 ------------
 
-- `CorporateHub <https://corporatehub.eu/>`__
+-  `CorporateHub <https://corporatehub.eu/>`__
 
-  - Alexey Pelykh <alexey.pelykh@corphub.eu>
+   -  Alexey Pelykh <alexey.pelykh@corphub.eu>
 
-- Denis Roussel <denis.roussel@acsone.eu>
-- Elliott Bristow <elliott@glo.systems>
+-  Denis Roussel <denis.roussel@acsone.eu>
+-  Elliott Bristow <elliott@glo.systems>
+-  Christopher Rogos <crogos@gmail.com>
 
 Maintainers
 -----------
