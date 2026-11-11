@@ -18,7 +18,11 @@ mail
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[mail_activity_board](mail_activity_board/) | 20.0.1.0.0 |  | Add Activity Boards
 
 [//]: # (end addons)
 
