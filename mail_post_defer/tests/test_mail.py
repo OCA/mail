@@ -277,6 +277,48 @@ class MessagePostCase(MailPostDeferCommon):
                 )
 
 
+@freezegun.freeze_time("2023-01-02 10:00:00")
+class ComposerCase(MailPostDeferCommon):
+    """Test the composer wizard (HTML editor) behavior."""
+
+    def test_composer_html_deferred(self):
+        """Messages sent via HTML editor (composer) are deferred."""
+        with self.mock_mail_gateway():
+            composer = (
+                self.env["mail.compose.message"]
+                .with_context(
+                    default_composition_mode="comment",
+                    default_model="res.partner",
+                    default_res_ids=f"[{self.partner_portal.id}]",
+                )
+                .create(
+                    {
+                        "subject": "Test Subject",
+                        "body": "<p>HTML body content</p>",
+                        "partner_ids": [(6, 0, self.partner_employee.ids)],
+                    }
+                )
+            )
+            composer.action_send_mail()
+            schedules = self.env["mail.message.schedule"].search(
+                [
+                    ("mail_message_id.res_id", "=", self.partner_portal.id),
+                    ("mail_message_id.model", "=", "res.partner"),
+                    ("scheduled_datetime", "=", "2023-01-02 10:00:30"),
+                ]
+            )
+            self.assertEqual(len(schedules), 1)
+            self.assertNoMail(self.partner_employee)
+            with freezegun.freeze_time("2023-01-02 10:01:00"):
+                self.env["mail.message.schedule"]._send_notifications_cron()
+                self.env["mail.mail"].process_email_queue()
+                self.assertSentEmail(
+                    self.env.user.partner_id,
+                    self.partner_employee,
+                    body_content="HTML body content",
+                )
+
+
 @tagged("-at_install", "post_install")
 @freezegun.freeze_time("2023-01-02 10:00:00")
 class AutomaticNotificationCase(MailPostDeferCommon):
