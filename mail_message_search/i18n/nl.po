@@ -6,28 +6,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-11-11 03:46+0000\n"
+"Last-Translator: Daniel Boven <daanboven@outlook.com>\n"
 "Language-Team: none\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: mail_message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Weergavenaam"
 
 #. module: mail_message_search
 #: model:ir.model,name:mail_message_search.model_mail_thread
 msgid "Email Thread"
-msgstr ""
+msgstr "E-mailthread"
 
 #. module: mail_message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_mail_thread__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: mail_message_search
 #. odoo-python
@@ -70,7 +72,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:mail_message_search.field_res_partner_bank__message_search
 #: model:ir.model.fields,field_description:mail_message_search.field_res_users__message_search
 msgid "Message Search"
-msgstr ""
+msgstr "Zoeken in berichten"
 
 #. module: mail_message_search
 #: model:ir.model.fields,help:mail_message_search.field_account_account__message_search
@@ -111,4 +113,4 @@ msgstr ""
 #: model:ir.model.fields,help:mail_message_search.field_res_partner_bank__message_search
 #: model:ir.model.fields,help:mail_message_search.field_res_users__message_search
 msgid "Message search, to be used only in searches"
-msgstr ""
+msgstr "Zoeken in berichten, alleen te gebruiken in zoekopdrachten"
