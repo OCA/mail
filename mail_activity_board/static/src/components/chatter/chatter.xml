@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t
+        t-name="mail_activity_board.Chatter"
+        t-inherit="mail.Chatter"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//button[hasclass('o-mail-Chatter-activity')]" position="after">
+            <t t-if="this.webChatterProps.has_activities">
+                <button
+                    class="btn btn-link o_ChatterTopbar_button"
+                    type="button"
+                    t-att-disabled="!this.thread()?.id or !this.thread().hasWriteAccess"
+                    t-on-click="() => this._onListActivity()"
+                >
+                    <i class="oi" data-icon="format_list_bulleted" /> View Activities
+                </button>
+            </t>
+        </xpath>
+    </t>
+</templates>
