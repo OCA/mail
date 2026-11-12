@@ -716,6 +716,37 @@ class TestMailGateway(MailGatewayTestCase):
         channel.action_unfollow()
         self.assertNotIn(user.partner_id, channel.sudo().channel_partner_ids)
 
+    def test_gateway_failure_summary_in_store(self):
+        impl = self.env["mail.gateway.abstract"]
+        channel = impl._get_channel(
+            self.gateway, "fail-summary-tok", {}, force_create=True
+        )
+        msg = channel.message_post(body="Fail test", message_type="comment")
+        notif = self.env["mail.notification"].create(
+            {
+                "mail_message_id": msg.id,
+                "gateway_channel_id": channel.id,
+                "notification_type": "gateway",
+                "gateway_type": self.GATEWAY_TYPE,
+                "notification_status": "exception",
+                "failure_type": "unknown",
+                "failure_reason": "[131047] Re-engagement message\n\n[100] Bad",
+            }
+        )
+        self.assertEqual(
+            notif._get_gateway_failure_summary(),
+            "[131047] Re-engagement message · [100] Bad",
+        )
+        data = Store().add(notif).get_result()["mail.notification"][0]
+        self.assertEqual(
+            data["gateway_failure_summary"],
+            "[131047] Re-engagement message · [100] Bad",
+        )
+        notif.failure_reason = "x" * 400
+        self.assertEqual(len(notif._get_gateway_failure_summary()), 300)
+        notif.notification_status = "sent"
+        self.assertFalse(notif._get_gateway_failure_summary())
+
     # ── discuss.channel._message_update_content gateway hook ─────────────────
 
     def test_discuss_channel_message_update_content_gateway_hook(self):
