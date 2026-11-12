@@ -6,7 +6,7 @@ import logging
 from unittest.mock import MagicMock, patch
 
 from odoo.http import _request_stack
-from odoo.tests import tagged
+from odoo.tests import new_test_user, tagged
 
 from odoo.addons.mail.tools.discuss import Store
 from odoo.addons.mail_gateway.controllers.gateway import GatewayController
@@ -690,6 +690,31 @@ class TestMailGateway(MailGatewayTestCase):
         # _send is mocked to return None; failure_type stays "unknown",
         # triggering _notify_message_notification_update
         notif.send_gateway()
+
+    def test_gateway_user_open_post_leave_channel(self):
+        """A gateway user that is not an administrator can open a gateway
+        conversation, answer in it and leave it (mail.gateway is readable
+        only by administrators)."""
+        user = new_test_user(
+            self.env,
+            login="gateway_regular_user",
+            groups="base.group_user,mail_gateway.gateway_user",
+        )
+        channel = self.env["mail.gateway.abstract"]._get_channel(
+            self.gateway, "regular-user-tok", {}, force_create=True
+        )
+        channel._add_members(users=user)
+        self.env.flush_all()
+        self.env.invalidate_all()
+        channel = channel.with_user(user)
+        data = Store().add(channel).get_result()
+        self.assertEqual(data["discuss.channel"][0]["gateway"]["id"], self.gateway.id)
+        message = channel.message_post(
+            body="Hello", message_type="comment", subtype_xmlid="mail.mt_comment"
+        )
+        self.assertEqual(message.notification_ids.notification_type, "gateway")
+        channel.action_unfollow()
+        self.assertNotIn(user.partner_id, channel.sudo().channel_partner_ids)
 
     # ── discuss.channel._message_update_content gateway hook ─────────────────
 
