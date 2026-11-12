@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t
+        t-name="mail_activity_team.Activity"
+        t-inherit="mail.Activity"
+        t-inherit-mode="extension"
+    >
+        <!-- Show team in the condensed view -->
+        <xpath expr="//span[hasclass('o-mail-Activity-role')]" position="after">
+            <span
+                t-if="this.activity().team_id?.name"
+                class="o-mail-Activity-team pe-1"
+            >(Team <t t-out="this.activity().team_id.name" />)</span>
+        </xpath>
+    </t>
+
+    <t
+        t-name="mail_activity_team.ActivityTooltip"
+        t-inherit="mail.ActivityTooltip"
+        t-inherit-mode="extension"
+    >
+        <!-- Show team in the activity tooltip -->
+        <xpath expr="//t[@t-elif='activity.role_id_name']" position="after">
+            <t t-if="activity.team_id_name">
+                <span>Team: <t t-out="activity.team_id_name" /></span>
+                <br />
+            </t>
+        </xpath>
+    </t>
+
+</templates>
