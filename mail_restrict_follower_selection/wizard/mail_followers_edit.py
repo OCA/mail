@@ -16,7 +16,9 @@ class MailFollowersEdit(models.TransientModel):
     _inherit = "mail.followers.edit"
 
     @api.model
-    def _mail_restrict_follower_selection_get_domain(self, res_model=None):
+    def _mail_restrict_follower_selection_get_domain(
+        self, res_model=None, wizard=False
+    ):
         if not res_model:
             res_model = self.env.context.get("default_res_model")
         parameter_name = "mail_restrict_follower_selection.domain"
@@ -25,14 +27,9 @@ class MailFollowersEdit(models.TransientModel):
             f"{parameter_name}.{res_model}",
             IrConfigParameter.get_param(parameter_name, default="[]"),
         )
-        domain = Domain.AND(
-            [
-                safe_eval(
-                    parameter_domain, {"ref": lambda str_id: _id_get(self.env, str_id)}
-                ),
-                self._fields["partner_ids"].domain,
-            ]
-        )
+        domain = safe_eval(parameter_domain)
+        if wizard:
+            domain = Domain.AND([domain, self._fields["partner_ids"].domain])
         return domain
 
     def edit_followers(self):
@@ -66,7 +63,9 @@ class MailFollowersEdit(models.TransientModel):
         # act_window bindings like helpdesk's `Add/remove followers`.
         res_model = self.env.context.get("restrict_follower_res_model_view_ref")
         arch = etree.fromstring(result["arch"])
-        domain = self._mail_restrict_follower_selection_get_domain(res_model=res_model)
+        domain = self._mail_restrict_follower_selection_get_domain(
+            res_model=res_model, wizard=True
+        )
         eval_domain = safe_eval(
             str(domain), {"ref": lambda str_id: _id_get(self.env, str_id)}
         )
