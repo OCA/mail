@@ -51,3 +51,60 @@ class TestMailForwarding(TransactionCase):
             subtype_id=self.env.ref("mail.mt_comment").id,
             partner_ids=[self.partner_2.id],
         )
+
+    def _create_internal_partner(self, login):
+        user = self.env["res.users"].create(
+            {
+                "name": login,
+                "login": login,
+                "email": f"{login}@test.example.com",
+                "group_ids": [(6, 0, [self.env.ref("base.group_user").id])],
+            }
+        )
+        return user.partner_id
+
+    def _forwarded_recipients(
+        self, original, forwarding, subtype_xmlid="mail.mt_comment"
+    ):
+        original.forwarding_partner_id = forwarding
+        message = self.order.message_post(
+            body=self.env._("Test"),
+            message_type="comment",
+            subtype_id=self.env.ref(subtype_xmlid).id,
+            partner_ids=[original.id],
+        )
+        recipients = self.order._notify_get_recipients(
+            message, {"partner_ids": [original.id]}
+        )
+        return {r["id"]: r for r in recipients}
+
+    def test_external_forwards_to_internal(self):
+        """The forwarded recipient has its own data, not the original's"""
+        internal = self._create_internal_partner("internal_forwarding_user")
+        self.assertTrue(self.partner_2.partner_share)
+        by_id = self._forwarded_recipients(self.partner_2, internal)
+        self.assertIn(internal.id, by_id)
+        data = by_id[internal.id]
+        self.assertFalse(data["share"])
+        self.assertEqual(data["email_normalized"], internal.email_normalized)
+        self.assertEqual(data["name"], internal.name)
+        self.assertTrue(data["uid"])
+
+    def test_internal_forwards_to_external(self):
+        """An external forwarding partner is not given the internal data"""
+        internal = self._create_internal_partner("internal_original_user")
+        by_id = self._forwarded_recipients(internal, self.partner_1)
+        self.assertIn(self.partner_1.id, by_id)
+        data = by_id[self.partner_1.id]
+        self.assertTrue(data["share"])
+        self.assertEqual(data["email_normalized"], self.partner_1.email_normalized)
+        self.assertEqual(data["name"], self.partner_1.name)
+        self.assertFalse(data["uid"])
+
+    def test_internal_message_not_forwarded_to_external(self):
+        """Internal notes are not forwarded to external partners"""
+        internal = self._create_internal_partner("internal_note_user")
+        by_id = self._forwarded_recipients(
+            internal, self.partner_1, subtype_xmlid="mail.mt_note"
+        )
+        self.assertNotIn(self.partner_1.id, by_id)

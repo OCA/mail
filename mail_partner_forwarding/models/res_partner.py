@@ -7,7 +7,7 @@ class ResPartner(models.Model):
     forwarding_partner_id = fields.Many2one(
         "res.partner",
         string="Forwarding Partner",
-        help="Messages will be forwarded only for partners that are followers but no"
-        " partners being notify because they belong to channel that is following"
-        " the thread",
+        help="Messages are forwarded only for partners who are direct followers, not"
+        " for partners who are notified because they belong to a channel following"
+        " the thread.",
     )
