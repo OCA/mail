@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-inherit="mail.Message" t-inherit-mode="extension">
+        <xpath
+            expr="//div[@name='header']/small[hasclass('o-mail-Message-date')]"
+            position="after"
+        >
+            <small
+                t-if="this.message.hasGatewayThread and this.message.gateway_thread_data.model !== 'discuss.channel'"
+                class="o-mail-Message-gatewayThread ms-1 o-xsmaller text-500"
+            >
+                on <a
+                t-att-href="this.message.resUrl"
+                t-on-click="(ev) => this.openGatewayThreadRecord(ev)"
+                t-out="this.message.gateway_thread_data.name"
+            />
+            </small>
+        </xpath>
+    </t>
+</templates>
