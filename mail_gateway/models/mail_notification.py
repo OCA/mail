@@ -40,7 +40,8 @@ class MailNotification(models.Model):
 
     def send_gateway(self, auto_commit=False, raise_exception=False, parse_mode="HTML"):
         for record in self:
-            gateway = record.gateway_channel_id.gateway_id
+            # sudo: mail.gateway is readable only by administrators
+            gateway = record.sudo().gateway_channel_id.gateway_id
             self.env[f"mail.gateway.{gateway.gateway_type}"]._send(
                 gateway,
                 record,
