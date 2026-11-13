@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_company_form_mail_department" model="ir.ui.view">
+        <field name="name">res.company.form.mail.department</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page
+                    string="Department Emails"
+                    name="department_emails"
+                >
+                    <field name="mail_ids">
+                        <list editable="bottom">
+                            <field name="department" />
+                            <field name="email" widget="email" />
+                        </list>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>
