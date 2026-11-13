@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_signature_mass_edit_list" model="ir.ui.view">
+        <field name="model">signature.mass.edit</field>
+        <field name="arch" type="xml">
+            <list default_order="id desc">
+                <field name="company_id" />
+                <field name="group_ids" widget="many2many_tags" />
+                <field name="state" decoration-success="state == 'done'" />
+                <field name="user_count" />
+                <field name="processed_user_count" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_signature_mass_edit_form" model="ir.ui.view">
+        <field name="model">signature.mass.edit</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_confirm"
+                        string="Confirm"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_reset_to_draft"
+                        string="Reset to Draft"
+                        type="object"
+                        invisible="state != 'done'"
+                    />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,done"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_users"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-users"
+                            invisible="not processed_user_count"
+                        >
+                            <field
+                                name="processed_user_count"
+                                string="Users"
+                                widget="statinfo"
+                            />
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" readonly="state != 'draft'" />
+                            <field
+                                name="group_ids"
+                                widget="many2many_tags"
+                                readonly="state != 'draft'"
+                            />
+                            <field name="user_count" />
+                            <field name="processed_user_count" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="signature_preview" string="Preview">
+                            <field
+                                name="signature"
+                                widget="html"
+                                readonly="1"
+                                nolabel="1"
+                            />
+                        </page>
+                        <page name="signature_source" string="Source">
+                            <field
+                                name="signature"
+                                widget="text"
+                                readonly="state != 'draft'"
+                                nolabel="1"
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_signature_mass_edit_search" model="ir.ui.view">
+        <field name="model">signature.mass.edit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="company_id" />
+                <field name="group_ids" />
+                <filter
+                    string="Draft"
+                    name="filter_draft"
+                    domain="[('state', '=', 'draft')]"
+                />
+                <filter
+                    string="Done"
+                    name="filter_done"
+                    domain="[('state', '=', 'done')]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Company"
+                        name="groupby_company"
+                        context="{'group_by': 'company_id'}"
+                    />
+                    <filter
+                        string="Status"
+                        name="groupby_state"
+                        context="{'group_by': 'state'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_signature_mass_edit" model="ir.actions.act_window">
+        <field name="name">User Signature Mass Edits</field>
+        <field name="res_model">signature.mass.edit</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_signature_mass_edit_search" />
+    </record>
+
+    <menuitem
+        id="menu_signature_mass_edit"
+        name="Signature Mass Edits"
+        parent="base.menu_users"
+        action="action_signature_mass_edit"
+        sequence="60"
+        groups="base.group_system"
+    />
+    <menuitem
+        id="menu_signature_mass_edit_marketing"
+        name="Signature Mass Edits"
+        parent="mass_mailing.mass_mailing_configuration"
+        action="action_signature_mass_edit"
+        sequence="40"
+        groups="group_signature_mass_edit"
+    />
+</odoo>
