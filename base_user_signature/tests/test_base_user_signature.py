@@ -3,6 +3,9 @@ from io import BytesIO
 
 from PIL import Image
 
+from odoo import Command
+from odoo.exceptions import AccessError
+
 from odoo.addons.base.tests.common import SavepointCaseWithUserDemo
 
 
@@ -10,57 +13,41 @@ class TestResUsersDigitalSignature(SavepointCaseWithUserDemo):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.user_model = cls.env["res.users"]
-
-        # Create a test user
-        cls.user = cls.user_model.create(
+        cls.user = cls.env["res.users"].create(
             {
                 "name": "Test User",
                 "login": "test_user",
                 "email": "test_user@example.com",
+                "group_ids": [Command.set(cls.env.ref("base.group_user").ids)],
             }
         )
+        cls.png = cls._generate_sample_png()
+        cls.signature = b64encode(cls.png).decode("ascii")
 
-    def _generate_sample_image(self):
-        """Generate a small valid image and return its base64-encoded content."""
-        img = Image.new("RGB", (10, 10), color="red")  # Create a red 10x10 image
+    @classmethod
+    def _generate_sample_png(cls):
+        img = Image.new("RGB", (10, 10), color="red")
         buffer = BytesIO()
         img.save(buffer, format="PNG")
-        return b64encode(buffer.getvalue()).decode("ascii")
+        return buffer.getvalue()
 
-    def test_digital_signature_field(self):
-        """Test assigning and clearing the digital signature field."""
-        # Generate a valid base64-encoded image
-        test_signature = self._generate_sample_image()
+    def test_01_user_signs_and_clears_own_signature(self):
+        """An internal user draws a signature in their preferences, sees it
+        saved, then clears it with the trash button."""
+        me = self.user.with_user(self.user)
+        me.write({"digital_signature": self.signature})
+        me.invalidate_recordset()
+        self.assertEqual(me.digital_signature.content, self.png)
 
-        # Assign a digital signature to the user
-        self.user.digital_signature = test_signature
-        self.assertEqual(
-            self.user.digital_signature.decode("ascii"),
-            test_signature,
-            "Digital signature should be set correctly.",
-        )
+        me.clear_digital_signature()
+        me.invalidate_recordset()
+        self.assertFalse(me.digital_signature)
 
-        # Clear the digital signature using the method
-        self.user.clear_digital_signature()
-        self.assertFalse(
-            self.user.digital_signature, "Digital signature should be cleared."
-        )
-
-    def test_self_readable_fields(self):
-        """Test if 'digital_signature' is included in SELF_READABLE_FIELDS."""
-        readable_fields = self.user.SELF_READABLE_FIELDS
-        self.assertIn(
-            "digital_signature",
-            readable_fields,
-            "'digital_signature' should be in SELF_READABLE_FIELDS.",
-        )
-
-    def test_self_writeable_fields(self):
-        """Test if 'digital_signature' is included in SELF_WRITEABLE_FIELDS."""
-        writeable_fields = self.user.SELF_WRITEABLE_FIELDS
-        self.assertIn(
-            "digital_signature",
-            writeable_fields,
-            "'digital_signature' should be in SELF_WRITEABLE_FIELDS.",
-        )
+    def test_02_user_cannot_sign_for_someone_else(self):
+        """An internal user can read a colleague's signature but cannot
+        replace it."""
+        self.user_demo.digital_signature = self.signature
+        colleague = self.user_demo.with_user(self.user)
+        self.assertEqual(colleague.digital_signature.content, self.png)
+        with self.assertRaises(AccessError):
+            colleague.write({"digital_signature": False})

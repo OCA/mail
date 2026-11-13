@@ -13,7 +13,8 @@
                 />
                 <h2>
                     <button
-                        class="oe_right oe_edit_only fa fa-trash-o fa-lg float-right o_clear_file_button"
+                        class="oe_right oe_edit_only oi oi-lg o_clear_file_button"
+                        data-icon="delete"
                         type="object"
                         name="clear_digital_signature"
                         title="Clear"
@@ -38,7 +39,8 @@
                 />
                 <h2>
                     <button
-                        class="oe_right oe_edit_only fa fa-trash-o fa-lg float-right o_clear_file_button"
+                        class="oe_right oe_edit_only oi oi-lg o_clear_file_button"
+                        data-icon="delete"
                         type="object"
                         name="clear_digital_signature"
                         title="Clear"

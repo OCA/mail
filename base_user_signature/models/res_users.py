@@ -14,15 +14,8 @@ class ResUsers(models.Model):
         copy=False,
         max_width=1024,
         max_height=1024,
+        user_writeable=True,
     )
 
     def clear_digital_signature(self):
         self.digital_signature = False
-
-    @property
-    def SELF_READABLE_FIELDS(self):
-        return super().SELF_READABLE_FIELDS + ["digital_signature"]
-
-    @property
-    def SELF_WRITEABLE_FIELDS(self):
-        return super().SELF_WRITEABLE_FIELDS + ["digital_signature"]
