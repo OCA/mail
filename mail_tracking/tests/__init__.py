@@ -3,3 +3,4 @@
 
 from . import test_mail_tracking
 from . import test_gc_mail_tracking_email
+from . import test_corecipient_bounce
