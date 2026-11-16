@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo noupdate="1">
     <record id="models_to_exclude_config_parameter" model="ir.config_parameter">
         <field name="key">show_followers.models_to_exclude</field>
