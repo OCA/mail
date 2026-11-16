@@ -70,7 +70,7 @@ class MailMail(models.Model):
         models_to_exclude = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("show_followers.models_to_exclude", "")
+            .get_str("show_followers.models_to_exclude", "")
         )
         for mail in self:
             if not (mail.model and mail.res_id and group_user):
