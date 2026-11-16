@@ -101,6 +101,8 @@ class TestMailRestrictFollowerSelection(TransactionCase):
     def test_message_add_suggested_recipient_eval(self):
         """Check using safe_eval when adding recipients."""
         self._use_ref_in_domain()
+        # Without a model-specific domain, the global one applies
+        self.param.unlink()
         partner = self.partner.with_context(test_restrict_follower=True)
         res = partner._message_add_suggested_recipient([], partner=self.partner)
         self.assertEqual(res[0]["partner_id"], self.partner.id)
@@ -109,3 +111,34 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         partner.country_id = self.switzerland
         res = partner._message_add_suggested_recipient([], partner=self.partner)
         self.assertFalse(res)
+
+    def test_message_get_suggested_recipients_model_domain(self):
+        """Suggested recipients follow the domain of the record's model"""
+        self.env["ir.config_parameter"].set_param(
+            "mail_restrict_follower_selection.domain",
+            "[('category_id.name', '=', 'Employees')]",
+        )
+        self.param.value = "[('category_id', '=', False)]"
+        res = self.partner.with_context(
+            test_restrict_follower=True
+        )._message_get_suggested_recipients()
+        self.assertFalse(res)
+
+    def test_message_add_suggested_recipient_remove_all(self):
+        """Every suggestion not meeting the domain is removed"""
+        other_partners = self.env["res.partner"].create(
+            [{"name": "Other 1"}, {"name": "Other 2"}]
+        )
+        suggestions = [
+            {
+                "partner_id": partner.id,
+                "name": partner.name,
+                "lang": False,
+                "reason": "",
+            }
+            for partner in other_partners
+        ]
+        res = self.partner.with_context(
+            test_restrict_follower=True
+        )._message_add_suggested_recipient(suggestions, partner=self.partner)
+        self.assertEqual([item.get("partner_id") for item in res], self.partner.ids)
