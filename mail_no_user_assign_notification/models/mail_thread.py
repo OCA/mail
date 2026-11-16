@@ -13,9 +13,7 @@ class MailThread(models.AbstractModel):
         assignment."""
         if updated_values.get("user_id"):
             icp = self.sudo().env["ir.config_parameter"]
-            models_to_skip = icp.get_param(
-                "mail_no_user_assign_notification.models", ""
-            )
+            models_to_skip = icp.get_str("mail_no_user_assign_notification.models", "")
             models_to_skip = [x.strip() for x in models_to_skip.split(",")]
             if self._name in models_to_skip:
                 updated_values.pop("user_id")
