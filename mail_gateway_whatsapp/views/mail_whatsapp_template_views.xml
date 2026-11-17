@@ -139,9 +139,9 @@
                                     <field name="sample_value" required="1" />
                                     <field
                                         name="field_name"
-                                        widget="DynamicModelFieldSelectorChar"
+                                        widget="field_selector"
                                         required="1"
-                                        options="{'model': 'model'}"
+                                        options="{'model': 'model', 'allow_properties': False}"
                                     />
                                     <field name="model" column_invisible="True" />
                                     <field

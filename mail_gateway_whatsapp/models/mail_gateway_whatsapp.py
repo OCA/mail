@@ -339,7 +339,7 @@ class MailGatewayWhatsappService(models.AbstractModel):
                 record.sudo().write(
                     {
                         "notification_status": "exception",
-                        "failure_reason": exc,
+                        "failure_reason": self._get_send_failure_reason(exc),
                         "failure_type": "unknown",
                     }
                 )
@@ -354,6 +354,25 @@ class MailGatewayWhatsappService(models.AbstractModel):
         if auto_commit is True:
             # pylint: disable=invalid-commit
             self.env.cr.commit()
+
+    def _get_send_failure_reason(self, exc):
+        """Keep the error returned by Meta (e.g. "[131030] Recipient phone
+        number not in allowed list"), not only the HTTP status line."""
+        reason = str(exc)
+        response = getattr(exc, "response", None)
+        if response is None:
+            return reason
+        try:
+            error = response.json().get("error") or {}
+        except ValueError:
+            return f"{reason}\n{(response.text or '')[:500]}"
+        if not error:
+            return reason
+        details = (error.get("error_data") or {}).get("details")
+        meta_error = f"[{error.get('code')}] {error.get('message', '')}"
+        if details:
+            meta_error += f" - {details}"
+        return f"{meta_error}\n{reason}"
 
     def _html_to_whatsapp(self, body):
         """Turn the html formatting of an outgoing body into text markers."""

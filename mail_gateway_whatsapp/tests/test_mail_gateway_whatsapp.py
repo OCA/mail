@@ -7,6 +7,7 @@ import hmac
 import json
 from unittest.mock import MagicMock, patch
 
+import requests
 from markupsafe import Markup
 
 from odoo import Command
@@ -516,6 +517,37 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase, HttpCase):
                 message_type="comment",
             )
         self.assertEqual(message.notification_ids.notification_status, "exception")
+
+    def test_send_error_keeps_meta_message(self):
+        channel = self.partner._whatsapp_get_channel("phone", self.gateway)
+        response = requests.Response()
+        response.status_code = 400
+        response._content = json.dumps(
+            {
+                "error": {
+                    "message": "(#131030) Recipient phone number not in allowed list",
+                    "code": 131030,
+                    "error_data": {"details": "Add the number to the allowed list"},
+                }
+            }
+        ).encode()
+        with (
+            patch("requests.post", return_value=response),
+            mute_logger(
+                "odoo.addons.mail_gateway_whatsapp.models.mail_gateway_whatsapp"
+            ),
+        ):
+            message = channel.message_post(
+                body="Hello", subtype_xmlid="mail.mt_comment", message_type="comment"
+            )
+        notification = message.notification_ids
+        self.assertEqual(notification.notification_status, "exception")
+        self.assertTrue(
+            notification.failure_reason.startswith(
+                "[131030] (#131030) Recipient phone number not in allowed list"
+                " - Add the number to the allowed list\n400"
+            )
+        )
 
     def test_send_message_text(self):
         """
