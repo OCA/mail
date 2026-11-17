@@ -98,17 +98,25 @@ registry.category("web_tour.tours").add("mail_forward.mail_another_thread_tour",
         },
         {
             content: "Select the Forward thread",
-            trigger: "div[name=forward_thread] select",
-            run: "select res.partner",
+            trigger: "div[name=forward_thread] input",
+            run: "click",
+        },
+        {
+            content: "Select res.partner Model",
+            trigger:
+                "div.o_select_menu-choices span.o-dropdown-item:contains('Contact')",
+            run: "click",
         },
         {
             content: "Select a thread record",
-            trigger: "div[name=forward_thread] input",
+            trigger:
+                '.o_field_widget[name="forward_thread"] input.o-autocomplete--input',
             run: "edit forward@example.com",
         },
         {
             content: "Validate thread record",
-            trigger: ".ui-menu-item a:contains(Forward)",
+            trigger:
+                '.o_field_widget[name="forward_thread"] .o-autocomplete--dropdown-menu a[role="option"]:contains(Forward)',
             run: "click",
         },
         {
@@ -118,18 +126,25 @@ registry.category("web_tour.tours").add("mail_forward.mail_another_thread_tour",
         },
         {
             content: "Valid Follower2",
-            trigger: ".ui-menu-item a:contains(Follower2)",
+            trigger:
+                '.modal .o_field_widget[name="partner_ids"] .o-autocomplete--dropdown-menu a[role="option"]:contains(Follower2)',
             run: "click",
         },
         {
+            content: "Wait for Follower2 to be added to the recipients",
+            trigger:
+                '.modal .o_field_widget[name="partner_ids"] .o_tag:contains(Follower2)',
+        },
+        {
             content: "Send mail",
-            trigger: "button.o_mail_send",
+            trigger: '.modal button.o_mail_send[name="action_send_mail"]:enabled',
             run: "click",
         },
         {
             isActive: ["auto"],
-            trigger: "body:not(.modal-open)",
-            run: "click",
+            content: "Wait for the forward dialog to close",
+            trigger:
+                "body:not(:has(.modal:visible .o_field_widget[name=forward_type]))",
         },
     ],
 });

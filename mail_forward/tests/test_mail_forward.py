@@ -60,11 +60,13 @@ class TestMailForward(TestMailComposer, HttpCase):
             ("model", "=", self.test_record._name),
             ("res_id", "=", self.test_record.id),
         ]
-        with RecordCapturer(self.env["mail.message"], message_domain) as capture:
-            with self.mock_mail_gateway():
-                self.start_tour(
-                    "/web", "mail_forward.mail_forward_tour", login="user_test_forward"
-                )
+        with (
+            RecordCapturer(self.env["mail.message"], message_domain) as capture,
+            self.mock_mail_gateway(),
+        ):
+            self.start_tour(
+                "/web", "mail_forward.mail_forward_tour", login="user_test_forward"
+            )
         # Verify the followers of mail.message
         forward_message = capture.records
         self.assertEqual(len(forward_message.notified_partner_ids), 1)
@@ -101,13 +103,15 @@ class TestMailForward(TestMailComposer, HttpCase):
             ("model", "=", self.partner_forward._name),
             ("res_id", "=", self.partner_forward.id),
         ]
-        with RecordCapturer(self.env["mail.message"], message_domain) as capture:
-            with self.mock_mail_gateway():
-                self.start_tour(
-                    "/web",
-                    "mail_forward.mail_another_thread_tour",
-                    login="user_test_forward",
-                )
+        with (
+            RecordCapturer(self.env["mail.message"], message_domain) as capture,
+            self.mock_mail_gateway(),
+        ):
+            self.start_tour(
+                "/web",
+                "mail_forward.mail_another_thread_tour",
+                login="user_test_forward",
+            )
         # Verify the followers of mail.message
         forward_message = capture.records
         self.assertEqual(forward_message.subject, "Fwd: Test Forward")
