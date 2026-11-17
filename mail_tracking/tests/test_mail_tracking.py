@@ -571,6 +571,16 @@ class TestMailTracking(TransactionCase):
             self.assertEqual("Test error", tracking.error_description)
             self.assertTrue(self.recipient.email_bounced)
 
+    @mute_logger("odoo.addons.mail_tracking.models.ir_mail_server")
+    def test_tracking_failure_does_not_break_send(self):
+        with patch(
+            "odoo.addons.mail_tracking.models.mail_tracking_email."
+            "MailTrackingEmail._tracking_sent_prepare",
+            side_effect=Exception("Test tracking error"),
+        ):
+            mail, tracking = self.mail_send(self.recipient.email)
+        self.assertEqual("sent", mail.state)
+
     def test_partner_email_change(self):
         mail, tracking = self.mail_send(self.recipient.email)
         tracking.event_create("open", {})

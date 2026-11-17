@@ -1,10 +1,13 @@
 # Copyright 2016 Antonio Espinosa - <antonio.espinosa@tecnativa.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import logging
 import re
 import threading
 
 from odoo import api, models, tools
+
+_logger = logging.getLogger(__name__)
 
 
 class IrMailServer(models.Model):
@@ -162,9 +165,19 @@ class IrMailServer(models.Model):
             else:
                 raise
         if message_id and tracking_email:
-            vals = tracking_email._tracking_sent_prepare(
-                self, smtp_server_used, message, message_id
-            )
-            if vals:
-                self.env["mail.tracking.event"].sudo().create(vals)
+            # The message has already been delivered by the SMTP server. A failure
+            # in the tracking bookkeeping must not abort the transaction, as that
+            # would roll back the mail queue and make the same email be sent again
+            # on every cron run.
+            try:
+                with self.env.cr.savepoint():
+                    vals = tracking_email._tracking_sent_prepare(
+                        self, smtp_server_used, message, message_id
+                    )
+                    if vals:
+                        self.env["mail.tracking.event"].sudo().create(vals)
+            except Exception:
+                _logger.exception(
+                    "Mail tracking failed after sending message %s", message_id
+                )
         return message_id
