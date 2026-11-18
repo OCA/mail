@@ -16,4 +16,4 @@ class MailMessageGatewaySend(models.TransientModel):
     )
 
     def send(self):
-        self.message_id._send_to_gateway_thread(self.gateway_channel_id)
+        self.message_id._send_to_gateway_thread(self.gateway_channel_id.sudo())

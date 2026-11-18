@@ -39,6 +39,13 @@ class TestMailGateway(MailGatewayTestCase):
                 "group_ids": [(6, 0, [cls.env.ref("base.group_user").id])],
             }
         )
+        # Gateway user without administration rights: mail.gateway is only
+        # readable by administrators.
+        cls.gateway_user = new_test_user(
+            cls.env,
+            login="gateway_access_user",
+            groups="base.group_user,mail_gateway.gateway_user",
+        )
 
     # ── mail.gateway ──────────────────────────────────────────────────────────
 
@@ -1039,6 +1046,37 @@ class TestMailGateway(MailGatewayTestCase):
             [("channel_id", "=", channel.id), ("partner_id", "=", target.id)]
         )
         self.assertTrue(partner_member)
+
+    def test_guest_manage_merge_partner_as_gateway_user(self):
+        guest = self.env["mail.guest"].create(
+            {
+                "name": "Merge Guest",
+                "gateway_id": self.gateway.id,
+                "gateway_token": "guest-merge-user-tok",
+            }
+        )
+        target = self.env["res.partner"].create({"name": "Merge Target"})
+        wizard = (
+            self.env["mail.guest.manage"]
+            .with_user(self.gateway_user)
+            .create({"guest_id": guest.id, "partner_id": target.id})
+        )
+        wizard.merge_partner()
+        gw_channel = self.env["res.partner.gateway.channel"].search(
+            [
+                ("partner_id", "=", target.id),
+                ("gateway_id", "=", self.gateway.id),
+            ]
+        )
+        self.assertEqual(gw_channel.gateway_token, "guest-merge-user-tok")
+
+    def test_gateway_link_target_models_as_gateway_user(self):
+        target_models = dict(
+            self.env["mail.message.gateway.link"]
+            .with_user(self.gateway_user)
+            ._selection_target_model()
+        )
+        self.assertIn("res.partner", target_models)
 
 
 @tagged("post_install", "-at_install")

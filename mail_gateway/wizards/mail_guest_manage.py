@@ -22,11 +22,12 @@ class MailGuestManage(models.TransientModel):
         }
 
     def _merge_partner(self, partner):
+        gateway = self.guest_id.gateway_id.sudo()
         self.env["res.partner.gateway.channel"].create(
             {
-                "name": self.guest_id.gateway_id.name,
+                "name": gateway.name,
                 "partner_id": partner.id,
-                "gateway_id": self.guest_id.gateway_id.id,
+                "gateway_id": gateway.id,
                 "gateway_token": self.guest_id.gateway_token,
             }
         )
