@@ -9,7 +9,8 @@ class DiscussChannel(models.Model):
     _inherit = "discuss.channel"
 
     def _generate_avatar_gateway(self):
-        if self.gateway_id.gateway_type == "telegram":
+        # sudo: mail.gateway is readable only by administrators
+        if self.sudo().gateway_id.gateway_type == "telegram":
             with file_open("mail_gateway_telegram/static/description/icon.svg") as f:
                 return f.read()
         return super()._generate_avatar_gateway()
