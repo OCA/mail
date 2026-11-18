@@ -64,7 +64,8 @@ class DiscussChannel(models.Model):
                 self._name,
                 {
                     "id": record.id,
-                    "gateway": record.gateway_id._gateway_info(),
+                    # sudo: mail.gateway is readable only by administrators
+                    "gateway": record.sudo().gateway_id._gateway_info(),
                     "gateway_id": record.id,
                     "gateway_partner_id": partner.id,
                     "gateway_guest_id": guests.id if len(guests) == 1 else False,
@@ -113,13 +114,15 @@ class DiscussChannel(models.Model):
     def message_post(
         self, *, message_type="notification", gateway_type=False, **kwargs
     ):
+        # sudo: mail.gateway is readable only by administrators
+        gateway = self.sudo().gateway_id
         message = super().message_post(
             message_type=message_type,
-            gateway_type=gateway_type or self.gateway_id.gateway_type,
+            gateway_type=gateway_type or gateway.gateway_type,
             **kwargs,
         )
         if (
-            self.gateway_id
+            gateway
             and not self.env.context.get("no_gateway_notification", False)
             and message.message_type != "notification"
         ):
@@ -128,7 +131,7 @@ class DiscussChannel(models.Model):
                     "mail_message_id": message.id,
                     "gateway_channel_id": self.id,
                     "notification_type": "gateway",
-                    "gateway_type": self.gateway_id.gateway_type,
+                    "gateway_type": gateway.gateway_type,
                 }
             ).send_gateway()
         return message
@@ -154,6 +157,6 @@ class DiscussChannel(models.Model):
         )
         if self.channel_type == "gateway" and message.gateway_notification_ids:
             self.env[
-                f"mail.gateway.{self.gateway_id.gateway_type}"
+                f"mail.gateway.{self.sudo().gateway_id.gateway_type}"
             ]._update_content_after_hook(self, message)
         return res

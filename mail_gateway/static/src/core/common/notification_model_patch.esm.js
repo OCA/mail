@@ -1,7 +1,18 @@
 import {Notification} from "@mail/core/common/notification_model";
+import {fields} from "@mail/core/common/record";
 import {patch} from "@web/core/utils/patch";
 
 patch(Notification.prototype, {
+    setup() {
+        super.setup(...arguments);
+        this.gateway_failure_summary = fields.Attr(false);
+    },
+    get failureMessage() {
+        if (this.gateway_type && this.gateway_failure_summary) {
+            return this.gateway_failure_summary;
+        }
+        return super.failureMessage;
+    },
     get icon() {
         if (this.gateway_type) {
             return `fa fa-${this.gateway_type}`;
