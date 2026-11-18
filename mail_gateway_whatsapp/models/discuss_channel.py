@@ -11,7 +11,8 @@ class DiscussChannel(models.Model):
     _inherit = "discuss.channel"
 
     def _generate_avatar_gateway(self):
-        if self.gateway_id.gateway_type == "whatsapp":
+        # sudo: mail.gateway is readable only by administrators
+        if self.sudo().gateway_id.gateway_type == "whatsapp":
             path = file_path("mail_gateway_whatsapp/static/description/icon.svg")
             with open(path) as f:
                 avatar = f.read()

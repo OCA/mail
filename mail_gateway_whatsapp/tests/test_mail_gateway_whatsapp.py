@@ -638,6 +638,36 @@ class TestMailGatewayWhatsApp(MailGatewayTestCase, HttpCase):
         channel.invalidate_recordset()
         self.assertTrue(channel.message_ids)
 
+    def test_compose_as_gateway_user(self):
+        # mail.gateway is only readable by administrators
+        self.gateway.webhook_key = self.webhook
+        self.gateway.set_webhook()
+        self.integrate_webhook()
+        composer = (
+            self.env["whatsapp.composer"]
+            .with_user(self.user)
+            .with_context(
+                default_res_model=self.partner._name,
+                default_res_id=self.partner.id,
+                default_number_field_name="phone",
+            )
+            .create({"body": "DEMO"})
+        )
+        self.assertEqual(composer.gateway_id, self.gateway)
+        self.assertTrue(composer.is_required_template)
+        composer.action_view_whatsapp()
+        channel = self.env["discuss.channel"].search(
+            [("gateway_id", "=", self.gateway.id)]
+        )
+        self.assertTrue(channel)
+        self.assertTrue(channel.with_user(self.user)._generate_avatar_gateway())
+        composer.is_required_template = False
+        with patch("requests.post") as post_mock:
+            post_mock.return_value = MagicMock()
+            composer.action_send_whatsapp()
+            post_mock.assert_called()
+        self.assertEqual(channel.message_ids.author_id, self.user.partner_id)
+
     def test_send_message_with_variable(self):
         ctx = {
             "default_res_model": self.partner._name,

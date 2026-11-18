@@ -34,14 +34,14 @@ class MailThread(models.AbstractModel):
         ):
             self.env["res.partner.gateway.channel"].create(
                 {
-                    "name": gateway.name,
                     "partner_id": partner.id,
                     "gateway_id": gateway.id,
                     "gateway_token": sanitized_number,
                 }
             )
-        return self.env["mail.gateway.whatsapp"]._get_channel(
-            gateway,
+        # sudo: mail.gateway is readable only by administrators
+        channel = self.env["mail.gateway.whatsapp"]._get_channel(
+            gateway.sudo(),
             sanitized_number,
             {
                 "contacts": [
@@ -54,6 +54,7 @@ class MailThread(models.AbstractModel):
             },
             force_create=True,
         )
+        return channel.with_env(self.env)
 
     def _whatsapp_get_partner(self):
         if "partner_id" in self._fields:

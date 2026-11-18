@@ -74,7 +74,10 @@ class WhatsappComposer(models.TransientModel):
     @api.model
     def default_get(self, fields):
         result = super().default_get(fields)
-        gateways = self.env["mail.gateway"].search([("gateway_type", "=", "whatsapp")])
+        # sudo: mail.gateway is readable only by administrators
+        gateways = (
+            self.env["mail.gateway"].sudo().search([("gateway_type", "=", "whatsapp")])
+        )
         result["find_gateway"] = len(gateways) != 1
         if not result["find_gateway"]:
             result["gateway_id"] = gateways.id
