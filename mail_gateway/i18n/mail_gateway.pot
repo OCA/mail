@@ -882,7 +882,7 @@ msgstr ""
 
 #. module: mail_gateway
 #: model:ir.model.fields,help:mail_gateway.field_mail_gateway__webhook_user_id
-msgid "User that will create the messages"
+msgid "User that will create the messages. It must be a gateway user."
 msgstr ""
 
 #. module: mail_gateway
