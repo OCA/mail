@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-02-04 10:09+0000\n"
+"PO-Revision-Date: 2026-11-18 12:51+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.11.2\n"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__res_domain
@@ -83,7 +83,7 @@ msgstr "Il contenuto del corpo è lo stesso del modello"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__can_attach_attachment
 msgid "Can Attach Attachment"
-msgstr ""
+msgstr "Può inserire allegati"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__can_edit_body
@@ -131,7 +131,7 @@ msgstr "Messaggi del gateway figlio"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__composition_comment_option
 msgid "Comment Options"
-msgstr ""
+msgstr "Opzioni commento"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_discuss_channel__company_id
@@ -219,7 +219,7 @@ msgstr "Nome visualizzato"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__display_object_attachment_ids
 msgid "Display Object Attachment"
-msgstr ""
+msgstr "Visualizza allegato oggetto"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__email_layout_xmlid
@@ -399,6 +399,8 @@ msgid ""
 "If set, a mass mailing will be created so that you can track its results in "
 "the Email Marketing app."
 msgstr ""
+"Se impostato, verrà creato un invio di massa in modo da poterne monitorare i "
+"risultati nell'app Email Marketing."
 
 #. module: mail_gateway
 #: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__scheduled_date
@@ -439,7 +441,7 @@ msgstr "È un registro"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notified_bcc_contains_share
 msgid "Is an external partner follower of the document?"
-msgstr ""
+msgstr "È un partner esterno che segue il documento?"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__auto_delete_keep_log
@@ -549,7 +551,7 @@ msgstr "Invia messaggio e-mail gateway"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__mailing_list_ids
 msgid "Mailing List"
-msgstr ""
+msgstr "Lista distribuzione"
 
 #. module: mail_gateway
 #: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__reply_to_force_new
@@ -563,17 +565,17 @@ msgstr ""
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__mass_mailing_id
 msgid "Mass Mailing"
-msgstr ""
+msgstr "Spedizione di massa"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__campaign_id
 msgid "Mass Mailing Campaign"
-msgstr ""
+msgstr "Campagna spedizione di massa"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__mass_mailing_name
 msgid "Mass Mailing Name"
-msgstr ""
+msgstr "Nome spedizione di massa"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_gateway__member_ids
@@ -637,17 +639,17 @@ msgstr "Tipo notifica"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notify_author
 msgid "Notify Author"
-msgstr ""
+msgstr "Notifica l'autore"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notify_author_mention
 msgid "Notify Author Mention"
-msgstr ""
+msgstr "Notifica l'autore con menzione"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__notify_skip_followers
 msgid "Notify Skip Followers"
-msgstr ""
+msgstr "Chi segue ignorato dalla notifica"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__object_attachment_ids
@@ -668,6 +670,10 @@ msgid ""
 "usually be a placeholder expression that provides the appropriate language, "
 "e.g. {{ object.partner_id.lang }}."
 msgstr ""
+"Lingua di traduzione opzionale (codice ISO) da selezionare al momento "
+"dell'invio di un'e-mail. Se non impostata, verrà utilizzata la lingua del "
+"partner principale. Solitamente si tratta di un'espressione segnaposto che "
+"fornisce la lingua appropriata, ad esempio {{ object.partner_id.lang }}."
 
 #. module: mail_gateway
 #: model:ir.model.fields,help:mail_gateway.field_mail_compose_gateway_message__reply_to_mode
@@ -711,7 +717,7 @@ msgstr "Partner"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__partner_ids_all_have_email
 msgid "Partner Ids All Have Email"
-msgstr ""
+msgstr "Tutti gli ID partner hanno e-mail"
 
 #. module: mail_gateway
 #: model:ir.model.constraint,message:mail_gateway.constraint_res_partner_gateway_channel_unique_partner_gateway
@@ -729,6 +735,8 @@ msgid ""
 "Prevent sending messages to blacklisted contacts. Disable only when "
 "absolutely necessary."
 msgstr ""
+"Impedisci l'invio di messaggi ai contatti presenti nella lista nera. "
+"Disabilita solo se strettamente necessario."
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_message_gateway_link__resource_ref
@@ -894,7 +902,7 @@ msgstr "Aggiorna webhook"
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__use_exclusion_list
 msgid "Use Exclusion List"
-msgstr ""
+msgstr "Usa elenco esclusione"
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_compose_gateway_message__template_id
@@ -920,7 +928,7 @@ msgstr "Impostazioni utente"
 #. module: mail_gateway
 #: model:ir.model.fields,help:mail_gateway.field_mail_gateway__webhook_user_id
 msgid "User that will create the messages. It must be a gateway user."
-msgstr ""
+msgstr "Utente che creerà i messaggi. Deve trattarsi di un utente gateway."
 
 #. module: mail_gateway
 #: model:ir.model.fields,field_description:mail_gateway.field_mail_gateway__webhook_key
