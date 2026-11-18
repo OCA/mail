@@ -415,6 +415,11 @@ msgid "Export Template"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__failed_message_ids
+msgid "Failed Messages"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_variable__field_name
 msgid "Field"
 msgstr ""
@@ -770,6 +775,16 @@ msgstr ""
 #. module: mail_gateway_whatsapp
 #: model:ir.model,name:mail_gateway_whatsapp.model_mail_notification
 msgid "Message Notifications"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__message_search
+msgid "Message Search"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__message_search
+msgid "Message search, to be used only in searches"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
@@ -1298,8 +1313,18 @@ msgid "We were not able to fetch value of field: %(field)s"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
+#: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_res_partner__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
 #: model:ir.model.fields,field_description:mail_gateway_whatsapp.field_mail_whatsapp_template_button__website_url
 msgid "Website Url"
+msgstr ""
+
+#. module: mail_gateway_whatsapp
+#: model:ir.model.fields,help:mail_gateway_whatsapp.field_res_partner__website_message_ids
+msgid "Website communication history"
 msgstr ""
 
 #. module: mail_gateway_whatsapp
