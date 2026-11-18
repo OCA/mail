@@ -69,9 +69,10 @@ class TestMailCcBcc(TestMailComposerForm):
         # Verify recipients of mail.message
         message = self.test_record.message_ids[0]
 
-        # only keep 1 email to avoid clutting db
-        # but actually send 1 mail per recipients
-        self.assertEqual(len(message.mail_ids), 1)
+        # `partner_cc` (Marc Demo) is linked to an internal user, so it gets its
+        # own mail.mail, while the rest of the audience (external) shares a second.
+        # Both still carry the same To/Cc/Bcc headers, checked below.
+        self.assertEqual(len(message.mail_ids), 2)
         self.assertEqual(len(message.recipient_cc_ids), 3)
         self.assertEqual(len(message.recipient_bcc_ids), 1)
         # Verify notification
@@ -83,17 +84,17 @@ class TestMailCcBcc(TestMailComposerForm):
         self.assertEqual(len(notif), 5)
 
         # Verify data of mail.mail
-        mail = message.mail_ids
-        expecting = ", ".join(
+        expecting_cc = ", ".join(
             [
                 '"Marc Demo" <mark.brown23@example.com>',
                 '"Joel Willis" <joel.willis63@example.com>',
                 '"Chester Reed" <chester.reed79@example.com>',
             ]
         )
-        self.assertEqual(mail.email_cc, expecting)
-        expecting = '"Dwayne Newman" <dwayne.newman28@example.com>'
-        self.assertEqual(mail.email_bcc, expecting)
+        expecting_bcc = '"Dwayne Newman" <dwayne.newman28@example.com>'
+        for mail in message.mail_ids:
+            self.assertEqual(mail.email_cc, expecting_cc)
+            self.assertEqual(mail.email_bcc, expecting_bcc)
 
     def test_template_cc_bcc(self):
         env = self.env
@@ -228,7 +229,7 @@ Test Template<br></p>""",
             composer._action_send_mail()
 
         message = self.test_record.message_ids[0]
-        self.assertEqual(len(message.mail_ids), 1)
+        self.assertEqual(len(message.mail_ids), 2)
 
         # Only 4 partners notified
         self.assertEqual(len(message.notified_partner_ids), 4)
