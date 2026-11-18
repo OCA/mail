@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field
+            name="name"
+        >res.config.settings.view.form.inherit.mail.activity.reassign</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="mail.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <block id="discuss" position="inside">
+                <setting
+                    id="activity_reassign_setting"
+                    help="Reassign activities to a designated user when archiving users instead of deleting them"
+                >
+                    <field name="activity_reassign_on_archive" />
+                    <div
+                        class="content-group"
+                        invisible="not activity_reassign_on_archive"
+                    >
+                        <div class="mt8">
+                            <label
+                                for="activity_reassign_user_id"
+                                string="Reassign Activities To"
+                            />
+                            <field name="activity_reassign_user_id" />
+                        </div>
+                        <div class="mt8">
+                            <field name="activity_reassign_on_unarchive" />
+                            <label
+                                string="Reassign Activities to original user on Unarchive"
+                                for="activity_reassign_on_unarchive"
+                            />
+                        </div>
+                    </div>
+                </setting>
+            </block>
+        </field>
+    </record>
+</odoo>

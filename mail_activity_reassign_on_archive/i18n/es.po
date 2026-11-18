@@ -1,0 +1,125 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_activity_reassign_on_archive
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20260119\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-28 13:22+0000\n"
+"PO-Revision-Date: 2026-03-28 13:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model,name:mail_activity_reassign_on_archive.model_mail_activity
+msgid "Activity"
+msgstr "Actividad"
+
+#. module: mail_activity_reassign_on_archive
+#. odoo-python
+#: code:addons/mail_activity_reassign_on_archive/models/res_users.py:0
+msgid ""
+"Activity reassignment is enabled but no reassign user is configured. Please "
+"configure a reassign user in Settings."
+msgstr ""
+"La reasignación de actividades está habilitada pero no hay un usuario de "
+"reasignación configurado. Por favor configure un usuario de reasignación en "
+"Ajustes."
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model,name:mail_activity_reassign_on_archive.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,field_description:mail_activity_reassign_on_archive.field_mail_activity__original_user_id
+msgid "Original Assignee"
+msgstr "Responsable original"
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,field_description:mail_activity_reassign_on_archive.field_res_config_settings__activity_reassign_user_id
+#: model_terms:ir.ui.view,arch_db:mail_activity_reassign_on_archive.res_config_settings_view_form
+msgid "Reassign Activities To"
+msgstr "Reasignar actividades a"
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,field_description:mail_activity_reassign_on_archive.field_res_config_settings__activity_reassign_on_archive
+msgid "Reassign Activities on User Archive"
+msgstr "Reasignar actividades al archivar usuario"
+
+#. module: mail_activity_reassign_on_archive
+#: model_terms:ir.ui.view,arch_db:mail_activity_reassign_on_archive.res_config_settings_view_form
+msgid "Reassign Activities to original user on Unarchive"
+msgstr "Reasignar actividades al usuario original al desarchivar"
+
+#. module: mail_activity_reassign_on_archive
+#: model_terms:ir.ui.view,arch_db:mail_activity_reassign_on_archive.res_config_settings_view_form
+msgid ""
+"Reassign activities to a designated user when archiving users instead of "
+"deleting them"
+msgstr ""
+"Reasignar actividades a un usuario designado al archivar usuarios en lugar "
+"de eliminarlas"
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,field_description:mail_activity_reassign_on_archive.field_res_config_settings__activity_reassign_on_unarchive
+msgid "Restore Activities on User Unarchive"
+msgstr "Restaurar actividades al desarchivar usuario"
+
+#. module: mail_activity_reassign_on_archive
+#. odoo-python
+#: code:addons/mail_activity_reassign_on_archive/models/res_users.py:0
+msgid "The user designated for activity reassignment must be active."
+msgstr ""
+"El usuario designado para la reasignación de actividades debe estar activo."
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,help:mail_activity_reassign_on_archive.field_mail_activity__original_user_id
+msgid ""
+"The user originally assigned to this activity before reassignment due to "
+"user archiving."
+msgstr ""
+"El usuario originalmente asignado a esta actividad antes de la reasignación "
+"debido al archivado del usuario."
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model,name:mail_activity_reassign_on_archive.model_res_users
+msgid "User"
+msgstr "Usuario"
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,help:mail_activity_reassign_on_archive.field_res_config_settings__activity_reassign_user_id
+msgid "User to reassign activities to when the original assignee is archived."
+msgstr ""
+"Usuario al que se reasignarán las actividades cuando el responsable original"
+" sea archivado."
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,help:mail_activity_reassign_on_archive.field_res_config_settings__activity_reassign_on_archive
+msgid ""
+"When enabled, activities assigned to archived users will be reassigned to a "
+"designated user instead of being deleted."
+msgstr ""
+"Cuando está habilitado, las actividades asignadas a usuarios archivados se "
+"reasignarán a un usuario designado en lugar de ser eliminadas."
+
+#. module: mail_activity_reassign_on_archive
+#: model:ir.model.fields,help:mail_activity_reassign_on_archive.field_res_config_settings__activity_reassign_on_unarchive
+msgid ""
+"When enabled, pending activities will be reassigned back to the original "
+"user when they are unarchived."
+msgstr ""
+"Cuando está habilitado, las actividades pendientes se reasignarán al usuario"
+" original cuando sean desarchivados."
+
+#. module: mail_activity_reassign_on_archive
+#. odoo-python
+#: code:addons/mail_activity_reassign_on_archive/models/res_users.py:0
+msgid "You cannot archive a user designated for activity reassignment."
+msgstr ""
+"No puede archivar un usuario designado para la reasignación de actividades."
