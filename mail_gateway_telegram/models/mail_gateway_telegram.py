@@ -378,7 +378,8 @@ class MailGatewayTelegramService(models.AbstractModel):
         return super()._get_author(gateway, update)
 
     async def _async_update_content_after_hook(self, channel, message):
-        bot = self._get_telegram_bot(channel.gateway_id.token)
+        # sudo: mail.gateway is readable only by administrators
+        bot = self._get_telegram_bot(channel.sudo().gateway_id.token)
         await bot.initialize()
         await bot.edit_message_text(
             html2plaintext(message.body),

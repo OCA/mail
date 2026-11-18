@@ -876,3 +876,28 @@ class TestMailGatewayTelegram(MailGatewayTestCase, HttpCase):
         partner_info = self._get_partner_store_info()
         self.assertIn("gateway_channels", partner_info)
         self.assertEqual(1, len(partner_info["gateway_channels"]))
+
+    def _create_gateway_channel(self):
+        # The gateway user is a member of the gateway, so also of the channel
+        return self.env["mail.gateway.abstract"]._get_channel(
+            self.gateway, self.gateway_token, {}, force_create=True
+        )
+
+    def test_channel_avatar_as_gateway_user(self):
+        channel = self._create_gateway_channel()
+        self.env.invalidate_all()
+        self.assertTrue(channel.with_user(self.user).avatar_128)
+
+    def test_message_update_as_gateway_user(self):
+        channel = self._create_gateway_channel().with_user(self.user)
+        with patch.object(telegram, "Bot", getMyBot()):
+            message = channel.message_post(
+                body="HELLO",
+                subtype_xmlid="mail.mt_comment",
+                message_type="comment",
+            )
+            self.env.invalidate_all()
+            # The update is only sent to Telegram for messages sent through it
+            self.assertTrue(message.gateway_notification_ids)
+            channel._message_update_content(message, body="New message")
+        self.assertRegex(message.body, ".*New message.*")
