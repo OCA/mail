@@ -159,6 +159,42 @@ Test Template<br></p>""",
         expecting = self.partner_cc2 + self.partner_bcc
         self.assertEqual(composer.partner_bcc_ids, expecting)
 
+    def test_template_cc_overlapping_partner_ids(self):
+        """A partner who is both the resolved 'To' and listed in the
+        template's Cc must end up only in partner_ids, not
+        duplicated into partner_cc_ids.
+        """
+        self.test_record.email = "test-overlap@example.com"
+        tmpl_model = self.env["ir.model"].search([("model", "=", "res.partner")])
+        vals = {
+            "name": "Overlapping Cc Template",
+            "model_id": tmpl_model.id,
+            "subject": "Overlap",
+            "body_html": "<p>Hello</p>",
+            "email_cc": ", ".join(
+                tools.formataddr((p.name or "False", p.email or "False"))
+                for p in (self.partner_cc + self.test_record)
+            ),
+        }
+        overlap_tmpl = self.env["mail.template"].create(vals)
+
+        form = self.open_mail_composer_form()
+        composer = form.save()
+        form = Form(composer)
+        form.template_id = overlap_tmpl
+        composer = form.save()
+
+        self.assertEqual(
+            composer.partner_ids,
+            self.test_record,
+            "The To recipient must still be resolved normally",
+        )
+        self.assertEqual(
+            composer.partner_cc_ids,
+            self.partner_cc,
+            "The To recipient must not also be duplicated into Cc",
+        )
+
     def _set_parent_partner(self, parent, childs):
         # Ensure assign works even when other modules are installed
         # e.g. account: expect single record
