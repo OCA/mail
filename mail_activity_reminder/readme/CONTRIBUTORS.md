@@ -2,3 +2,4 @@
   - Alexey Pelykh \<<alexey.pelykh@corphub.eu>\>
 - Denis Roussel \<<denis.roussel@acsone.eu>\>
 - Elliott Bristow \<<elliott@glo.systems>\>
+- Christopher Rogos \<<crogos@gmail.com>\>

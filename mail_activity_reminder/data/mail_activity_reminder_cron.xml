@@ -13,4 +13,14 @@
         <field name="interval_type">hours</field>
         <field name="nextcall">2020-01-01 00:01:00</field>
     </record>
+    <record id="mail_activity_reminder_report" model="ir.cron">
+        <field name="name">Mail Activity: Reminder Report</field>
+        <field name="model_id" ref="model_mail_activity" />
+        <field name="state">code</field>
+        <field name="code">model._process_reminder_report()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+        <!-- A Monday, so the report is sent at the start of each week -->
+        <field name="nextcall">2020-01-06 06:00:00</field>
+    </record>
 </odoo>

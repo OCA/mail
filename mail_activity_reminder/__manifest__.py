@@ -14,6 +14,10 @@
     "data": [
         "data/mail_activity_reminder_cron.xml",
         "views/mail_activity_type.xml",
+        "views/mail_activity.xml",
         "data/mail_activity_template.xml",
+    ],
+    "demo": [
+        "demo/mail_activity_reminder_demo.xml",
     ],
 }
