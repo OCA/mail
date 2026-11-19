@@ -1,7 +1,13 @@
 """Tests for mail_activity_restrict."""
 
+from unittest.mock import patch
+
 from odoo.exceptions import AccessError
 from odoo.tests import TransactionCase, new_test_user
+
+from odoo.addons.mail.models.mail_activity import MailActivity as CoreMailActivity
+
+from ..models.mail_activity import SKIP_RESTRICT_KEY
 
 
 class TestMailActivityRestrict(TransactionCase):
@@ -87,6 +93,40 @@ class TestMailActivityRestrict(TransactionCase):
         )
 
         self.assertEqual(activity.user_id, self.user_assigned)
+
+    def test_create_restricted_for_another_user_written_on_notify(self):
+        """Writes on the new activity while notifying the assignee are allowed.
+
+        Core ``create`` calls ``action_notify`` as the creator when the
+        activity is assigned to somebody else, and modules such as
+        mail_activity_reminder write on the activity there. The creator is no
+        longer allowed to modify it by then, but creating it must not fail.
+        """
+        core_action_notify = CoreMailActivity.action_notify
+
+        def action_notify_writing(activities):
+            res = core_action_notify(activities)
+            activities.write({"note": "Notified"})
+            return res
+
+        with patch.object(
+            CoreMailActivity,
+            "action_notify",
+            autospec=True,
+            side_effect=action_notify_writing,
+        ) as action_notify:
+            activity = self._create_activity(
+                self.activity_type_restricted,
+                self.user_assigned,
+                env=self.env(user=self.user_manager),
+            )
+
+        action_notify.assert_called()
+        self.assertEqual(activity.user_id, self.user_assigned)
+        self.assertIn("Notified", str(activity.note))
+        # the skip is limited to create: the creator still cannot write
+        with self.assertRaises(AccessError):
+            activity.write({"summary": "Nope"})
 
     # ------------------------------------------------------------------
     # write / done: only the assigned user
@@ -216,6 +256,35 @@ class TestMailActivityRestrict(TransactionCase):
         activity.with_user(self.user_manager).write({"user_id": self.user_assigned.id})
 
         self.assertEqual(activity.user_id, self.user_assigned)
+
+    def test_restricted_activity_reassign_keeps_core_document_check(self):
+        """Reassigning still needs the document rights core asks for.
+
+        Core subscribes the new assignee to the document, which requires write
+        access on it. This module must not lift that check.
+        """
+        for activity_type in (
+            self.activity_type_unrestricted,
+            self.activity_type_restricted,
+        ):
+            with self.subTest(activity_type=activity_type.name):
+                activity = self._create_activity(activity_type, self.user_assigned)
+
+                with self.assertRaises(AccessError):
+                    activity.with_user(self.user_assigned).write(
+                        {"user_id": self.user_other.id}
+                    )
+
+    def test_restricted_activity_skip_flag_from_client_is_ignored(self):
+        """The context key cannot be used to switch the restriction off."""
+        activity = self._create_activity(
+            self.activity_type_restricted, self.user_assigned
+        )
+
+        with self.assertRaises(AccessError):
+            activity.with_user(self.user_manager).with_context(
+                **{SKIP_RESTRICT_KEY: True}
+            ).write({"summary": "Nope"})
 
     def test_restricted_activity_creator_cannot_reassign(self):
         """The creator cannot take a restricted activity away from its assignee."""

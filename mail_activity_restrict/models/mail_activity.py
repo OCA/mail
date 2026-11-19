@@ -1,7 +1,13 @@
 """Restrict mail.activity modifications to the assigned user."""
 
-from odoo import models
+from odoo import api, models
 from odoo.exceptions import AccessError
+
+# Context key that skips only the check of this module for the rest of an
+# operation that was already allowed. Its value must be ``_SKIP_RESTRICT``,
+# which cannot be sent through RPC, so clients cannot switch the check off.
+SKIP_RESTRICT_KEY = "mail_activity_restrict_skip"
+_SKIP_RESTRICT = object()
 
 
 class MailActivity(models.Model):
@@ -9,19 +15,32 @@ class MailActivity(models.Model):
 
     _inherit = "mail.activity"
 
+    def _with_restrict_skipped(self):
+        return self.with_context(**{SKIP_RESTRICT_KEY: _SKIP_RESTRICT})
+
+    def _is_restrict_skipped(self) -> bool:
+        return self.env.context.get(SKIP_RESTRICT_KEY) is _SKIP_RESTRICT
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Anybody allowed to create the activity may assign somebody else. Core
+        # (and e.g. mail_activity_reminder via action_notify) then writes on the
+        # new activity, which the creator no longer "owns": skip only this
+        # module's check for that, core access rules still apply.
+        activities = super(MailActivity, self._with_restrict_skipped()).create(
+            vals_list
+        )
+        return activities.with_env(self.env)
+
     def write(self, vals):
-        # user looses access to the record when changing the user_id,
-        # so we need to check access before changing it
-        res = True
-        allow_sudo_activity = self.env["mail.activity"]
-        if "user_id" in vals:
-            allow_sudo_activity = self.filtered(
-                lambda act: act._check_access("write") is None
-            )
-        if allow_sudo_activity:
-            res = super(MailActivity, allow_sudo_activity.sudo()).write(vals)
-        res = super(MailActivity, self - allow_sudo_activity).write(vals) and res
-        return res
+        if "user_id" not in vals:
+            return super().write(vals)
+        # Changing the assignee makes the current user lose the right to modify
+        # the activity, while core still writes on it and its document after the
+        # change (notification, subscription). Check access on the state before
+        # the change, then skip only this module's check for the rest of it.
+        self.check_access("write")
+        return super(MailActivity, self._with_restrict_skipped()).write(vals)
 
     def _get_can_write_restrict_allowed_activities(self):
         """Return restricted activities the current user may modify."""
@@ -48,7 +67,12 @@ class MailActivity(models.Model):
     def _check_access(self, operation: str) -> tuple | None:
         """Restrict write-like operations when the activity type requires it."""
         result = super()._check_access(operation)
-        if operation not in ("write", "unlink") or not self or self.env.su:
+        if (
+            operation not in ("write", "unlink")
+            or not self
+            or self.env.su
+            or self._is_restrict_skipped()
+        ):
             return result
 
         restricted = self.filtered("activity_type_id.can_write_restrict")
