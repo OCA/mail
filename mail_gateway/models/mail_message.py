@@ -94,7 +94,9 @@ class MailMessage(models.Model):
             lambda n: n.gateway_channel_id == channel
         )
         if not self.gateway_type:
-            self.gateway_type = gateway_channel_id.gateway_id.gateway_type
+            # sudo: mail.message - the user may not be the author of the message
+            # sent through the gateway
+            self.sudo().gateway_type = gateway_channel_id.gateway_id.gateway_type
         notification_vals = {
             "notification_status": "sent",
             "mail_message_id": self.id,

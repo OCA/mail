@@ -104,7 +104,7 @@ class DiscussChannel(models.Model):
         return False
 
     def _generate_avatar(self):
-        if self.channel_type not in ("gateway"):
+        if self.channel_type != "gateway":
             return super()._generate_avatar()
         avatar = self._generate_avatar_gateway()
         if not avatar:

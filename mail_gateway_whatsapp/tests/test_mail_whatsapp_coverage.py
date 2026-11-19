@@ -8,7 +8,7 @@ import requests
 
 from odoo import Command
 from odoo.exceptions import UserError, ValidationError
-from odoo.tests.common import tagged
+from odoo.tests.common import new_test_user, tagged
 from odoo.tools import mute_logger
 
 from odoo.addons.base.models.ir_mail_server import MailDeliveryException
@@ -762,6 +762,39 @@ class TestMailWhatsAppCoverage(MailGatewayTestCase):
             [("gateway_id", "=", self.gateway.id)]
         )
         self.assertTrue(channel)
+
+    def test_server_action_run_whatsapp_as_gateway_user(self):
+        # mail.gateway is only readable by administrators
+        gateway_user = new_test_user(
+            self.env,
+            login="wa_server_action_user",
+            groups="base.group_user,base.group_partner_manager,"
+            "mail_gateway.gateway_user",
+        )
+        tmpl = self._create_template(
+            model_id=self.env["ir.model"]._get_id("res.partner"),
+        )
+        action = self.env["ir.actions.server"].create(
+            {
+                "name": "WA action",
+                "model_id": self.env["ir.model"]._get_id("res.partner"),
+                "state": "whatsapp",
+                "whatsapp_gateway_id": self.gateway.id,
+                "whatsapp_partner": "{{ object.id }}",
+                "whatsapp_template_id": tmpl.id,
+            }
+        )
+        service_cls = type(self.env["mail.gateway.whatsapp"])
+        with patch.object(service_cls, "_send", return_value=None):
+            action.with_user(gateway_user).with_context(
+                active_model="res.partner",
+                active_ids=self.partner.ids,
+                active_id=self.partner.id,
+            ).run()
+        channel = self.env["discuss.channel"].search(
+            [("gateway_id", "=", self.gateway.id)]
+        )
+        self.assertTrue(channel.message_ids)
 
     def test_server_action_run_whatsapp_no_active_ids(self):
         tmpl = self._create_template(
