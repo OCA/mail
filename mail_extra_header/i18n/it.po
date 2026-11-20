@@ -1,0 +1,44 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_extra_header
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-07-28 09:25+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: mail_extra_header
+#: model:ir.model.fields,field_description:mail_extra_header.field_ir_mail_server__extra_headers
+msgid "Extra Headers"
+msgstr "Intestazioni extra"
+
+#. module: mail_extra_header
+#: model:ir.model,name:mail_extra_header.model_ir_mail_server
+msgid "Mail Server"
+msgstr "Server di posta"
+
+#. module: mail_extra_header
+#: model:ir.model.fields,help:mail_extra_header.field_ir_mail_server__extra_headers
+msgid "Python dictionary, e.g. {\"MY-HEADER\": \"test\"}"
+msgstr "Dizionario Python, es {\"MY-HEADER\": \"test\"}"
+
+#. module: mail_extra_header
+#. odoo-python
+#: code:addons/mail_extra_header/models/ir_mail_server.py:0
+msgid "The extra headers cannot be read (syntax error)."
+msgstr "Le intestazioni extra non possono essere lette (errore di sintassi)."
+
+#. module: mail_extra_header
+#. odoo-python
+#: code:addons/mail_extra_header/models/ir_mail_server.py:0
+msgid "The extra headers must be a dictionary of strings."
+msgstr "Le intestazioni extra devono essere un dizionario di stringhe."
