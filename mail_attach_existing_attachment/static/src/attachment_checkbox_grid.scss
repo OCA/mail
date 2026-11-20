@@ -1,0 +1,62 @@
+// Copyright 2026 PureKarting
+// License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+.o_field_attachment_checkbox_grid {
+    // A field widget is inline-block by default, so the picker would be only as
+    // wide as its longest filename: the header's rules would have nothing to
+    // grow into and the grid below would never get past one column.
+    --fieldWidget-display: block;
+}
+
+.o_attachment_checkbox_grid_items {
+    // auto-fill against a min column width makes the number of columns follow
+    // the composer's own width, without a media query: the composer is a
+    // dialog, so the viewport says nothing useful about how wide it is. The
+    // min() keeps a narrow composer down to one column instead of overflowing,
+    // and is interpolated because libsass would otherwise try to evaluate it
+    // as its own function and choke on comparing rem with %.
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(#{"min(15rem, 100%)"}, 1fr));
+    column-gap: 1.5rem;
+    row-gap: 0.125rem;
+
+    > .o-checkbox {
+        // Odoo sizes .o-checkbox with `width: fit-content`. Because the name
+        // below is `nowrap`, its min-content width is the whole filename, so
+        // fit-content resolves to that and the row spills over the next
+        // column. Stretching to the track is what lets the name truncate.
+        width: auto;
+        min-width: 0;
+
+        .form-check-label {
+            display: flex;
+            align-items: baseline;
+            gap: 0.375rem;
+            min-width: 0;
+            max-width: 100%;
+        }
+    }
+}
+
+// The name is the only part allowed to give up space. Let the size shrink too
+// and a squeezed column wraps it ("12.67" over "Kb"), which makes that one row
+// two lines tall and drags the whole grid row out of line with its neighbours.
+.o_attachment_checkbox_grid_name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.o_attachment_checkbox_grid_size {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.o_attachment_checkbox_grid_thumb {
+    display: block;
+    max-width: 100%;
+    max-height: 12rem;
+    object-fit: contain;
+}
