@@ -23,6 +23,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [mail_activity_board](mail_activity_board/) | 20.0.1.0.0 |  | Add Activity Boards
+[mail_gateway](mail_gateway/) | 20.0.1.0.0 |  | Base module for gateway communications
 
 [//]: # (end addons)
 
