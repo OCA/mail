@@ -12,7 +12,7 @@
             <xpath expr="//field[@name='mail_attachments_widget']" position="after">
                 <field
                     name="object_attachment_ids"
-                    widget="many2many_checkboxes"
+                    widget="attachment_checkbox_grid"
                     domain="[('res_model', '=', 'account.move'), ('res_id', '=', move_id)]"
                     invisible="not can_attach_attachment"
                     context="{'skip_res_field_check': True}"
