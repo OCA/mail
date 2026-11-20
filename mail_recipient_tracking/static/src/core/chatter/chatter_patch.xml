@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="mail_recipient_tracking.FailedMessageList">
+        <div class="o_mail_tracking_failed_message_list o-mail-ActivityList">
+            <div
+                class="d-flex pt-2 px-2 cursor-pointer fw-bold"
+                t-on-click="this.toggleFailedMessages"
+            >
+                <hr class="flex-grow-1 fs-3" />
+                <div class="d-flex align-items-center px-3 text-danger">
+                    <i
+                    class="oi oi-fw"
+                    t-att-data-icon="this.state.showFailedMessages ? 'arrow_drop_down' : 'arrow_right'"
+                />
+                    Failed messages
+                    <span
+                    t-if="!this.state.showFailedMessages"
+                    class="badge rounded-pill ms-2 text-bg-danger"
+                    t-out="this.failedMessages.length"
+                />
+                </div>
+                <hr class="flex-grow-1 fe-3" />
+            </div>
+            <t t-if="this.state.showFailedMessages">
+                <t
+                    t-foreach="this.failedMessages"
+                    t-as="failedMessage"
+                    t-key="failedMessage.id"
+                >
+                    <FailedMessage message="failedMessage" />
+                </t>
+            </t>
+        </div>
+    </t>
+
+    <t
+        t-name="mail_recipient_tracking.Chatter"
+        t-inherit="mail.Chatter"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//t[@t-call='mail.ActivityList']/.." position="after">
+            <t
+                t-if="this.failedMessages.length and !this.messageSearch.searching and !this.messageSearch.searched"
+            >
+                <t t-call="mail_recipient_tracking.FailedMessageList" />
+            </t>
+        </xpath>
+    </t>
+</templates>
