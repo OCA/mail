@@ -14,8 +14,9 @@ class MailThread(models.AbstractModel):
     # ------------------------------------------------------------
 
     def _get_message_create_valid_field_names(self):
-        """
-        add cc and bcc field to create record in mail.mail
+        """Let ``message_post`` store the Cc / Bcc partners on the message.
+
+        Odoo drops any value given to ``message_post`` that is not listed here.
         """
         field_names = super()._get_message_create_valid_field_names()
         field_names.update({"recipient_cc_ids", "recipient_bcc_ids"})
@@ -25,119 +26,73 @@ class MailThread(models.AbstractModel):
     # NOTIFICATION API
     # ------------------------------------------------------
 
+    def _notify_thread_by_email(self, message, recipients_data, **kwargs):
+        """Tell the base mail values whether the message has Cc / Bcc.
+
+        Odoo 18 does not give the recipients to
+        ``_notify_by_email_get_base_mail_values``: this flag, scoped to this
+        call, spares reading the message when no recipient is a Cc / Bcc.
+        """
+        if any(data.get("is_cc_bcc") for data in recipients_data):
+            self = self.with_context(mail_composer_cc_bcc_notify=True)
+        return super()._notify_thread_by_email(message, recipients_data, **kwargs)
+
     def _notify_by_email_get_base_mail_values(self, message, additional_values=None):
-        """
-        This is to add cc, bcc addresses to mail.mail objects so that email
-        can be sent to those addresses.
-        """
+        """Mark the emails of a message with Cc / Bcc."""
         res = super()._notify_by_email_get_base_mail_values(
             message, additional_values=additional_values
         )
-        context = self.env.context
-        skip_adding_cc_bcc = context.get("skip_adding_cc_bcc", False)
-        if skip_adding_cc_bcc:
+        # No flagged recipient means no Cc / Bcc: spares reading the message
+        if not self.env.context.get("mail_composer_cc_bcc_notify"):
             return res
-
-        partners_cc = context.get("partner_cc_ids", None)
+        _partners_to, partners_cc, partners_bcc = message._get_cc_bcc_audience()
+        if not partners_cc and not partners_bcc:
+            return res
+        # Shown on the email, and the sign for mail.mail that its copies need
+        # the Cc / Bcc headers, also when sent later by the queue or Retry
         if partners_cc:
             res["email_cc"] = format_emails_str(partners_cc)
-
-        partners_bcc = context.get("partner_bcc_ids", None)
         if partners_bcc:
             res["email_bcc"] = format_emails_str(partners_bcc)
-
         return res
 
     def _notify_get_recipients(self, message, msg_vals, **kwargs):
-        """
-        This is to add cc, bcc recipients so that they can be grouped with
-        other recipients.
-        """
-        ResPartner = self.env["res.partner"]
-        MailFollowers = self.env["mail.followers"]
-        rdata = super()._notify_get_recipients(message, msg_vals, **kwargs)
-        context = self.env.context
-        is_from_composer = context.get("is_from_composer", False)
-        skip_adding_cc_bcc = context.get("skip_adding_cc_bcc", False)
-        if not is_from_composer or skip_adding_cc_bcc:
-            return rdata
-        for pdata in rdata:
-            pdata["type"] = "customer"
-        partners_cc_bcc = context.get("partner_cc_ids", ResPartner)
-        partners_cc_bcc += context.get("partner_bcc_ids", ResPartner)
-        msg_sudo = message.sudo()
-        message_type = (
-            msg_vals.get("message_type") if msg_vals else msg_sudo.message_type
-        )
-        subtype_id = msg_vals.get("subtype_id") if msg_vals else msg_sudo.subtype_id.id
-        recipients_cc_bcc = MailFollowers._get_recipient_data(
-            None, message_type, subtype_id, partners_cc_bcc.ids
-        )
-        partners_already_marked_as_recipient = [r.get("id", False) for r in rdata]
-        for _, value in recipients_cc_bcc.items():
-            for _, data in value.items():
-                if (
-                    not data.get("id")
-                    or data.get("id") in partners_already_marked_as_recipient
-                ):
-                    continue
-                if not data.get(
-                    "notif"
-                ):  # notif is False, has no user, is therefore customer
-                    notif = "email"
-                msg_type = "customer"
-                pdata = {
-                    "id": data.get("id"),
-                    "active": data.get("active"),
-                    "share": data.get("share"),
-                    "notif": data.get("notif") and data.get("notif") or notif,
-                    "type": msg_type,
-                    "is_follower": data.get("is_follower"),
-                    "lang": data.get("lang"),
-                    "uid": False,
-                }
-                rdata.append(pdata)
-        return rdata
-
-    def _notify_get_recipients_classify(
-        self, message, recipients_data, model_description, msg_vals=None
-    ):
-        res = super()._notify_get_recipients_classify(
-            message, recipients_data, model_description, msg_vals=msg_vals
-        )
-        is_from_composer = self.env.context.get("is_from_composer", False)
-        skip_adding_cc_bcc = self.env.context.get("skip_adding_cc_bcc", False)
-        if not is_from_composer or skip_adding_cc_bcc:
-            return res
-        ids = []
-        customer_data = None
-        for rcpt_data in res:
-            if rcpt_data["notification_group_name"] == "customer":
-                customer_data = rcpt_data
-            else:
-                ids += rcpt_data["recipients"]
-        if not customer_data:
-            customer_data = res[0]
-            customer_data["notification_group_name"] = "customer"
-            customer_data["recipients"] = ids
-        else:
-            customer_data["recipients"] += ids
-        return [customer_data]
-
-    def _notify_thread_by_email(self, message, recipients_data, **kwargs):
-        # Pass the whole audience to `_prepare_outgoing_list`
-        # (only known here)
-        if self.env.context.get("is_from_composer") and not self.env.context.get(
-            "skip_adding_cc_bcc"
+        """Add the Cc / Bcc partners of the message to the email recipients."""
+        recipients_data = super()._notify_get_recipients(message, msg_vals, **kwargs)
+        # msg_vals are the values the message was just created with: checking
+        # them instead of the message spares two queries on every message
+        if msg_vals and not (
+            msg_vals.get("recipient_cc_ids") or msg_vals.get("recipient_bcc_ids")
         ):
-            self = self.with_context(
-                composer_recipient_ids=[
-                    data["id"] for data in recipients_data if data["notif"] == "email"
-                ]
-            )
-        return super()._notify_thread_by_email(message, recipients_data, **kwargs)
+            return recipients_data
+        message_sudo = message.sudo()
+        partners_cc_bcc = message_sudo.recipient_cc_ids | message_sudo.recipient_bcc_ids
+        if not partners_cc_bcc:
+            return recipients_data
 
-    def _notify_thread(self, message, msg_vals=False, **kwargs):
-        if message.message_type == "notification":
-            self = self.with_context(skip_adding_cc_bcc=True)
-        return super()._notify_thread(message, msg_vals, **kwargs)
+        # An explicit Cc / Bcc asks for an email, even to an internal user who
+        # chose to handle notifications in Odoo. The flag tells the next steps
+        # that this message has Cc / Bcc.
+        for data in recipients_data:
+            if data["id"] in partners_cc_bcc.ids:
+                data.update(notif="email", is_cc_bcc=True)
+        # Cc / Bcc partners who do not follow the document: built like Odoo
+        # builds followers, so they are grouped by language and notification
+        # group like any other recipient
+        missing = partners_cc_bcc.filtered(
+            lambda p: p.id not in {data["id"] for data in recipients_data}
+        )
+        if missing:
+            msg_vals = msg_vals or {}
+            missing_data = self.env["mail.followers"]._get_recipient_data(
+                None,
+                msg_vals.get("message_type") or message_sudo.message_type,
+                msg_vals.get("subtype_id") or message_sudo.subtype_id.id,
+                missing.ids,
+            )[0]
+            recipients_data += [
+                {**data, "notif": "email", "is_cc_bcc": True}
+                for data in missing_data.values()
+                if data["active"]
+            ]
+        return recipients_data

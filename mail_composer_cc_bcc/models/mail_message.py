@@ -23,3 +23,16 @@ class MailMessage(models.Model):
         string="Bcc (Partners)",
         context={"active_test": False},
     )
+
+    def _get_cc_bcc_audience(self):
+        """Split the audience in visible To / Cc and hidden Bcc partners.
+
+        The single place for this rule: the emails are created and sent from
+        it, so both steps agree. A partner in To and in Cc / Bcc stays in To.
+        """
+        self.ensure_one()
+        message = self.sudo()
+        partners_to = message.partner_ids
+        partners_cc = message.recipient_cc_ids - partners_to
+        partners_bcc = message.recipient_bcc_ids - partners_to - partners_cc
+        return partners_to, partners_cc, partners_bcc

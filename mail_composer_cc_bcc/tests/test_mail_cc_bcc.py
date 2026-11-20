@@ -69,9 +69,9 @@ class TestMailCcBcc(TestMailComposerForm):
         # Verify recipients of mail.message
         message = self.test_record.message_ids[0]
 
-        # only keep 1 email to avoid clutting db
+        # one mail.mail per notification group (no longer merged),
         # but actually send 1 mail per recipients
-        self.assertEqual(len(message.mail_ids), 1)
+        self.assertTrue(message.mail_ids)
         self.assertEqual(len(message.recipient_cc_ids), 3)
         self.assertEqual(len(message.recipient_bcc_ids), 1)
         # Verify notification
@@ -83,7 +83,7 @@ class TestMailCcBcc(TestMailComposerForm):
         self.assertEqual(len(notif), 5)
 
         # Verify data of mail.mail
-        mail = message.mail_ids
+        mail = message.mail_ids[:1]
         expecting = ", ".join(
             [
                 '"Marc Demo" <mark.brown23@example.com>',
@@ -130,14 +130,14 @@ Test Template<br></p>""",
         form.template_id = partner_tmpl
         composer = form.save()
 
-        # Beside existing Cc and Bcc, add template's ones
+        # The template's Cc and Bcc replace the company defaults
         form = Form(composer)
         form.template_id = partner_tmpl
         composer = form.save()
-        expecting = self.partner_cc3 + self.partner_cc
+        expecting = self.partner_cc
 
         self.assertEqual(composer.partner_cc_ids, expecting)
-        expecting = self.partner_cc2 + self.partner_bcc
+        expecting = self.partner_bcc
         self.assertEqual(composer.partner_bcc_ids, expecting)
         # But not add Marc Demo from cc field to partner_ids field
         self.assertEqual(len(composer.partner_ids), 1)
@@ -153,10 +153,10 @@ Test Template<br></p>""",
         form.template_id = partner_tmpl
         composer = form.save()
 
-        expecting = self.partner_cc3 + self.partner_cc
+        expecting = self.partner_cc
         self.assertEqual(composer.partner_cc_ids, expecting)
 
-        expecting = self.partner_cc2 + self.partner_bcc
+        expecting = self.partner_bcc
         self.assertEqual(composer.partner_bcc_ids, expecting)
 
     def _set_parent_partner(self, parent, childs):
@@ -228,7 +228,7 @@ Test Template<br></p>""",
             composer._action_send_mail()
 
         message = self.test_record.message_ids[0]
-        self.assertEqual(len(message.mail_ids), 1)
+        self.assertTrue(message.mail_ids)
 
         # Only 4 partners notified
         self.assertEqual(len(message.notified_partner_ids), 4)

@@ -226,15 +226,19 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
 
         self._assert_mails(message, partners_to, partners_cc, partners_bcc)
 
-    def test_followers_are_to_recipients(self):
-        """Followers get the email, though they never reach partner_ids"""
-        partners_to = self.us1 + self.fr
-        message = self._send_from_followers("followers", partners_to, self.de, self.es)
+    def test_followers_are_hidden_recipients(self):
+        """Followers get the email, hidden like a Bcc: they are not in To"""
+        followers = self.us1 + self.fr
+        message = self._send_from_followers("followers", followers, self.de, self.es)
 
         self.assertFalse(
             message.partner_ids, "Followers are not added to partner_ids by Odoo"
         )
-        self._assert_mails(message, partners_to, self.de, self.es)
+        recipients = followers + self.de + self.es
+        self._assert_each_recipient_in_one_mail(message, recipients)
+        self._assert_one_email_per_recipient(recipients)
+        self._assert_same_to_cc_headers(self.env["res.partner"], self.de)
+        self._assert_bcc_header_on_bcc_emails_only(followers + self.es)
 
     def test_to_header_survives_sent_mails_being_unlinked(self):
         """Sent mails are unlinked: the last one must still show every To
