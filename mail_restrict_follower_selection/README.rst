@@ -38,8 +38,23 @@ only internally, it makes sense to filter possible followers for being
 employees. Otherwise, you'll get a quite crowded list of partners to
 choose from.
 
-Moreover, the module disables the option to automatically add followers
-that do not meet the domain.
+The domain is enforced on every follower addition, not only in the "Add
+Followers" wizard: partners subscribed programmatically (for example the
+sender of an incoming email, the recipients of a message) or
+automatically (for example the assignee of a task or the salesperson of
+an order) are silently skipped when they do not meet the domain.
+
+The domain applies to every partner, including the current user: a user
+that does not meet the domain is not subscribed when creating a record,
+when being assigned, nor when posting a message, and gets an error when
+clicking the "Follow" button.
+
+Exceptions:
+
+-  Existing followers are never changed, and their subscription
+   (subtypes) can still be edited.
+-  Pass ``no_restrict_follower`` in the context to bypass the
+   restriction in custom code.
 
 **Table of contents**
 
@@ -58,13 +73,13 @@ mail_restrict_follower_selection.domain.$your_model.
 
 Some examples:
 
-- ``[("category_id.name", "=", "Employees")]`` : Only allow contacts
-  with 'Employees' tag
-- ``[("is_company", "=", False)]`` : Restrict company contacts to be
-  added as follower (to avoid emails to info@ email address)
-- ``[("user_ids","!=",False)]`` : Restrict to contacts with user
-  (internal and portal)
-- ``[("employee_ids","!=",False)]`` : Restrict to employees
+-  ``[("category_id.name", "=", "Employees")]`` : Only allow contacts
+   with 'Employees' tag
+-  ``[("is_company", "=", False)]`` : Restrict company contacts to be
+   added as follower (to avoid emails to info@ email address)
+-  ``[("user_ids","!=",False)]`` : Restrict to contacts with user
+   (internal and portal)
+-  ``[("employee_ids","!=",False)]`` : Restrict to employees
 
 Note: This module won't change existing followers!
 
@@ -90,14 +105,14 @@ Authors
 Contributors
 ------------
 
-- Holger Brunn <hbrunn@therp.nl>
-- Nguyen Tan Phuc <phuc.nt@komit-consulting.com>
-- Enric Tobella <etobella@creublanca.es>
-- `Quartile <https://www.quartile.co>`__:
+-  Holger Brunn <hbrunn@therp.nl>
+-  Nguyen Tan Phuc <phuc.nt@komit-consulting.com>
+-  Enric Tobella <etobella@creublanca.es>
+-  `Quartile <https://www.quartile.co>`__:
 
-  - Aung Ko Ko Lin
+   -  Aung Ko Ko Lin
 
-- Christopher Rogos <crogos@gmail.com>
+-  Christopher Rogos <crogos@gmail.com>
 
 Maintainers
 -----------
