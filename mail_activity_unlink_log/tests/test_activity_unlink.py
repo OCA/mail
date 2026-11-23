@@ -47,3 +47,22 @@ class TestActivityUnlink(BaseCommon):
                 lambda r: r.subtype_id == self.unlink_subtype
             )
         )
+
+    def test_unlink_record(self):
+        """Deleting a record deletes its activities without any error."""
+        # sudo: the test user of BaseCommon cannot create nor delete contacts
+        partner = self.env["res.partner"].sudo().create({"name": "To delete"})
+        activity = partner.activity_schedule(
+            act_type_xmlid="mail.mail_activity_data_todo"
+        )
+        partner.unlink()
+        self.assertFalse(activity.exists())
+        self.assertFalse(
+            self.env["mail.message"].search(
+                [
+                    ("model", "=", "res.partner"),
+                    ("res_id", "=", partner.id),
+                    ("subtype_id", "=", self.unlink_subtype.id),
+                ]
+            )
+        )
