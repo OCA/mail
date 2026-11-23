@@ -13,7 +13,8 @@
             <div>
                 <p>
                     <span
-                    t-attf-class="fa #{activity.activity_type_id.icon} fa-fw"
+                    class="oi oi-fw"
+                    t-att-data-icon="activity.activity_type_id.icon"
                 /><span t-field="activity.activity_type_id.name" /> deleted
                     <t t-if="display_assignee"> (originally assigned to <span
                     t-field="activity.user_id.name"
