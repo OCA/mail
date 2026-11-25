@@ -1,5 +1,5 @@
 Known issues:
 
-- Not all branding is removed from auth_signup's invitation email
-  because it is a longer, more complex snippet of HTML. Only the line
-  containing the link to Odoo.com is removed.
+- Only the branding shipped by the templates is debranded. Data stored in
+  the records themselves is never modified, so a user literally named
+  `OdooBot` keeps that name in the mails that mention it.
