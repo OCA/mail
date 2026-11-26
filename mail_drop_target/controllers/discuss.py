@@ -26,15 +26,24 @@ class AttachmentController(attachment.AttachmentController):
         )
 
     def mail_attachment_upload_email(self, ufile, thread_id, thread_model):
-        channel_member = request.env["discuss.channel.member"]
+        attachment_model = request.env["ir.attachment"]
         if thread_model == "discuss.channel":
-            channel_member = request.env[
-                "discuss.channel.member"
-            ]._get_as_sudo_from_request_or_raise(
-                request=request, channel_id=int(thread_id)
+            post_access = (
+                request.env[thread_model]
+                .sudo()
+                ._get_mail_message_access(int(thread_id), "create")
             )
+            channel = request.env[thread_model]._get_thread_with_access(
+                int(thread_id), mode=post_access
+            )
+            if not channel:
+                # Let the standard upload deal with the missing access
+                return False
+            # sudo: ir.attachment - reading an email file posted on an
+            # accessible channel, as members may not read its messages
+            attachment_model = attachment_model.sudo()
         try:
-            mail_resp = channel_member.env["ir.attachment"].read_mail_file_content(
+            mail_resp = attachment_model.read_mail_file_content(
                 ufile.filename, ufile.read(), int(thread_id), thread_model
             )
             ufile.seek(0)
