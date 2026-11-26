@@ -5,3 +5,4 @@
   > - Tri Doan \<<tridm@trobz.com>\>
 
 * Alberto Nieto <alberto.nieto@braintec.com> (https://braintec.com)
+* Alejandro Abbas <skanndar@skanndar.top> (https://skanndar.top)

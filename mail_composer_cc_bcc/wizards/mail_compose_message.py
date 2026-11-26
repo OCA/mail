@@ -73,8 +73,8 @@ class MailComposeMessage(models.TransientModel):
                     rendered_values.get("email_bcc"), "partner_bcc_ids"
                 )
             elif composer.parent_id and composer.composition_mode == "comment":
-                composer.partner_cc_ids = composer.parent_id.partner_cc_ids
-                composer.partner_bcc_ids = composer.parent_id.partner_bcc_ids
+                composer.partner_cc_ids = composer.parent_id.recipient_cc_ids
+                composer.partner_bcc_ids = composer.parent_id.recipient_bcc_ids
             elif not composer.template_id:
                 composer.partner_cc_ids = self.env.company.default_partner_cc_ids
                 composer.partner_bcc_ids = self.env.company.default_partner_bcc_ids
