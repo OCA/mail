@@ -17,6 +17,8 @@ class MailThread(models.AbstractModel):
             # filter out all the followers
             pids = (
                 msg_vals.get("partner_ids", [])
+                + msg_vals.get("recipient_cc_ids", [])
+                + msg_vals.get("recipient_bcc_ids", [])
                 if msg_vals
                 else message.sudo().partner_ids.ids
             )
