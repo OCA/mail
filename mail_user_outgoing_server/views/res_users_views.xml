@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 ForgeFlow S.L. (https://www.forgeflow.com)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- "My Preferences" form: let the user connect their own mailbox -->
+    <record id="view_users_form_simple_modif_outgoing_server" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.outgoing.server</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='signature']" position="before">
+                <group
+                    name="outgoing_mail_server"
+                    invisible="not has_external_mail_server"
+                >
+                    <field name="has_external_mail_server" invisible="1" />
+                    <!-- Used by the mail_server_configurator_selection widget -->
+                    <field name="outgoing_mail_server_id" invisible="1" />
+                    <field
+                        name="outgoing_mail_server_type"
+                        string="Outgoing Mail Server"
+                        widget="mail_server_configurator_selection"
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Full-page "My Preferences" action so the Outlook OAuth callback can
+         redirect back to /odoo/my-preferences/<id>. Backported from Odoo 19's
+         mail module (absent in 18); without it the callback raised
+         "Missing Action: my-preferences". -->
+    <record id="action_res_users_my_fullpage" model="ir.actions.act_window">
+        <field name="name">Change My Preferences</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">form</field>
+        <field name="path">my-preferences</field>
+    </record>
+    <record id="action_res_users_my_fullpage_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="50" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="base.view_users_form_simple_modif" />
+        <field name="act_window_id" ref="action_res_users_my_fullpage" />
+    </record>
+</odoo>
