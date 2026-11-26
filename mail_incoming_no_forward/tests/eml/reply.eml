@@ -1,0 +1,8 @@
+From: Sender <sender@example.com>
+To: odoo@example.com
+Subject: Re: Thread
+Message-ID: {message_id}
+In-Reply-To: {parent_id}
+Content-Type: text/plain; charset=utf-8
+
+Hello back

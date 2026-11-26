@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Camptocamp SA
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field
+            name="name"
+        >res.config.settings.view.form.mail_incoming_no_forward</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="mail.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='emails']" position="inside">
+                <setting
+                    help="Odoo forwards incoming mails to all the followers by email."
+                >
+                    <field name="disable_incoming_mail_forward" />
+                </setting>
+                <setting
+                    help="Forward incoming mails to internal followers notified by email."
+                    invisible="not disable_incoming_mail_forward"
+                >
+                    <field name="notify_internal_on_incoming_email" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
