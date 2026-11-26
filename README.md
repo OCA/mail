@@ -24,6 +24,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [mail_activity_board](mail_activity_board/) | 20.0.1.0.0 |  | Add Activity Boards
 [mail_gateway](mail_gateway/) | 20.0.1.0.0 |  | Base module for gateway communications
+[mail_message_search](mail_message_search/) | 20.0.1.0.0 | <a href='https://github.com/yostashiro'><img src='https://github.com/yostashiro.png' width='32' height='32' style='border-radius:50%;' alt='yostashiro'/></a> <a href='https://github.com/aungkokolin1997'><img src='https://github.com/aungkokolin1997.png' width='32' height='32' style='border-radius:50%;' alt='aungkokolin1997'/></a> | Mail Message Search
 
 [//]: # (end addons)
 

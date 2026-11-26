@@ -1,9 +1,10 @@
 [project]
 name = "odoo-addons-oca-mail"
-version = "20.0.20261120.0"
+version = "20.0.20261126.0"
 dependencies = [
     "odoo-addon-mail_activity_board==20.0.*",
     "odoo-addon-mail_gateway==20.0.*",
+    "odoo-addon-mail_message_search==20.0.*",
 ]
 classifiers=[
     "Programming Language :: Python",
