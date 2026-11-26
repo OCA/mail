@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Camptocamp SA
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field
+            name="name"
+        >res.config.settings.view.form.mail_incoming_malformed_permissive</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="mail.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='emails']" position="inside">
+                <setting
+                    help="Odoo keeps only the first HTML document of an incoming mail."
+                >
+                    <field name="parse_all_html_documents_in_mail" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
