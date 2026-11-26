@@ -9,8 +9,24 @@ from odoo import fields, models, tools
 from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
 
 
+def normalized_emails(partner):
+    """Addresses of the partner as Odoo core writes them in ``email_to``.
+
+    Core also passes them, normalized, as ``send_validated_to``, and the
+    envelope only keeps the addresses of the headers found in that list. A raw
+    address (e.g. ``Foo@Example.com``) would not match, and its email would
+    be refused with "no valid recipient".
+    """
+    return tools.mail.email_normalize_all(partner.email) or [partner.email]
+
+
 def format_emails(partners):
-    return [tools.formataddr((p.name or "", p.email)) for p in partners if p.email]
+    return [
+        tools.formataddr((p.name or "", email))
+        for p in partners
+        if p.email
+        for email in normalized_emails(p)
+    ]
 
 
 def format_emails_raw(partners):
@@ -66,7 +82,12 @@ class MailMail(models.Model):
         email_to = format_emails(partner_to)
         email_to_raw = format_emails_raw(partner_to)
         email_cc = format_emails_str(self.recipient_cc_ids)
-        email_bcc = [r.email for r in self.recipient_bcc_ids if r.email]
+        email_bcc = [
+            email
+            for r in self.recipient_bcc_ids
+            if r.email
+            for email in normalized_emails(r)
+        ]
 
         # Collect recipients (RCPT TO) and update all emails
         # with the same To, Cc headers (to be shown by email client as users expect)
