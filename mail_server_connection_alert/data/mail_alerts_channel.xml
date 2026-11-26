@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="channel_system_mail_alerts" model="discuss.channel">
+        <field name="name">⚠️ System Mail Alerts</field>
+        <field name="channel_type">group</field>
+    </record>
+</odoo>
