@@ -429,8 +429,22 @@ class MailTrackingEmail(models.Model):
             # If mail_message haven't tracking partner, then
             # add it in order to see his tracking status in chatter
             if mail_message.subtype_id:
+                # Create the notification through the ORM: linking
+                # ``notified_partner_ids`` directly issues a raw INSERT into
+                # ``mail_notification`` without its required ``notification_type``.
                 mail_message.sudo().write(
-                    {"notified_partner_ids": [Command.link(self.partner_id.id)]}
+                    {
+                        "notification_ids": [
+                            Command.create(
+                                {
+                                    "res_partner_id": self.partner_id.id,
+                                    "notification_type": "email",
+                                    "notification_status": "sent",
+                                    "is_read": True,
+                                }
+                            )
+                        ]
+                    }
                 )
             else:
                 mail_message.sudo().write(
