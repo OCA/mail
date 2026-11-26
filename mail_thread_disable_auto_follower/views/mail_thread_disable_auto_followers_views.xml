@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2026 CIT Services
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_mail_thread_disable_auto_followers_config_form" model="ir.ui.view">
+        <field name="name">mail.thread.disable.auto.followers.config.form</field>
+        <field name="model">mail.thread.disable.auto.followers.config</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false">
+                <sheet>
+                    <field name="name" invisible="1" />
+                    <div class="alert alert-info" role="alert">
+                        Select the models that need to disable the auto follower option.
+                    </div>
+                    <group string="Disabled Models">
+                        <field
+                            name="model_ids"
+                            widget="many2many_tags"
+                            nolabel="1"
+                            options="{'no_create': True}"
+                            placeholder="Select models..."
+                        />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record
+        id="action_mail_thread_disable_auto_followers_config"
+        model="ir.actions.act_window"
+    >
+        <field name="name">Disable Auto Follower Configuration</field>
+        <field name="res_model">mail.thread.disable.auto.followers.config</field>
+        <field name="view_mode">form</field>
+        <field
+            name="res_id"
+            ref="mail_thread_disable_auto_follower.mail_thread_disable_auto_followers_config_default"
+        />
+    </record>
+
+    <menuitem
+        id="menu_mail_thread_disable_auto_followers_config"
+        name="Disable Auto-Follower Configuration"
+        action="action_mail_thread_disable_auto_followers_config"
+        parent="base.menu_automation"
+        sequence="60"
+        groups="base.group_no_one"
+    />
+</odoo>
