@@ -270,3 +270,78 @@ class TestMailCcBccRecipients(TransactionCase, MailCase):
         server = mail_server.with_context(is_from_composer=True, recipients=[])
         with self.assertRaises(ValueError):
             server._prepare_email_message(message, None)
+
+    def test_notification_from_template_is_sent_like_odoo(self):
+        """Automatic emails from a template are left to Odoo
+
+        e.g. order or delivery confirmations: Odoo posts them through the
+        composer as notifications, which skip the Cc/Bcc handling. Each
+        template recipient must still get its email.
+        """
+        template = self.env["mail.template"].create(
+            {
+                "name": "Automatic",
+                "model_id": self.env["ir.model"]._get_id(self.record._name),
+                "subject": "automatic",
+                "body_html": "<p>Hello</p>",
+                "partner_to": f"{self.us1.id},{self.us2.id}",
+            }
+        )
+        with self.mock_mail_gateway():
+            self.record.with_context(
+                mail_notify_force_send=True
+            ).message_post_with_source(template, subtype_xmlid="mail.mt_comment")
+        message = self.record.message_ids.filtered(lambda m: m.subject == "automatic")
+
+        self._assert_one_email_per_recipient(self.us1 + self.us2)
+        self.assertEqual(
+            set(message.notification_ids.mapped("notification_status")), {"sent"}
+        )
+
+    def test_notification_from_template_reaches_its_cc(self):
+        """The template Cc of an automatic email gets it, like in Odoo
+
+        e.g. an internal copy of every order confirmation: Odoo turns the
+        template Cc into recipients, and the module must not drop it.
+        """
+        template = self.env["mail.template"].create(
+            {
+                "name": "Automatic with Cc",
+                "model_id": self.env["ir.model"]._get_id(self.record._name),
+                "subject": "automatic-cc",
+                "body_html": "<p>Hello</p>",
+                "partner_to": str(self.us1.id),
+                "email_cc": self.us2.email,
+            }
+        )
+        with self.mock_mail_gateway():
+            self.record.with_context(
+                mail_notify_force_send=True
+            ).message_post_with_source(template, subtype_xmlid="mail.mt_comment")
+        message = self.record.message_ids.filtered(
+            lambda m: m.subject == "automatic-cc"
+        )
+
+        self._assert_one_email_per_recipient(self.us1 + self.us2)
+        self.assertEqual(message.partner_ids, self.us1 + self.us2)
+        self.assertEqual(
+            set(message.notification_ids.mapped("notification_status")), {"sent"}
+        )
+
+    def test_recipient_without_email_does_not_block_the_others(self):
+        """A recipient without email is skipped like Odoo does
+
+        e.g. a delivery address with no email: the others still get theirs.
+        """
+        no_email = self.env["res.partner"].create({"name": "No Email"})
+        partners_to = self.us1 + no_email
+        message = self._send("no-email", partners_to, self.us2, self.us3)
+
+        self._assert_one_email_per_recipient(self.us1 + self.us2 + self.us3)
+        self._assert_same_to_cc_headers(self.us1, self.us2)
+        self._assert_bcc_header_on_bcc_emails_only(self.us3)
+        notifs = message.notification_ids
+        failed = notifs.filtered(lambda n: n.res_partner_id == no_email)
+        self.assertEqual(failed.notification_status, "exception")
+        self.assertEqual(failed.failure_type, "mail_email_invalid")
+        self.assertEqual(set((notifs - failed).mapped("notification_status")), {"sent"})

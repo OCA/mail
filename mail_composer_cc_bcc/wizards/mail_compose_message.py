@@ -46,11 +46,22 @@ class MailComposeMessage(models.TransientModel):
         return res
 
     @api.depends(
-        "composition_mode", "model", "parent_id", "res_domain", "res_ids", "template_id"
+        "composition_mode",
+        "message_type",
+        "model",
+        "parent_id",
+        "res_domain",
+        "res_ids",
+        "template_id",
     )
     def _compute_partner_cc_bcc_ids(self):
         for composer in self:
-            if (
+            if composer.message_type == "notification":
+                # Notifications skip the Cc/Bcc handling (see `_notify_thread`):
+                # Odoo adds the template Cc to the recipients instead
+                composer.partner_cc_ids = False
+                composer.partner_bcc_ids = False
+            elif (
                 composer.template_id
                 and composer.composition_mode == "comment"
                 and not composer.composition_batch
@@ -80,15 +91,23 @@ class MailComposeMessage(models.TransientModel):
                 composer.partner_bcc_ids = self.env.company.default_partner_bcc_ids
 
     @api.depends(
-        "composition_mode", "model", "parent_id", "res_domain", "res_ids", "template_id"
+        "composition_mode",
+        "message_type",
+        "model",
+        "parent_id",
+        "res_domain",
+        "res_ids",
+        "template_id",
     )
     def _compute_partner_ids(self):
         """
-        Change: dont add email_cc to partner_ids
+        Change: dont add email_cc to partner_ids, except for notifications
+        (e.g. order confirmations), which are left to Odoo
 
         return: field Recipients filled with value from 'email_to', 'partner_ids'
         """
-        for composer in self:
+        notifications = self.filtered(lambda c: c.message_type == "notification")
+        for composer in self - notifications:
             if (
                 composer.template_id
                 and composer.composition_mode == "comment"
@@ -107,6 +126,7 @@ class MailComposeMessage(models.TransientModel):
                 composer.partner_ids = composer.parent_id.partner_ids
             elif not composer.template_id:
                 composer.partner_ids = False
+        return super(MailComposeMessage, notifications)._compute_partner_ids()
 
     def _set_partner_ids_from_mails(self, email_field, partner_field):
         if email_field:
