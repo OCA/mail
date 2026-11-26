@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="group_signature_mass_edit" model="res.groups">
+        <field name="name">Signature Mass Edit</field>
+        <field
+            name="category_id"
+            ref="base.module_category_marketing_email_marketing"
+        />
+        <field
+            name="implied_ids"
+            eval="[(4, ref('mass_mailing.group_mass_mailing_user'))]"
+        />
+    </record>
+</odoo>
