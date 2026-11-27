@@ -1,4 +1,4 @@
-import {Component, toRaw, useState} from "@odoo/owl";
+import {Component, useState} from "@odoo/owl";
 import {AvatarCardPopover} from "@mail/discuss/web/avatar_card/avatar_card_popover";
 import {FailedMessageReview} from "@mail_tracking/components/failed_message_review/failed_message_review.esm";
 import {MessageTracking} from "@mail_tracking/components/message_tracking/message_tracking.esm";
@@ -24,20 +24,6 @@ export class FailedMessage extends Component {
         this.state = useState({showDetails: false});
         this.message = useState(this.props.message);
         this.orm = useService("orm");
-    }
-    retryFailedMessage() {
-        const message = toRaw(this.message);
-        this.env.services.action.doAction("mail.mail_resend_message_action", {
-            additionalContext: {
-                mail_message_to_resend: message.id,
-            },
-            onClose: async () => {
-                // Check if message is still 'failed' after Retry
-                await this.orm.call("mail.message", "get_failed_messages", [
-                    [message.id],
-                ]);
-            },
-        });
     }
     async onClickJump() {
         await this.env.messageHighlight?.highlightMessage(this.message, this.thread);
