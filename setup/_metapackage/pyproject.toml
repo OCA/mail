@@ -1,6 +1,6 @@
 [project]
 name = "odoo-addons-oca-mail"
-version = "19.0.20261118.0"
+version = "19.0.20261127.0"
 dependencies = [
     "odoo-addon-base_user_signature==19.0.*",
     "odoo-addon-mail_activity_board==19.0.*",
@@ -8,6 +8,7 @@ dependencies = [
     "odoo-addon-mail_activity_team==19.0.*",
     "odoo-addon-mail_attach_existing_attachment==19.0.*",
     "odoo-addon-mail_attach_existing_attachment_account==19.0.*",
+    "odoo-addon-mail_chatter_split==19.0.*",
     "odoo-addon-mail_forward==19.0.*",
     "odoo-addon-mail_gateway==19.0.*",
     "odoo-addon-mail_gateway_telegram==19.0.*",
