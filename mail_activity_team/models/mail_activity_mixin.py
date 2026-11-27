@@ -1,0 +1,137 @@
+# Copyright 2021 Tecnativa - David Vidal
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+from odoo import api, fields, models
+from odoo.fields import Domain
+
+
+class MailActivityMixin(models.AbstractModel):
+    _inherit = "mail.activity.mixin"
+
+    activity_team_user_ids = fields.Many2many(
+        comodel_name="res.users",
+        string="Activity Team Members",
+        compute="_compute_activity_team_user_ids",
+        search="_search_activity_team_user_ids",
+    )
+
+    @api.depends("activity_ids")
+    def _compute_activity_team_user_ids(self):
+        for rec in self:
+            rec.activity_team_user_ids = rec.activity_ids.mapped("team_id.member_ids")
+
+    def _search_my_activity_date_deadline(self, operator, operand):
+        if not self.env.context.get("team_activities", False):
+            return super()._search_my_activity_date_deadline(operator, operand)
+        if operator in Domain.NEGATIVE_OPERATORS:
+            return NotImplemented
+        domain = Domain(
+            "activity_ids",
+            "any",
+            [
+                ("active", "=", True),  # never overdue if "done"
+                ("date_deadline", operator, operand),
+                ("res_model", "=", self._name),
+                "|",
+                ("user_id", "=", self.env.user.id),
+                ("team_id", "in", self.env.user.activity_team_ids.ids),
+            ],
+        )
+        if operator == "in" and False in operand:  # relation may be falsy
+            domain |= Domain("activity_ids", "=", False)
+        return domain
+
+    @api.model
+    def _search_activity_team_user_ids(self, operator, operand):
+        return [("activity_ids.team_id.member_ids", operator, operand)]
+
+    def activity_schedule(
+        self,
+        act_type_xmlid="",
+        date_deadline=None,
+        summary="",
+        note="",
+        activity_user_id_fname="",
+        **act_values,
+    ):
+        """With automatic activities, the user onchange won't act so we must
+        ensure the right group is set and no exceptions are raised due to
+        user-team missmatch. We can hook onto `act_values` dict as it's passed
+        to the create activity method.
+        """
+        # Pick up some defaults from mail.activity.schedule
+        for field in ("team_id", "team_user_id", "user_id"):
+            if self.env.context.get(f"schedule_default_{field}") and not act_values.get(
+                field
+            ):
+                act_values[field] = self.env.context[f"schedule_default_{field}"]
+
+        if self.env.context.get("force_activity_team"):
+            act_values["team_id"] = self.env.context["force_activity_team"].id
+        if "team_id" not in act_values:
+            if act_type_xmlid:
+                activity_type = self.sudo().env.ref(act_type_xmlid)
+            else:
+                activity_type = (
+                    self.env["mail.activity.type"]
+                    .sudo()
+                    .browse(act_values["activity_type_id"])
+                )
+            if activity_type.default_team_id:
+                act_values.update({"team_id": activity_type.default_team_id.id})
+                if (
+                    not act_values.get("user_id")
+                    and activity_type.default_team_id.member_ids
+                ):
+                    act_values.update(
+                        {"user_id": activity_type.default_team_id.member_ids[:1].id}
+                    )
+        return super().activity_schedule(
+            act_type_xmlid=act_type_xmlid,
+            date_deadline=date_deadline,
+            summary=summary,
+            note=note,
+            activity_user_id_fname=activity_user_id_fname,
+            **act_values,
+        )
+
+    @api.depends(
+        "activity_ids.date_deadline", "activity_ids.user_id", "activity_ids.team_id"
+    )
+    @api.depends_context("uid")
+    def _compute_my_activity_date_deadline(self):
+        for record in self:
+            record.my_activity_date_deadline = next(
+                (
+                    activity.date_deadline
+                    for activity in record.activity_ids
+                    if activity.user_id.id == record.env.uid
+                    or activity.team_id in record.env.user.activity_team_ids
+                ),
+                False,
+            )
+
+    @api.model
+    def web_search_read(
+        self, domain, specification, offset=0, limit=None, order=None, count_limit=None
+    ):
+        """Intercept the queries from the systray widget and apply team search.
+
+        This allows the frontend widget to direct the user to their team activities
+        Late/Today/Future.
+        """
+        if self.env.context.get("team_activities"):
+            orig_domain = domain
+            domain = []
+            for clause in orig_domain:
+                if isinstance(clause, list | tuple) and clause[0] == "activity_user_id":
+                    domain.append(("activity_team_user_ids", clause[1], clause[2]))
+                else:
+                    domain.append(clause)
+        return super().web_search_read(
+            domain,
+            specification,
+            offset=offset,
+            limit=limit,
+            order=order,
+            count_limit=count_limit,
+        )
