@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Fasil
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<templates xml:space="preserve">
+    <t t-name="mail_call_screen_annotation.ScreenAnnotationOverlay">
+        <canvas
+            class="o-mail-ScreenAnnotationOverlay position-absolute top-0 start-0 w-100 h-100"
+            t-att-class="{'o-isDrawing': this.annotation.isDrawing}"
+            t-att-data-screen-session-id="this.props.session.id"
+            t-ref="this.canvas"
+            t-on-pointerdown="this.onPointerDown"
+            t-on-pointermove="this.onPointerMove"
+            t-on-pointerup="this.onPointerUp"
+            t-on-pointercancel="this.onPointerUp"
+            t-on-click.stop=""
+            t-on-mousedown.stop=""
+        />
+    </t>
+
+    <t
+        t-inherit="discuss.CallParticipantCard"
+        t-inherit-mode="extension"
+        t-name="mail_call_screen_annotation.CallParticipantCard"
+    >
+        <!-- Before the card overlays, so that its name and menu stay above the ink. -->
+        <xpath
+            expr="//t[@t-if='this.isActiveCall and this.rtcSession']"
+            position="before"
+        >
+            <ScreenAnnotationOverlay
+                t-if="this.showsScreenAnnotation"
+                session="this.rtcSession"
+            />
+        </xpath>
+    </t>
+</templates>
