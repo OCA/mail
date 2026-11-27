@@ -1,0 +1,157 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mail_show_follower
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-12-11 09:15+0000\n"
+"Last-Translator: Ricard <ricard.calvo@forgeflow.com>\n"
+"Language-Team: none\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "%(partner_email)s = Partner Email"
+msgstr "%(partner_email)s = Correu electrònic de l'empresa"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "%(partner_email_domain)s = Partner Email Domain"
+msgstr "%(partner_email_domain)s = Domini de correu electrònic de l'empresa"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "%(partner_name)s <%(partner_email)s>"
+msgstr "%(partner_name)s <%(partner_email)s>"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "%(partner_name)s = Partner Name"
+msgstr "%(partner_name)s = Nom de l'empresa"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "<strong>Supported parameters:</strong>"
+msgstr "<strong>Paràmetres admesos:</strong>"
+
+#. module: mail_show_follower
+#: model:ir.model,name:mail_show_follower.model_res_company
+msgid "Companies"
+msgstr "Companyies"
+
+#. module: mail_show_follower
+#: model:ir.model,name:mail_show_follower.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustos de configuració"
+
+#. module: mail_show_follower
+#: model:ir.model,name:mail_show_follower.model_res_partner
+msgid "Contact"
+msgstr "Contacte"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_message_preview
+msgid "Message preview"
+msgstr "Vista prèvia del missatge"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "Models to exclude"
+msgstr "Models a excloure"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "Notice: Replies to this email will be sent to all recipients."
+msgstr ""
+"Avís: Les respostes a aquest correu electrònic s'enviaran a tots els "
+"destinataris."
+
+#. module: mail_show_follower
+#: model:ir.model,name:mail_show_follower.model_mail_mail
+msgid "Outgoing Mails"
+msgstr "Correus sortints"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_company__show_followers_partner_format
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_partner_format
+msgid "Partner format"
+msgstr "Format de l'empresa"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_models_to_exclude
+msgid "Show Followers Models To Exclude"
+msgstr "Mostrar Models de Seguidors a Excloure"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "Show Followers on mails"
+msgstr "Mostrar seguidors als correus"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_company__show_internal_users_cc
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_internal_users_cc
+msgid "Show Internal Users CC"
+msgstr "Mostrar Usuaris Interns CC"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "Show Internal Users on CC"
+msgstr "Mostrar Usuaris Interns a CC"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_users__show_in_cc
+msgid "Show in CC"
+msgstr "Mostrar a CC"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,help:mail_show_follower.field_res_company__show_followers_partner_format
+#: model:ir.model.fields,help:mail_show_follower.field_res_config_settings__show_followers_partner_format
+msgid ""
+"Supported parameters:\n"
+"%(partner_name)s = Partner Name\n"
+"%(partner_email)s = Partner Email\n"
+"%(partner_email_domain)s = Partner Email Domain"
+msgstr ""
+"Paràmetres admesos:\n"
+"%(partner_name)s = Nom de l'empresa\n"
+"%(partner_email)s = Correu electrònic de l'empresa\n"
+"%(partner_email_domain)s = Domini de correu electrònic de l'empresa"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,help:mail_show_follower.field_res_config_settings__show_followers_models_to_exclude
+msgid "Tecnichal model names separated by coma"
+msgstr "Noms tècnics de model separats per comes"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_company__show_followers_message_response_warning
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_message_response_warning
+msgid "Text 'Replies'"
+msgstr "Text 'Respostes'"
+
+#. module: mail_show_follower
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_company__show_followers_message_sent_to
+#: model:ir.model.fields,field_description:mail_show_follower.field_res_config_settings__show_followers_message_sent_to
+msgid "Text 'Sent to'"
+msgstr "Text 'Enviat a'"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "This message has been sent to"
+msgstr "Aquest missatge ha estat enviat a"
+
+#. module: mail_show_follower
+#: model:ir.model,name:mail_show_follower.model_res_users
+msgid "User"
+msgstr "Usuari"
+
+#. module: mail_show_follower
+#: model_terms:ir.ui.view,arch_db:mail_show_follower.res_config_settings_view_form
+msgid "blog.blog,blog.post"
+msgstr "blog.blog,blog.post"
