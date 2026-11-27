@@ -1,0 +1,3 @@
+- Holger Brunn <hbrunn@therp.nl>
+- Ronald Portier <ronald@openeyedev.eu>
+- Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
