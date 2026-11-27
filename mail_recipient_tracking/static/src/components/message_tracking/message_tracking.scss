@@ -1,0 +1,7 @@
+.mail_tracking_double_check {
+    display: inline-flex;
+
+    > .oi + .oi {
+        margin-left: -0.6em;
+    }
+}
