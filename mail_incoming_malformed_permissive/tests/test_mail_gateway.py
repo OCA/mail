@@ -26,6 +26,13 @@ class TestMailGateway(TransactionCase):
         self.assertIn("First document", body)
         self.assertIn("Second document", body)
 
+    def test_all_html_documents_are_kept_in_multipart(self):
+        partner = self._process("multipart_multiple_html_documents.eml")
+        message = partner.message_ids.filtered(lambda m: m.message_type == "email")
+        self.assertIn("First document", message.body)
+        self.assertIn("Second document", message.body)
+        self.assertEqual(message.attachment_ids.mapped("name"), ["note.txt"])
+
     def test_all_html_documents_can_be_turned_off(self):
         self.env.company.parse_all_html_documents_in_mail = False
         partner = self._process("multiple_html_documents.eml")

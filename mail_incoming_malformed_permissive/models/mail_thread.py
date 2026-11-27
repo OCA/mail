@@ -1,6 +1,7 @@
 # Copyright 2026 Camptocamp SA
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+import copy
 import logging
 import re
 
@@ -26,22 +27,37 @@ class MailThread(models.AbstractModel):
     def _message_parse_extract_payload(
         self, message, message_dict, save_original=False
     ):
-        # Rebuild the body after super() to keep the original mail untouched
-        payload = super()._message_parse_extract_payload(
-            message, message_dict, save_original=save_original
-        )
         if not self.env.company.parse_all_html_documents_in_mail:
-            return payload
-        # Keep all <html> instead of just the first one
-        body = self._message_extract_whole_html_payload(message)
-        if body is not None:
-            payload["body"] = body
+            return super()._message_parse_extract_payload(
+                message, message_dict, save_original=save_original
+            )
+        fixed_message = self._merge_html_documents(message)
+        payload = super()._message_parse_extract_payload(
+            fixed_message,
+            message_dict,
+            # use save_original=False, otherwise it will always save the copy
+            save_original=False,
+        )
+        if save_original:
+            # Save the mail as received, not the fixed copy
+            payload["attachments"].insert(
+                0, self._Attachment("original_email.eml", message.as_string(), {})
+            )
         return payload
 
-    def _message_extract_whole_html_payload(self, message):
-        if message.get_content_type() != "text/html":
-            return None
-        return self._parse_whole_html_part(message.get_content())
+    def _merge_html_documents(self, message):
+        """Keep every ``<html>`` of each html part, not just the first one.
+
+        Return a fixed copy, to keep ``message`` as received.
+        """
+        fixed_message = copy.deepcopy(message)
+        for part in fixed_message.walk():
+            if part.get_content_type() != "text/html" or part.is_attachment():
+                continue
+            content = self._parse_whole_html_part(part.get_content())
+            if content is not None:
+                part.set_content(content, subtype="html")
+        return fixed_message
 
     def _parse_whole_html_part(self, html_content):
         """Keep every ``<html>`` of the part, not just the first one.
