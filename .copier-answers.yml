@@ -19,6 +19,7 @@ org_slug: OCA
 postgres_image: ''
 rebel_module_groups:
 - mail_send_confirmation
+- mail_restrict_send_button
 repo_description: mail
 repo_name: mail
 repo_slug: mail
