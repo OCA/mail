@@ -9,6 +9,8 @@ from odoo import api, models
 from odoo.fields import Command, Domain
 from odoo.tools.safe_eval import safe_eval
 
+from odoo.addons.mail.tools.parser import parse_res_ids
+
 from ..utils import _id_get
 
 
@@ -36,21 +38,20 @@ class MailFollowersEdit(models.TransientModel):
         return domain
 
     def edit_followers(self):
+        # The domain itself is enforced by `mail.followers._insert_followers`.
+        # Apply the very same rule here beforehand so that partners that will
+        # not be subscribed are not sent the invitation either.
         if not self.env.context.get("no_restrict_follower"):
+            filter_partners = self.env[
+                "mail.followers"
+            ]._mail_restrict_follower_selection_filter_partners
             for wizard in self.filtered(lambda w: w.operation == "add"):
-                domain_str = str(
-                    self._mail_restrict_follower_selection_get_domain(
-                        res_model=wizard.res_model
-                    )
+                allowed_ids = filter_partners(
+                    wizard.res_model,
+                    parse_res_ids(wizard.res_ids, self.env),
+                    wizard.partner_ids.ids,
                 )
-                allowed_partners = self.env["res.partner"].search(
-                    [("id", "in", wizard.partner_ids.ids)]
-                    + safe_eval(
-                        domain_str,
-                        {"ref": lambda str_id: _id_get(self.env, str_id)},
-                    )
-                )
-                wizard.write({"partner_ids": [Command.set(allowed_partners.ids)]})
+                wizard.write({"partner_ids": [Command.set(allowed_ids)]})
         return super().edit_followers()
 
     @api.model
