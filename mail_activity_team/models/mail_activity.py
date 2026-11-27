@@ -203,7 +203,8 @@ class MailActivity(models.Model):
             # in case record was cascade-deleted in DB, skipping unlink override
             activity_data["record_ids"] = records_sudo.exists().ids
 
-        for activity in self:
+        # Activities without document (res_model) are skipped, as in action_notify()
+        for activity in self.filtered("res_model"):
             if activity.res_id not in classified[activity.res_model]["record_ids"]:
                 continue
             if not activity.team_id.notify_members:

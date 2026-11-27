@@ -1095,3 +1095,20 @@ class TestMailActivityTeam(TransactionCase):
                 "Could not find 'activity_descriptions' list in inspected frames",
                 log_catcher.output[0],
             )
+
+    def test_activity_without_document(self):
+        """An activity not linked to a document can be assigned to a team"""
+        activity = (
+            self.env["mail.activity"]
+            .with_user(self.employee)
+            .create(
+                {
+                    "summary": "To do without document",
+                    "activity_type_id": self.env.ref("mail.mail_activity_data_todo").id,
+                    "team_id": self.team2.id,
+                    "team_user_id": self.employee.id,
+                }
+            )
+        )
+        self.assertFalse(activity.res_model)
+        self.assertEqual(activity.team_id, self.team2)
