@@ -57,7 +57,7 @@ class TestMailLayoutForce(TransactionCase):
         self.partner.message_post(
             body="Test Message",
             email_layout_xmlid=self.mail_notification_layout.xml_id,
-            message_type="email",
+            message_type="comment",
             subtype_xmlid="mail.mt_comment",
             mail_auto_delete=False,
             force_send=True,
@@ -73,7 +73,7 @@ class TestMailLayoutForce(TransactionCase):
         self.partner.message_post(
             body="Test Message",
             email_layout_xmlid=self.mail_notification_layout.xml_id,
-            message_type="email",
+            message_type="comment",
             subtype_xmlid="mail.mt_comment",
             mail_auto_delete=False,
             force_send=True,
