@@ -1,0 +1,28 @@
+From: Sender <sender@example.com>
+To: odoo@example.com
+Subject: Several HTML documents in a multipart mail
+Message-ID: <multipart-multiple-html-documents@example.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="mixed"
+
+--mixed
+Content-Type: multipart/alternative; boundary="alternative"
+
+--alternative
+Content-Type: text/plain; charset=utf-8
+
+First document
+Second document
+--alternative
+Content-Type: text/html; charset=utf-8
+
+<HTML>.</HTML>
+<html><body><p>First document</p></body></html>
+<html><body><p>Second document</p></body></html>
+--alternative--
+--mixed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment; filename="note.txt"
+
+Attachment
+--mixed--

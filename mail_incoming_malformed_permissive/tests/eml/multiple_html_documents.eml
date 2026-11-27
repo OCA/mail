@@ -1,0 +1,10 @@
+From: Sender <sender@example.com>
+To: odoo@example.com
+Subject: Several HTML documents
+Message-ID: <multiple-html-documents@example.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<HTML>.</HTML>
+<html><body><p>First document</p></body></html>
+<html><body><p>Second document</p></body></html>
