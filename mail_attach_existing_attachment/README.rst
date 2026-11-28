@@ -55,6 +55,19 @@ To use this module, you need to:
 
 |image2|
 
+The composer groups attachments under two headers, each folding away
+when its title is clicked:
+
+- **New Attachments** lists the files added to this email as cards, and
+  only appears once there is at least one.
+- **Available Attachments** is the picker for the files already on the
+  record. It starts folded, and its header shows how many files are on
+  offer, or how many are ticked once you fold it back. Unfolded, it lays
+  the checkboxes out in as many columns as the composer is wide enough
+  for. Filenames are truncated to keep one file per line; hovering one
+  shows its full name, its size, and a preview of the file when there is
+  one to show.
+
 .. |image1| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_attach_existing_attachment/static/description/attachment.png
 .. |image2| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_attach_existing_attachment/static/description/ex_mail_compose_message.png
 
@@ -100,6 +113,10 @@ Contributors
 - `Apik <https://www.aapik.cloud>`__:
 
   - Frederic Grall
+
+- `PureKarting <https://www.purekarting.com>`__:
+
+  - Cliff Kujala
 
 Maintainers
 -----------
